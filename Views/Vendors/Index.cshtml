@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Vendors</h2>
+
+@using (Html.BeginForm("New", "Vendors"))
+{
+    <button type="submit" class="btn btn-primary">NEW</button>
+
+}
+<table id="projects" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Vendor</th>
+
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+

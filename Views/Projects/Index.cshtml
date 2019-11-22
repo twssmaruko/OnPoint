@@ -1,0 +1,25 @@
+﻿
+@{
+    ViewBag.Title = "Projects";
+}
+
+<h2>Projects</h2>
+<p></p>
+
+@using (Html.BeginForm("Add", "Projects"))
+{
+    <button type="submit" class="btn btn-primary">Create New Project</button>
+
+}
+<table id="projects" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Project</th>
+            <th>Status</th>
+            <th>Aduno</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
