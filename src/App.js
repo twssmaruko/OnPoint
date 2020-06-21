@@ -1,13 +1,17 @@
 import React from 'react';
 import './App.css';
+// import { withAuthenticator } from 'aws-amplify-react';
+import {
+  withRouter,
+} from 'react-router-dom';
+import Routes from './Components/Routes/Routes';
 import Header from './Components/Layout/Header/Header';
-import Purchaserequestlist from './Components/Purchaserequest/Purchaserequestlist';
 
-const App = (props) => (
+const App = () => (
   <div className="App">
     <Header />
-    <Purchaserequestlist />
+    <Routes />
   </div>
 );
 
-export default App;
+export default withRouter(App);

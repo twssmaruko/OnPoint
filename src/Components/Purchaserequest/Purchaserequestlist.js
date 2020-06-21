@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import {
-  Row, Col, Button, List, Table, Input, Modal,
+  Row, Col,
+  Button,
+  // List,
+  Table, Input, Modal,
 } from 'antd';
 
 import { SearchOutlined } from '@ant-design/icons';
 import Purchaserequest from './Purchaserequest';
 
-
 const Purchaselist = () => {
-  const x = 0;
+  // const x = 0;
   const [modalVisible, setModalVisible] = useState(false);
-  const [prList, setprList] = useState([
+  const prList = [
     {
       prnumber: 'PR-1',
       description: 'Description for PR-1',
@@ -32,15 +34,13 @@ const Purchaselist = () => {
       quantity: 3,
       price: 3000,
     },
-  ]);
-
+  ];
 
   const renderInput = () => (
     <div>
       <Input> Search </Input>
     </div>
   );
-
 
   const columns = [
     {
@@ -91,7 +91,7 @@ const Purchaselist = () => {
       title: '',
       key: 'delete',
       width: 200,
-      render: () => (<a>Delete</a>),
+      render: () => (<Button type="link">Delete</Button>),
     },
   ];
 
@@ -102,7 +102,6 @@ const Purchaselist = () => {
   const handleOk = () => {
     setModalVisible(false);
   };
-
 
   return (
     <>
