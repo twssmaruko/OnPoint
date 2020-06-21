@@ -11,6 +11,7 @@ module.exports = {
     Atomics: 'readonly',
     SharedArrayBuffer: 'readonly',
   },
+  parser: "babel-eslint",
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
@@ -22,7 +23,7 @@ module.exports = {
     'react',
   ],
   rules: {
-    "no-dupe-args": 1,
+   "no-dupe-args": 1,
     "no-dupe-keys": 1,
     "no-empty": 1,
     "no-extra-parens": 1,
@@ -41,7 +42,6 @@ module.exports = {
     "brace-style": 1,
     "camelcase": 1,
     "comma-dangle": 1,
-    "func-style": 1,
     "indent": 1,
     "key-spacing": 1,
     "jsx-quotes": 1,
@@ -50,7 +50,7 @@ module.exports = {
     "no-lonely-if": 1,
     "no-mixed-spaces-and-tabs": 1,
     "no-negated-condition": 1,
-    "no-nested-ternary": 1,
+    "no-nested-ternary": 0,
     "no-plusplus": 1,
     "no-trailing-spaces": 1,
     "no-unneeded-ternary": 1,
@@ -73,5 +73,6 @@ module.exports = {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
     "react/jsx-props-no-spreading":"off",
     "react/no-unescaped-entities": "off",
+    "react/prop-types" : "off",
   },
 };

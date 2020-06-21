@@ -1,0 +1,14 @@
+# enum terms {
+#   TERM1
+#   TERM2
+#   TERM3
+# }
+
+type Vendor @model {
+  id: ID!
+  name: String!
+  address: String!
+  contactNumber: String!
+  terms: String!
+}
+

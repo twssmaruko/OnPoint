@@ -1,10 +1,11 @@
 import React from 'react';
 import { Row, Col, Menu } from 'antd';
+import { Link } from 'react-router-dom';
 
-const Header = (props) => {
-  const handleClick = () => {
+const Header = () => {
+  // const handleClick = () => {
 
-  };
+  // };
 
   // color #343A40
 
@@ -28,7 +29,9 @@ const Header = (props) => {
       <Col span={14} style={{ backgroundColor: '#343A40' }}>
         <Menu style={menuStyle} mode="horizontal">
           <Menu.Item>
-            Home
+            <Link style={{ color: 'white' }} exact="true" to="/">
+              Home
+            </Link>
           </Menu.Item>
           <Menu.Item>
             Projects
@@ -37,19 +40,22 @@ const Header = (props) => {
             Purchase Orders
           </Menu.Item>
           <Menu.Item>
-            Purchase Requests
+            <Link style={{ color: 'white' }} exact="true" to="purchaserequest">
+              Purchase Requests
+            </Link>
           </Menu.Item>
           <Menu.Item>
-            Vendors
+            <Link style={{ color: 'white' }} exact="true" to="vendors">
+              Vendors
+            </Link>
           </Menu.Item>
         </Menu>
       </Col>
       <Col offset={2} span={4} style={{ marginTop: '30px', fontSize: '15px' }}>
-        <a style={{ color: 'white' }}> Authenticate </a>
+        <h4 style={{ color: 'white' }}> Authenticate </h4>
       </Col>
     </Row>
   );
 };
-
 
 export default Header;
