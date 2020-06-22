@@ -13,6 +13,7 @@ const { Option } = Select;
 const Vendors = () => {
   const onFinish = (values) => {
     console.log('Success:', values);
+    console.log('Jefferson Loves Camille Reyes');
     // API.graphql(graphqlOperation(createVendor, { input: { ...values } }));
   };
 
