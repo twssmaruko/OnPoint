@@ -14,6 +14,7 @@ const Vendors = () => {
   const onFinish = (values) => {
     console.log('Success:', values);
     console.log('Jefferson Loves Camille Reyes');
+    console.log('marco bayot');
     // API.graphql(graphqlOperation(createVendor, { input: { ...values } }));
   };
 
