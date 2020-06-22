@@ -4,8 +4,8 @@ import './App.css';
 import {
   withRouter,
 } from 'react-router-dom';
-import Routes from './Components/Routes/Routes';
-import Header from './Components/Layout/Header/Header';
+import Routes from './components/Routes/Routes';
+import Header from './components/Layout/Header/Header';
 
 const App = () => (
   <div className="App">
