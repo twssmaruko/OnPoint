@@ -1,8 +1,8 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
-import Purchaserequestlist from '../Purchaserequest/Purchaserequestlist';
-import Vendors from '../Vendors/Vendors';
-import Homepage from '../Homepage/Homepage';
+import Purchaserequestlist from '../purchaserequest/Purchaserequestlist';
+import Vendors from '../vendors/Vendors';
+import Homepage from '../homepage/Homepage';
 
 const Routes = () => {
   const routes = (

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Row, Col, Menu } from 'antd';
 import { Link } from 'react-router-dom';
-import Logo from '../../Logo/Logo';
+import Logo from '../../logo/Logo';
 
 const Header = () => {
   // const handleClick = () => {
@@ -26,7 +26,7 @@ const Header = () => {
     <Row style={{ backgroundColor: '#white' }}>
       <Col span={4} style={titleStyle}>
         <div>
-        <Logo />
+          <Logo />
         </div>
       </Col>
       <Col span={14} style={{ backgroundColor: '#white' }}>
@@ -37,12 +37,12 @@ const Header = () => {
             </Link>
           </Menu.Item>
           <Menu.Item>
-          <Link style={{ color: 'black' }} exact="true" to="projects">
+            <Link style={{ color: 'black' }} exact="true" to="projects">
               Projects
             </Link>
           </Menu.Item>
           <Menu.Item>
-          <Link style={{ color: 'black' }} exact="true" to="purchaseorders">
+            <Link style={{ color: 'black' }} exact="true" to="purchaseorders">
               Purchase Orders
             </Link>
           </Menu.Item>
