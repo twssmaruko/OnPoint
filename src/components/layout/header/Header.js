@@ -1,15 +1,14 @@
 import React from 'react';
-import { Row, Col, Menu } from 'antd';
+import {
+  Row,
+  Col,
+  Menu,
+  Button,
+} from 'antd';
 import { Link } from 'react-router-dom';
 import Logo from '../../logo/Logo';
 
 const Header = () => {
-  // const handleClick = () => {
-
-  // };
-
-  // color #343A40
-
   const titleStyle = {
     color: 'white',
     marginTop: '22px',
@@ -59,7 +58,9 @@ const Header = () => {
         </Menu>
       </Col>
       <Col offset={2} span={4} style={{ marginTop: '30px', fontSize: '15px' }}>
-        <h4 style={{ color: 'black' }}> Authenticate </h4>
+        <Link exact="true" to="auth">
+          <Button type="link" style={{ color: 'black' }}> Authenticate </Button>
+        </Link>
       </Col>
     </Row>
   );

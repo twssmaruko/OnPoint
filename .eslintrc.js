@@ -75,7 +75,7 @@ module.exports = {
         "react/jsx-props-no-spreading":"off",
         "react/no-unescaped-entities": "off",
         "react/prop-types" : "off",
-        "linebreak-style": ["error", (process.platform === "win32" ? "windows" : "unix")]
+        // "linebreak-style": ["error", : "unix")]
         // "import/no-extraneous-dependencies": ["error", {"devDependencies": false, "optionalDependencies": false, "peerDependencies": false}],
     }
 };
