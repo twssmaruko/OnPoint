@@ -75,5 +75,6 @@ module.exports = {
         "react/jsx-props-no-spreading":"off",
         "react/no-unescaped-entities": "off",
         "react/prop-types" : "off",
+        // "import/no-extraneous-dependencies": ["error", {"devDependencies": false, "optionalDependencies": false, "peerDependencies": false}],
     }
 };
