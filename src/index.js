@@ -8,11 +8,12 @@ import {
   // combineReducers,
 } from 'redux';
 import thunk from 'redux-thunk';
+// import Amplify from 'aws-amplify';
 import App from './App';
 import authReducer from './store/auth/reducer/Reducer';
 
-// import Amplify from 'aws-amplify';
 // import AWSexports from './aws-exports';
+
 // Amplify.configure(AWSexports);
 
 const composeEnhancers = compose;

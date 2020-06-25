@@ -6,7 +6,7 @@ const Homepage = () => {
   return (
     <div style={{ marginTop: 50 }}>
       <h1>
-        Empty Homepage
+        OMEGALUL
       </h1>
     </div>
   );
