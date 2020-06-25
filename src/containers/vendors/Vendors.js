@@ -2,8 +2,7 @@ import React from 'react';
 import {
   // Row, Col,
   Form, Input,
-  Select,
-  Button,
+  Select
 } from 'antd';
 // import { API, graphqlOperation } from 'aws-amplify';
 // import { createVendor } from '../../graphql/mutations';
@@ -66,11 +65,6 @@ const Vendors = () => {
               <Option value="term2">Term2</Option>
               <Option value="term3">Term3</Option>
             </Select>
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Submit
-            </Button>
           </Form.Item>
         </Form>
       </div>

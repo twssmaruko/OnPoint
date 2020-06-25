@@ -70,7 +70,7 @@
     "start": "node scripts/start.js",
     "build": "GENERATE_SOURCEMAP=false node scripts/build.js",
     "test": "node scripts/test.js",
-    "lint": "eslint --fix . --ext .js"
+    "lint": "eslint src --fix . --ext .js"
   },
   "eslintConfig": {
     "extends": "react-app"
