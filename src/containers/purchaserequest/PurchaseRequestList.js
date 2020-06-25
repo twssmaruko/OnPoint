@@ -7,11 +7,12 @@ import {
 } from 'antd';
 
 import { SearchOutlined } from '@ant-design/icons';
-import Purchaserequest from './Purchaserequest';
+import PurchaseRequest from './PurchaseRequest';
 
 const Purchaselist = () => {
   // const x = 0;
   const [modalVisible, setModalVisible] = useState(false);
+
   const prList = [
     {
       prnumber: 'PR-1',
@@ -80,13 +81,7 @@ const Purchaselist = () => {
       width: 250,
       sorter: (a, b) => a.quantity - b.quantity,
     },
-    {
-      title: 'Price',
-      dataIndex: 'price',
-      key: 'price',
-      width: 150,
 
-    },
     {
       title: '',
       key: 'delete',
@@ -136,7 +131,7 @@ const Purchaselist = () => {
         okText="Save"
         cancelText="Cancel"
       >
-        <Purchaserequest />
+        <PurchaseRequest />
       </Modal>
     </>
   );
