@@ -81,7 +81,7 @@ const Purchaselist = () => {
       width: 250,
       sorter: (a, b) => a.quantity - b.quantity,
     },
-    
+
     {
       title: '',
       key: 'delete',
