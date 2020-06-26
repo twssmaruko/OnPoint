@@ -7,9 +7,9 @@ import {
 } from 'antd';
 
 import { SearchOutlined } from '@ant-design/icons';
-import PurchaseRequest from './PurchaseRequest';
+import PurchaseRequestList from './PurchaseRequestList';
 
-const Purchaselist = () => {
+const PurchaseRequests = () => {
   // const x = 0;
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -131,10 +131,10 @@ const Purchaselist = () => {
         okText="Save"
         cancelText="Cancel"
       >
-        <PurchaseRequest />
+        <PurchaseRequestList />
       </Modal>
     </>
   );
 };
 
-export default Purchaselist;
+export default PurchaseRequests;
