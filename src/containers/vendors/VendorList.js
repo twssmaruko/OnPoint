@@ -51,14 +51,14 @@ const VendorList = () => {
           <Form.Item
             label="Contact Number"
             name="contactNumber"
-            rules={[{ required: true, message: 'Please input vendor address!' }]}
+            rules={[{ required: true, message: 'Please input vendor number!' }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
             label="Terms"
             name="terms"
-            rules={[{ required: true, message: 'Please input vendor address!' }]}
+            rules={[{ required: true, message: 'Please input vendor terms!' }]}
           >
             <Select>
               <Option value="term1">Term1</Option>

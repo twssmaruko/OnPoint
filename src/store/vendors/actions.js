@@ -1,0 +1,64 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable guard-for-in */
+import * as actionTypes from './actionTypes';
+import axios from '../../axios-orders';
+
+export const fetchVendorsStart = () => ({
+  type: actionTypes.FETCH_VENDORS_START,
+});
+
+export const fetchVendorsSuccess = (vendors) => ({
+  type: actionTypes.FETCH_VENDORS_SUCCESS,
+  vendors,
+});
+
+export const fetchVendorsFail = (error) => ({
+  type: actionTypes.FETCH_VENDORS_FAIL,
+  error,
+});
+
+export const fetchVendors = () => (dispatch) => {
+  dispatch(fetchVendorsStart());
+  axios.get('/vendors.json')
+    .then((res) => {
+      const fetchedVendors = [];
+      for (const key in res.data) {
+        fetchedVendors.push({
+          ...res.data[key],
+          id: key,
+        });
+      }
+      dispatch(fetchVendorsSuccess(fetchedVendors));
+    })
+    .catch((err) => {
+      dispatch(fetchVendorsFail(err));
+    });
+};
+
+export const newVendorStart = () => ({
+  type: actionTypes.NEW_VENDOR_START,
+});
+
+export const newVendorSuccess = (id, vendorData) => ({
+  type: actionTypes.NEW_VENDOR_SUCCESS,
+  vendorId: id,
+  vendorData,
+});
+
+export const newVendorFail = (error) => ({
+  type: actionTypes.NEW_VENDOR_FAIL,
+  error,
+});
+
+export const newVendor = (vendorData) => (dispatch) => {
+  dispatch(newVendorStart());
+  axios.post('/vendors.json', vendorData)
+    .then((response) => {
+      // eslint-disable-next-line no-console
+      console.log(response.data);
+      dispatch(newVendorSuccess(response.data.name, vendorData));
+    })
+    .catch((error) => {
+      dispatch(newVendorFail(error));
+    });
+};

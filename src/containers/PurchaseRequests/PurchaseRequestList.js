@@ -7,7 +7,7 @@ import {
 
 const { Option } = Select;
 
-const Purchaserequest = () => {
+const PurchaseRequestList = () => {
   const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
@@ -81,4 +81,4 @@ const Purchaserequest = () => {
   );
 };
 
-export default Purchaserequest;
+export default PurchaseRequestList;

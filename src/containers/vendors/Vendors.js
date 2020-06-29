@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import { connect } from 'react-redux';
 import {
   Row, Col,
   Button,
@@ -7,8 +7,9 @@ import {
   Table, Input, Modal,
 } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
-
+// eslint-disable-next-line import/no-unresolved
 import VendorList from './VendorList';
+import * as actions from '../../store/vendors/index';
 
 const Vendors = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -115,7 +116,7 @@ const Vendors = () => {
         title="Add Vendor"
         visible={modalVisible}
         onOk={handleOk}
-        onCancel={handleOk}
+        onCancel={setModalVisible(false)}
         width={1000}
         okText="Save"
         cancelText="Cancel"
@@ -126,4 +127,12 @@ const Vendors = () => {
   );
 };
 
-export default Vendors;
+const mapStateToProps = (state) => ({
+  vndr: state.vendors.vendors,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onVendorAdded: (vendor) => dispatch(actions.newVendor(vendor)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Vendors);
