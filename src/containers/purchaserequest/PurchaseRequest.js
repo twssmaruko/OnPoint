@@ -1,83 +1,139 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  Row, Col, Form, Input,
-  Select,
-  //  Button,
+  Row, Col,
+  Button,
+  // List,
+  Table, Input, Modal,
 } from 'antd';
 
-const { Option } = Select;
+import { SearchOutlined } from '@ant-design/icons';
+import PurchaseRequestForm from './PurchaseRequestForm';
 
 const Purchaserequest = () => {
-  const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
-  };
-  const handleChange = () => {
+  // const x = 0;
+  const [modalVisible, setModalVisible] = useState(false);
 
+  const prList = [
+    {
+      prnumber: 'PR-1',
+      description: 'Description for PR-1',
+      unit: 'Unit 1',
+      quantity: 1,
+      price: 1000,
+    },
+    {
+      prnumber: 'PR-2',
+      description: 'Description for PR-2',
+      unit: 'Unit 2',
+      quantity: 2,
+      price: 2000,
+    },
+    {
+      prnumber: 'PR-3',
+      description: 'Description for PR-3',
+      unit: 'Unit 3',
+      quantity: 3,
+      price: 3000,
+    },
+  ];
+
+  const renderInput = () => (
+    <div>
+      <Input> Search </Input>
+    </div>
+  );
+
+  const columns = [
+    {
+      title: () => (
+        <div style={{ marginTop: 15 }}>
+          <p style={{ display: 'inline-block' }}> PR number</p>
+          <Button
+            size="small"
+            style={{ width: 20, marginLeft: 30, display: 'inline-block' }}
+            icon={<SearchOutlined />}
+            onClick={renderInput}
+          />
+        </div>
+      ),
+      dataIndex: 'prnumber',
+      key: 'prnumber',
+      width: 250,
+    },
+    {
+      title: 'Description',
+      dataIndex: 'description',
+      key: 'description',
+      width: 300,
+
+    },
+    {
+      title: 'Unit',
+      dataIndex: 'unit',
+      key: 'unit',
+      width: 250,
+
+    },
+    {
+      title: 'Quantity',
+      dataIndex: 'quantity',
+      key: 'quantity',
+      width: 250,
+      sorter: (a, b) => a.quantity - b.quantity,
+    },
+
+    {
+      title: '',
+      key: 'delete',
+      width: 200,
+      render: () => (<Button type="link">Delete</Button>),
+    },
+  ];
+
+  const setModal = () => {
+    setModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setModalVisible(false);
   };
 
   return (
-    <Row>
-      <Col span={24}>
-        <Row>
-          <Form
-            {...layout}
-            name="basic"
-          >
-            <Row>
-              <Col span={6}>
-                <Form.Item
-                  label="PR #"
-                  rules={[{ required: true, message: 'Please input PR #' }]}
-                >
-                  <Input />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={6}>
-                <Form.Item
-                  label="Description"
-                  rules={[{ required: true, message: 'Please input PR #' }]}
-                >
-                  <Select defaultValue="Select Description" style={{ width: 170 }} onChange={handleChange}>
-                    <Option value="Des1">Description 1</Option>
-                    <Option value="Des2">Description 2</Option>
-                    <Option value="Des3">Description 3</Option>
-                    <Option value="Des4">Description 4</Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item
-                  label="Unit"
-                  rules={[{ required: true, message: 'Please input PR #' }]}
-                >
-                  <Input />
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item
-                  label="Quantity"
-                  rules={[{ required: true, message: 'Please input PR #' }]}
-                >
-                  <Input />
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item
-                  label="Price"
-                  rules={[{ required: true, message: 'Please input PR #' }]}
-                >
-                  <Input />
-                </Form.Item>
-              </Col>
-            </Row>
-          </Form>
-        </Row>
-
-      </Col>
-    </Row>
+    <>
+      <Row>
+        <Col offset={5} style={{ marginTop: '40px' }}>
+          <Row>
+            <h1>Purchase Request</h1>
+          </Row>
+          <Row>
+            <Button type="primary" onClick={setModal}>
+              New
+            </Button>
+          </Row>
+          <Row style={{ marginTop: '30px' }}>
+            <Col span={24}>
+              <Table
+                columns={columns}
+                dataSource={prList}
+                size="large"
+                rowKey="prnumber"
+              />
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+      <Modal
+        title="Add Purchase Request"
+        visible={modalVisible}
+        onOk={handleOk}
+        onCancel={handleOk}
+        width={1000}
+        okText="Save"
+        cancelText="Cancel"
+      >
+        <PurchaseRequestForm />
+      </Modal>
+    </>
   );
 };
 

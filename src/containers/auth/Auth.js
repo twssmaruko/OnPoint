@@ -6,18 +6,30 @@ import {
   Button,
 } from 'antd';
 import { useDispatch } from 'react-redux';
+import { Auth } from 'aws-amplify';
 import * as actions from '../../store/auth/actions/Action';
 // import { API, graphqlOperation } from 'aws-amplify';
 // import { createVendor } from '../../graphql/mutations';
 // const { Option } = Select;
 
-const Auth = () => {
+const Authentication = () => {
   const dispatcher = useDispatch();
 
   const onFinish = (values) => {
     console.log('Success:', values);
     dispatcher(actions.signIn(values));
     // API.graphql(graphqlOperation(createVendor, { input: { ...values } }));
+  };
+
+  const checkAuth = async () => {
+    const authUser = await Auth.currentAuthenticatedUser();
+    console.log(authUser);
+  };
+
+  const signOut = async () => {
+    // const authUser = await Auth.currentAuthenticatedUser();
+    // console.log(authUser);
+    await Auth.signOut();
   };
 
   return (
@@ -59,8 +71,14 @@ const Auth = () => {
             </Button>
           </Form.Item>
         </Form>
+        <Button type="primary" onClick={checkAuth}>
+          Check auth
+        </Button>
+        <Button type="primary" onClick={signOut}>
+          Sign out
+        </Button>
       </div>
     </div>
   );
 };
-export default Auth;
+export default Authentication;

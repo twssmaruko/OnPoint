@@ -3,16 +3,18 @@ import {
   // Row, Col,
   Form, Input,
   Select,
+  Button,
 } from 'antd';
-// import { API, graphqlOperation } from 'aws-amplify';
-// import { createVendor } from '../../graphql/mutations';
+import { API, graphqlOperation } from 'aws-amplify';
+import { createVendor } from '../../graphql/mutations';
 
 const { Option } = Select;
 
 const Vendors = () => {
-  const onFinish = (values) => {
+  const onFinish = async (values) => {
     console.log('Success:', values);
-    // API.graphql(graphqlOperation(createVendor, { input: { ...values } }));
+    const data = await API.graphql(graphqlOperation(createVendor, { input: { ...values } }));
+    console.log(data);
   };
 
   return (
@@ -65,6 +67,11 @@ const Vendors = () => {
               <Option value="term2">Term2</Option>
               <Option value="term3">Term3</Option>
             </Select>
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
           </Form.Item>
         </Form>
       </div>
