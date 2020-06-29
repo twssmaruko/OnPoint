@@ -9,7 +9,7 @@ import {
 import { SearchOutlined } from '@ant-design/icons';
 import PurchaseRequestForm from './PurchaseRequestForm';
 
-const Purchaserequest = () => {
+const PurchaseRequests = () => {
   // const x = 0;
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -137,4 +137,4 @@ const Purchaserequest = () => {
   );
 };
 
-export default Purchaserequest;
+export default PurchaseRequests;

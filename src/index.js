@@ -5,20 +5,26 @@ import './index.css';
 import { Provider } from 'react-redux';
 import {
   createStore, applyMiddleware, compose,
-  // combineReducers,
+  combineReducers,
 } from 'redux';
 import thunk from 'redux-thunk';
-import Amplify from 'aws-amplify';
+// import Amplify from 'aws-amplify';
 import App from './App';
 import authReducer from './store/auth/reducer/Reducer';
+import vendorReducer from './store/vendors/reducer';
 
-import AWSexports from './aws-exports';
+// import AWSexports from './aws-exports';
 
-Amplify.configure(AWSexports);
+// Amplify.configure(AWSexports);
 
 const composeEnhancers = compose;
 
-const store = createStore(authReducer, composeEnhancers(
+const rootReducer = combineReducers({
+  auth: authReducer,
+  vendor: vendorReducer,
+});
+
+const store = createStore(rootReducer, composeEnhancers(
   applyMiddleware(thunk),
 ));
 

@@ -1,129 +1,74 @@
-import React, { useState } from 'react';
-
+import React from 'react';
 import {
-  Row, Col,
-  Button,
-  // List,
-  Table, Input, Modal,
+  // Row, Col,
+  Form, Input,
+  Select,
 } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+// import { API, graphqlOperation } from 'aws-amplify';
+// import { createVendor } from '../../graphql/mutations';
 
-import Vendors from './Vendors';
+const { Option } = Select;
 
 const VendorList = () => {
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const vendorList = [{
-    vendorName: 'I forgot their name',
-    telNo: '8205245',
-    location: 'Mandaue City',
-    Terms: 'COD',
-  },
-  {
-    vendorName: 'I forgot their name',
-    telNo: '8205245',
-    location: 'Mandaue City',
-    Terms: 'Cheque or something',
-  },
-  {
-    vendorName: 'I forgot alsoo',
-    telNo: '2381311',
-    location: 'Mandaue City',
-    Terms: 'COD',
-  },
-  {
-    vendorName: 'This is a test',
-    telNo: '3444512',
-    location: 'Cebu City',
-    Terms: 'COD',
-  }];
-
-  const renderInput = () => (
-    <div>
-      <Input> Search </Input>
-    </div>
-  );
-
-  const columns = [
-    {
-      title: () => (
-        <div style={{ marginTop: 15 }}>
-          <p style={{ display: 'inline-block' }}> Vendor</p>
-          <Button
-            size="small"
-            style={{ width: 20, marginLeft: 30, display: 'inline-block' }}
-            icon={<SearchOutlined />}
-            onClick={renderInput}
-          />
-        </div>
-      ),
-      dataIndex: 'vendorName',
-      key: 'vendorName',
-      width: 250,
-    },
-    {
-      title: 'Tel-No',
-      dataIndex: 'telNo',
-      key: 'telNo',
-      width: 250,
-    },
-    {
-      title: 'Location',
-      dataIndex: 'location',
-      key: 'location',
-      width: 250,
-    },
-    {
-      title: 'Terms',
-      dataIndex: 'terms',
-      key: 'terms',
-      width: 250,
-    },
-  ];
-
-  const setModal = () => {
-    setModalVisible(true);
-  };
-
-  const handleOk = () => {
-    setModalVisible(false);
+  const onFinish = (values) => {
+    console.log('Success:', values);
+    // API.graphql(graphqlOperation(createVendor, { input: { ...values } }));
   };
 
   return (
-    <>
-      <Row>
-        <Col offset={5} style={{ marginTop: '40px' }}>
-          <Row>
-            <h1>Vendors</h1>
-          </Row>
-          <Row>
-            <Button type="primary" onClick={setModal}>NEW</Button>
-          </Row>
-          <Row style={{ marginTop: '30px' }}>
-            <Col span={24}>
-              <Table
-                columns={columns}
-                dataSource={vendorList}
-                size="large"
-                rowkey="vendorName"
-              />
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-      <Modal
-        title="Add Vendor"
-        visible={modalVisible}
-        onOk={handleOk}
-        onCancel={handleOk}
-        width={1000}
-        okText="Save"
-        cancelText="Cancel"
+    <div>
+      <div style={{ textAlign: 'center', marginTop: 20, width: '100%' }}>
+        <h3 style={{ color: '#512E0E' }}>Vendors</h3>
+      </div>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        marginTop: 20,
+        width: '100%',
+      }}
       >
-        <Vendors />
-      </Modal>
-    </>
+        <Form
+          // layout="vertical"
+          name="basic"
+          initialValues={{ remember: true, terms: 'term1' }}
+          onFinish={onFinish}
+          // labelAlign="left"
+        >
+          <Form.Item
+            label="Name"
+            name="name"
+            rules={[{ required: true, message: 'Please input vendor name!' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Address"
+            name="address"
+            rules={[{ required: true, message: 'Please input vendor address!' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Contact Number"
+            name="contactNumber"
+            rules={[{ required: true, message: 'Please input vendor number!' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            label="Terms"
+            name="terms"
+            rules={[{ required: true, message: 'Please input vendor terms!' }]}
+          >
+            <Select>
+              <Option value="term1">Term1</Option>
+              <Option value="term2">Term2</Option>
+              <Option value="term3">Term3</Option>
+            </Select>
+          </Form.Item>
+        </Form>
+      </div>
+    </div>
   );
 };
-
 export default VendorList;
