@@ -8,20 +8,24 @@ import {
   combineReducers,
 } from 'redux';
 import thunk from 'redux-thunk';
-// import Amplify from 'aws-amplify';
+import Amplify from 'aws-amplify';
 import App from './App';
 import authReducer from './store/auth/reducer/Reducer';
 import vendorReducer from './store/vendors/reducer';
+import productsReducer from './store/products/reducer/Reducer';
+import uiReducer from './store/ui/reducer/Reducer';
 
-// import AWSexports from './aws-exports';
+import AWSexports from './aws-exports';
 
-// Amplify.configure(AWSexports);
+Amplify.configure(AWSexports);
 
 const composeEnhancers = compose;
 
 const rootReducer = combineReducers({
   auth: authReducer,
   vendor: vendorReducer,
+  products: productsReducer,
+  ui: uiReducer,
 });
 
 const store = createStore(rootReducer, composeEnhancers(

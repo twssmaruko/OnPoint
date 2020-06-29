@@ -12,3 +12,9 @@ type Vendor @model {
   terms: String!
 }
 
+type Product @model {
+  id: ID!
+  name: String!
+  description: String!
+}
+

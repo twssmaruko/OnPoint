@@ -6,9 +6,16 @@ import {
   Button,
 } from 'antd';
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import * as actions from '../../../store/auth/actions/Action';
 import Logo from '../../logo/Logo';
 
 const Header = () => {
+  const dispatcher = useDispatch();
+  const { user } = useSelector(({ auth }) => ({
+    user: auth.user,
+  }));
+
   const titleStyle = {
     color: 'white',
     marginTop: '22px',
@@ -20,6 +27,24 @@ const Header = () => {
     color: 'white',
     marginTop: '20px',
   };
+
+  const signOut = () => {
+    dispatcher(actions.signOut());
+  };
+
+  const authenticate = (
+    <Link exact="true" to="auth">
+      <Button type="link" style={{ color: 'black' }}>
+        Authenticate
+      </Button>
+    </Link>
+  );
+
+  const signOutButton = (
+    <Button type="link" style={{ color: 'black' }} onClick={signOut}>
+      Sign Out
+    </Button>
+  );
 
   return (
     <Row style={{ backgroundColor: '#white' }}>
@@ -55,12 +80,15 @@ const Header = () => {
               Vendors
             </Link>
           </Menu.Item>
+          <Menu.Item>
+            <Link style={{ color: 'black' }} exact="true" to="products">
+              Products
+            </Link>
+          </Menu.Item>
         </Menu>
       </Col>
       <Col offset={2} span={4} style={{ marginTop: '30px', fontSize: '15px' }}>
-        <Link exact="true" to="auth">
-          <Button type="link" style={{ color: 'black' }}> Authenticate </Button>
-        </Link>
+        {user ? signOutButton : authenticate}
       </Col>
     </Row>
   );
