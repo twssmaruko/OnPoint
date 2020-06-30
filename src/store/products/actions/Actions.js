@@ -74,7 +74,6 @@ export const removeProduct = (data) => async (dispatch) => {
     dispatch(getProducts());
   } catch (e) {
     message.error('Deleting product failed!');
-    console.log(e);
     dispatch(setModalSpin(false));
   }
 };
