@@ -20,9 +20,9 @@ import TableButton from '../../components/button/OnpointButton';
 const Products = () => {
   const [operation, setOperation] = useState('add');
   const [editValues, setEditValues] = useState({});
-  const dispatcher = useDispatch(); // hooks dispatcher for functions
+  const dispatcher = useDispatch(); // hooks dispatcher for redux functions from actions
   const formRef = useRef(null);
-  // next line is hooks mapstatetoprops, dretso na variable, dli na props
+  // next line is hooks mapstatetoprops, dretso na variable, dli na ibutang sa props
   const {
     openModal,
     showSpin,
@@ -34,7 +34,7 @@ const Products = () => {
     tableSpin: ui.tableSpin,
     productsList: products.products,
   }));
-
+  // next line is componentwillmount hooks version, where you get the products para ishow sa table
   useEffect(() => {
     dispatcher(actions.getProducts());
   }, [dispatcher]);
@@ -117,7 +117,7 @@ const Products = () => {
   return (
     <>
       <Row>
-        <Col offset={5} style={{ marginTop: '40px' }}>
+        <Col offset={5} style={{ marginTop: 20 }}>
           <Row>
             <h1>Products</h1>
           </Row>
