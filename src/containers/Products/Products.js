@@ -1,5 +1,5 @@
 import React, {
-  useRef, useEffect,
+  useRef, useEffect, useState,
 } from 'react';
 import {
   Row,
@@ -11,11 +11,15 @@ import {
 } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 
+import { EditTwoTone, DeleteFilled } from '@ant-design/icons';
 import Productsform from './ProductsForm';
 import * as uiActions from '../../store/ui/actions/Actions';
 import * as actions from '../../store/products/actions/Actions';
+import TableButton from '../../components/button/OnpointButton';
 
 const Products = () => {
+  const [operation, setOperation] = useState('add');
+  const [editValues, setEditValues] = useState({});
   const dispatcher = useDispatch(); // hooks dispatcher for functions
   const formRef = useRef(null);
   // next line is hooks mapstatetoprops, dretso na variable, dli na props
@@ -35,24 +39,37 @@ const Products = () => {
     dispatcher(actions.getProducts());
   }, [dispatcher]);
 
-  // const prList = [
-  //   {
-  //     name: 'Product-1',
-  //     description: 'description for product 1.',
-  //   },
-  //   {
-  //     name: 'Product-2',
-  //     description: 'description for product 2.',
-  //   },
-  //   {
-  //     name: 'Product-3',
-  //     description: 'description for product 3.',
-  //   },
-  // ];
+  const setEditModal = (item) => {
+    setOperation('edit');
+    setEditValues(item);
+    dispatcher(uiActions.setOpenModal(true));
+  };
 
-  console.log(productsList);
+  const deleteItem = (item) => {
+    const { id } = item;
+    dispatcher(actions.removeProduct(id));
+  };
+
+  const editButton = (item) => (
+    <div>
+      <TableButton value={item} type="primary" icon={<EditTwoTone />} onClick={setEditModal} />
+    </div>
+  );
+
+  const deleteButton = (item) => (
+    <div>
+      <TableButton value={item} type="danger" icon={<DeleteFilled />} onClick={deleteItem} />
+    </div>
+  );
 
   const columns = [
+    {
+      title: 'Edit',
+      key: 'edit',
+      render: editButton,
+      fixed: 'left',
+      width: '1%',
+    },
     {
       title: 'Products',
       dataIndex: 'name',
@@ -65,9 +82,27 @@ const Products = () => {
       key: 'description',
       width: 250,
     },
+    {
+      title: 'Delete',
+      render: deleteButton,
+      key: 'delete',
+      width: '1%',
+    },
+
   ];
 
-  const setModal = () => {
+  const onSubmit = (values) => {
+    if (operation === 'add') {
+      dispatcher(actions.addProduct(values));
+    } else if (operation === 'edit') {
+      const toSubmitValues = { ...editValues, ...values };
+      dispatcher(actions.editProduct(toSubmitValues));
+    }
+  };
+
+  const setAddModal = () => {
+    setEditValues({});
+    setOperation('add');
     dispatcher(uiActions.setOpenModal(true));
   };
 
@@ -87,7 +122,7 @@ const Products = () => {
             <h1>Products</h1>
           </Row>
           <Row>
-            <Button type="primary" onClick={setModal}>
+            <Button type="primary" onClick={setAddModal}>
               New
             </Button>
           </Row>
@@ -95,10 +130,13 @@ const Products = () => {
             <Col span={24}>
               <Spin spinning={tableSpin}>
                 <Table
+                  size="small"
                   columns={columns}
                   dataSource={productsList}
-                  size="large"
                   rowKey="name"
+                  style={{
+                    border: '1px solid black',
+                  }}
                 />
               </Spin>
             </Col>
@@ -106,18 +144,17 @@ const Products = () => {
         </Col>
       </Row>
       <Modal
-        title="Add a product"
+        title={operation === 'add' ? 'Add a product' : 'Edit a product'}
         visible={openModal}
         onOk={handleOk}
         onCancel={handleCancel}
         width={1000}
-        okText="Save"
+        okText={operation === 'add' ? 'Add' : 'Edit'}
         cancelText="Cancel"
         destroyOnClose
       >
         <Spin spinning={showSpin}>
-
-          <Productsform reference={formRef} />
+          <Productsform reference={formRef} onSubmit={onSubmit} editValues={editValues} />
         </Spin>
       </Modal>
     </>

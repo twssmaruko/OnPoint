@@ -1,9 +1,17 @@
 import { message } from 'antd';
 import { API, graphqlOperation } from 'aws-amplify';
 import * as actionTypes from '../ActionTypes';
-import { createProduct } from '../../../graphql/mutations';
+import {
+  createProduct,
+  updateProduct,
+  deleteProduct,
+} from '../../../graphql/mutations';
 import { listProducts } from '../../../graphql/queries';
-import { setOpenModal, setShowSpin, setTableSpin } from '../../ui/actions/Actions';
+import {
+  setOpenModal,
+  setModalSpin,
+  setTableSpin,
+} from '../../ui/actions/Actions';
 
 export const setProducts = (data) => ({
   type: actionTypes.SET_PRODUCTS,
@@ -19,20 +27,54 @@ export const getProducts = () => async (dispatch) => {
     dispatch(setTableSpin(false));
   } catch (e) {
     dispatch(setTableSpin(false));
-    message.error('Error getting products.');
+    message.error('error getting products');
   }
 };
 
-export const addProducts = (data) => async (dispatch) => {
+export const addProduct = (data) => async (dispatch) => {
   try {
-    dispatch(setShowSpin(true));
+    dispatch(setModalSpin(true));
     await API.graphql(graphqlOperation(createProduct, { input: data }));
-    message.success('Product added succesfuly!');
+    message.success('Product added succesfully!');
     dispatch(setOpenModal(false));
-    dispatch(setShowSpin(false));
+    dispatch(setModalSpin(false));
     dispatch(getProducts());
   } catch (e) {
-    message.error('theres an error logging in');
-    dispatch(setShowSpin(false));
+    message.error('Adding product failed!');
+    dispatch(setModalSpin(false));
+  }
+};
+
+export const editProduct = (data) => async (dispatch) => {
+  try {
+    dispatch(setModalSpin(true));
+    const { id, name, description } = data;
+    const input = { id, name, description };
+    await API.graphql(graphqlOperation(updateProduct, { input }));
+    message.success('Product updated succesfully!');
+    dispatch(setOpenModal(false));
+    dispatch(setModalSpin(false));
+    dispatch(getProducts());
+  } catch (e) {
+    message.error('Updating product failed!');
+    dispatch(setModalSpin(false));
+  }
+};
+
+export const removeProduct = (data) => async (dispatch) => {
+  try {
+    dispatch(setModalSpin(true));
+    const input = {
+      id: data,
+    };
+    await API.graphql(graphqlOperation(deleteProduct, { input }));
+    message.success('Product deleted succesfully!');
+    dispatch(setOpenModal(false));
+    dispatch(setModalSpin(false));
+    dispatch(getProducts());
+  } catch (e) {
+    message.error('Deleting product failed!');
+    console.log(e);
+    dispatch(setModalSpin(false));
   }
 };

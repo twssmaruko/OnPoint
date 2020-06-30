@@ -13,7 +13,7 @@ const ui = (state = initialState, action) => {
         ...state,
         openModal: action.data,
       };
-    case actions.SET_SHOWSPIN:
+    case actions.SET_MODALSPIN:
       return {
         ...state,
         showSpin: action.data,

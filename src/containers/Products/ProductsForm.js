@@ -2,19 +2,13 @@ import React from 'react';
 import {
   Row, Col, Form, Input,
 } from 'antd';
-import { useDispatch } from 'react-redux';
-import * as actions from '../../store/products/actions/Actions';
 
 const Productsform = (props) => {
-  const dispatcher = useDispatch();
   const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
   };
-  const { reference } = props;
-  const onSubmit = (values) => {
-    dispatcher(actions.addProducts(values));
-  };
+  const { reference, onSubmit, editValues } = props;
 
   return (
     <Row>
@@ -24,6 +18,7 @@ const Productsform = (props) => {
             ref={reference}
             {...layout}
             name="basic"
+            initialValues={editValues}
             onFinish={onSubmit}
           >
             <Row>
