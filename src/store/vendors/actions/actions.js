@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable guard-for-in */
-import * as actionTypes from './actionTypes';
-import axios from '../../axios-orders';
+import * as actionTypes from '../actionTypes';
+import axios from '../../../axios-orders';
 
 export const fetchVendorsStart = () => ({
   type: actionTypes.FETCH_VENDORS_START,

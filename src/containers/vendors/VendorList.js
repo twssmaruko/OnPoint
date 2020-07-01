@@ -11,6 +11,7 @@ const { Option } = Select;
 
 const VendorList = () => {
   const onFinish = (values) => {
+    // eslint-disable-next-line no-console
     console.log('Success:', values);
     // API.graphql(graphqlOperation(createVendor, { input: { ...values } }));
   };

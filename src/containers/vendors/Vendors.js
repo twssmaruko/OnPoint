@@ -118,7 +118,7 @@ const Vendors = () => {
         onOk={handleOk}
         onCancel={handleOk}
         width={1000}
-        okText="Save"
+        okText="Add"
         cancelText="Cancel"
       >
         <VendorList />
@@ -127,12 +127,13 @@ const Vendors = () => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  vndr: state.vendor.vendors,
+const mapStateToProps = ({ vendor }) => ({
+  vendor: vendor.vendors,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   onVendorAdded: (vendor) => dispatch(actions.newVendor(vendor)),
+  onVendorFetched: (vendor) => dispatch(actions.fetchVendors(vendor)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Vendors);
