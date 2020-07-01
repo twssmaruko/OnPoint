@@ -118,7 +118,7 @@ const Vendors = () => {
         onOk={handleOk}
         onCancel={setModalVisible(false)}
         width={1000}
-        okText="Save"
+        okText="Add"
         cancelText="Cancel"
       >
         <VendorList />
