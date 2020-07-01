@@ -31,7 +31,7 @@ export const setSubscriptions = (data) => ({
 export const getProducts = () => async (dispatch) => {
   try {
     dispatch(setTableSpin(true));
-    const products = await API.graphql(graphqlOperation(listProducts, { limit: 10 }));
+    const products = await API.graphql(graphqlOperation(listProducts));
     const newProducts = products.data.listProducts.items;
     dispatch(setProducts(newProducts));
     dispatch(setTableSpin(false));
@@ -48,7 +48,6 @@ export const addProduct = (data) => async (dispatch) => {
     message.success('Product added succesfully!');
     dispatch(setOpenModal(false));
     dispatch(setModalSpin(false));
-    // dispatch(getProducts());
   } catch (e) {
     message.error('Adding product failed!');
     dispatch(setModalSpin(false));
@@ -64,7 +63,6 @@ export const editProduct = (data) => async (dispatch) => {
     message.success('Product updated succesfully!');
     dispatch(setOpenModal(false));
     dispatch(setModalSpin(false));
-    // dispatch(getProducts());
   } catch (e) {
     message.error('Updating product failed!');
     dispatch(setModalSpin(false));
@@ -81,7 +79,6 @@ export const removeProduct = (data) => async (dispatch) => {
     message.success('Product deleted succesfully!');
     dispatch(setOpenModal(false));
     dispatch(setModalSpin(false));
-    // dispatch(getProducts());
   } catch (e) {
     message.error('Deleting product failed!');
     dispatch(setModalSpin(false));

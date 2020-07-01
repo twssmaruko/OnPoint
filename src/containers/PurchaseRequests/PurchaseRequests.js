@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Row, Col,
   Button,
   // List,
-  Table, Input, Modal,
+  Table, Input,
 } from 'antd';
 
 import { SearchOutlined } from '@ant-design/icons';
@@ -11,7 +11,6 @@ import PurchaseRequestForm from './PurchaseRequestForm';
 
 const PurchaseRequests = () => {
   // const x = 0;
-  const [modalVisible, setModalVisible] = useState(false);
 
   const prList = [
     {
@@ -90,14 +89,6 @@ const PurchaseRequests = () => {
     },
   ];
 
-  const setModal = () => {
-    setModalVisible(true);
-  };
-
-  const handleOk = () => {
-    setModalVisible(false);
-  };
-
   return (
     <>
       <Row>
@@ -106,9 +97,7 @@ const PurchaseRequests = () => {
             <h1>Purchase Request</h1>
           </Row>
           <Row>
-            <Button type="primary" onClick={setModal}>
-              New
-            </Button>
+            <PurchaseRequestForm />
           </Row>
           <Row style={{ marginTop: '30px' }}>
             <Col span={24}>
@@ -122,17 +111,7 @@ const PurchaseRequests = () => {
           </Row>
         </Col>
       </Row>
-      <Modal
-        title="Add Purchase Request"
-        visible={modalVisible}
-        onOk={handleOk}
-        onCancel={handleOk}
-        width={1000}
-        okText="Save"
-        cancelText="Cancel"
-      >
-        <PurchaseRequestForm />
-      </Modal>
+
     </>
   );
 };

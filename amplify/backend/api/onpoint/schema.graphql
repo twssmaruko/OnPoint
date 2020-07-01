@@ -18,3 +18,12 @@ type Product @model {
   description: String!
 }
 
+type PurchaseRequest @model {
+  id: ID!
+  prNumber: String!
+  product: Product!,
+  unit: String!,
+  quantity: Int!,
+  price: Float!, 
+}
+
