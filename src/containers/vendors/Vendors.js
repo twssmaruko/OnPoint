@@ -116,7 +116,7 @@ const Vendors = () => {
         title="Add Vendor"
         visible={modalVisible}
         onOk={handleOk}
-        onCancel={setModalVisible(false)}
+        onCancel={handleOk}
         width={1000}
         okText="Save"
         cancelText="Cancel"
@@ -128,7 +128,7 @@ const Vendors = () => {
 };
 
 const mapStateToProps = (state) => ({
-  vndr: state.vendors.vendors,
+  vndr: state.vendor.vendors,
 });
 
 const mapDispatchToProps = (dispatch) => ({

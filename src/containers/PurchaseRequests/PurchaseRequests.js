@@ -3,13 +3,28 @@ import {
   Row, Col,
   Button,
   // List,
-  Table, Input,
+  Table,
+  Input,
+  Modal,
+  Spin,
 } from 'antd';
+
+import { useSelector, useDispatch } from 'react-redux';
 
 import { SearchOutlined } from '@ant-design/icons';
 import PurchaseRequestForm from './PurchaseRequestForm';
+import * as uiActions from '../../store/ui/actions/Actions';
 
 const PurchaseRequests = () => {
+  const dispatcher = useDispatch();
+  const {
+    openModal,
+    showSpin,
+  } = useSelector(({ ui }) => ({
+    showSpin: ui.showSpin,
+    openModal: ui.openModal,
+  }));
+
   // const x = 0;
 
   const prList = [
@@ -89,15 +104,25 @@ const PurchaseRequests = () => {
     },
   ];
 
+  const setModal = () => {
+    dispatcher(uiActions.setOpenModal(true));
+  };
+
+  const handleCancel = () => {
+    dispatcher(uiActions.setOpenModal(false));
+  };
+
   return (
     <>
       <Row>
-        <Col offset={5} style={{ marginTop: '40px' }}>
+        <Col offset={5} style={{ marginTop: 20 }}>
           <Row>
             <h1>Purchase Request</h1>
           </Row>
           <Row>
-            <PurchaseRequestForm />
+            <Button type="primary" onClick={setModal}>
+              New
+            </Button>
           </Row>
           <Row style={{ marginTop: '30px' }}>
             <Col span={24}>
@@ -111,6 +136,20 @@ const PurchaseRequests = () => {
           </Row>
         </Col>
       </Row>
+      <Modal
+        title="Add a new purchase request"
+        visible={openModal}
+        // onOk={handleOk}
+        onCancel={handleCancel}
+        width={1000}
+        okText="ok"
+        cancelText="Cancel"
+        destroyOnClose
+      >
+        <Spin spinning={showSpin}>
+          <PurchaseRequestForm />
+        </Spin>
+      </Modal>
 
     </>
   );

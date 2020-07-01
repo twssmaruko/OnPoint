@@ -1,83 +1,90 @@
 import React from 'react';
 import {
-  Row, Col, Form, Input,
+  // Row,
+  // Col,
+  Form, Input,
   Select,
-  //  Button,
+  Button,
+  List,
 } from 'antd';
 
 const { Option } = Select;
 
 const PurchaseRequestForm = () => {
-  const layout = {
-    labelCol: { span: 8 },
-    wrapperCol: { span: 16 },
-  };
+  // const [orderData, setOrderData] = useState({
+
+  // });
+  // const layout = {
+  //   labelCol: { span: 12 },
+  //   wrapperCol: { span: 10 },
+  // };
+
+  const orderData = ['4 pounds of shovel for the price of 1000'];
+
   const handleChange = () => {
 
   };
 
   return (
-    <Row>
-      <Col span={24}>
-        <Row>
-          <Form
-            {...layout}
-            name="basic"
+    <div>
+      <Form
+          // {...layout}
+        name="basic"
+      >
+        <div style={{ marginLeft: 20 }}>
+          <h3>PR #</h3>
+        </div>
+        <div style={{
+          display: 'flex', flexDirection: 'row',
+        }}
+        >
+          <Form.Item
+            label="Product"
+            rules={[{ required: true, message: 'Please input PR #!' }]}
           >
-            <Row>
-              <Col span={6}>
-                <Form.Item
-                  label="PR #"
-                  rules={[{ required: true, message: 'Please input PR #' }]}
-                >
-                  <Input />
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row>
-              <Col span={6}>
-                <Form.Item
-                  label="Description"
-                  rules={[{ required: true, message: 'Please input PR #' }]}
-                >
-                  <Select defaultValue="Select Description" style={{ width: 170 }} onChange={handleChange}>
-                    <Option value="Des1">Description 1</Option>
-                    <Option value="Des2">Description 2</Option>
-                    <Option value="Des3">Description 3</Option>
-                    <Option value="Des4">Description 4</Option>
-                  </Select>
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item
-                  label="Unit"
-                  rules={[{ required: true, message: 'Please input PR #' }]}
-                >
-                  <Input />
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item
-                  label="Quantity"
-                  rules={[{ required: true, message: 'Please input PR #' }]}
-                >
-                  <Input />
-                </Form.Item>
-              </Col>
-              <Col span={6}>
-                <Form.Item
-                  label="Price"
-                  rules={[{ required: true, message: 'Please input PR #' }]}
-                >
-                  <Input />
-                </Form.Item>
-              </Col>
-            </Row>
-          </Form>
-        </Row>
-
-      </Col>
-    </Row>
+            <Select defaultValue="Select Description" style={{ width: 170 }} onChange={handleChange}>
+              <Option value="Des1">Description 1</Option>
+              <Option value="Des2">Description 2</Option>
+              <Option value="Des3">Description 3</Option>
+              <Option value="Des4">Description 4</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item
+            style={{ marginLeft: 20 }}
+            label="Unit"
+            rules={[{ required: true, message: 'Please input Unit!' }]}
+          >
+            <Input style={{ width: 50 }} />
+          </Form.Item>
+          <Form.Item
+            style={{ marginLeft: 20 }}
+            label="Quantity"
+            rules={[{ required: true, message: 'Please input Quantity!' }]}
+          >
+            <Input style={{ width: 50 }} />
+          </Form.Item>
+          <Form.Item
+            style={{ marginLeft: 20 }}
+            label="Price"
+            rules={[{ required: true, message: 'Please input Price!' }]}
+          >
+            <Input style={{ width: 100 }} />
+          </Form.Item>
+          <Form.Item style={{ marginLeft: 15 }}>
+            <Button type="primary" htmlType="submit">
+              Add Order
+            </Button>
+          </Form.Item>
+        </div>
+      </Form>
+      <List
+        size="small"
+        header={<div>Orders</div>}
+        bordered
+        dataSource={orderData}
+        renderItem={(item) => <List.Item>{item}</List.Item>}
+      />
+    </div>
   );
 };
 

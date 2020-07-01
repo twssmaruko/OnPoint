@@ -12,18 +12,24 @@ type Vendor @model {
   terms: String!
 }
 
-type Product @model {
+type PurchaseRequest @model {
+  id: ID!
+  purchaseRequestNo: String!
+  isApproved: Boolean!
+  orders: [Order!]! @connection(name:"PurchaseRequestOrders")
+}
+
+ type Order @model {
+   id: ID!,
+   product: Product @connection
+   unit: String!
+   qty: Int!
+   price: Float!
+   purchaserequest: PurchaseRequest @connection(name:"PurchaseRequestOrders")
+ }
+
+ type Product @model {
   id: ID!
   name: String!
   description: String!
 }
-
-type PurchaseRequest @model {
-  id: ID!
-  prNumber: String!
-  product: Product!,
-  unit: String!,
-  quantity: Int!,
-  price: Float!, 
-}
-
