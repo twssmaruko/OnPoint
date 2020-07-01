@@ -19,7 +19,7 @@ const PurchaseRequestForm = () => {
   //   wrapperCol: { span: 10 },
   // };
 
-  const orderData = ['4 pounds of shovel for the price of 1000'];
+  const orderData = ['4 pounds of shovel for the price of 1000 yow'];
 
   const handleChange = () => {
 
