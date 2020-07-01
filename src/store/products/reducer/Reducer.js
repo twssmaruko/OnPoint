@@ -2,6 +2,7 @@ import * as actions from '../ActionTypes';
 
 const initialState = {
   products: [],
+  subscriptions: [],
 };
 
 const productsReducer = (state = initialState, action) => {
@@ -10,6 +11,11 @@ const productsReducer = (state = initialState, action) => {
       return {
         ...state,
         products: action.data,
+      };
+    case actions.SET_SUBSCRIPTIONS:
+      return {
+        ...state,
+        subscriptions: action.data,
       };
     default:
       return state;
