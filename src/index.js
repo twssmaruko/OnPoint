@@ -12,6 +12,8 @@ import thunk from 'redux-thunk';
 import App from './App';
 import authReducer from './store/auth/reducer/Reducer';
 import vendorReducer from './store/vendors/reducer';
+import productsReducer from './store/products/reducer/Reducer';
+import uiReducer from './store/ui/reducer/Reducer';
 
 // import AWSexports from './aws-exports';
 
@@ -22,6 +24,8 @@ const composeEnhancers = compose;
 const rootReducer = combineReducers({
   auth: authReducer,
   vendor: vendorReducer,
+  products: productsReducer,
+  ui: uiReducer,
 });
 
 const store = createStore(rootReducer, composeEnhancers(

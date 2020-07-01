@@ -1,19 +1,19 @@
 import * as actions from '../ActionTypes';
 
 const initialState = {
-  user: null,
+  products: [],
 };
 
-const authReducer = (state = initialState, action) => {
+const productsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case actions.SET_USER:
+    case actions.SET_PRODUCTS:
       return {
         ...state,
-        user: action.data,
+        products: action.data,
       };
     default:
       return state;
   }
 };
 
-export default authReducer;
+export default productsReducer;

@@ -1,0 +1,3 @@
+export const SET_OPENMODAL = 'SET_OPENMODAL';
+export const SET_MODALSPIN = 'SET_MODALSPIN';
+export const SET_TABLESPIN = 'SET_TABLESPIN';
