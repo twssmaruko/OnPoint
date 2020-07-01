@@ -1,4 +1,4 @@
 export {
   newVendor,
   fetchVendors,
-} from './actions';
+} from './actions/actions';

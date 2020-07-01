@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import PurchaseRequests from '../../containers/PurchaseRequests/PurchaseRequests';
-import Vendors from '../../containers/vendors/Vendors';
+import Vendors from '../../containers/Vendors/Vendors';
 import Homepage from '../homepage/Homepage';
 import Auth from '../../containers/auth/Auth';
 
