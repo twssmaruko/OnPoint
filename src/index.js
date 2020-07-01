@@ -11,7 +11,7 @@ import thunk from 'redux-thunk';
 // import Amplify from 'aws-amplify';
 import App from './App';
 import authReducer from './store/auth/reducer/Reducer';
-import vendorReducer from './store/vendors/reducer';
+import vendorReducer from './store/vendors/reducer/reducer';
 import productsReducer from './store/products/reducer/Reducer';
 import uiReducer from './store/ui/reducer/Reducer';
 
