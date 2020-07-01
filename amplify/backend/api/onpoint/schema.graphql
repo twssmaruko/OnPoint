@@ -14,7 +14,7 @@ type Vendor @model {
 
 type PurchaseRequest @model {
   id: ID!
-  purchaseRequestNo: String!
+  purchaseRequestNo: NumberFormat!
   isApproved: Boolean!
   orders: [Order!]! @connection(name:"PurchaseRequestOrders")
 }
@@ -32,4 +32,9 @@ type PurchaseRequest @model {
   id: ID!
   name: String!
   description: String!
+}
+
+ type NumberFormat  {
+  year: String!
+  count: Int!
 }

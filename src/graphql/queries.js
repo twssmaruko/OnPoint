@@ -38,7 +38,10 @@ export const getPurchaseRequest = /* GraphQL */ `
   query GetPurchaseRequest($id: ID!) {
     getPurchaseRequest(id: $id) {
       id
-      purchaseRequestNo
+      purchaseRequestNo {
+        year
+        count
+      }
       isApproved
       orders {
         items {
@@ -69,7 +72,10 @@ export const listPurchaseRequests = /* GraphQL */ `
     ) {
       items {
         id
-        purchaseRequestNo
+        purchaseRequestNo {
+          year
+          count
+        }
         isApproved
         orders {
           nextToken
@@ -97,7 +103,10 @@ export const getOrder = /* GraphQL */ `
       price
       purchaserequest {
         id
-        purchaseRequestNo
+        purchaseRequestNo {
+          year
+          count
+        }
         isApproved
         orders {
           nextToken
@@ -131,7 +140,6 @@ export const listOrders = /* GraphQL */ `
         price
         purchaserequest {
           id
-          purchaseRequestNo
           isApproved
           createdAt
           updatedAt

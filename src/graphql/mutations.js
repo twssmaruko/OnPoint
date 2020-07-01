@@ -56,7 +56,10 @@ export const createPurchaseRequest = /* GraphQL */ `
   ) {
     createPurchaseRequest(input: $input, condition: $condition) {
       id
-      purchaseRequestNo
+      purchaseRequestNo {
+        year
+        count
+      }
       isApproved
       orders {
         items {
@@ -81,7 +84,10 @@ export const updatePurchaseRequest = /* GraphQL */ `
   ) {
     updatePurchaseRequest(input: $input, condition: $condition) {
       id
-      purchaseRequestNo
+      purchaseRequestNo {
+        year
+        count
+      }
       isApproved
       orders {
         items {
@@ -106,7 +112,10 @@ export const deletePurchaseRequest = /* GraphQL */ `
   ) {
     deletePurchaseRequest(input: $input, condition: $condition) {
       id
-      purchaseRequestNo
+      purchaseRequestNo {
+        year
+        count
+      }
       isApproved
       orders {
         items {
@@ -143,7 +152,10 @@ export const createOrder = /* GraphQL */ `
       price
       purchaserequest {
         id
-        purchaseRequestNo
+        purchaseRequestNo {
+          year
+          count
+        }
         isApproved
         orders {
           nextToken
@@ -175,7 +187,10 @@ export const updateOrder = /* GraphQL */ `
       price
       purchaserequest {
         id
-        purchaseRequestNo
+        purchaseRequestNo {
+          year
+          count
+        }
         isApproved
         orders {
           nextToken
@@ -207,7 +222,10 @@ export const deleteOrder = /* GraphQL */ `
       price
       purchaserequest {
         id
-        purchaseRequestNo
+        purchaseRequestNo {
+          year
+          count
+        }
         isApproved
         orders {
           nextToken
