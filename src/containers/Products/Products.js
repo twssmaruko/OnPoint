@@ -34,9 +34,14 @@ const Products = () => {
     tableSpin: ui.tableSpin,
     productsList: products.products,
   }));
+
   // next line is componentwillmount hooks version, where you get the products para ishow sa table
   useEffect(() => {
     dispatcher(actions.getProducts());
+    dispatcher(actions.initSubscriptions());
+    return () => {
+      dispatcher(actions.unsubscribe());
+    };
   }, [dispatcher]);
 
   const setEditModal = (item) => {
@@ -94,10 +99,10 @@ const Products = () => {
   const onSubmit = (values) => {
     if (operation === 'add') {
       dispatcher(actions.addProduct(values));
-    } else if (operation === 'edit') {
-      const toSubmitValues = { ...editValues, ...values };
-      dispatcher(actions.editProduct(toSubmitValues));
+      return;
     }
+    const toSubmitValues = { ...editValues, ...values };
+    dispatcher(actions.editProduct(toSubmitValues));
   };
 
   const setAddModal = () => {
