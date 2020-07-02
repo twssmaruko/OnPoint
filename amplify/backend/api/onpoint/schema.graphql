@@ -21,14 +21,14 @@ type PurchaseRequest @model {
 
  type Order @model {
    id: ID!,
-   product: Product @connection
+   product: Product! @connection
    unit: String!
    qty: Int!
    price: Float!
    purchaserequest: PurchaseRequest @connection(name:"PurchaseRequestOrders")
  }
 
- type Product @model {
+ type Product @model @searchable {
   id: ID!
   name: String!
   description: String!

@@ -6,7 +6,7 @@ import {
 } from 'react-router-dom';
 import Routes from './components/routes/Routes';
 import Header from './components/layout/header/Header';
-import * as actions from './store/auth/actions/Action';
+import * as actions from './store/auth/actions/Actions';
 
 const App = () => {
   const dispatcher = useDispatch();

@@ -7,7 +7,7 @@ import {
 } from 'antd';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import * as actions from '../../../store/auth/actions/Action';
+import * as actions from '../../../store/auth/actions/Actions';
 import Logo from '../../logo/Logo';
 
 const Header = () => {

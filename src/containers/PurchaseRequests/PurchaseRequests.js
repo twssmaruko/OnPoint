@@ -6,7 +6,7 @@ import {
   Table,
   Input,
   Modal,
-  Spin,
+  // Spin,
 } from 'antd';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -19,7 +19,7 @@ const PurchaseRequests = () => {
   const dispatcher = useDispatch();
   const {
     openModal,
-    showSpin,
+    // showSpin,
   } = useSelector(({ ui }) => ({
     showSpin: ui.showSpin,
     openModal: ui.openModal,
@@ -146,9 +146,9 @@ const PurchaseRequests = () => {
         cancelText="Cancel"
         destroyOnClose
       >
-        <Spin spinning={showSpin}>
-          <PurchaseRequestForm />
-        </Spin>
+        {/* <Spin spinning={showSpin}> */}
+        <PurchaseRequestForm />
+        {/* </Spin> */}
       </Modal>
 
     </>

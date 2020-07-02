@@ -12,6 +12,6 @@ const awsmobile = {
     "aws_appsync_region": "ap-southeast-1",
     "aws_appsync_authenticationType": "AMAZON_COGNITO_USER_POOLS"
 };
- 
+
 
 export default awsmobile;

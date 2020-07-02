@@ -14,7 +14,7 @@ import {
 import { listProducts } from '../../../graphql/queries';
 import {
   setOpenModal,
-  setModalSpin,
+  setShowSpin,
   setTableSpin,
 } from '../../ui/actions/Actions';
 
@@ -43,45 +43,45 @@ export const getProducts = () => async (dispatch) => {
 
 export const addProduct = (data) => async (dispatch) => {
   try {
-    dispatch(setModalSpin(true));
+    dispatch(setShowSpin(true));
     await API.graphql(graphqlOperation(createProduct, { input: data }));
     message.success('Product added succesfully!');
     dispatch(setOpenModal(false));
-    dispatch(setModalSpin(false));
+    dispatch(setShowSpin(false));
   } catch (e) {
     message.error('Adding product failed!');
-    dispatch(setModalSpin(false));
+    dispatch(setShowSpin(false));
   }
 };
 
 export const editProduct = (data) => async (dispatch) => {
   try {
-    dispatch(setModalSpin(true));
+    dispatch(setShowSpin(true));
     const { id, name, description } = data;
     const input = { id, name, description };
     await API.graphql(graphqlOperation(updateProduct, { input }));
     message.success('Product updated succesfully!');
     dispatch(setOpenModal(false));
-    dispatch(setModalSpin(false));
+    dispatch(setShowSpin(false));
   } catch (e) {
     message.error('Updating product failed!');
-    dispatch(setModalSpin(false));
+    dispatch(setShowSpin(false));
   }
 };
 
 export const removeProduct = (data) => async (dispatch) => {
   try {
-    dispatch(setModalSpin(true));
+    dispatch(setShowSpin(true));
     const input = {
       id: data,
     };
     await API.graphql(graphqlOperation(deleteProduct, { input }));
     message.success('Product deleted succesfully!');
     dispatch(setOpenModal(false));
-    dispatch(setModalSpin(false));
+    dispatch(setShowSpin(false));
   } catch (e) {
     message.error('Deleting product failed!');
-    dispatch(setModalSpin(false));
+    dispatch(setShowSpin(false));
   }
 };
 

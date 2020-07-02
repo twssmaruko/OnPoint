@@ -6,7 +6,7 @@ import {
   Button,
 } from 'antd';
 import { useDispatch } from 'react-redux';
-import * as actions from '../../store/auth/actions/Action';
+import * as actions from '../../store/auth/actions/Actions';
 // import { API, graphqlOperation } from 'aws-amplify';
 // import { createVendor } from '../../graphql/mutations';
 // const { Option } = Select;

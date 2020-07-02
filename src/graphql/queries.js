@@ -180,3 +180,28 @@ export const listProducts = /* GraphQL */ `
     }
   }
 `;
+export const searchProducts = /* GraphQL */ `
+  query SearchProducts(
+    $filter: SearchableProductFilterInput
+    $sort: SearchableProductSortInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    searchProducts(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        name
+        description
+        createdAt
+        updatedAt
+      }
+      nextToken
+      total
+    }
+  }
+`;
