@@ -49,6 +49,195 @@ export const deleteVendor = /* GraphQL */ `
     }
   }
 `;
+export const createPurchaseRequest = /* GraphQL */ `
+  mutation CreatePurchaseRequest(
+    $input: CreatePurchaseRequestInput!
+    $condition: ModelPurchaseRequestConditionInput
+  ) {
+    createPurchaseRequest(input: $input, condition: $condition) {
+      id
+      purchaseRequestNo {
+        year
+        count
+      }
+      isApproved
+      orders {
+        items {
+          id
+          unit
+          qty
+          price
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updatePurchaseRequest = /* GraphQL */ `
+  mutation UpdatePurchaseRequest(
+    $input: UpdatePurchaseRequestInput!
+    $condition: ModelPurchaseRequestConditionInput
+  ) {
+    updatePurchaseRequest(input: $input, condition: $condition) {
+      id
+      purchaseRequestNo {
+        year
+        count
+      }
+      isApproved
+      orders {
+        items {
+          id
+          unit
+          qty
+          price
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deletePurchaseRequest = /* GraphQL */ `
+  mutation DeletePurchaseRequest(
+    $input: DeletePurchaseRequestInput!
+    $condition: ModelPurchaseRequestConditionInput
+  ) {
+    deletePurchaseRequest(input: $input, condition: $condition) {
+      id
+      purchaseRequestNo {
+        year
+        count
+      }
+      isApproved
+      orders {
+        items {
+          id
+          unit
+          qty
+          price
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const createOrder = /* GraphQL */ `
+  mutation CreateOrder(
+    $input: CreateOrderInput!
+    $condition: ModelOrderConditionInput
+  ) {
+    createOrder(input: $input, condition: $condition) {
+      id
+      product {
+        id
+        name
+        description
+        createdAt
+        updatedAt
+      }
+      unit
+      qty
+      price
+      purchaserequest {
+        id
+        purchaseRequestNo {
+          year
+          count
+        }
+        isApproved
+        orders {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const updateOrder = /* GraphQL */ `
+  mutation UpdateOrder(
+    $input: UpdateOrderInput!
+    $condition: ModelOrderConditionInput
+  ) {
+    updateOrder(input: $input, condition: $condition) {
+      id
+      product {
+        id
+        name
+        description
+        createdAt
+        updatedAt
+      }
+      unit
+      qty
+      price
+      purchaserequest {
+        id
+        purchaseRequestNo {
+          year
+          count
+        }
+        isApproved
+        orders {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const deleteOrder = /* GraphQL */ `
+  mutation DeleteOrder(
+    $input: DeleteOrderInput!
+    $condition: ModelOrderConditionInput
+  ) {
+    deleteOrder(input: $input, condition: $condition) {
+      id
+      product {
+        id
+        name
+        description
+        createdAt
+        updatedAt
+      }
+      unit
+      qty
+      price
+      purchaserequest {
+        id
+        purchaseRequestNo {
+          year
+          count
+        }
+        isApproved
+        orders {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const createProduct = /* GraphQL */ `
   mutation CreateProduct(
     $input: CreateProductInput!

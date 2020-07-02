@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import PurchaseRequests from '../../containers/PurchaseRequests/PurchaseRequests';
-import Vendors from '../../containers/Vendors/Vendors';
+import Vendors from '../../containers/vendors/Vendors';
 import Homepage from '../homepage/Homepage';
 // eslint-disable-next-line import/no-unresolved
 import Auth from '../../containers/Auth/Auth';

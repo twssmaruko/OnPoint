@@ -40,6 +40,177 @@ export const onDeleteVendor = /* GraphQL */ `
     }
   }
 `;
+export const onCreatePurchaseRequest = /* GraphQL */ `
+  subscription OnCreatePurchaseRequest {
+    onCreatePurchaseRequest {
+      id
+      purchaseRequestNo {
+        year
+        count
+      }
+      isApproved
+      orders {
+        items {
+          id
+          unit
+          qty
+          price
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdatePurchaseRequest = /* GraphQL */ `
+  subscription OnUpdatePurchaseRequest {
+    onUpdatePurchaseRequest {
+      id
+      purchaseRequestNo {
+        year
+        count
+      }
+      isApproved
+      orders {
+        items {
+          id
+          unit
+          qty
+          price
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeletePurchaseRequest = /* GraphQL */ `
+  subscription OnDeletePurchaseRequest {
+    onDeletePurchaseRequest {
+      id
+      purchaseRequestNo {
+        year
+        count
+      }
+      isApproved
+      orders {
+        items {
+          id
+          unit
+          qty
+          price
+          createdAt
+          updatedAt
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreateOrder = /* GraphQL */ `
+  subscription OnCreateOrder {
+    onCreateOrder {
+      id
+      product {
+        id
+        name
+        description
+        createdAt
+        updatedAt
+      }
+      unit
+      qty
+      price
+      purchaserequest {
+        id
+        purchaseRequestNo {
+          year
+          count
+        }
+        isApproved
+        orders {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdateOrder = /* GraphQL */ `
+  subscription OnUpdateOrder {
+    onUpdateOrder {
+      id
+      product {
+        id
+        name
+        description
+        createdAt
+        updatedAt
+      }
+      unit
+      qty
+      price
+      purchaserequest {
+        id
+        purchaseRequestNo {
+          year
+          count
+        }
+        isApproved
+        orders {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeleteOrder = /* GraphQL */ `
+  subscription OnDeleteOrder {
+    onDeleteOrder {
+      id
+      product {
+        id
+        name
+        description
+        createdAt
+        updatedAt
+      }
+      unit
+      qty
+      price
+      purchaserequest {
+        id
+        purchaseRequestNo {
+          year
+          count
+        }
+        isApproved
+        orders {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
 export const onCreateProduct = /* GraphQL */ `
   subscription OnCreateProduct {
     onCreateProduct {

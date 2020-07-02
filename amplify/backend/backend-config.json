@@ -1,6 +1,6 @@
 {
 	"auth": {
-		"onpoint79f7f3cb": {
+		"onpoint3e878ac6": {
 			"service": "Cognito",
 			"providerPlugin": "awscloudformation",
 			"dependsOn": []
@@ -16,7 +16,7 @@
 					"defaultAuthentication": {
 						"authenticationType": "AMAZON_COGNITO_USER_POOLS",
 						"userPoolConfig": {
-							"userPoolId": "authonpoint79f7f3cb"
+							"userPoolId": "authonpoint3e878ac6"
 						}
 					}
 				}
