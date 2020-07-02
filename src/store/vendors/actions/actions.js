@@ -28,6 +28,8 @@ export const fetchVendors = () => (dispatch) => {
           id: key,
         });
       }
+      // eslint-disable-next-line no-console
+      console.log(fetchedVendors);
       dispatch(fetchVendorsSuccess(fetchedVendors));
     })
     .catch((err) => {

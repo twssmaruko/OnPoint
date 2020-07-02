@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { connect } from 'react-redux';
+import React, { useState, useEffect, useRef } from 'react';
+import { connect, useDispatch } from 'react-redux';
 import {
   Row, Col,
   Button,
@@ -11,39 +11,45 @@ import { SearchOutlined } from '@ant-design/icons';
 import VendorList from './VendorList';
 import * as actions from '../../store/vendors/index';
 
-const Vendors = () => {
+const Vendors = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
-
-  const vendorList = [{
-    vendorName: 'I forgot their name',
-    telNo: '8205245',
-    location: 'Mandaue City',
-    Terms: 'COD',
-  },
-  {
-    vendorName: 'I forgot their name',
-    telNo: '8205245',
-    location: 'Mandaue City',
-    Terms: 'Cheque or something',
-  },
-  {
-    vendorName: 'I forgot alsoo',
-    telNo: '2381311',
-    location: 'Mandaue City',
-    Terms: 'COD',
-  },
-  {
-    vendorName: 'This is a test',
-    telNo: '3444512',
-    location: 'Cebu City',
-    Terms: 'COD',
-  }];
 
   const renderInput = () => (
     <div>
       <Input> Search </Input>
     </div>
   );
+
+  // const vendorList = [{
+  //   vendorName: 'I forgot their name',
+  //   telNo: '8205245',
+  //   location: 'Mandaue City',
+  //   Terms: 'COD',
+  // },
+  // {
+  //   vendorName: 'I forgot their name',
+  //   telNo: '8205245',
+  //   location: 'Mandaue City',
+  //   Terms: 'Cheque or something',
+  // },
+  // {
+  //   vendorName: 'I forgot alsoo',
+  //   telNo: '2381311',
+  //   location: 'Mandaue City',
+  //   Terms: 'COD',
+  // },
+  // {
+  //   vendorName: 'This is a test',
+  //   telNo: '3444512',
+  //   location: 'Cebu City',
+  //   Terms: 'COD',
+  // }];
+  const dispatcher = useDispatch();
+  const formRef = useRef(null);
+
+  useEffect(() => {
+    dispatcher(actions.fetchVendors());
+  }, [dispatcher]);
 
   const columns = [
     {
@@ -82,11 +88,31 @@ const Vendors = () => {
     },
   ];
 
+  // const vendorSample = {
+  //   vendorName: 'CementLand',
+  //   telNo: '2542422',
+  //   location: 'Cebu City',
+  //   terms: 'COD',
+  // };
   const setModal = () => {
     setModalVisible(true);
   };
 
-  const handleOk = () => {
+  const handleOk = (values) => {
+    // eslint-disable-next-line no-console
+    console.log('Hello', values);
+    setModalVisible(false);
+  };
+
+  const onSubmit = (values) => {
+    // eslint-disable-next-line no-console
+    console.log('Success', values);
+  };
+
+  // eslint-disable-next-line react/destructuring-assignment
+
+  const handleCancel = () => {
+    // eslint-disable-next-line no-console
     setModalVisible(false);
   };
 
@@ -104,7 +130,8 @@ const Vendors = () => {
             <Col span={24}>
               <Table
                 columns={columns}
-                dataSource={vendorList}
+                // eslint-disable-next-line react/destructuring-assignment
+                dataSource={props.vndr}
                 size="large"
                 rowkey="vendorName"
               />
@@ -116,24 +143,24 @@ const Vendors = () => {
         title="Add Vendor"
         visible={modalVisible}
         onOk={handleOk}
-        onCancel={setModalVisible(false)}
+        onCancel={handleCancel}
         width={1000}
         okText="Add"
         cancelText="Cancel"
       >
-        <VendorList />
+        <VendorList reference={formRef} onSubmit={onSubmit} />
       </Modal>
     </>
   );
 };
 
-const mapStateToProps = ({ vendor }) => ({
-  vendor: vendor.vendors,
+const mapStateToProps = (state) => ({
+  vndr: state.vendor.vendors,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   onVendorAdded: (vendor) => dispatch(actions.newVendor(vendor)),
-  onVendorFetched: (vendor) => dispatch(actions.fetchVendors(vendor)),
+  onVendorsFetched: () => dispatch(actions.fetchVendors()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Vendors);

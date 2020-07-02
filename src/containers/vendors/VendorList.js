@@ -9,12 +9,17 @@ import {
 
 const { Option } = Select;
 
-const VendorList = () => {
-  const onFinish = (values) => {
+const VendorList = (props) => {
+  // const onFinish = (values) => {
+  //   // eslint-disable-next-line no-console
+  //   console.log('Success:', values);
+  //   // API.graphql(graphqlOperation(createVendor, { input: { ...values } }));
+  // };
+  const onFinishFailure = () => {
     // eslint-disable-next-line no-console
-    console.log('Success:', values);
-    // API.graphql(graphqlOperation(createVendor, { input: { ...values } }));
+    console.log('Hi');
   };
+  const { reference } = props;
 
   return (
     <div>
@@ -32,7 +37,10 @@ const VendorList = () => {
           // layout="vertical"
           name="basic"
           initialValues={{ remember: true, terms: 'term1' }}
-          onFinish={onFinish}
+          // eslint-disable-next-line react/destructuring-assignment
+          onFinish={props.onSubmit}
+          onFinishFailed={onFinishFailure}
+          ref={reference}
           // labelAlign="left"
         >
           <Form.Item
@@ -40,7 +48,9 @@ const VendorList = () => {
             name="name"
             rules={[{ required: true, message: 'Please input vendor name!' }]}
           >
-            <Input />
+            <Input
+              defaultValue="Vendor Name"
+            />
           </Form.Item>
           <Form.Item
             label="Address"
@@ -72,4 +82,5 @@ const VendorList = () => {
     </div>
   );
 };
+
 export default VendorList;
