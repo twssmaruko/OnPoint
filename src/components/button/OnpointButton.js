@@ -3,7 +3,7 @@ import { Button } from 'antd';
 
 const OnpointButton = (props) => {
   const {
-    value, onClick, name, type, icon,
+    value, onClick, name, type, icon, style,
   } = props;
 
   const buttonClicked = () => {
@@ -11,7 +11,7 @@ const OnpointButton = (props) => {
   };
 
   return (
-    <Button size="small" type={type} icon={icon} onClick={buttonClicked}>
+    <Button size="small" style={style} type={type} icon={icon} onClick={buttonClicked}>
       {name}
     </Button>
   );

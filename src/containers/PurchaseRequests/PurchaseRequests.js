@@ -1,107 +1,105 @@
-import React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
-  Row, Col,
+  Row,
   Button,
-  // List,
+  Select,
   Table,
-  Input,
+  DatePicker,
   Modal,
-  // Spin,
+  Spin,
 } from 'antd';
 
+import { CloseCircleFilled, CheckCircleFilled, EditTwoTone } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { SearchOutlined } from '@ant-design/icons';
+import moment from 'moment';
+
+// import { SearchOutlined } from '@ant-design/icons';
 import PurchaseRequestForm from './PurchaseRequestForm';
 import * as uiActions from '../../store/ui/actions/Actions';
+import * as actions from '../../store/purchaserequest/actions/Actions';
+import TableButton from '../../components/button/OnpointButton';
+import Updatemodal from './UpdateModal';
 
 const PurchaseRequests = () => {
+  const { Option } = Select;
+  const childRef = useRef();
   const dispatcher = useDispatch();
+  const [params, setParams] = useState({});
   const {
     openModal,
-    // showSpin,
-  } = useSelector(({ ui }) => ({
+    modalSpin,
+    purchaseRequestsList,
+    showSpin,
+    tableSpin,
+  } = useSelector(({ ui, purchaseRequests }) => ({
     showSpin: ui.showSpin,
     openModal: ui.openModal,
+    modalSpin: ui.modalSpin,
+    openAnotherModal: ui.openAnotherModal,
+    purchaseRequestsList: purchaseRequests.purchaseRequests,
+    tableSpin: ui.tableSpin,
   }));
 
-  // const x = 0;
+  useEffect(() => {
+    dispatcher(actions.getMonthlyPurchaseRequests());
+    dispatcher(actions.initSubscriptions());
+    return () => {
+      dispatcher(actions.unsubscribe());
+    };
+  }, [dispatcher]);
 
-  const prList = [
-    {
-      prnumber: 'PR-1',
-      description: 'Description for PR-1',
-      unit: 'Unit 1',
-      quantity: 1,
-      price: 1000,
-    },
-    {
-      prnumber: 'PR-2',
-      description: 'Description for PR-2',
-      unit: 'Unit 2',
-      quantity: 2,
-      price: 2000,
-    },
-    {
-      prnumber: 'PR-3',
-      description: 'Description for PR-3',
-      unit: 'Unit 3',
-      quantity: 3,
-      price: 3000,
-    },
-  ];
+  const onDetailsClick = (item) => {
+    dispatcher(actions.initiateUpdateModal(item.id));
+  };
 
-  const renderInput = () => (
+  const editButton = (item) => (
     <div>
-      <Input> Search </Input>
+      <TableButton value={item} type="primary" icon={<EditTwoTone />} onClick={onDetailsClick} />
     </div>
   );
 
+  const approvedDisplay = (isApproved) => (
+    isApproved === 'APPROVED' ? <CheckCircleFilled style={{ marginLeft: 20, color: 'green' }} />
+      : <CloseCircleFilled style={{ marginLeft: 20, color: 'red' }} />
+  );
+
+  const prNumberDisplay = (data) => `PR ${data.monthYear}-${data.count}`;
+
   const columns = [
     {
-      title: () => (
-        <div style={{ marginTop: 15 }}>
-          <p style={{ display: 'inline-block' }}> PR number</p>
-          <Button
-            size="small"
-            style={{ width: 20, marginLeft: 30, display: 'inline-block' }}
-            icon={<SearchOutlined />}
-            onClick={renderInput}
-          />
-        </div>
-      ),
-      dataIndex: 'prnumber',
-      key: 'prnumber',
+      title: 'Details',
+      key: 'details',
+      width: 100,
+      render: editButton,
+    },
+    {
+      title: 'PR Number',
+      key: 'PurchaseRequestNo',
+      width: 250,
+      render: prNumberDisplay,
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
       width: 250,
     },
     {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
-      width: 300,
-
-    },
-    {
-      title: 'Unit',
-      dataIndex: 'unit',
-      key: 'unit',
-      width: 250,
-
-    },
-    {
-      title: 'Quantity',
-      dataIndex: 'quantity',
-      key: 'quantity',
-      width: 250,
-      sorter: (a, b) => a.quantity - b.quantity,
-    },
-
-    {
-      title: '',
-      key: 'delete',
+      title: 'Approved',
+      dataIndex: 'isApproved',
+      key: 'isApproved',
       width: 200,
-      render: () => (<Button type="link">Delete</Button>),
+      render: approvedDisplay,
     },
+    {
+      title: 'Requested On',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      width: 250,
+      render: (createdAt) => moment(createdAt).format('MMMM Do YYYY, h:mm:ss A'),
+    },
+
   ];
 
   const setModal = () => {
@@ -112,46 +110,178 @@ const PurchaseRequests = () => {
     dispatcher(uiActions.setOpenModal(false));
   };
 
+  const addPurchaseRequest = () => {
+    childRef.current.add();
+  };
+
+  const onSearch = () => {
+    dispatcher(actions.getPurchaseRequests(params));
+  };
+
+  const onDateSelect = (date) => {
+    if (!date) {
+      const newParams = params;
+      delete newParams.dayMonthYear;
+      setParams({ ...newParams });
+      return;
+    }
+    setParams({ ...params, dayMonthYear: moment(date).format('DD-MM-YYYY') });
+  };
+
+  const onMonthYearSelect = (date) => {
+    if (!date) {
+      const newParams = params;
+      delete newParams.monthYear;
+      setParams({ ...newParams });
+      return;
+    }
+    setParams({ ...params, monthYear: moment(date).format('MM-YYYY') });
+  };
+
+  const handleStatusChange = (value) => {
+    if (!value) {
+      const newParams = params;
+      delete newParams.status;
+      setParams({ ...newParams });
+      return;
+    }
+    setParams({ ...params, status: value });
+  };
+
+  const onApprovedChange = (value) => {
+    if (!value) {
+      const newParams = params;
+      delete newParams.isApproved;
+      setParams({ ...newParams });
+      return;
+    }
+    // const isApproved = value || '';
+    setParams({ ...params, isApproved: value });
+  };
+
   return (
-    <>
-      <Row>
-        <Col offset={5} style={{ marginTop: 20 }}>
-          <Row>
-            <h1>Purchase Request</h1>
-          </Row>
-          <Row>
-            <Button type="primary" onClick={setModal}>
-              New
-            </Button>
-          </Row>
-          <Row style={{ marginTop: '30px' }}>
-            <Col span={24}>
-              <Table
-                columns={columns}
-                dataSource={prList}
-                size="large"
-                rowKey="prnumber"
-              />
-            </Col>
-          </Row>
-        </Col>
+    <div>
+      <Row style={{
+        display: 'flex', flexDirection: 'column', marginLeft: '20%', marginTop: 20,
+      }}
+      >
+        <Row>
+          <h1>Purchase Request</h1>
+        </Row>
+        <Row>
+          <Button type="primary" onClick={setModal}>
+            New Purchase Request
+          </Button>
+        </Row>
+      </Row>
+      <Row style={{
+        marginTop: 50,
+        marginLeft: '20%',
+        marginRight: '20%',
+      }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <h4>Requested On:</h4>
+          <div>
+            <DatePicker
+              disabled={params.monthYear}
+              allowClear
+              placeholder="Specific Day"
+              style={{
+                marginLeft: 15,
+                marginBottom: 10,
+                width: 130,
+                border: '0.5px solid black',
+              }}
+              onChange={onDateSelect}
+            />
+          </div>
+
+          <DatePicker
+            disabled={params.dayMonthYear}
+            allowClear
+            picker="month"
+            placeholder="Year/Month"
+            style={{
+              marginLeft: 5,
+              marginBottom: 10,
+              width: 130,
+              border: '0.5px solid black',
+            }}
+            onChange={onMonthYearSelect}
+          />
+          <h4 style={{ marginLeft: 110 }}>Status</h4>
+          <Select
+            allowClear
+            style={{
+              marginLeft: 10,
+              marginBottom: 10,
+              width: 170,
+              border: '0.5px solid black',
+            }}
+            onChange={handleStatusChange}
+          >
+            <Option value="ORDERED">ORDERED</Option>
+            <Option value="PENDING">PENDING</Option>
+            <Option value="RECEIVED">RECEIVED</Option>
+          </Select>
+          <h4 style={{ marginLeft: 20 }}>Approved</h4>
+          <Select
+            allowClear
+            onChange={onApprovedChange}
+            style={{
+              marginLeft: 10,
+              marginBottom: 10,
+              width: 170,
+              border: '0.5px solid black',
+            }}
+          >
+            <Option value="APPROVED">APPROVED</Option>
+            <Option value="NOTAPPROVED">NOT APPROVED</Option>
+          </Select>
+
+          <Button
+            type="primary"
+            style={{ marginLeft: 10, marginBottom: 10 }}
+            onClick={onSearch}
+          >
+            Search
+          </Button>
+
+        </div>
+        <div style={{ border: '1px solid black' }}>
+          <Spin spinning={tableSpin}>
+            <Table
+              columns={columns}
+              dataSource={purchaseRequestsList}
+              size="small"
+              rowKey="id"
+              pagination={{
+                pageSize: 10,
+              }}
+            />
+          </Spin>
+        </div>
       </Row>
       <Modal
         title="Add a new purchase request"
         visible={openModal}
-        // onOk={handleOk}
+        onOk={addPurchaseRequest}
         onCancel={handleCancel}
-        width={1000}
-        okText="ok"
+        width={900}
+        okText="Add Purchase Request"
         cancelText="Cancel"
         destroyOnClose
       >
-        {/* <Spin spinning={showSpin}> */}
-        <PurchaseRequestForm />
-        {/* </Spin> */}
+        <Spin spinning={modalSpin}>
+          <PurchaseRequestForm ref={childRef} />
+        </Spin>
       </Modal>
+      <Spin spinning={showSpin}>
+        <Updatemodal />
+      </Spin>
 
-    </>
+    </div>
   );
 };
 

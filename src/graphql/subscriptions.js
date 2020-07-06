@@ -44,22 +44,24 @@ export const onCreatePurchaseRequest = /* GraphQL */ `
   subscription OnCreatePurchaseRequest {
     onCreatePurchaseRequest {
       id
-      purchaseRequestNo {
-        year
-        count
-      }
+      purchaseRequestNo
       isApproved
       orders {
         items {
           id
+          purchaseRequestId
           unit
-          qty
+          quantity
           price
           createdAt
           updatedAt
         }
         nextToken
       }
+      count
+      monthYear
+      dayMonthYear
+      status
       createdAt
       updatedAt
     }
@@ -69,22 +71,24 @@ export const onUpdatePurchaseRequest = /* GraphQL */ `
   subscription OnUpdatePurchaseRequest {
     onUpdatePurchaseRequest {
       id
-      purchaseRequestNo {
-        year
-        count
-      }
+      purchaseRequestNo
       isApproved
       orders {
         items {
           id
+          purchaseRequestId
           unit
-          qty
+          quantity
           price
           createdAt
           updatedAt
         }
         nextToken
       }
+      count
+      monthYear
+      dayMonthYear
+      status
       createdAt
       updatedAt
     }
@@ -94,22 +98,24 @@ export const onDeletePurchaseRequest = /* GraphQL */ `
   subscription OnDeletePurchaseRequest {
     onDeletePurchaseRequest {
       id
-      purchaseRequestNo {
-        year
-        count
-      }
+      purchaseRequestNo
       isApproved
       orders {
         items {
           id
+          purchaseRequestId
           unit
-          qty
+          quantity
           price
           createdAt
           updatedAt
         }
         nextToken
       }
+      count
+      monthYear
+      dayMonthYear
+      status
       createdAt
       updatedAt
     }
@@ -119,6 +125,7 @@ export const onCreateOrder = /* GraphQL */ `
   subscription OnCreateOrder {
     onCreateOrder {
       id
+      purchaseRequestId
       product {
         id
         name
@@ -127,21 +134,8 @@ export const onCreateOrder = /* GraphQL */ `
         updatedAt
       }
       unit
-      qty
+      quantity
       price
-      purchaserequest {
-        id
-        purchaseRequestNo {
-          year
-          count
-        }
-        isApproved
-        orders {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
@@ -151,6 +145,7 @@ export const onUpdateOrder = /* GraphQL */ `
   subscription OnUpdateOrder {
     onUpdateOrder {
       id
+      purchaseRequestId
       product {
         id
         name
@@ -159,21 +154,8 @@ export const onUpdateOrder = /* GraphQL */ `
         updatedAt
       }
       unit
-      qty
+      quantity
       price
-      purchaserequest {
-        id
-        purchaseRequestNo {
-          year
-          count
-        }
-        isApproved
-        orders {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
@@ -183,6 +165,7 @@ export const onDeleteOrder = /* GraphQL */ `
   subscription OnDeleteOrder {
     onDeleteOrder {
       id
+      purchaseRequestId
       product {
         id
         name
@@ -191,21 +174,8 @@ export const onDeleteOrder = /* GraphQL */ `
         updatedAt
       }
       unit
-      qty
+      quantity
       price
-      purchaserequest {
-        id
-        purchaseRequestNo {
-          year
-          count
-        }
-        isApproved
-        orders {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }

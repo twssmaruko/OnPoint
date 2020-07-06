@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { forwardRef, useState, useImperativeHandle } from 'react';
 import {
   // Row,
   // Col,
@@ -10,25 +10,44 @@ import {
 } from 'antd';
 import _ from 'lodash';
 
+import moment from 'moment';
+
 import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../../store/purchaserequest/actions/Actions';
+import OnPointButton from '../../components/button/OnpointButton';
 
 const { Option } = Select;
 
-const PurchaseRequestForm = () => {
+const PurchaseRequestForm = forwardRef((props, ref) => {
+  const [form] = Form.useForm();
   const [ordersList, setOrdersList] = useState([]);
+  const [listItems, setListItems] = useState([]);
   const dispatcher = useDispatch();
   const { productsList, showSpin } = useSelector(({ ui, products }) => ({
     showSpin: ui.showSpin,
     productsList: products.products,
   }));
-  // const [orderData, setOrderData] = useState({
-
-  const listOrderItems = ordersList.map((data) => `${data.quantity} ${data.unit} of ${data.product.name} for ${data.price}`);
 
   const fetchProduct = (value) => {
     dispatcher(actions.getProducts(value));
   };
+
+  useImperativeHandle(ref, () => ({
+
+    add() {
+      const dateNow = new Date();
+      const prData = {
+        status: 'PENDING',
+        purchaseRequestNo: 1,
+        isApproved: 'NOTAPPROVED',
+        monthYear: moment(dateNow).format('MM-YYYY'),
+        dayMonthYear: moment(dateNow).format('DD-MM-YYYY'),
+        orders: ordersList,
+      };
+      dispatcher(actions.addPurchaseRequest(prData));
+    },
+
+  }));
 
   const debounceFetchProduct = _.debounce(fetchProduct, 1000);
 
@@ -47,82 +66,109 @@ const PurchaseRequestForm = () => {
       },
     }];
     const newList = order.concat(ordersList);
-    console.log(newList);
+    setListItems(newList.map((data) => (<h3>{`${data.quantity} ${data.unit} of ${data.product.name}  for ${data.price} Php`}</h3>)));
     setOrdersList(newList);
+    form.resetFields();
+  };
+
+  const layout = {
+    labelCol: { span: 8 },
+    wrapperCol: { span: 16 },
+  };
+
+  const onDeleteItem = (index) => {
+    const newOrdersList = ordersList;
+    newOrdersList.splice(index, 1);
+    setListItems(newOrdersList.map((data) => (<h3>{`${data.quantity} ${data.unit} of ${data.product.name}  for ${data.price} Php`}</h3>)));
+    setOrdersList(newOrdersList);
   };
 
   return (
-    <div>
+    <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
       <Form
-          // {...layout}
+        {...layout}
+        form={form}
+
         name="basic"
         onFinish={onSubmit}
       >
-        <div style={{ marginLeft: 20 }}>
-          <h3>PR #</h3>
-        </div>
-        <div style={{
-          display: 'flex', flexDirection: 'row',
-        }}
+        <Form.Item
+          label="Product"
+          name="product"
+          rules={[{ required: true, message: 'Please input PR #!' }]}
         >
-          <Form.Item
-            label="Product"
-            name="product"
-            rules={[{ required: true, message: 'Please input PR #!' }]}
+          <Select
+            showSearch
+            allowClear
+            labelInValue
+            placeholder="Select products"
+            notFoundContent={<Spin spinning={showSpin} />}
+            filterOption={false}
+            onSearch={debounceFetchProduct}
+            style={{ width: 170 }}
           >
-            <Select
-              showSearch
-              labelInValue
-              placeholder="Select products"
-              notFoundContent={<Spin spinning={showSpin} />}
-              filterOption={false}
-              onSearch={debounceFetchProduct}
-              style={{ width: 170 }}
-            >
-              {searchOptionList()}
-            </Select>
-          </Form.Item>
-          <Form.Item
-            name="unit"
-            style={{ marginLeft: 20 }}
-            label="Unit"
-            rules={[{ required: true, message: 'Please input Unit!' }]}
-          >
-            <Input style={{ width: 100 }} />
-          </Form.Item>
-          <Form.Item
-            name="quantity"
-            style={{ marginLeft: 20 }}
-            label="Quantity"
-            rules={[{ required: true, message: 'Please input Quantity!' }]}
-          >
-            <Input style={{ width: 50 }} />
-          </Form.Item>
-          <Form.Item
-            name="price"
-            style={{ marginLeft: 20 }}
-            label="Price"
-            rules={[{ required: true, message: 'Please input Price!' }]}
-          >
-            <Input style={{ width: 100 }} />
-          </Form.Item>
-          <Form.Item style={{ marginLeft: 15 }}>
-            <Button type="primary" htmlType="submit">
-              Add Order
-            </Button>
-          </Form.Item>
-        </div>
+            {searchOptionList()}
+          </Select>
+        </Form.Item>
+        <Form.Item
+          name="unit"
+          label="Unit"
+          rules={[{ required: true, message: 'Please input Unit!' }]}
+        >
+          <Input style={{ width: 170 }} />
+        </Form.Item>
+        <Form.Item
+          name="quantity"
+          label="Quantity"
+          rules={[{ required: true, message: 'Please input Quantity!' }]}
+        >
+          <Input style={{ width: 170 }} />
+        </Form.Item>
+        <Form.Item
+          name="price"
+          label="Price"
+          rules={[{ required: true, message: 'Please input Price!' }]}
+        >
+          <Input style={{ width: 170 }} />
+        </Form.Item>
+        <Form.Item style={{ marginLeft: 80 }}>
+          <Button type="primary" htmlType="submit">
+            Add Order
+          </Button>
+        </Form.Item>
       </Form>
-      <List
-        size="small"
-        header={<div>Orders</div>}
-        bordered
-        dataSource={listOrderItems}
-        style={{ color: 'black', height: '20' }}
-        renderItem={(item) => <List.Item>{item}</List.Item>}
-      />
+      <div style={{ width: '70%', marginLeft: 40 }}>
+        <List
+          pagination={ordersList.length > 3 ? {
+            pageSize: 3,
+            position: 'bottom',
+          } : false}
+          size="small"
+          header={<div>Orders</div>}
+          bordered
+          dataSource={listItems}
+          style={{
+            color: 'black',
+            // height: '33vh',
+            // position: 'block',
+          }}
+          renderItem={(item, index) => (
+            <List.Item actions={[<OnPointButton
+              onClick={onDeleteItem}
+              value={index}
+              type="link"
+              name="Delete"
+              style={{ color: 'red' }}
+            />]}
+            >
+              {item}
+            </List.Item>
+          )}
+        />
+      </div>
+
     </div>
   );
-};
+});
 
 export default PurchaseRequestForm;

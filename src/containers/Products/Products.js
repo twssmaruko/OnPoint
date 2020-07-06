@@ -76,7 +76,7 @@ const Products = () => {
       width: '1%',
     },
     {
-      title: 'Products',
+      title: 'Product',
       dataIndex: 'name',
       key: 'name',
       width: 250,
@@ -128,7 +128,7 @@ const Products = () => {
           </Row>
           <Row>
             <Button type="primary" onClick={setAddModal}>
-              New
+              New Products
             </Button>
           </Row>
           <Row style={{ marginTop: '30px' }}>
