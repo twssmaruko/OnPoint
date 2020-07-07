@@ -91,7 +91,7 @@ export const initSubscriptions = () => (dispatch, getState) => {
       next: (productData) => {
         const { products } = getState().products;
         const addedData = productData.value.data.onCreateProduct;
-        const newProducts = products.concat(addedData);
+        const newProducts = [addedData].concat(products);
         dispatch(setProducts(newProducts));
       },
     });

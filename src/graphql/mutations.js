@@ -56,22 +56,24 @@ export const createPurchaseRequest = /* GraphQL */ `
   ) {
     createPurchaseRequest(input: $input, condition: $condition) {
       id
-      purchaseRequestNo {
-        year
-        count
-      }
+      purchaseRequestNo
       isApproved
       orders {
         items {
           id
+          purchaseRequestId
           unit
-          qty
+          quantity
           price
           createdAt
           updatedAt
         }
         nextToken
       }
+      count
+      monthYear
+      dayMonthYear
+      status
       createdAt
       updatedAt
     }
@@ -84,22 +86,24 @@ export const updatePurchaseRequest = /* GraphQL */ `
   ) {
     updatePurchaseRequest(input: $input, condition: $condition) {
       id
-      purchaseRequestNo {
-        year
-        count
-      }
+      purchaseRequestNo
       isApproved
       orders {
         items {
           id
+          purchaseRequestId
           unit
-          qty
+          quantity
           price
           createdAt
           updatedAt
         }
         nextToken
       }
+      count
+      monthYear
+      dayMonthYear
+      status
       createdAt
       updatedAt
     }
@@ -112,22 +116,24 @@ export const deletePurchaseRequest = /* GraphQL */ `
   ) {
     deletePurchaseRequest(input: $input, condition: $condition) {
       id
-      purchaseRequestNo {
-        year
-        count
-      }
+      purchaseRequestNo
       isApproved
       orders {
         items {
           id
+          purchaseRequestId
           unit
-          qty
+          quantity
           price
           createdAt
           updatedAt
         }
         nextToken
       }
+      count
+      monthYear
+      dayMonthYear
+      status
       createdAt
       updatedAt
     }
@@ -140,6 +146,7 @@ export const createOrder = /* GraphQL */ `
   ) {
     createOrder(input: $input, condition: $condition) {
       id
+      purchaseRequestId
       product {
         id
         name
@@ -148,21 +155,8 @@ export const createOrder = /* GraphQL */ `
         updatedAt
       }
       unit
-      qty
+      quantity
       price
-      purchaserequest {
-        id
-        purchaseRequestNo {
-          year
-          count
-        }
-        isApproved
-        orders {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
@@ -175,6 +169,7 @@ export const updateOrder = /* GraphQL */ `
   ) {
     updateOrder(input: $input, condition: $condition) {
       id
+      purchaseRequestId
       product {
         id
         name
@@ -183,21 +178,8 @@ export const updateOrder = /* GraphQL */ `
         updatedAt
       }
       unit
-      qty
+      quantity
       price
-      purchaserequest {
-        id
-        purchaseRequestNo {
-          year
-          count
-        }
-        isApproved
-        orders {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }
@@ -210,6 +192,7 @@ export const deleteOrder = /* GraphQL */ `
   ) {
     deleteOrder(input: $input, condition: $condition) {
       id
+      purchaseRequestId
       product {
         id
         name
@@ -218,21 +201,8 @@ export const deleteOrder = /* GraphQL */ `
         updatedAt
       }
       unit
-      qty
+      quantity
       price
-      purchaserequest {
-        id
-        purchaseRequestNo {
-          year
-          count
-        }
-        isApproved
-        orders {
-          nextToken
-        }
-        createdAt
-        updatedAt
-      }
       createdAt
       updatedAt
     }

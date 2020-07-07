@@ -6,8 +6,17 @@ export const setOpenModal = (data) => ({
   data,
 });
 
+export const setOpenAnotherModal = (data) => ({
+  type: actionTypes.SET_OPENANOTHERMODAL,
+  data,
+});
+
 export const setShowSpin = (data) => ({
   type: actionTypes.SET_SHOWSPIN,
+  data,
+});
+export const setModalSpin = (data) => ({
+  type: actionTypes.SET_MODALSPIN,
   data,
 });
 
