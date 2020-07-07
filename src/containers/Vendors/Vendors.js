@@ -98,15 +98,17 @@ const Vendors = (props) => {
     setModalVisible(true);
   };
 
-  const handleOk = (values) => {
+  const handleOk = () => {
     // eslint-disable-next-line no-console
-    console.log('Hello', values);
-    setModalVisible(false);
+    formRef.current.submit();
   };
 
   const onSubmit = (values) => {
     // eslint-disable-next-line no-console
     console.log('Success', values);
+
+    props.onVendorAdded(values);
+    setModalVisible(false);
   };
 
   // eslint-disable-next-line react/destructuring-assignment

@@ -19,7 +19,7 @@ const VendorList = (props) => {
     // eslint-disable-next-line no-console
     console.log('Hi');
   };
-  const { reference } = props;
+  const { reference, onSubmit } = props;
 
   return (
     <div>
@@ -37,31 +37,28 @@ const VendorList = (props) => {
           // layout="vertical"
           name="basic"
           initialValues={{ remember: true, terms: 'term1' }}
-          // eslint-disable-next-line react/destructuring-assignment
-          onFinish={props.onSubmit}
+          onFinish={onSubmit}
           onFinishFailed={onFinishFailure}
           ref={reference}
           // labelAlign="left"
         >
           <Form.Item
             label="Name"
-            name="name"
+            name="vendorName"
             rules={[{ required: true, message: 'Please input vendor name!' }]}
           >
-            <Input
-              defaultValue="Vendor Name"
-            />
+            <Input />
           </Form.Item>
           <Form.Item
-            label="Address"
-            name="address"
+            label="Location"
+            name="location"
             rules={[{ required: true, message: 'Please input vendor address!' }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
-            label="Contact Number"
-            name="contactNumber"
+            label="Telephone Number"
+            name="telNo"
             rules={[{ required: true, message: 'Please input vendor number!' }]}
           >
             <Input />
@@ -72,9 +69,9 @@ const VendorList = (props) => {
             rules={[{ required: true, message: 'Please input vendor terms!' }]}
           >
             <Select>
-              <Option value="term1">Term1</Option>
-              <Option value="term2">Term2</Option>
-              <Option value="term3">Term3</Option>
+              <Option value="Term 1">Term 1</Option>
+              <Option value="Term 2">Term 2</Option>
+              <Option value="Term 3">Term 3</Option>
             </Select>
           </Form.Item>
         </Form>
