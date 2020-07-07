@@ -43,7 +43,7 @@ const ProjectForm = () => (
 
         </Form.Item>
         <h3><b>BUDGET PROPOSAL</b></h3>
-        
+
       </Form>
     </div>
   </div>
