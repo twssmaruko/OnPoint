@@ -40,7 +40,7 @@ const Projects = () => {
     width: 250,
   },
   {
-    title: 'projectCode',
+    title: 'Project Code',
     dataIndex: 'projectCode',
     key: 'projectCode',
     width: 250,

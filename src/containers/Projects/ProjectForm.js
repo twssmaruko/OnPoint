@@ -1,13 +1,15 @@
 import React from 'react';
 import {
-  // Row, Col,
+//  Row, Col,
   Form, Input,
 } from 'antd';
+import Logo from '../../components/logo/Logo';
+import Budget from './Budget/Budget';
 
 const ProjectForm = () => (
   <div>
     <div style={{ textAlign: 'center', marginTop: 20, width: '100%' }}>
-      <h3 style={{ color: '#512E0E' }}>Project</h3>
+      <h3 style={{ color: '#512E0E' }}><Logo /></h3>
     </div>
     <div style={{
       display: 'flex',
@@ -42,8 +44,10 @@ const ProjectForm = () => (
           <Input style={{ width: '200px' }} />
 
         </Form.Item>
-        <h3><b>BUDGET PROPOSAL</b></h3>
-
+        <h3 style={{ textAlign: 'center' }}><b>BUDGET PROPOSAL</b></h3>
+        <Form.Item>
+          <Budget />
+        </Form.Item>
       </Form>
     </div>
   </div>
