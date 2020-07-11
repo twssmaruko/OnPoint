@@ -1,26 +1,26 @@
 // import { Auth } from 'aws-amplify';
 import * as actionTypes from '../ActionTypes';
 
-export const setOpenModal = (data) => ({
-  type: actionTypes.SET_OPENMODAL,
+export const setOpenModal1 = (data) => ({
+  type: actionTypes.SET_OPENMODAL1,
   data,
 });
 
-export const setOpenAnotherModal = (data) => ({
-  type: actionTypes.SET_OPENANOTHERMODAL,
+export const setOpenModal2 = (data) => ({
+  type: actionTypes.SET_OPENMODAL2,
   data,
 });
 
-export const setShowSpin = (data) => ({
-  type: actionTypes.SET_SHOWSPIN,
+export const setShowSpin1 = (data) => ({
+  type: actionTypes.SET_SHOWSPIN1,
   data,
 });
-export const setModalSpin = (data) => ({
-  type: actionTypes.SET_MODALSPIN,
+export const setShowSpin2 = (data) => ({
+  type: actionTypes.SET_SHOWSPIN2,
   data,
 });
 
-export const setTableSpin = (data) => ({
-  type: actionTypes.SET_TABLESPIN,
+export const setShowSpin3 = (data) => ({
+  type: actionTypes.SET_SHOWSPIN3,
   data,
 });

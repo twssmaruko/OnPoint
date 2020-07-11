@@ -9,16 +9,18 @@ import {
 } from 'antd';
 
 import { CloseCircleFilled, CheckCircleFilled, EditTwoTone } from '@ant-design/icons';
-import { useSelector, useDispatch } from 'react-redux';
+import {
+  useSelector,
+  useDispatch,
+} from 'react-redux';
 
 import moment from 'moment';
+import PurchaseOrderModal from './PurchaseOrderModal';
 
 // import { SearchOutlined } from '@ant-design/icons';
-import PurchaseRequestFormModal from './PurchaseRequestFormModal';
 import * as uiActions from '../../store/ui/actions/Actions';
-import * as actions from '../../store/purchaserequest/actions/Actions';
+// import * as actions from '../../store/purchaserequest/actions/Actions';
 import TableButton from '../../components/button/OnpointButton';
-import Updatemodal from './UpdateModal';
 
 const PurchaseRequests = () => {
   const { Option } = Select;
@@ -35,15 +37,15 @@ const PurchaseRequests = () => {
   }));
 
   useEffect(() => {
-    dispatcher(actions.getMonthlyPurchaseRequests());
-    dispatcher(actions.initSubscriptions());
-    return () => {
-      dispatcher(actions.unsubscribe());
-    };
-  }, [dispatcher]);
+    // dispatcher(actions.getMonthlyPurchaseRequests());
+    // dispatcher(actions.initSubscriptions());
+    // return () => {
+    //   dispatcher(actions.unsubscribe());
+    // };
+  }, []);
 
-  const onDetailsClick = (item) => {
-    dispatcher(actions.initiateUpdateModal(item.id));
+  const onDetailsClick = () => {
+    // dispatcher(actions.initiateUpdateModal(item.id));
   };
 
   const editButton = (item) => (
@@ -100,7 +102,7 @@ const PurchaseRequests = () => {
   };
 
   const onSearch = () => {
-    dispatcher(actions.getPurchaseRequests(params));
+    // dispatcher(actions.getPurchaseRequests(params));
   };
 
   const onDateSelect = (date) => {
@@ -150,11 +152,11 @@ const PurchaseRequests = () => {
       }}
       >
         <Row>
-          <h1>Purchase Request</h1>
+          <h1>Purchase Orders</h1>
         </Row>
         <Row>
           <Button type="primary" onClick={setModal}>
-            New Purchase Request
+            New Purchase Orders
           </Button>
         </Row>
       </Row>
@@ -247,8 +249,7 @@ const PurchaseRequests = () => {
           </Spin>
         </div>
       </Row>
-      <PurchaseRequestFormModal />
-      <Updatemodal />
+      <PurchaseOrderModal />
     </div>
   );
 };

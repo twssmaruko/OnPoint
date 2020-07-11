@@ -1,18 +1,17 @@
 import React, {
-  useRef, useEffect, useState,
+  useEffect, useState,
 } from 'react';
 import {
   Row,
   Col,
   Button,
   Table,
-  Modal,
   Spin,
 } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { EditTwoTone, DeleteFilled } from '@ant-design/icons';
-import Productsform from './ProductsForm';
+import Productsform from './ProductsFormModal';
 import * as uiActions from '../../store/ui/actions/Actions';
 import * as actions from '../../store/products/actions/Actions';
 import TableButton from '../../components/button/OnpointButton';
@@ -21,17 +20,14 @@ const Products = () => {
   const [operation, setOperation] = useState('add');
   const [editValues, setEditValues] = useState({});
   const dispatcher = useDispatch(); // hooks dispatcher for redux functions from actions
-  const formRef = useRef(null);
   // next line is hooks mapstatetoprops, dretso na variable, dli na ibutang sa props
   const {
-    openModal,
-    showSpin,
     tableSpin,
     productsList,
   } = useSelector(({ ui, products }) => ({
-    openModal: ui.openModal,
-    showSpin: ui.showSpin,
-    tableSpin: ui.tableSpin,
+    openModal: ui.openModal1,
+    showSpin: ui.showSpin1,
+    tableSpin: ui.showSpin2,
     productsList: products.products,
   }));
 
@@ -47,7 +43,7 @@ const Products = () => {
   const setEditModal = (item) => {
     setOperation('edit');
     setEditValues(item);
-    dispatcher(uiActions.setOpenModal(true));
+    dispatcher(uiActions.setOpenModal1(true));
   };
 
   const deleteItem = (item) => {
@@ -96,27 +92,10 @@ const Products = () => {
 
   ];
 
-  const onSubmit = (values) => {
-    if (operation === 'add') {
-      dispatcher(actions.addProduct(values));
-      return;
-    }
-    const toSubmitValues = { ...editValues, ...values };
-    dispatcher(actions.editProduct(toSubmitValues));
-  };
-
   const setAddModal = () => {
     setEditValues({});
     setOperation('add');
-    dispatcher(uiActions.setOpenModal(true));
-  };
-
-  const handleOk = () => {
-    formRef.current.submit();
-  };
-
-  const handleCancel = () => {
-    dispatcher(uiActions.setOpenModal(false));
+    dispatcher(uiActions.setOpenModal1(true));
   };
 
   return (
@@ -148,20 +127,7 @@ const Products = () => {
           </Row>
         </Col>
       </Row>
-      <Modal
-        title={operation === 'add' ? 'Add a product' : 'Edit a product'}
-        visible={openModal}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        width={1000}
-        okText={operation === 'add' ? 'Add' : 'Edit'}
-        cancelText="Cancel"
-        destroyOnClose
-      >
-        <Spin spinning={showSpin}>
-          <Productsform reference={formRef} onSubmit={onSubmit} editValues={editValues} />
-        </Spin>
-      </Modal>
+      <Productsform operation={operation} editValues={editValues} />
     </>
   );
 };

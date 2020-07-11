@@ -1,39 +1,39 @@
 import * as actions from '../ActionTypes';
 
 const initialState = {
-  openModal: false,
-  openAnotherModal: false,
-  showSpin: false,
-  tableSpin: false,
-  modalSpin: false,
+  openModal1: false,
+  openModal2: false,
+  showSpin1: false,
+  showSpin2: false,
+  showSpin3: false,
 };
 
 const ui = (state = initialState, action) => {
   switch (action.type) {
-    case actions.SET_OPENMODAL:
+    case actions.SET_OPENMODAL1:
       return {
         ...state,
-        openModal: action.data,
+        openModal1: action.data,
       };
-    case actions.SET_SHOWSPIN:
+    case actions.SET_OPENMODAL2:
       return {
         ...state,
-        showSpin: action.data,
+        openModal2: action.data,
       };
-    case actions.SET_TABLESPIN:
+    case actions.SET_SHOWSPIN1:
       return {
         ...state,
-        tableSpin: action.data,
+        showSpin1: action.data,
       };
-    case actions.SET_MODALSPIN:
+    case actions.SET_SHOWSPIN2:
       return {
         ...state,
-        modalSpin: action.data,
+        showSpin2: action.data,
       };
-    case actions.SET_OPENANOTHERMODAL:
+    case actions.SET_SHOWSPIN3:
       return {
         ...state,
-        openAnotherModal: action.data,
+        showSpin3: action.data,
       };
     default:
       return state;

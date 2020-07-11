@@ -7,10 +7,12 @@ import Homepage from '../homepage/Homepage';
 import Auth from '../../containers/Auth/Auth';
 import Products from '../../containers/Products/Products';
 import Projects from '../../containers/Projects/Projects';
+import PurchaseOrders from '../../containers/PurchaseOrders/PurchaseOrders';
 
 const Routes = () => {
   const routes = (
     <Switch>
+      <Route path="/purchaseorders" exact component={PurchaseOrders} />
       <Route path="/purchaserequest" exact component={PurchaseRequests} />
       <Route path="/auth" exact component={Auth} />
       <Route path="/vendors" exact component={Vendors} />

@@ -18,7 +18,7 @@ import {
   purchaseRequestStatusIsApprovedDayMonthYear,
 } from '../../../graphql/queries'; import * as actionTypes from '../ActionTypes';
 import {
-  setShowSpin, setModalSpin, setOpenModal, setOpenAnotherModal, setTableSpin,
+  setShowSpin1, setShowSpin2, setOpenModal1, setOpenModal2, setShowSpin3,
 } from '../../ui/actions/Actions';
 import {
   createPurchaseRequest,
@@ -58,7 +58,7 @@ export const setSubscriptions = (data) => ({
 
 export const getProducts = (data) => async (dispatch) => {
   try {
-    dispatch(setShowSpin(true));
+    dispatch(setShowSpin1(true));
     const queryData = await API.graphql(graphqlOperation(searchProducts, {
       filter:
         {
@@ -71,9 +71,9 @@ export const getProducts = (data) => async (dispatch) => {
     }));
     const itemsInProducts = queryData.data.searchProducts.items;
     dispatch(setProducts(itemsInProducts));
-    dispatch(setShowSpin(false));
+    dispatch(setShowSpin1(false));
   } catch (e) {
-    dispatch(setShowSpin(false));
+    dispatch(setShowSpin1(false));
     message.error('Error getting products');
     throw new Error(e);
   }
@@ -81,10 +81,10 @@ export const getProducts = (data) => async (dispatch) => {
 
 export const invokeUpdatePurchaseRequest = (data) => async (dispatch) => {
   try {
-    dispatch(setShowSpin(true));
+    dispatch(setShowSpin1(true));
     await API.graphql(graphqlOperation(updatePurchaseRequest, { input: data }));
-    dispatch(setShowSpin(false));
-    dispatch(setOpenAnotherModal(false));
+    dispatch(setShowSpin1(false));
+    dispatch(setOpenModal2(false));
     message.success('Updated Successfully!');
   } catch (e) {
     message.error('Error updating purchase request');
@@ -93,19 +93,23 @@ export const invokeUpdatePurchaseRequest = (data) => async (dispatch) => {
 
 export const initiateUpdateModal = (data) => async (dispatch) => {
   try {
+    dispatch(setOpenModal2(true));
+    dispatch(setShowSpin1(true));
     const queryData = await API.graphql(graphqlOperation(getPurchaseRequest, {
       id: data,
     }));
     const purchaseRequestData = queryData.data.getPurchaseRequest;
-    await dispatch(setPurchaseRequestData(purchaseRequestData));
-    dispatch(setOpenAnotherModal(true));
+    dispatch(setPurchaseRequestData(purchaseRequestData));
+    dispatch(setShowSpin1(false));
   } catch (e) {
+    dispatch(setOpenModal2(false));
     message.error('Error getting Purchase Request data!');
   }
 };
 
 export const getMonthlyPurchaseRequests = () => async (dispatch) => {
   try {
+    dispatch(setShowSpin3(true));
     const queryData = await API.graphql(graphqlOperation(purchaseRequestMonthCreatedAt, {
       monthYear: moment(new Date()).format('MM-YYYY'),
       sortDirection: 'DESC',
@@ -115,14 +119,16 @@ export const getMonthlyPurchaseRequests = () => async (dispatch) => {
       dispatch(setPurchaseRequestCount(items[0].count));
       dispatch(setPurchaseRequests(items));
     }
+    dispatch(setShowSpin3(false));
   } catch (e) {
+    dispatch(setShowSpin3(false));
     message.error('Cannot get latest List of  Purchase Requests');
   }
 };
 
 export const getPurchaseRequests = (params) => async (dispatch) => {
   try {
-    dispatch(setTableSpin(true));
+    dispatch(setShowSpin3(true));
     const paramKey = Object.keys(params);
     const checkParams = [
       _.isEmpty(_.xor(['dayMonthYear'], paramKey)),
@@ -176,10 +182,10 @@ export const getPurchaseRequests = (params) => async (dispatch) => {
     const purchaseRequests = queryData.data[queryDataItem[queryIndex]].items;
     // console.log(queryData);
     dispatch(setPurchaseRequests(purchaseRequests));
-    dispatch(setTableSpin(false));
+    dispatch(setShowSpin3(false));
   } catch (e) {
     console.log(e);
-    dispatch(setShowSpin(false));
+    dispatch(setShowSpin1(false));
     message.error('Error getting Purchase Request');
     throw new Error(e);
   }
@@ -187,10 +193,10 @@ export const getPurchaseRequests = (params) => async (dispatch) => {
 
 export const addPurchaseRequest = (data) => async (dispatch, getState) => {
   try {
-    dispatch(setModalSpin(true));
+    dispatch(setShowSpin2(true));
     if (!data.orders.length) {
       message.error('Cannot add purchase request without orders!');
-      dispatch(setModalSpin(false));
+      dispatch(setShowSpin2(false));
       return;
     }
 
@@ -199,11 +205,11 @@ export const addPurchaseRequest = (data) => async (dispatch, getState) => {
 
     const { purchaseRequestCount } = getState().purchaseRequests;
 
-    const createData = await API.graphql(graphqlOperation(createPurchaseRequest, {
+    const createdData = await API.graphql(graphqlOperation(createPurchaseRequest, {
       input: { ...body, count: purchaseRequestCount + 1 },
     }));
 
-    const { id } = createData.data.createPurchaseRequest;
+    const { id } = createdData.data.createPurchaseRequest;
 
     data.orders.forEach(async (order) => {
       const {
@@ -219,11 +225,11 @@ export const addPurchaseRequest = (data) => async (dispatch, getState) => {
       await API.graphql(graphqlOperation(createOrder, { input }));
     });
     message.success('Purchase Request added succesfully!');
-    dispatch(setModalSpin(false));
-    dispatch(setOpenModal(false));
+    dispatch(setShowSpin2(false));
+    dispatch(setOpenModal1(false));
   } catch (e) {
     message.error('Adding Purchase Request failed!');
-    dispatch(setShowSpin(false));
+    dispatch(setShowSpin1(false));
     throw new Error(e);
   }
 };
@@ -232,15 +238,18 @@ export const initSubscriptions = () => (dispatch, getState) => {
   try {
     const queryCreateData = API.graphql(graphqlOperation(onCreatePurchaseRequest)).subscribe({
       next: (purchaseRequestData) => {
+        dispatch(setShowSpin3(true));
         const { purchaseRequests } = getState().purchaseRequests;
         const addedData = purchaseRequestData.value.data.onCreatePurchaseRequest;
         const newPurchaseRequests = [addedData].concat(purchaseRequests);
         dispatch(setPurchaseRequestCount(addedData.count));
         dispatch(setPurchaseRequests(newPurchaseRequests));
+        dispatch(setShowSpin3(false));
       },
     });
     const queryUpdateData = API.graphql(graphqlOperation(onUpdatePurchaseRequest)).subscribe({
       next: (purchaseRequestData) => {
+        dispatch(setShowSpin3(true));
         const { purchaseRequests } = getState().purchaseRequests;
         const updatedData = purchaseRequestData.value.data.onUpdatePurchaseRequest;
         const newPurchaseRequests = purchaseRequests.map((product) => {
@@ -250,6 +259,7 @@ export const initSubscriptions = () => (dispatch, getState) => {
           return product;
         });
         dispatch(setPurchaseRequests(newPurchaseRequests));
+        dispatch(setShowSpin3(false));
       },
     });
 

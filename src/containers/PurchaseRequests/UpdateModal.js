@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Row, Select, Switch, Modal, message,
+  Row, Select, Switch, Modal, message, Spin,
 } from 'antd';
 import { AlertTwoTone } from '@ant-design/icons';
 // import _ from 'lodash';
@@ -14,17 +14,14 @@ const Updatemodal = () => {
   const {
     purchaseRequestData,
     openAnotherModal,
+    showSpin,
   } = useSelector(({ ui, purchaseRequests }) => ({
+    showSpin: ui.showSpin1,
     purchaseRequestData: purchaseRequests.purchaseRequestData,
-    openAnotherModal: ui.openAnotherModal,
-    showSpin: ui.showSpin,
+    openAnotherModal: ui.openModal2,
   }));
 
   const [updateParams, setUpdateParams] = useState({ });
-
-  // console.log(purchaseRequestData);
-  // const [statusParam, setStatusParam] = useState();
-  // const [isApprovedParam, setIsApprovedParam] = useState();
 
   const { orders } = purchaseRequestData;
 
@@ -69,11 +66,11 @@ const Updatemodal = () => {
       return;
     }
     message.info('No changes applied.');
-    dispatcher(uiActions.setOpenAnotherModal(false));
+    dispatcher(uiActions.setOpenModal2(false));
   };
 
   const handleUpdateCancel = () => {
-    dispatcher(uiActions.setOpenAnotherModal(false));
+    dispatcher(uiActions.setOpenModal2(false));
   };
 
   return (
@@ -89,37 +86,37 @@ const Updatemodal = () => {
         destroyOnClose
         afterClose={afterModalClose}
       >
-        {/* <Updatemodal /> */}
-        <div>
-          <h2>
-            {`PR ${purchaseRequestData.monthYear}${purchaseRequestData.count}`}
-          </h2>
-        </div>
-        <div>
-          <h3>Orders:</h3>
-          <h4>
-            {ordersItems}
-          </h4>
-        </div>
-        <>
-          <Row style={{ marginTop: 20 }}>
-            <h3>Status:</h3>
-            <Select
-              defaultValue={purchaseRequestData.status}
-              style={{ marginLeft: 10, width: 170 }}
-              onChange={setStatus}
-            >
-              <Option value="ORDERED">ORDERED</Option>
-              <Option value="PENDING">PENDING</Option>
-              <Option value="RECEIVED">RECEIVED</Option>
-            </Select>
-          </Row>
-          <Row style={{ marginTop: 10 }}>
-            <h3>Approval:</h3>
-            <Switch style={{ marginLeft: 10 }} onChange={setApproved} defaultChecked={purchaseRequestData.isApproved === 'APPROVED'} />
-          </Row>
-        </>
-
+        <Spin spinning={showSpin}>
+          <div>
+            <h2>
+              {`PR ${purchaseRequestData.monthYear}-${purchaseRequestData.count}`}
+            </h2>
+          </div>
+          <div>
+            <h3>Orders:</h3>
+            <h4>
+              {ordersItems}
+            </h4>
+          </div>
+          <>
+            <Row style={{ marginTop: 20 }}>
+              <h3>Status:</h3>
+              <Select
+                defaultValue={purchaseRequestData.status}
+                style={{ marginLeft: 10, width: 170 }}
+                onChange={setStatus}
+              >
+                <Option value="ORDERED">ORDERED</Option>
+                <Option value="PENDING">PENDING</Option>
+                <Option value="RECEIVED">RECEIVED</Option>
+              </Select>
+            </Row>
+            <Row style={{ marginTop: 10 }}>
+              <h3>Approval:</h3>
+              <Switch style={{ marginLeft: 10 }} onChange={setApproved} defaultChecked={purchaseRequestData.isApproved === 'APPROVED'} />
+            </Row>
+          </>
+        </Spin>
       </Modal>
 
     </div>
