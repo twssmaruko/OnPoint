@@ -1143,7 +1143,7 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "name",
+          "name" : "vendorName",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -1158,7 +1158,7 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "address",
+          "name" : "location",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -1173,7 +1173,7 @@
           "isDeprecated" : false,
           "deprecationReason" : null
         }, {
-          "name" : "contactNumber",
+          "name" : "telNo",
           "description" : null,
           "args" : [ ],
           "type" : {
@@ -1314,7 +1314,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "name",
+          "name" : "vendorName",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -1323,7 +1323,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "address",
+          "name" : "location",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -1332,7 +1332,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "contactNumber",
+          "name" : "telNo",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -1970,6 +1970,21 @@
             "ofType" : {
               "kind" : "ENUM",
               "name" : "Status",
+              "ofType" : null
+            }
+          },
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "totalPrice",
+          "description" : null,
+          "args" : [ ],
+          "type" : {
+            "kind" : "NON_NULL",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "Float",
               "ofType" : null
             }
           },
@@ -2724,6 +2739,15 @@
           "type" : {
             "kind" : "INPUT_OBJECT",
             "name" : "ModelStatusInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "totalPrice",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelFloatInput",
             "ofType" : null
           },
           "defaultValue" : null
@@ -3856,6 +3880,15 @@
           },
           "defaultValue" : null
         }, {
+          "name" : "totalPrice",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "SearchableFloatFilterInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
           "name" : "createdAt",
           "description" : null,
           "type" : {
@@ -4242,6 +4275,82 @@
         "possibleTypes" : null
       }, {
         "kind" : "INPUT_OBJECT",
+        "name" : "SearchableFloatFilterInput",
+        "description" : null,
+        "fields" : null,
+        "inputFields" : [ {
+          "name" : "ne",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "Float",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "gt",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "Float",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "lt",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "Float",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "gte",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "Float",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "lte",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "Float",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "eq",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "Float",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "range",
+          "description" : null,
+          "type" : {
+            "kind" : "LIST",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "Float",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
+        } ],
+        "interfaces" : null,
+        "enumValues" : null,
+        "possibleTypes" : null
+      }, {
+        "kind" : "INPUT_OBJECT",
         "name" : "SearchablePurchaseRequestSortInput",
         "description" : null,
         "fields" : null,
@@ -4296,6 +4405,11 @@
           "deprecationReason" : null
         }, {
           "name" : "dayMonthYear",
+          "description" : null,
+          "isDeprecated" : false,
+          "deprecationReason" : null
+        }, {
+          "name" : "totalPrice",
           "description" : null,
           "isDeprecated" : false,
           "deprecationReason" : null
@@ -4477,82 +4591,6 @@
             "kind" : "INPUT_OBJECT",
             "name" : "SearchableOrderFilterInput",
             "ofType" : null
-          },
-          "defaultValue" : null
-        } ],
-        "interfaces" : null,
-        "enumValues" : null,
-        "possibleTypes" : null
-      }, {
-        "kind" : "INPUT_OBJECT",
-        "name" : "SearchableFloatFilterInput",
-        "description" : null,
-        "fields" : null,
-        "inputFields" : [ {
-          "name" : "ne",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "Float",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "gt",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "Float",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "lt",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "Float",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "gte",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "Float",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "lte",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "Float",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "eq",
-          "description" : null,
-          "type" : {
-            "kind" : "SCALAR",
-            "name" : "Float",
-            "ofType" : null
-          },
-          "defaultValue" : null
-        }, {
-          "name" : "range",
-          "description" : null,
-          "type" : {
-            "kind" : "LIST",
-            "name" : null,
-            "ofType" : {
-              "kind" : "SCALAR",
-              "name" : "Float",
-              "ofType" : null
-            }
           },
           "defaultValue" : null
         } ],
@@ -5246,7 +5284,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "name",
+          "name" : "vendorName",
           "description" : null,
           "type" : {
             "kind" : "NON_NULL",
@@ -5259,7 +5297,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "address",
+          "name" : "location",
           "description" : null,
           "type" : {
             "kind" : "NON_NULL",
@@ -5272,7 +5310,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "contactNumber",
+          "name" : "telNo",
           "description" : null,
           "type" : {
             "kind" : "NON_NULL",
@@ -5325,7 +5363,7 @@
         "description" : null,
         "fields" : null,
         "inputFields" : [ {
-          "name" : "name",
+          "name" : "vendorName",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -5334,7 +5372,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "address",
+          "name" : "location",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -5343,7 +5381,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "contactNumber",
+          "name" : "telNo",
           "description" : null,
           "type" : {
             "kind" : "INPUT_OBJECT",
@@ -5436,7 +5474,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "name",
+          "name" : "vendorName",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
@@ -5445,7 +5483,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "address",
+          "name" : "location",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
@@ -5454,7 +5492,7 @@
           },
           "defaultValue" : null
         }, {
-          "name" : "contactNumber",
+          "name" : "telNo",
           "description" : null,
           "type" : {
             "kind" : "SCALAR",
@@ -5604,6 +5642,19 @@
           },
           "defaultValue" : null
         }, {
+          "name" : "totalPrice",
+          "description" : null,
+          "type" : {
+            "kind" : "NON_NULL",
+            "name" : null,
+            "ofType" : {
+              "kind" : "SCALAR",
+              "name" : "Float",
+              "ofType" : null
+            }
+          },
+          "defaultValue" : null
+        }, {
           "name" : "createdAt",
           "description" : null,
           "type" : {
@@ -5681,6 +5732,15 @@
           "type" : {
             "kind" : "INPUT_OBJECT",
             "name" : "ModelStatusInput",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "totalPrice",
+          "description" : null,
+          "type" : {
+            "kind" : "INPUT_OBJECT",
+            "name" : "ModelFloatInput",
             "ofType" : null
           },
           "defaultValue" : null
@@ -5810,6 +5870,15 @@
           "type" : {
             "kind" : "ENUM",
             "name" : "Status",
+            "ofType" : null
+          },
+          "defaultValue" : null
+        }, {
+          "name" : "totalPrice",
+          "description" : null,
+          "type" : {
+            "kind" : "SCALAR",
+            "name" : "Float",
             "ofType" : null
           },
           "defaultValue" : null
@@ -7412,6 +7481,22 @@
         "onFragment" : false,
         "onField" : false
       }, {
+        "name" : "aws_oidc",
+        "description" : "Tells the service this field/object has access authorized by an OIDC token.",
+        "locations" : [ "OBJECT", "FIELD_DEFINITION" ],
+        "args" : [ ],
+        "onOperation" : false,
+        "onFragment" : false,
+        "onField" : false
+      }, {
+        "name" : "aws_api_key",
+        "description" : "Tells the service this field/object has access authorized by an API key.",
+        "locations" : [ "OBJECT", "FIELD_DEFINITION" ],
+        "args" : [ ],
+        "onOperation" : false,
+        "onFragment" : false,
+        "onField" : false
+      }, {
         "name" : "deprecated",
         "description" : null,
         "locations" : [ "FIELD_DEFINITION", "ENUM_VALUE" ],
@@ -7425,22 +7510,6 @@
           },
           "defaultValue" : "\"No longer supported\""
         } ],
-        "onOperation" : false,
-        "onFragment" : false,
-        "onField" : false
-      }, {
-        "name" : "aws_oidc",
-        "description" : "Tells the service this field/object has access authorized by an OIDC token.",
-        "locations" : [ "OBJECT", "FIELD_DEFINITION" ],
-        "args" : [ ],
-        "onOperation" : false,
-        "onFragment" : false,
-        "onField" : false
-      }, {
-        "name" : "aws_api_key",
-        "description" : "Tells the service this field/object has access authorized by an API key.",
-        "locations" : [ "OBJECT", "FIELD_DEFINITION" ],
-        "args" : [ ],
         "onOperation" : false,
         "onFragment" : false,
         "onField" : false

@@ -44,6 +44,7 @@ const Vendors = (props) => {
   //   location: 'Cebu City',
   //   Terms: 'COD',
   // }];
+
   const dispatcher = useDispatch();
   const formRef = useRef(null);
 
@@ -135,7 +136,7 @@ const Vendors = (props) => {
                 // eslint-disable-next-line react/destructuring-assignment
                 dataSource={props.vndr}
                 size="large"
-                rowkey="vendorName"
+                rowKey="id"
               />
             </Col>
           </Row>

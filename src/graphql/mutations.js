@@ -8,9 +8,9 @@ export const createVendor = /* GraphQL */ `
   ) {
     createVendor(input: $input, condition: $condition) {
       id
-      name
-      address
-      contactNumber
+      vendorName
+      location
+      telNo
       terms
       createdAt
       updatedAt
@@ -24,9 +24,9 @@ export const updateVendor = /* GraphQL */ `
   ) {
     updateVendor(input: $input, condition: $condition) {
       id
-      name
-      address
-      contactNumber
+      vendorName
+      location
+      telNo
       terms
       createdAt
       updatedAt
@@ -40,9 +40,9 @@ export const deleteVendor = /* GraphQL */ `
   ) {
     deleteVendor(input: $input, condition: $condition) {
       id
-      name
-      address
-      contactNumber
+      vendorName
+      location
+      telNo
       terms
       createdAt
       updatedAt
@@ -74,6 +74,7 @@ export const createPurchaseRequest = /* GraphQL */ `
       monthYear
       dayMonthYear
       status
+      totalPrice
       createdAt
       updatedAt
     }
@@ -104,6 +105,7 @@ export const updatePurchaseRequest = /* GraphQL */ `
       monthYear
       dayMonthYear
       status
+      totalPrice
       createdAt
       updatedAt
     }
@@ -134,6 +136,7 @@ export const deletePurchaseRequest = /* GraphQL */ `
       monthYear
       dayMonthYear
       status
+      totalPrice
       createdAt
       updatedAt
     }

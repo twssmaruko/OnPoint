@@ -98,6 +98,12 @@ const Updatemodal = () => {
               {ordersItems}
             </h4>
           </div>
+          <div>
+            <h3>
+              Total Price: &nbsp;
+              {`${purchaseRequestData.totalPrice} Php`}
+            </h3>
+          </div>
           <>
             <Row style={{ marginTop: 20 }}>
               <h3>Status:</h3>

@@ -5,9 +5,9 @@ export const getVendor = /* GraphQL */ `
   query GetVendor($id: ID!) {
     getVendor(id: $id) {
       id
-      name
-      address
-      contactNumber
+      vendorName
+      location
+      telNo
       terms
       createdAt
       updatedAt
@@ -23,9 +23,9 @@ export const listVendors = /* GraphQL */ `
     listVendors(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        name
-        address
-        contactNumber
+        vendorName
+        location
+        telNo
         terms
         createdAt
         updatedAt
@@ -45,8 +45,9 @@ export const getPurchaseRequest = /* GraphQL */ `
           id
           purchaseRequestId
           product{
-            name
             id
+            name
+            description
           }
           unit
           quantity
@@ -60,6 +61,7 @@ export const getPurchaseRequest = /* GraphQL */ `
       monthYear
       dayMonthYear
       status
+      totalPrice
       createdAt
       updatedAt
     }
@@ -87,6 +89,7 @@ export const listPurchaseRequests = /* GraphQL */ `
         monthYear
         dayMonthYear
         status
+        totalPrice
         createdAt
         updatedAt
       }
@@ -191,13 +194,14 @@ export const purchaseRequestDayCreatedAt = /* GraphQL */ `
         id
         purchaseRequestNo
         isApproved
-        # orders {
-        #   nextToken
-        # }
+        orders {
+          nextToken
+        }
         count
         monthYear
         dayMonthYear
         status
+        totalPrice
         createdAt
         updatedAt
       }
@@ -226,13 +230,14 @@ export const purchaseRequestMonthCreatedAt = /* GraphQL */ `
         id
         purchaseRequestNo
         isApproved
-        # orders {
-        #   nextToken
-        # }
+        orders {
+          nextToken
+        }
         count
         monthYear
         dayMonthYear
         status
+        totalPrice
         createdAt
         updatedAt
       }
@@ -261,13 +266,14 @@ export const purchaseRequestStatusMonthYearCreatedAt = /* GraphQL */ `
         id
         purchaseRequestNo
         isApproved
-        # orders {
-        #   nextToken
-        # }
+        orders {
+          nextToken
+        }
         count
         monthYear
         dayMonthYear
         status
+        totalPrice
         createdAt
         updatedAt
       }
@@ -296,13 +302,14 @@ export const purchaseRequestIsApprovedMonthYearCreatedAt = /* GraphQL */ `
         id
         purchaseRequestNo
         isApproved
-        # orders {
-        #   nextToken
-        # }
+        orders {
+          nextToken
+        }
         count
         monthYear
         dayMonthYear
         status
+        totalPrice
         createdAt
         updatedAt
       }
@@ -331,13 +338,14 @@ export const purchaseRequestStatusDayMonthYearCreatedAt = /* GraphQL */ `
         id
         purchaseRequestNo
         isApproved
-        # orders {
-        #   nextToken
-        # }
+        orders {
+          nextToken
+        }
         count
         monthYear
         dayMonthYear
         status
+        totalPrice
         createdAt
         updatedAt
       }
@@ -366,13 +374,14 @@ export const purchaseRequestIsApprovedDayMonthYearcreatedAt = /* GraphQL */ `
         id
         purchaseRequestNo
         isApproved
-        # orders {
-        #   nextToken
-        # }
+        orders {
+          nextToken
+        }
         count
         monthYear
         dayMonthYear
         status
+        totalPrice
         createdAt
         updatedAt
       }
@@ -401,13 +410,14 @@ export const purchaseRequestStatusCreatedAt = /* GraphQL */ `
         id
         purchaseRequestNo
         isApproved
-        # orders {
-        #   nextToken
-        # }
+        orders {
+          nextToken
+        }
         count
         monthYear
         dayMonthYear
         status
+        totalPrice
         createdAt
         updatedAt
       }
@@ -436,13 +446,14 @@ export const purchaseRequestIsApprovedCreatedAt = /* GraphQL */ `
         id
         purchaseRequestNo
         isApproved
-        # orders {
-        #   nextToken
-        # }
+        orders {
+          nextToken
+        }
         count
         monthYear
         dayMonthYear
         status
+        totalPrice
         createdAt
         updatedAt
       }
@@ -471,13 +482,14 @@ export const purchaseRequestStatusIsApprovedMonthYear = /* GraphQL */ `
         id
         purchaseRequestNo
         isApproved
-        # orders {
-        #   nextToken
-        # }
+        orders {
+          nextToken
+        }
         count
         monthYear
         dayMonthYear
         status
+        totalPrice
         createdAt
         updatedAt
       }
@@ -506,13 +518,14 @@ export const purchaseRequestStatusIsApprovedCreatedAt = /* GraphQL */ `
         id
         purchaseRequestNo
         isApproved
-        # orders {
-        #   nextToken
-        # }
+        orders {
+          nextToken
+        }
         count
         monthYear
         dayMonthYear
         status
+        totalPrice
         createdAt
         updatedAt
       }
@@ -541,13 +554,14 @@ export const purchaseRequestStatusIsApprovedDayMonthYear = /* GraphQL */ `
         id
         purchaseRequestNo
         isApproved
-        # orders {
-        #   nextToken
-        # }
+        orders {
+          nextToken
+        }
         count
         monthYear
         dayMonthYear
         status
+        totalPrice
         createdAt
         updatedAt
       }
@@ -579,6 +593,7 @@ export const searchPurchaseRequests = /* GraphQL */ `
         monthYear
         dayMonthYear
         status
+        totalPrice
         createdAt
         updatedAt
       }

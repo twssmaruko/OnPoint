@@ -6,9 +6,9 @@
 
 type Vendor @model {
   id: ID!
-  name: String!
-  address: String!
-  contactNumber: String!
+  vendorName: String!
+  location: String!
+  telNo: String!
   terms: String!
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
@@ -36,6 +36,7 @@ type PurchaseRequest @model @searchable
   monthYear: String!
   dayMonthYear: String!
   status: Status!
+  totalPrice: Float!
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
 }

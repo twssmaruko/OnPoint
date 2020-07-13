@@ -7,6 +7,7 @@ import {
   Button,
   List,
   Spin,
+  InputNumber,
 } from 'antd';
 import _ from 'lodash';
 
@@ -39,12 +40,14 @@ const PurchaseRequestForm = () => {
 
   const addPurchaseRequest = () => {
     const dateNow = new Date();
+    const totalPrice = _.sumBy(ordersList, 'price');
     const prData = {
       status: 'PENDING',
       purchaseRequestNo: 1,
       isApproved: 'NOTAPPROVED',
       monthYear: moment(dateNow).format('MM-YYYY'),
       dayMonthYear: moment(dateNow).format('DD-MM-YYYY'),
+      totalPrice,
       orders: ordersList,
     };
     dispatcher(actions.addPurchaseRequest(prData));
@@ -138,16 +141,16 @@ const PurchaseRequestForm = () => {
             <Form.Item
               name="quantity"
               label="Quantity"
-              rules={[{ required: true, message: 'Please input Quantity!' }]}
+              rules={[{ required: true, message: 'Please input Quantity!' }, { type: 'number', message: 'Should be a number!' }]}
             >
-              <Input style={{ width: 170 }} />
+              <InputNumber style={{ width: 170 }} />
             </Form.Item>
             <Form.Item
               name="price"
               label="Price"
-              rules={[{ required: true, message: 'Please input Price!' }]}
+              rules={[{ required: true, message: 'Please input Price!' }, { type: 'number', message: 'Should be a number!' }]}
             >
-              <Input style={{ width: 170 }} />
+              <InputNumber style={{ width: 170 }} />
             </Form.Item>
             <Form.Item style={{ marginLeft: 80 }}>
               <Button type="primary" htmlType="submit">

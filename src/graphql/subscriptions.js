@@ -5,9 +5,9 @@ export const onCreateVendor = /* GraphQL */ `
   subscription OnCreateVendor {
     onCreateVendor {
       id
-      name
-      address
-      contactNumber
+      vendorName
+      location
+      telNo
       terms
       createdAt
       updatedAt
@@ -18,9 +18,9 @@ export const onUpdateVendor = /* GraphQL */ `
   subscription OnUpdateVendor {
     onUpdateVendor {
       id
-      name
-      address
-      contactNumber
+      vendorName
+      location
+      telNo
       terms
       createdAt
       updatedAt
@@ -31,9 +31,9 @@ export const onDeleteVendor = /* GraphQL */ `
   subscription OnDeleteVendor {
     onDeleteVendor {
       id
-      name
-      address
-      contactNumber
+      vendorName
+      location
+      telNo
       terms
       createdAt
       updatedAt
@@ -62,6 +62,7 @@ export const onCreatePurchaseRequest = /* GraphQL */ `
       monthYear
       dayMonthYear
       status
+      totalPrice
       createdAt
       updatedAt
     }
@@ -89,6 +90,7 @@ export const onUpdatePurchaseRequest = /* GraphQL */ `
       monthYear
       dayMonthYear
       status
+      totalPrice
       createdAt
       updatedAt
     }
@@ -116,6 +118,7 @@ export const onDeletePurchaseRequest = /* GraphQL */ `
       monthYear
       dayMonthYear
       status
+      totalPrice
       createdAt
       updatedAt
     }
