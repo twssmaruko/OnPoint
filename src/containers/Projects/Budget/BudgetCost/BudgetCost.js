@@ -21,20 +21,37 @@ const BudgetCost = () => {
           rules={{ required: true, message: 'Please Input a Cost Name!' }}
         >
           <Input style={{
-            borderColor: 'black', backgroundColor: 'yellow', width: '50px', textAlign: 'center',
+            borderColor: 'black',
+            backgroundColor: 'yellow',
+            width: '50px',
+            textAlign: 'center',
+            fontWeight: 'bold',
+            color: '#5DADE2',
           }}
           />
           <Input style={{
-            borderColor: 'black', backgroundColor: 'yellow', width: '470px', textAlign: 'center',
+            borderColor: 'black',
+            backgroundColor: 'yellow',
+            width: '642px',
+            textAlign: 'center',
+            fontWeight: 'bold',
+            color: '#5DADE2',
           }}
           />
           <Input
             disabled="true"
             style={{
-              borderColor: 'black', backgroundColor: 'yellow', width: '150px', textAlign: 'right',
+              borderColor: 'black',
+              backgroundColor: 'yellow',
+              width: '125px',
+              textAlign: 'right',
+              fontWeight: 'bold',
+              fontSize: 12,
+              height: '32px',
+              color: '#5DADE2',
             }}
           />
-          <Button onClick={addSubCategoryClicked}>Add Sub-Category</Button>
+          <Button onClick={addSubCategoryClicked} shape="circle">+</Button>
 
         </Form.Item>
         {subCategoryState}
