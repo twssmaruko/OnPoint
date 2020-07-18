@@ -19,32 +19,7 @@ const Vendors = (props) => {
       <Input> Search </Input>
     </div>
   );
-
-  // const vendorList = [{
-  //   vendorName: 'I forgot their name',
-  //   telNo: '8205245',
-  //   location: 'Mandaue City',
-  //   Terms: 'COD',
-  // },
-  // {
-  //   vendorName: 'I forgot their name',
-  //   telNo: '8205245',
-  //   location: 'Mandaue City',
-  //   Terms: 'Cheque or something',
-  // },
-  // {
-  //   vendorName: 'I forgot alsoo',
-  //   telNo: '2381311',
-  //   location: 'Mandaue City',
-  //   Terms: 'COD',
-  // },
-  // {
-  //   vendorName: 'This is a test',
-  //   telNo: '3444512',
-  //   location: 'Cebu City',
-  //   Terms: 'COD',
-  // }];
-
+  // const [projectState, setProjectState] = useState([]);
   const dispatcher = useDispatch();
   const formRef = useRef(null);
 
@@ -89,12 +64,6 @@ const Vendors = (props) => {
     },
   ];
 
-  // const vendorSample = {
-  //   vendorName: 'CementLand',
-  //   telNo: '2542422',
-  //   location: 'Cebu City',
-  //   terms: 'COD',
-  // };
   const setModal = () => {
     setModalVisible(true);
   };
