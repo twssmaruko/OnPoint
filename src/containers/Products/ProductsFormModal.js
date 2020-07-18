@@ -56,6 +56,7 @@ const Productsform = (props) => {
   return (
     <Row>
       <Modal
+        maskClosable={false}
         title={operation === 'add' ? 'Add a product' : 'Edit a product'}
         visible={openModal}
         onOk={handleOk}

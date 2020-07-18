@@ -2,12 +2,12 @@ import React from 'react';
 import {
   // Row, Col,
   Form, Input,
-  Select,
+  // Select,
 } from 'antd';
 // import { API, graphqlOperation } from 'aws-amplify';
 // import { createVendor } from '../../graphql/mutations';
 
-const { Option } = Select;
+// const { Option } = Select;
 
 const VendorList = (props) => {
   // const onFinish = (values) => {
@@ -36,7 +36,7 @@ const VendorList = (props) => {
         <Form
           // layout="vertical"
           name="basic"
-          initialValues={{ remember: true, terms: 'term1' }}
+          initialValues={{ remember: true }}
           onFinish={onSubmit}
           onFinishFailed={onFinishFailure}
           ref={reference}
@@ -68,11 +68,13 @@ const VendorList = (props) => {
             name="terms"
             rules={[{ required: true, message: 'Please input vendor terms!' }]}
           >
-            <Select>
+            {/* <Select>
               <Option value="Term 1">Term 1</Option>
               <Option value="Term 2">Term 2</Option>
               <Option value="Term 3">Term 3</Option>
-            </Select>
+            </Select> */}
+            <Input />
+
           </Form.Item>
         </Form>
       </div>

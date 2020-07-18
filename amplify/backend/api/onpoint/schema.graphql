@@ -4,7 +4,7 @@
 #   TERM3
 # }
 
-type Vendor @model {
+type Vendor @model @searchable{
   id: ID!
   vendorName: String!
   location: String!
@@ -14,7 +14,7 @@ type Vendor @model {
   updatedAt: AWSDateTime!
 }
 
-type PurchaseRequest @model @searchable 
+type PurchaseRequest @model @searchable
 @key(name:"DayMonthYearCreatedAt" fields:["dayMonthYear", "createdAt"] queryField: "purchaseRequestDayCreatedAt")
 @key(name:"MonthYearCreatedAt" fields:["monthYear", "createdAt"] queryField: "purchaseRequestMonthCreatedAt")
 @key(name:"StatuswithMonthYearCreatedAt" fields:["status", "monthYear", "createdAt"] queryField:"purchaseRequestStatusMonthYearCreatedAt")
@@ -29,7 +29,7 @@ type PurchaseRequest @model @searchable
 
  {
   id: ID!
-  purchaseRequestNo: Int!
+  purchaseRequestNo: String!
   isApproved: isApproved!
   orders: [Order] @connection(keyName: "byPurchaseRequest", fields: ["id"])
   count: Int!

@@ -1,4 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, {
+  useState,
+  // useEffect,
+} from 'react';
 import {
   Row,
   Button,
@@ -15,7 +18,7 @@ import {
 } from 'react-redux';
 
 import moment from 'moment';
-import PurchaseOrderModal from './PurchaseOrderModal';
+import PurchaseOrderAddModal from './AddPurchaseOrderModal';
 
 // import { SearchOutlined } from '@ant-design/icons';
 import * as uiActions from '../../store/ui/actions/Actions';
@@ -36,13 +39,13 @@ const PurchaseRequests = () => {
     tableSpin: ui.showSpin3,
   }));
 
-  useEffect(() => {
-    // dispatcher(actions.getMonthlyPurchaseRequests());
-    // dispatcher(actions.initSubscriptions());
-    // return () => {
-    //   dispatcher(actions.unsubscribe());
-    // };
-  }, []);
+  // useEffect(() => {
+  //   // dispatcher(actions.getMonthlyPurchaseRequests());
+  //   // dispatcher(actions.initSubscriptions());
+  //   // return () => {
+  //   //   dispatcher(actions.unsubscribe());
+  //   // };
+  // }, []);
 
   const onDetailsClick = () => {
     // dispatcher(actions.initiateUpdateModal(item.id));
@@ -98,7 +101,8 @@ const PurchaseRequests = () => {
   ];
 
   const setModal = () => {
-    dispatcher(uiActions.setOpenModal1(true));
+    dispatcher(uiActions.setOpenModal2(true));
+    // dispatcher(uiActions.setOpenModal1(true));
   };
 
   const onSearch = () => {
@@ -249,7 +253,7 @@ const PurchaseRequests = () => {
           </Spin>
         </div>
       </Row>
-      <PurchaseOrderModal />
+      <PurchaseOrderAddModal />
     </div>
   );
 };

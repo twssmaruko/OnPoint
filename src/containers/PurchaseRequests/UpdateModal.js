@@ -8,9 +8,10 @@ import { AlertTwoTone } from '@ant-design/icons';
 import * as uiActions from '../../store/ui/actions/Actions';
 import * as actions from '../../store/purchaserequest/actions/Actions';
 
-const Updatemodal = () => {
+const Updatemodal = (props) => {
   const dispatcher = useDispatch();
   const { Option } = Select;
+  const { initialValue } = props;
   const {
     purchaseRequestData,
     openAnotherModal,
@@ -25,7 +26,7 @@ const Updatemodal = () => {
 
   const { orders } = purchaseRequestData;
 
-  const ordersItems = orders ? orders.items.map((item) => (<div key={item.id}>{`${item.quantity} ${item.unit} of ${item.product.name}  for ${item.price} Php` }</div>)) : null;
+  const ordersItems = orders.items.map((item) => (<div key={item.id}>{`-- ${item.quantity} ${item.unit} of ${item.product.name}  for ${item.price} Php` }</div>));
 
   const setStatus = (value) => {
     setUpdateParams({ ...updateParams, status: value });
@@ -77,7 +78,8 @@ const Updatemodal = () => {
     <div>
 
       <Modal
-        title="Purchase Request Detatils"
+        maskClosable={false}
+        title={`PR ${purchaseRequestData.purchaseRequestNo}`}
         visible={openAnotherModal}
         width={500}
         onOk={handleUpdateOk}
@@ -87,18 +89,20 @@ const Updatemodal = () => {
         afterClose={afterModalClose}
       >
         <Spin spinning={showSpin}>
-          <div>
+          {/* <div style={{ marginTop: -20 }}>
             <h2>
-              {`PR ${purchaseRequestData.monthYear}-${purchaseRequestData.count}`}
+              {`PR ${purchaseRequestData.purchaseRequestNo}`}
             </h2>
-          </div>
-          <div>
+          </div> */}
+          <div style={{ marginTop: -20 }}>
             <h3>Orders:</h3>
-            <h4>
-              {ordersItems}
-            </h4>
+            <div style={{ border: '1px solid #D3D3D3' }}>
+              <div style={{ margin: '2%', color: 'black' }}>
+                {ordersItems}
+              </div>
+            </div>
           </div>
-          <div>
+          <div style={{ marginTop: 20 }}>
             <h3>
               Total Price: &nbsp;
               {`${purchaseRequestData.totalPrice} Php`}
@@ -108,7 +112,7 @@ const Updatemodal = () => {
             <Row style={{ marginTop: 20 }}>
               <h3>Status:</h3>
               <Select
-                defaultValue={purchaseRequestData.status}
+                defaultValue={initialValue.status}
                 style={{ marginLeft: 10, width: 170 }}
                 onChange={setStatus}
               >
@@ -119,7 +123,7 @@ const Updatemodal = () => {
             </Row>
             <Row style={{ marginTop: 10 }}>
               <h3>Approval:</h3>
-              <Switch style={{ marginLeft: 10 }} onChange={setApproved} defaultChecked={purchaseRequestData.isApproved === 'APPROVED'} />
+              <Switch style={{ marginLeft: 10 }} onChange={setApproved} defaultChecked={initialValue.isApproved === 'APPROVED'} />
             </Row>
           </>
         </Spin>

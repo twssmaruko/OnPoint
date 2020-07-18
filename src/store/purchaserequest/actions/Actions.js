@@ -173,9 +173,6 @@ export const getPurchaseRequests = (params) => async (dispatch) => {
     ];
 
     const queryIndex = checkParams.indexOf(true);
-    console.log(params);
-    console.log(paramKey);
-    console.log(checkParams);
     // console.log(queryArray[]);
 
     const queryData = await API.graphql(queryArray[queryIndex]);
@@ -184,7 +181,6 @@ export const getPurchaseRequests = (params) => async (dispatch) => {
     dispatch(setPurchaseRequests(purchaseRequests));
     dispatch(setShowSpin3(false));
   } catch (e) {
-    console.log(e);
     dispatch(setShowSpin1(false));
     message.error('Error getting Purchase Request');
     throw new Error(e);
@@ -205,8 +201,11 @@ export const addPurchaseRequest = (data) => async (dispatch, getState) => {
 
     const { purchaseRequestCount } = getState().purchaseRequests;
 
+    const count = purchaseRequestCount + 1;
+    const purchaseRequestNo = `${body.monthYear}-${count}`;
+
     const createdData = await API.graphql(graphqlOperation(createPurchaseRequest, {
-      input: { ...body, count: purchaseRequestCount + 1 },
+      input: { ...body, count, purchaseRequestNo },
     }));
 
     const { id } = createdData.data.createPurchaseRequest;
@@ -228,6 +227,7 @@ export const addPurchaseRequest = (data) => async (dispatch, getState) => {
     dispatch(setShowSpin2(false));
     dispatch(setOpenModal1(false));
   } catch (e) {
+    console.log(e);
     message.error('Adding Purchase Request failed!');
     dispatch(setShowSpin1(false));
     throw new Error(e);

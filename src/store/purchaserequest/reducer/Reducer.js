@@ -4,7 +4,7 @@ const initialState = {
   products: [],
   purchaseRequests: [],
   purchaseRequestCount: 0,
-  purchaseRequestData: {},
+  purchaseRequestData: { orders: { items: [] } },
   subscriptions: [],
 };
 

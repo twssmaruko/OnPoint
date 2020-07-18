@@ -40,10 +40,11 @@ const PurchaseRequestForm = () => {
 
   const addPurchaseRequest = () => {
     const dateNow = new Date();
-    const totalPrice = _.sumBy(ordersList, 'price');
+    // const totalPrice = _.sumBy(ordersList, 'price');
+    const totalPrice = ordersList.reduce((accumulator,
+      current) => accumulator + (current.price * current.quantity), 0);
     const prData = {
       status: 'PENDING',
-      purchaseRequestNo: 1,
       isApproved: 'NOTAPPROVED',
       monthYear: moment(dateNow).format('MM-YYYY'),
       dayMonthYear: moment(dateNow).format('DD-MM-YYYY'),
@@ -92,6 +93,11 @@ const PurchaseRequestForm = () => {
     dispatcher(uiActions.setOpenModal1(false));
   };
 
+  const afterModalClose = () => {
+    setOrdersList([]);
+    setListItems([]);
+  };
+
   return (
     <Modal
       title="Add a new purchase request"
@@ -102,6 +108,7 @@ const PurchaseRequestForm = () => {
       okText="Add Purchase Request"
       cancelText="Cancel"
       destroyOnClose
+      afterClose={afterModalClose}
     >
       <Spin spinning={modalSpin}>
 
@@ -185,7 +192,6 @@ const PurchaseRequestForm = () => {
               )}
             />
           </div>
-
         </div>
       </Spin>
     </Modal>

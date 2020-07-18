@@ -43,12 +43,12 @@ export const getPurchaseRequest = /* GraphQL */ `
       orders {
         items {
           id
-          purchaseRequestId
           product{
             id
             name
             description
           }
+          purchaseRequestId
           unit
           quantity
           price
@@ -566,6 +566,33 @@ export const purchaseRequestStatusIsApprovedDayMonthYear = /* GraphQL */ `
         updatedAt
       }
       nextToken
+    }
+  }
+`;
+export const searchVendors = /* GraphQL */ `
+  query SearchVendors(
+    $filter: SearchableVendorFilterInput
+    $sort: SearchableVendorSortInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    searchVendors(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        vendorName
+        location
+        telNo
+        terms
+        createdAt
+        updatedAt
+      }
+      nextToken
+      total
     }
   }
 `;

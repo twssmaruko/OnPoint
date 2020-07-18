@@ -6,12 +6,14 @@ import {
   Table,
   DatePicker,
   Spin,
+  message,
 } from 'antd';
 
 import { CloseCircleFilled, CheckCircleFilled, EditTwoTone } from '@ant-design/icons';
 import { useSelector, useDispatch } from 'react-redux';
 
 import moment from 'moment';
+import _ from 'lodash';
 
 // import { SearchOutlined } from '@ant-design/icons';
 import PurchaseRequestFormModal from './PurchaseRequestFormModal';
@@ -24,6 +26,7 @@ const PurchaseRequests = () => {
   const { Option } = Select;
   // const childRef = useRef();
   const dispatcher = useDispatch();
+  const [initialPurchaseRequest, setInitialPurchaseRequest] = useState({});
   const [params, setParams] = useState({});
   const {
     purchaseRequestsList,
@@ -43,6 +46,7 @@ const PurchaseRequests = () => {
   }, [dispatcher]);
 
   const onDetailsClick = (item) => {
+    setInitialPurchaseRequest(item);
     dispatcher(actions.initiateUpdateModal(item.id));
   };
 
@@ -57,7 +61,7 @@ const PurchaseRequests = () => {
       : <CloseCircleFilled style={{ marginLeft: 20, color: 'red' }} />
   );
 
-  const prNumberDisplay = (data) => `PR ${data.monthYear}-${data.count}`;
+  const prNumberDisplay = (data) => `PR ${data.purchaseRequestNo}`;
 
   const columns = [
     {
@@ -100,7 +104,11 @@ const PurchaseRequests = () => {
   };
 
   const onSearch = () => {
-    dispatcher(actions.getPurchaseRequests(params));
+    if (!_.isEmpty(params)) {
+      dispatcher(actions.getPurchaseRequests(params));
+      return;
+    }
+    message.info('Select options first');
   };
 
   const onDateSelect = (date) => {
@@ -248,7 +256,7 @@ const PurchaseRequests = () => {
         </div>
       </Row>
       <PurchaseRequestFormModal />
-      <Updatemodal />
+      <Updatemodal initialValue={initialPurchaseRequest} />
     </div>
   );
 };
