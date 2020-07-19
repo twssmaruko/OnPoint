@@ -4,6 +4,7 @@ import {
   // Input,
 } from 'antd';
 import { useSelector, useDispatch } from 'react-redux';
+import moment from 'moment';
 import * as uiActions from '../../store/ui/actions/Actions';
 import Logo from '../../assets/images/Logo.png';
 
@@ -82,7 +83,7 @@ const PurchaseOrderModal = (props) => {
               {`PR/Doc #: ${purchaseRequestData.purchaseRequestNo}`}
             </Col>
             <Col span={12}>
-              Order Date #: 1/23/2020
+              {`Order Date: ${moment(new Date()).format('L')}`}
             </Col>
           </Row>
         </Col>
@@ -181,12 +182,12 @@ const PurchaseOrderModal = (props) => {
           paddingBottom: 15,
         }}
         >
-          <div style={{ marginLeft: 30, width: 220 }}>IT</div>
-          <div style={{ width: 230 }}>DESCRIPTION</div>
-          <div style={{ width: 65 }}>QTY</div>
-          <div style={{ width: 65 }}>UNIT</div>
-          <div style={{ width: 120 }}>UNIT PRICE</div>
-          <div style={{ width: 65 }}>TOTAL</div>
+          <div style={{ marginLeft: 30, width: 100 }}>IT</div>
+          <div style={{ width: 250 }}>DESCRIPTION</div>
+          <div style={{ width: 85 }}>QTY</div>
+          <div style={{ width: 85 }}>UNIT</div>
+          <div style={{ width: 140 }}>UNIT PRICE</div>
+          <div style={{ width: 85 }}>TOTAL</div>
         </Row>
         <Row style={{
           marginTop: 20,
@@ -197,12 +198,12 @@ const PurchaseOrderModal = (props) => {
         >
           {orders.items.map((order, index) => (
             <Row key={order.id}>
-              <div style={{ marginLeft: 30, width: 220 }}>{index + 1}</div>
-              <div style={{ width: 230 }}>{order.product.name}</div>
-              <div style={{ width: 65 }}>{order.quantity}</div>
-              <div style={{ width: 65 }}>{order.unit}</div>
-              <div style={{ width: 120 }}>{order.price}</div>
-              <div style={{ width: 65 }}>{order.quantity * order.price}</div>
+              <div style={{ marginLeft: 30, width: 110 }}>{index + 1}</div>
+              <div style={{ width: 250 }}>{order.product.name}</div>
+              <div style={{ width: 85 }}>{order.quantity}</div>
+              <div style={{ width: 95 }}>{order.unit}</div>
+              <div style={{ width: 130 }}>{order.price}</div>
+              <div style={{ width: 85 }}>{order.quantity * order.price}</div>
             </Row>
           ))}
           {/* <div style={{ marginLeft: 30, width: 220 }}>1</div>
@@ -212,9 +213,6 @@ const PurchaseOrderModal = (props) => {
           <div style={{ width: 120 }}>1000</div>
           <div style={{ width: 65 }}>2000</div> */}
         </Row>
-        <div style={{ marginTop: 100, color: 'black', marginLeft: '3%' }}>
-          {`Notes: ${addNotes}`}
-        </div>
         <div style={{
           marginTop: 50,
           color: 'black',
@@ -226,6 +224,9 @@ const PurchaseOrderModal = (props) => {
           <div style={{ width: 200, borderTop: '1px solid black', textAlign: 'center' }}>
             {`Total Amount: ${purchaseRequestData.totalPrice}`}
           </div>
+        </div>
+        <div style={{ marginTop: 100, color: 'black', marginLeft: '3%' }}>
+          {`Notes: ${addNotes}`}
         </div>
         <div style={{
           marginTop: 50,

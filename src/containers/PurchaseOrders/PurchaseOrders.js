@@ -31,7 +31,7 @@ const PurchaseRequests = () => {
   const dispatcher = useDispatch();
   const [params, setParams] = useState({});
   const {
-    purchaseRequestsList,
+    // purchaseRequestsList,
     tableSpin,
   } = useSelector(({ ui, purchaseRequests }) => ({
     openAnotherModal: ui.openModal2,
@@ -243,7 +243,7 @@ const PurchaseRequests = () => {
           <Spin spinning={tableSpin}>
             <Table
               columns={columns}
-              dataSource={purchaseRequestsList}
+              // dataSource={purchaseRequestsList}
               size="small"
               rowKey="id"
               pagination={{

@@ -93,14 +93,14 @@ export const invokeUpdatePurchaseRequest = (data) => async (dispatch) => {
 
 export const initiateUpdateModal = (data) => async (dispatch) => {
   try {
-    dispatch(setOpenModal2(true));
-    dispatch(setShowSpin1(true));
+    // dispatch(setShowSpin1(true));
     const queryData = await API.graphql(graphqlOperation(getPurchaseRequest, {
       id: data,
     }));
     const purchaseRequestData = queryData.data.getPurchaseRequest;
     dispatch(setPurchaseRequestData(purchaseRequestData));
-    dispatch(setShowSpin1(false));
+    dispatch(setOpenModal2(true));
+    // dispatch(setShowSpin1(false));
   } catch (e) {
     dispatch(setOpenModal2(false));
     message.error('Error getting Purchase Request data!');

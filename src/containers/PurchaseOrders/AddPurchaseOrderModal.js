@@ -23,6 +23,7 @@ const AddPurchaseOrderModal = () => {
   const { Option } = Select;
   const [purchaseRequestSelected, setPurchaseRequestSelected] = useState(false);
   const [selectedVendor, setSelectedVendor] = useState({});
+  // const [vendorValue, setVendorValue] = useState();
   const [purchaseOrderData, setPurchaseOrderData] = useState({
     requestedBy: '',
     project: '',
@@ -48,14 +49,14 @@ const AddPurchaseOrderModal = () => {
     vendorsList: purchaseOrder.vendors,
   }));
 
-  const searchPurchaseRequestList = () => purchaseRequestList.map((purchaseRequest, index) => (
-    <Option key={purchaseRequest.id} value={index}>
+  const searchPurchaseRequestList = () => purchaseRequestList.map((purchaseRequest) => (
+    <Option key={purchaseRequest.id} value={purchaseRequest.id}>
       {purchaseRequest.purchaseRequestNo}
     </Option>
   ));
 
-  const searchVendorsList = () => vendorsList.map((vendor, index) => (
-    <Option key={vendor.id} value={index}>
+  const searchVendorsList = () => vendorsList.map((vendor) => (
+    <Option key={vendor.id} value={vendor.id}>
       {vendor.vendorName}
     </Option>
   ));
@@ -139,20 +140,22 @@ const AddPurchaseOrderModal = () => {
 
   const vendorRender = (
     <>
-      <Row style={{
+      <div style={{
         color: 'black', marginLeft: 10, marginTop: -10,
       }}
       >
-        <div>
-          {`Name: ${selectedVendor.vendorName}`}
-        </div>
-        <div style={{ marginLeft: 20 }}>
+        <Row>
+          <div>
+            {`Name: ${selectedVendor.vendorName}`}
+          </div>
+          <div style={{ marginLeft: 15 }}>
+            {`Contact # : ${selectedVendor.telNo}`}
+          </div>
+        </Row>
+        <Row style={{ overflowWrap: 'break-word' }}>
           {`Address: ${selectedVendor.location}`}
-        </div>
-        <div style={{ marginLeft: 20 }}>
-          {`Contact # : ${selectedVendor.telNo}`}
-        </div>
-      </Row>
+        </Row>
+      </div>
     </>
   );
 
@@ -162,10 +165,12 @@ const AddPurchaseOrderModal = () => {
       return;
     }
 
-    const index = selectedPurchaseRequest.value;
+    const itemSelected = purchaseRequestList.find(
+      (data) => data.id === selectedPurchaseRequest.value,
+    );
 
-    if (purchaseRequestList[index].isApproved === 'APPROVED') {
-      await dispatcher(actions.getPurchestRequestData(purchaseRequestList[index].id));
+    if (itemSelected.isApproved === 'APPROVED') {
+      await dispatcher(actions.getPurchestRequestData(itemSelected.id));
       setPurchaseRequestSelected(true);
       return;
     }
@@ -179,8 +184,10 @@ const AddPurchaseOrderModal = () => {
       return;
     }
 
-    const index = selectedVendorItem.value;
-    setSelectedVendor(vendorsList[index]);
+    const itemSelected = vendorsList.find((data) => data.id === selectedVendorItem.value);
+
+    // const index = selectedVendorItem.value;
+    setSelectedVendor(itemSelected);
   };
 
   const resetFields = () => {
@@ -223,6 +230,7 @@ const AddPurchaseOrderModal = () => {
                 rules={[{ required: true, message: 'Please input PR #!' }]}
               >
                 <Select
+                  key="puchaseRequest"
                   showSearch
                   allowClear
                   labelInValue
@@ -250,9 +258,11 @@ const AddPurchaseOrderModal = () => {
                 rules={[{ required: true, message: 'Please Input Vendor' }]}
               >
                 <Select
+                  key="vendors"
                   showSearch
                   allowClear
                   labelInValue
+                  // value={vendorValue}
                   placeholder="Search Vendor Name"
                   notFoundContent={<Spin spinning={showSpin2} />}
                   filterOption={false}

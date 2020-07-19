@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  Row, Select, Switch, Modal, message, Spin,
+  Row, Select, Switch, Modal, message,
+  // Spin,
 } from 'antd';
 import { AlertTwoTone } from '@ant-design/icons';
 // import _ from 'lodash';
@@ -15,9 +16,9 @@ const Updatemodal = (props) => {
   const {
     purchaseRequestData,
     openAnotherModal,
-    showSpin,
+    // showSpin,
   } = useSelector(({ ui, purchaseRequests }) => ({
-    showSpin: ui.showSpin1,
+    // showSpin: ui.showSpin1,
     purchaseRequestData: purchaseRequests.purchaseRequestData,
     openAnotherModal: ui.openModal2,
   }));
@@ -88,45 +89,45 @@ const Updatemodal = (props) => {
         destroyOnClose
         afterClose={afterModalClose}
       >
-        <Spin spinning={showSpin}>
-          {/* <div style={{ marginTop: -20 }}>
+        {/* <Spin spinning={showSpin}> */}
+        {/* <div style={{ marginTop: -20 }}>
             <h2>
               {`PR ${purchaseRequestData.purchaseRequestNo}`}
             </h2>
           </div> */}
-          <div style={{ marginTop: -20 }}>
-            <h3>Orders:</h3>
-            <div style={{ border: '1px solid #D3D3D3' }}>
-              <div style={{ margin: '2%', color: 'black' }}>
-                {ordersItems}
-              </div>
+        <div style={{ marginTop: -20 }}>
+          <h3>Orders:</h3>
+          <div style={{ border: '1px solid #D3D3D3' }}>
+            <div style={{ margin: '2%', color: 'black' }}>
+              {ordersItems}
             </div>
           </div>
-          <div style={{ marginTop: 20 }}>
-            <h3>
-              Total Price: &nbsp;
-              {`${purchaseRequestData.totalPrice} Php`}
-            </h3>
-          </div>
-          <>
-            <Row style={{ marginTop: 20 }}>
-              <h3>Status:</h3>
-              <Select
-                defaultValue={initialValue.status}
-                style={{ marginLeft: 10, width: 170 }}
-                onChange={setStatus}
-              >
-                <Option value="ORDERED">ORDERED</Option>
-                <Option value="PENDING">PENDING</Option>
-                <Option value="RECEIVED">RECEIVED</Option>
-              </Select>
-            </Row>
-            <Row style={{ marginTop: 10 }}>
-              <h3>Approval:</h3>
-              <Switch style={{ marginLeft: 10 }} onChange={setApproved} defaultChecked={initialValue.isApproved === 'APPROVED'} />
-            </Row>
-          </>
-        </Spin>
+        </div>
+        <div style={{ marginTop: 20 }}>
+          <h3>
+            Total Price: &nbsp;
+            {`${purchaseRequestData.totalPrice} Php`}
+          </h3>
+        </div>
+        <>
+          <Row style={{ marginTop: 20 }}>
+            <h3>Status:</h3>
+            <Select
+              defaultValue={initialValue.status}
+              style={{ marginLeft: 10, width: 170 }}
+              onChange={setStatus}
+            >
+              <Option value="ORDERED">ORDERED</Option>
+              <Option value="PENDING">PENDING</Option>
+              <Option value="RECEIVED">RECEIVED</Option>
+            </Select>
+          </Row>
+          <Row style={{ marginTop: 10 }}>
+            <h3>Approval:</h3>
+            <Switch style={{ marginLeft: 10 }} onChange={setApproved} defaultChecked={initialValue.isApproved === 'APPROVED'} />
+          </Row>
+        </>
+        {/* </Spin> */}
       </Modal>
 
     </div>
