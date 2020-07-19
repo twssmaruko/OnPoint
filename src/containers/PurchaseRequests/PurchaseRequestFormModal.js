@@ -104,6 +104,7 @@ const PurchaseRequestForm = () => {
       visible={openModal}
       onOk={addPurchaseRequest}
       onCancel={handleCancel}
+      maskClosable={false}
       width={900}
       okText="Add Purchase Request"
       cancelText="Cancel"
@@ -168,7 +169,7 @@ const PurchaseRequestForm = () => {
           <div style={{ width: '70%', marginLeft: 40 }}>
             <List
               pagination={ordersList.length > 3 ? {
-                pageSize: 3,
+                pageSize: 5,
                 position: 'bottom',
               } : false}
               size="small"

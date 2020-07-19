@@ -225,7 +225,7 @@ const PurchaseOrderModal = (props) => {
             {`Total Amount: ${purchaseRequestData.totalPrice}`}
           </div>
         </div>
-        <div style={{ marginTop: 100, color: 'black', marginLeft: '3%' }}>
+        <div style={{ marginTop: 50, color: 'black', marginLeft: '3%' }}>
           {`Notes: ${addNotes}`}
         </div>
         <div style={{
