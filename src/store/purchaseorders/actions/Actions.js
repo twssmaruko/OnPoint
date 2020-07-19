@@ -75,6 +75,7 @@ export const getPurchestRequestData = (data) => async (dispatch) => {
     const purchaseRequestData = queryData.data.getPurchaseRequest;
     dispatch(setPurchaseRequest(purchaseRequestData));
   } catch (e) {
+    console.log(e);
     message.error('Cannot get Purchase Request data.');
   }
 };

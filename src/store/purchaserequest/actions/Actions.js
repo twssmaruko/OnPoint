@@ -103,6 +103,7 @@ export const initiateUpdateModal = (data) => async (dispatch) => {
     // dispatch(setShowSpin1(false));
   } catch (e) {
     dispatch(setOpenModal2(false));
+    console.log(e);
     message.error('Error getting Purchase Request data!');
   }
 };
