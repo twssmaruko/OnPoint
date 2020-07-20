@@ -4,11 +4,70 @@
 #   TERM3
 # }
 
-type Vendor @model {
+type Vendor @model @searchable{
   id: ID!
-  name: String!
-  address: String!
-  contactNumber: String!
+  vendorName: String!
+  location: String!
+  telNo: String!
   terms: String!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
 }
 
+type PurchaseRequest @model @searchable
+@key(name:"DayMonthYearCreatedAt" fields:["dayMonthYear", "createdAt"] queryField: "purchaseRequestDayCreatedAt")
+@key(name:"MonthYearCreatedAt" fields:["monthYear", "createdAt"] queryField: "purchaseRequestMonthCreatedAt")
+@key(name:"StatuswithMonthYearCreatedAt" fields:["status", "monthYear", "createdAt"] queryField:"purchaseRequestStatusMonthYearCreatedAt")
+@key(name:"ApprovedwithMonthYearCreatedAt" fields:["isApproved", "monthYear", "createdAt"] queryField:"purchaseRequestIsApprovedMonthYearCreatedAt")
+@key(name:"StatuswithDayMonthYearCreatedAt" fields:["status", "dayMonthYear", "createdAt"] queryField:"purchaseRequestStatusDayMonthYearCreatedAt")
+@key(name:"ApprovedwithDayMonthYearCreatedAt" fields:["isApproved", "dayMonthYear", "createdAt"] queryField:"purchaseRequestIsApprovedDayMonthYearcreatedAt")
+@key(name:"StatusCreatedAt" fields:["status", "createdAt"] queryField:"purchaseRequestStatusCreatedAt")
+@key(name:"IsApprovedCreatedAt" fields:["isApproved", "createdAt"] queryField:"purchaseRequestIsApprovedCreatedAt")
+@key(name:"StatuswithApprovedMonthYear" fields:["status", "isApproved", "monthYear"] queryField:"purchaseRequestStatusIsApprovedMonthYear")
+@key(name:"StatuswithApprovedCreatedAt" fields:["status", "isApproved", "createdAt"] queryField:"purchaseRequestStatusIsApprovedCreatedAt")
+@key(name:"StatuswithApprovedDayMonthYear" fields:["status", "isApproved", "dayMonthYear"] queryField:"purchaseRequestStatusIsApprovedDayMonthYear")
+
+ {
+  id: ID!
+  purchaseRequestNo: String!
+  isApproved: isApproved!
+  orders: [Order] @connection(keyName: "byPurchaseRequest", fields: ["id"])
+  count: Int!
+  monthYear: String!
+  dayMonthYear: String!
+  status: Status!
+  totalPrice: Float!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+ type Order @model  @searchable  
+ @key(name: "byPurchaseRequest", fields: ["purchaseRequestId"])  {
+   id: ID!,
+   purchaseRequestId: ID!
+   product: Product! @connection
+   unit: String!
+   quantity: Int!
+   price: Float!
+   createdAt: AWSDateTime!
+   updatedAt: AWSDateTime!
+ }
+
+ type Product @model @searchable {
+  id: ID!
+  name: String!
+  description: String!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+ enum Status {
+   ORDERED
+   PENDING
+   RECEIVED
+ }
+
+ enum isApproved {
+   APPROVED
+   NOTAPPROVED
+ }
