@@ -7,29 +7,11 @@ import {
 import BudgetCost from './BudgetCost/BudgetCost';
 
 const Budget = () => {
-<<<<<<< HEAD
-  const [budgetCostState, setBudgetCostState] = useState([]);
-  const [budgetComponentState, setBudgetComponentState] = useState({
-    budget: {
-      contractPrice: 0,
-    },
-  });
-  const initBlurHandler = (e) => {
-    const inputValues = parseFloat(e).toFixed(2);
-    // setBudgetComponentState(inputValues);
-    setBudgetComponentState({
-      ...budgetComponentState,
-      budget: {
-        ...budgetComponentState.budget,
-        contractPrice: inputValues,
-      },
-=======
     const [budgetCostState, setBudgetCostState] = useState([]);
     const [budgetComponentState, setBudgetComponentState] = useState({
         budget: {
             contractPrice: 0
         }
->>>>>>> 39b5b39449ecf9489e66e979bfc8dac140274a71
     });
     const addCostClicked = () => {
         const newBudgetCostState = budgetCostState.concat(<BudgetCost />);
@@ -48,42 +30,6 @@ const Budget = () => {
         });
     };
 
-<<<<<<< HEAD
-  const [initInputState] = useState([<Input
-    style={{ fontWeight: 'bold', fontSize: 12, textAlign: 'right' }}
-    onBlur={(e) => initBlurHandler(e.target.value)}
-  />]);
-
-  const [inputState] = useState(initInputState);
-
-  const addCostClicked = () => {
-    const newBudgetCostState = budgetCostState.concat(<BudgetCost />);
-    setBudgetCostState(newBudgetCostState);
-  };
-
-  useEffect(() => console.log(budgetComponentState.budget.contractPrice));
-
-  return (
-    <>
-      <Form
-        name="basic"
-        style={{ marginRight: '0px' }}
-      >
-        <Form.Item
-          name="contractPrice"
-          rules={[{ required: true, message: 'Please input the Contract Price!' }]}
-          style={{ marginBottom: '0px' }}
-        >
-          <Row style={{ width: '850px' }}>
-            <Col flex="auto" style={{ borderWidth: 'thin', borderStyle: 'solid' }}>
-              <b>CONTRACT PRICE</b>
-            </Col>
-            <Col flex="125px" style={{ borderWidth: 'thin', borderStyle: 'solid' }}>
-              {inputState}
-            </Col>
-            <Col flex="32.5px" />
-          </Row>
-=======
     useEffect(() => console.log(budgetComponentState.budget.contractPrice));
 
     return (
@@ -116,7 +62,6 @@ const Budget = () => {
                         </Col>
                         <Col flex="32.5px" />
                     </Row>
->>>>>>> 39b5b39449ecf9489e66e979bfc8dac140274a71
 
                 </Form.Item>
                 <Form.Item
