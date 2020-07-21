@@ -13,12 +13,7 @@ const Budget = () => {
       contractPrice: 0,
     },
   });
-  const addCostClicked = () => {
-    const newBudgetCostState = budgetCostState.concat(<BudgetCost />);
-    setBudgetCostState(newBudgetCostState);
-  };
-
-  const onChangeHandler = (e) => {
+  const initBlurHandler = (e) => {
     const inputValues = parseFloat(e).toFixed(2);
     // setBudgetComponentState(inputValues);
     setBudgetComponentState({
@@ -28,6 +23,18 @@ const Budget = () => {
         contractPrice: inputValues,
       },
     });
+  };
+
+  const [initInputState] = useState([<Input
+    style={{ fontWeight: 'bold', fontSize: 12, textAlign: 'right' }}
+    onBlur={(e) => initBlurHandler(e.target.value)}
+  />]);
+
+  const [inputState] = useState(initInputState);
+
+  const addCostClicked = () => {
+    const newBudgetCostState = budgetCostState.concat(<BudgetCost />);
+    setBudgetCostState(newBudgetCostState);
   };
 
   useEffect(() => console.log(budgetComponentState.budget.contractPrice));
@@ -48,10 +55,7 @@ const Budget = () => {
               <b>CONTRACT PRICE</b>
             </Col>
             <Col flex="125px" style={{ borderWidth: 'thin', borderStyle: 'solid' }}>
-              <Input
-                style={{ fontWeight: 'bold', fontSize: 12, textAlign: 'right' }}
-                onBlur={(e) => onChangeHandler(e.target.value)}
-              />
+              {inputState}
             </Col>
             <Col flex="32.5px" />
           </Row>
