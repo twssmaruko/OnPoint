@@ -31,7 +31,7 @@
                 "IdentityPoolName": "onpoint3e878ac6_identitypool_3e878ac6__dev",
                 "UserPoolName": "onpoint3e878ac6_userpool_3e878ac6"
             },
-            "lastPushTimeStamp": "2020-07-21T05:41:13.915Z",
+            "lastPushTimeStamp": "2020-07-21T07:02:09.134Z",
             "providerMetadata": {
                 "s3TemplateURL": "https://s3.amazonaws.com/amplify-onpoint-dev-172734-deployment/amplify-cfn-templates/auth/onpoint3e878ac6-cloudformation-template.yml",
                 "logicalId": "authonpoint3e878ac6"
@@ -55,7 +55,7 @@
                 "GraphQLAPIIdOutput": "733tksg7svbqtach6phivz3vcy",
                 "GraphQLAPIEndpointOutput": "https://rnelgzsw2rd3hf2pqkp2f3d224.appsync-api.ap-southeast-1.amazonaws.com/graphql"
             },
-            "lastPushTimeStamp": "2020-07-21T05:41:13.916Z",
+            "lastPushTimeStamp": "2020-07-21T07:02:09.150Z",
             "providerMetadata": {
                 "s3TemplateURL": "https://s3.amazonaws.com/amplify-onpoint-dev-172734-deployment/amplify-cfn-templates/api/cloudformation-template.json",
                 "logicalId": "apionpoint"
