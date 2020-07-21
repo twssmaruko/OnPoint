@@ -36,7 +36,11 @@ type PurchaseRequest @model @searchable
   monthYear: String!
   dayMonthYear: String!
   status: Status!
+<<<<<<< HEAD
   # totalPrice: Float!
+=======
+  totalPrice: Float!
+>>>>>>> d35c3536f28098e8a0c286287b6894e2e8a0be8d
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
 }
@@ -49,7 +53,10 @@ type PurchaseRequest @model @searchable
    unit: String!
    quantity: Int!
    price: Float!
+<<<<<<< HEAD
    category: Category
+=======
+>>>>>>> d35c3536f28098e8a0c286287b6894e2e8a0be8d
    createdAt: AWSDateTime!
    updatedAt: AWSDateTime!
  }
@@ -71,10 +78,13 @@ type PurchaseRequest @model @searchable
  enum isApproved {
    APPROVED
    NOTAPPROVED
+<<<<<<< HEAD
  }
 
  enum Category {
    CATEGORY1
    CATEGORY2
    CATEGORY3
+=======
+>>>>>>> d35c3536f28098e8a0c286287b6894e2e8a0be8d
  }
