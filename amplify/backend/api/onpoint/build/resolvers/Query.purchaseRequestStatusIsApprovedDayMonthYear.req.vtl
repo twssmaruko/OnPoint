@@ -1,0 +1,120 @@
+## [Start] Set query expression for @key **
+#set( $modelQueryExpression = {} )
+## [Start] Validate key arguments. **
+#if( !$util.isNull($ctx.args.isApprovedDayMonthYear) && $util.isNullOrBlank($ctx.args.status) )
+  $util.error("When providing argument 'isApprovedDayMonthYear' you must also provide 'status'.", "InvalidArgumentsError")
+#end
+#if( !$util.isNull($ctx.args.isApprovedDayMonthYear) )
+  #set( $sortKeyArgumentOperations = $ctx.args.isApprovedDayMonthYear.keySet() )
+  #if( $sortKeyArgumentOperations.size() > 1 )
+    $util.error("Argument isApprovedDayMonthYear must specify at most one key condition operation.", "InvalidArgumentsError")
+  #end
+  #foreach( $operation in $sortKeyArgumentOperations )
+    #if( $operation == "between" )
+      #if( $ctx.args.isApprovedDayMonthYear.between.size() != 2 )
+        $util.error("Argument 'isApprovedDayMonthYear.between' expects exactly two elements.", "InvalidArgumentsError")
+      #end
+      #if( !$util.isNullOrBlank($ctx.args.isApprovedDayMonthYear.between[0].dayMonthYear) && $util.isNullOrBlank($ctx.args.isApprovedDayMonthYear.between[0].isApproved) )
+        $util.error("When providing argument 'isApprovedDayMonthYear.between[0].dayMonthYear' you must also provide 'isApprovedDayMonthYear.between[0].isApproved'.", "InvalidArgumentsError")
+      #end
+      #if( !$util.isNullOrBlank($ctx.args.isApprovedDayMonthYear.between[1].dayMonthYear) && $util.isNullOrBlank($ctx.args.isApprovedDayMonthYear.between[1].isApproved) )
+        $util.error("When providing argument 'isApprovedDayMonthYear.between[1].dayMonthYear' you must also provide 'isApprovedDayMonthYear.between[1].isApproved'.", "InvalidArgumentsError")
+      #end
+    #else
+      #if( !$util.isNullOrBlank($ctx.args.isApprovedDayMonthYear.get("$operation").dayMonthYear) && $util.isNullOrBlank($ctx.args.isApprovedDayMonthYear.get("$operation").isApproved) )
+        $util.error("When providing argument 'isApprovedDayMonthYear.$operation.dayMonthYear' you must also provide 'isApprovedDayMonthYear.$operation.isApproved'.", "InvalidArgumentsError")
+      #end
+    #end
+  #end
+#end
+## [End] Validate key arguments. **
+#if( !$util.isNull($ctx.args.status) )
+  #set( $modelQueryExpression.expression = "#status = :status" )
+  #set( $modelQueryExpression.expressionNames = {
+  "#status": "status"
+} )
+  #set( $modelQueryExpression.expressionValues = {
+  ":status": {
+      "S": "$ctx.args.status"
+  }
+} )
+#end
+## [Start] Applying Key Condition **
+#set( $sortKeyValue = "" )
+#set( $sortKeyValue2 = "" )
+#if( !$util.isNull($ctx.args.isApprovedDayMonthYear) && !$util.isNull($ctx.args.isApprovedDayMonthYear.beginsWith) )
+#if( !$util.isNull($ctx.args.isApprovedDayMonthYear.beginsWith.isApproved) ) #set( $sortKeyValue = "$ctx.args.isApprovedDayMonthYear.beginsWith.isApproved" ) #end
+#if( !$util.isNull($ctx.args.isApprovedDayMonthYear.beginsWith.dayMonthYear) ) #set( $sortKeyValue = "$sortKeyValue#$ctx.args.isApprovedDayMonthYear.beginsWith.dayMonthYear" ) #end
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND begins_with(#sortKey, :sortKey)" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "isApproved#dayMonthYear"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "S": "$sortKeyValue" }))
+#end
+#if( !$util.isNull($ctx.args.isApprovedDayMonthYear) && !$util.isNull($ctx.args.isApprovedDayMonthYear.between) )
+  #if( $ctx.args.isApprovedDayMonthYear.between.size() != 2 )
+    $util.error("Argument isApprovedDayMonthYear.between expects exactly 2 elements.")
+  #end
+#if( !$util.isNull($ctx.args.isApprovedDayMonthYear.between[0].isApproved) ) #set( $sortKeyValue = "$ctx.args.isApprovedDayMonthYear.between[0].isApproved" ) #end
+#if( !$util.isNull($ctx.args.isApprovedDayMonthYear.between[0].dayMonthYear) ) #set( $sortKeyValue = "$sortKeyValue#$ctx.args.isApprovedDayMonthYear.between[0].dayMonthYear" ) #end
+#if( !$util.isNull($ctx.args.isApprovedDayMonthYear.between[1].isApproved) ) #set( $sortKeyValue2 = "$ctx.args.isApprovedDayMonthYear.between[1].isApproved" ) #end
+#if( !$util.isNull($ctx.args.isApprovedDayMonthYear.between[1].dayMonthYear) ) #set( $sortKeyValue2 = "$sortKeyValue2#$ctx.args.isApprovedDayMonthYear.between[1].dayMonthYear" ) #end
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey BETWEEN :sortKey0 AND :sortKey1" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "isApproved#dayMonthYear"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey0", { "S": "$sortKeyValue" }))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey1", { "S": "$sortKeyValue2" }))
+#end
+#if( !$util.isNull($ctx.args.isApprovedDayMonthYear) && !$util.isNull($ctx.args.isApprovedDayMonthYear.eq) )
+#if( !$util.isNull($ctx.args.isApprovedDayMonthYear.eq.isApproved) ) #set( $sortKeyValue = "$ctx.args.isApprovedDayMonthYear.eq.isApproved" ) #end
+#if( !$util.isNull($ctx.args.isApprovedDayMonthYear.eq.dayMonthYear) ) #set( $sortKeyValue = "$sortKeyValue#$ctx.args.isApprovedDayMonthYear.eq.dayMonthYear" ) #end
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey = :sortKey" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "isApproved#dayMonthYear"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "S": "$sortKeyValue" }))
+#end
+#if( !$util.isNull($ctx.args.isApprovedDayMonthYear) && !$util.isNull($ctx.args.isApprovedDayMonthYear.lt) )
+#if( !$util.isNull($ctx.args.isApprovedDayMonthYear.lt.isApproved) ) #set( $sortKeyValue = "$ctx.args.isApprovedDayMonthYear.lt.isApproved" ) #end
+#if( !$util.isNull($ctx.args.isApprovedDayMonthYear.lt.dayMonthYear) ) #set( $sortKeyValue = "$sortKeyValue#$ctx.args.isApprovedDayMonthYear.lt.dayMonthYear" ) #end
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey < :sortKey" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "isApproved#dayMonthYear"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "S": "$sortKeyValue" }))
+#end
+#if( !$util.isNull($ctx.args.isApprovedDayMonthYear) && !$util.isNull($ctx.args.isApprovedDayMonthYear.le) )
+#if( !$util.isNull($ctx.args.isApprovedDayMonthYear.le.isApproved) ) #set( $sortKeyValue = "$ctx.args.isApprovedDayMonthYear.le.isApproved" ) #end
+#if( !$util.isNull($ctx.args.isApprovedDayMonthYear.le.dayMonthYear) ) #set( $sortKeyValue = "$sortKeyValue#$ctx.args.isApprovedDayMonthYear.le.dayMonthYear" ) #end
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey <= :sortKey" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "isApproved#dayMonthYear"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "S": "$sortKeyValue" }))
+#end
+#if( !$util.isNull($ctx.args.isApprovedDayMonthYear) && !$util.isNull($ctx.args.isApprovedDayMonthYear.gt) )
+#if( !$util.isNull($ctx.args.isApprovedDayMonthYear.gt.isApproved) ) #set( $sortKeyValue = "$ctx.args.isApprovedDayMonthYear.gt.isApproved" ) #end
+#if( !$util.isNull($ctx.args.isApprovedDayMonthYear.gt.dayMonthYear) ) #set( $sortKeyValue = "$sortKeyValue#$ctx.args.isApprovedDayMonthYear.gt.dayMonthYear" ) #end
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey > :sortKey" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "isApproved#dayMonthYear"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "S": "$sortKeyValue" }))
+#end
+#if( !$util.isNull($ctx.args.isApprovedDayMonthYear) && !$util.isNull($ctx.args.isApprovedDayMonthYear.ge) )
+#if( !$util.isNull($ctx.args.isApprovedDayMonthYear.ge.isApproved) ) #set( $sortKeyValue = "$ctx.args.isApprovedDayMonthYear.ge.isApproved" ) #end
+#if( !$util.isNull($ctx.args.isApprovedDayMonthYear.ge.dayMonthYear) ) #set( $sortKeyValue = "$sortKeyValue#$ctx.args.isApprovedDayMonthYear.ge.dayMonthYear" ) #end
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey >= :sortKey" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "isApproved#dayMonthYear"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "S": "$sortKeyValue" }))
+#end
+
+
+## [End] Applying Key Condition **
+## [End] Set query expression for @key **
+#set( $limit = $util.defaultIfNull($context.args.limit, 100) )
+#set( $QueryRequest = {
+  "version": "2018-05-29",
+  "operation": "Query",
+  "limit": $limit,
+  "query": $modelQueryExpression,
+  "index": "StatuswithApprovedDayMonthYear"
+} )
+#if( !$util.isNull($ctx.args.sortDirection)
+                    && $ctx.args.sortDirection == "DESC" )
+  #set( $QueryRequest.scanIndexForward = false )
+#else
+  #set( $QueryRequest.scanIndexForward = true )
+#end
+#if( $context.args.nextToken ) #set( $QueryRequest.nextToken = $context.args.nextToken ) #end
+#if( $context.args.filter ) #set( $QueryRequest.filter = $util.parseJson("$util.transform.toDynamoDBFilterExpression($ctx.args.filter)") ) #end
+$util.toJson($QueryRequest)

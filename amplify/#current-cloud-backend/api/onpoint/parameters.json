@@ -1,0 +1,11 @@
+{
+    "AppSyncApiName": "onpoint",
+    "DynamoDBBillingMode": "PAY_PER_REQUEST",
+    "DynamoDBEnableServerSideEncryption": "false",
+    "AuthCognitoUserPoolId": {
+        "Fn::GetAtt": [
+            "authonpoint3e878ac6",
+            "Outputs.UserPoolId"
+        ]
+    }
+}

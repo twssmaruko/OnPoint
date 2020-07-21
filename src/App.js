@@ -1,26 +1,26 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {useEffect} from 'react';
 import './App.css';
+import {useDispatch} from 'react-redux';
+import {
+    withRouter
+} from 'react-router-dom';
+import Routes from './components/routes/Routes';
+import Header from './components/layout/header/Header';
+import * as actions from './store/auth/actions/Actions';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const dispatcher = useDispatch();
 
-export default App;
+    useEffect(() => {
+        dispatcher(actions.checkAuth());
+    }, [dispatcher]);
+
+    return (
+        <div className="App">
+            <Header />
+            <Routes />
+        </div>
+    );
+};
+
+export default withRouter(App);

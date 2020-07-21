@@ -1,0 +1,752 @@
+type Vendor {
+  id: ID!
+  vendorName: String!
+  location: String!
+  telNo: String!
+  terms: String!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type PurchaseRequest {
+  id: ID!
+  purchaseRequestNo: String!
+  isApproved: isApproved!
+  orders(filter: ModelOrderFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelOrderConnection
+  count: Int!
+  monthYear: String!
+  dayMonthYear: String!
+  status: Status!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Order {
+  id: ID!
+  purchaseRequestId: ID!
+  product: Product!
+  unit: String!
+  quantity: Int!
+  price: Float!
+  category: Category
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Product {
+  id: ID!
+  name: String!
+  description: String!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+enum Status {
+  ORDERED
+  PENDING
+  RECEIVED
+}
+
+enum isApproved {
+  APPROVED
+  NOTAPPROVED
+}
+
+enum Category {
+  CATEGORY1
+  CATEGORY2
+  CATEGORY3
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelVendorConnection {
+  items: [Vendor]
+  nextToken: String
+}
+
+input ModelStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelBooleanInput {
+  ne: Boolean
+  eq: Boolean
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelSizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+input ModelVendorFilterInput {
+  id: ModelIDInput
+  vendorName: ModelStringInput
+  location: ModelStringInput
+  telNo: ModelStringInput
+  terms: ModelStringInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+  and: [ModelVendorFilterInput]
+  or: [ModelVendorFilterInput]
+  not: ModelVendorFilterInput
+}
+
+enum ModelAttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
+}
+
+type Query {
+  getVendor(id: ID!): Vendor
+  listVendors(filter: ModelVendorFilterInput, limit: Int, nextToken: String): ModelVendorConnection
+  getPurchaseRequest(id: ID!): PurchaseRequest
+  listPurchaseRequests(filter: ModelPurchaseRequestFilterInput, limit: Int, nextToken: String): ModelPurchaseRequestConnection
+  getOrder(id: ID!): Order
+  listOrders(filter: ModelOrderFilterInput, limit: Int, nextToken: String): ModelOrderConnection
+  getProduct(id: ID!): Product
+  listProducts(filter: ModelProductFilterInput, limit: Int, nextToken: String): ModelProductConnection
+  purchaseRequestDayCreatedAt(dayMonthYear: String, createdAt: ModelStringKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelPurchaseRequestFilterInput, limit: Int, nextToken: String): ModelPurchaseRequestConnection
+  purchaseRequestMonthCreatedAt(monthYear: String, createdAt: ModelStringKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelPurchaseRequestFilterInput, limit: Int, nextToken: String): ModelPurchaseRequestConnection
+  purchaseRequestStatusMonthYearCreatedAt(status: Status, monthYearCreatedAt: ModelPurchaseRequestStatuswithMonthYearCreatedAtCompositeKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelPurchaseRequestFilterInput, limit: Int, nextToken: String): ModelPurchaseRequestConnection
+  purchaseRequestIsApprovedMonthYearCreatedAt(isApproved: isApproved, monthYearCreatedAt: ModelPurchaseRequestApprovedwithMonthYearCreatedAtCompositeKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelPurchaseRequestFilterInput, limit: Int, nextToken: String): ModelPurchaseRequestConnection
+  purchaseRequestStatusDayMonthYearCreatedAt(status: Status, dayMonthYearCreatedAt: ModelPurchaseRequestStatuswithDayMonthYearCreatedAtCompositeKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelPurchaseRequestFilterInput, limit: Int, nextToken: String): ModelPurchaseRequestConnection
+  purchaseRequestIsApprovedDayMonthYearcreatedAt(isApproved: isApproved, dayMonthYearCreatedAt: ModelPurchaseRequestApprovedwithDayMonthYearCreatedAtCompositeKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelPurchaseRequestFilterInput, limit: Int, nextToken: String): ModelPurchaseRequestConnection
+  purchaseRequestStatusCreatedAt(status: Status, createdAt: ModelStringKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelPurchaseRequestFilterInput, limit: Int, nextToken: String): ModelPurchaseRequestConnection
+  purchaseRequestIsApprovedCreatedAt(isApproved: isApproved, createdAt: ModelStringKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelPurchaseRequestFilterInput, limit: Int, nextToken: String): ModelPurchaseRequestConnection
+  purchaseRequestStatusIsApprovedMonthYear(status: Status, isApprovedMonthYear: ModelPurchaseRequestStatuswithApprovedMonthYearCompositeKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelPurchaseRequestFilterInput, limit: Int, nextToken: String): ModelPurchaseRequestConnection
+  purchaseRequestStatusIsApprovedCreatedAt(status: Status, isApprovedCreatedAt: ModelPurchaseRequestStatuswithApprovedCreatedAtCompositeKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelPurchaseRequestFilterInput, limit: Int, nextToken: String): ModelPurchaseRequestConnection
+  purchaseRequestStatusIsApprovedDayMonthYear(status: Status, isApprovedDayMonthYear: ModelPurchaseRequestStatuswithApprovedDayMonthYearCompositeKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelPurchaseRequestFilterInput, limit: Int, nextToken: String): ModelPurchaseRequestConnection
+  searchVendors(filter: SearchableVendorFilterInput, sort: SearchableVendorSortInput, limit: Int, nextToken: String): SearchableVendorConnection
+  searchPurchaseRequests(filter: SearchablePurchaseRequestFilterInput, sort: SearchablePurchaseRequestSortInput, limit: Int, nextToken: String): SearchablePurchaseRequestConnection
+  searchOrders(filter: SearchableOrderFilterInput, sort: SearchableOrderSortInput, limit: Int, nextToken: String): SearchableOrderConnection
+  searchProducts(filter: SearchableProductFilterInput, sort: SearchableProductSortInput, limit: Int, nextToken: String): SearchableProductConnection
+}
+
+input CreateVendorInput {
+  id: ID
+  vendorName: String!
+  location: String!
+  telNo: String!
+  terms: String!
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+}
+
+input UpdateVendorInput {
+  id: ID!
+  vendorName: String
+  location: String
+  telNo: String
+  terms: String
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+}
+
+input DeleteVendorInput {
+  id: ID
+}
+
+type Mutation {
+  createVendor(input: CreateVendorInput!, condition: ModelVendorConditionInput): Vendor
+  updateVendor(input: UpdateVendorInput!, condition: ModelVendorConditionInput): Vendor
+  deleteVendor(input: DeleteVendorInput!, condition: ModelVendorConditionInput): Vendor
+  createPurchaseRequest(input: CreatePurchaseRequestInput!, condition: ModelPurchaseRequestConditionInput): PurchaseRequest
+  updatePurchaseRequest(input: UpdatePurchaseRequestInput!, condition: ModelPurchaseRequestConditionInput): PurchaseRequest
+  deletePurchaseRequest(input: DeletePurchaseRequestInput!, condition: ModelPurchaseRequestConditionInput): PurchaseRequest
+  createOrder(input: CreateOrderInput!, condition: ModelOrderConditionInput): Order
+  updateOrder(input: UpdateOrderInput!, condition: ModelOrderConditionInput): Order
+  deleteOrder(input: DeleteOrderInput!, condition: ModelOrderConditionInput): Order
+  createProduct(input: CreateProductInput!, condition: ModelProductConditionInput): Product
+  updateProduct(input: UpdateProductInput!, condition: ModelProductConditionInput): Product
+  deleteProduct(input: DeleteProductInput!, condition: ModelProductConditionInput): Product
+}
+
+input ModelVendorConditionInput {
+  vendorName: ModelStringInput
+  location: ModelStringInput
+  telNo: ModelStringInput
+  terms: ModelStringInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+  and: [ModelVendorConditionInput]
+  or: [ModelVendorConditionInput]
+  not: ModelVendorConditionInput
+}
+
+type Subscription {
+  onCreateVendor: Vendor @aws_subscribe(mutations: ["createVendor"])
+  onUpdateVendor: Vendor @aws_subscribe(mutations: ["updateVendor"])
+  onDeleteVendor: Vendor @aws_subscribe(mutations: ["deleteVendor"])
+  onCreatePurchaseRequest: PurchaseRequest @aws_subscribe(mutations: ["createPurchaseRequest"])
+  onUpdatePurchaseRequest: PurchaseRequest @aws_subscribe(mutations: ["updatePurchaseRequest"])
+  onDeletePurchaseRequest: PurchaseRequest @aws_subscribe(mutations: ["deletePurchaseRequest"])
+  onCreateOrder: Order @aws_subscribe(mutations: ["createOrder"])
+  onUpdateOrder: Order @aws_subscribe(mutations: ["updateOrder"])
+  onDeleteOrder: Order @aws_subscribe(mutations: ["deleteOrder"])
+  onCreateProduct: Product @aws_subscribe(mutations: ["createProduct"])
+  onUpdateProduct: Product @aws_subscribe(mutations: ["updateProduct"])
+  onDeleteProduct: Product @aws_subscribe(mutations: ["deleteProduct"])
+}
+
+type ModelPurchaseRequestConnection {
+  items: [PurchaseRequest]
+  nextToken: String
+}
+
+input ModelisApprovedInput {
+  eq: isApproved
+  ne: isApproved
+}
+
+input ModelStatusInput {
+  eq: Status
+  ne: Status
+}
+
+input ModelPurchaseRequestFilterInput {
+  id: ModelIDInput
+  purchaseRequestNo: ModelStringInput
+  isApproved: ModelisApprovedInput
+  count: ModelIntInput
+  monthYear: ModelStringInput
+  dayMonthYear: ModelStringInput
+  status: ModelStatusInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+  and: [ModelPurchaseRequestFilterInput]
+  or: [ModelPurchaseRequestFilterInput]
+  not: ModelPurchaseRequestFilterInput
+}
+
+input CreatePurchaseRequestInput {
+  id: ID
+  purchaseRequestNo: String!
+  isApproved: isApproved!
+  count: Int!
+  monthYear: String!
+  dayMonthYear: String!
+  status: Status!
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+}
+
+input UpdatePurchaseRequestInput {
+  id: ID!
+  purchaseRequestNo: String
+  isApproved: isApproved
+  count: Int
+  monthYear: String
+  dayMonthYear: String
+  status: Status
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+}
+
+input DeletePurchaseRequestInput {
+  id: ID
+}
+
+input ModelPurchaseRequestConditionInput {
+  purchaseRequestNo: ModelStringInput
+  isApproved: ModelisApprovedInput
+  count: ModelIntInput
+  monthYear: ModelStringInput
+  dayMonthYear: ModelStringInput
+  status: ModelStatusInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+  and: [ModelPurchaseRequestConditionInput]
+  or: [ModelPurchaseRequestConditionInput]
+  not: ModelPurchaseRequestConditionInput
+}
+
+type ModelOrderConnection {
+  items: [Order]
+  nextToken: String
+}
+
+input ModelCategoryInput {
+  eq: Category
+  ne: Category
+}
+
+input ModelOrderFilterInput {
+  id: ModelIDInput
+  purchaseRequestId: ModelIDInput
+  unit: ModelStringInput
+  quantity: ModelIntInput
+  price: ModelFloatInput
+  category: ModelCategoryInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+  and: [ModelOrderFilterInput]
+  or: [ModelOrderFilterInput]
+  not: ModelOrderFilterInput
+}
+
+input CreateOrderInput {
+  id: ID
+  purchaseRequestId: ID!
+  unit: String!
+  quantity: Int!
+  price: Float!
+  category: Category
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+  orderProductId: ID!
+}
+
+input UpdateOrderInput {
+  id: ID!
+  purchaseRequestId: ID
+  unit: String
+  quantity: Int
+  price: Float
+  category: Category
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+  orderProductId: ID
+}
+
+input DeleteOrderInput {
+  id: ID
+}
+
+input ModelOrderConditionInput {
+  purchaseRequestId: ModelIDInput
+  unit: ModelStringInput
+  quantity: ModelIntInput
+  price: ModelFloatInput
+  category: ModelCategoryInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+  and: [ModelOrderConditionInput]
+  or: [ModelOrderConditionInput]
+  not: ModelOrderConditionInput
+}
+
+type ModelProductConnection {
+  items: [Product]
+  nextToken: String
+}
+
+input ModelProductFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  description: ModelStringInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+  and: [ModelProductFilterInput]
+  or: [ModelProductFilterInput]
+  not: ModelProductFilterInput
+}
+
+input CreateProductInput {
+  id: ID
+  name: String!
+  description: String!
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+}
+
+input UpdateProductInput {
+  id: ID!
+  name: String
+  description: String
+  createdAt: AWSDateTime
+  updatedAt: AWSDateTime
+}
+
+input DeleteProductInput {
+  id: ID
+}
+
+input ModelProductConditionInput {
+  name: ModelStringInput
+  description: ModelStringInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+  and: [ModelProductConditionInput]
+  or: [ModelProductConditionInput]
+  not: ModelProductConditionInput
+}
+
+input ModelStringKeyConditionInput {
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  between: [String]
+  beginsWith: String
+}
+
+input ModelPurchaseRequestStatuswithMonthYearCreatedAtCompositeKeyConditionInput {
+  eq: ModelPurchaseRequestStatuswithMonthYearCreatedAtCompositeKeyInput
+  le: ModelPurchaseRequestStatuswithMonthYearCreatedAtCompositeKeyInput
+  lt: ModelPurchaseRequestStatuswithMonthYearCreatedAtCompositeKeyInput
+  ge: ModelPurchaseRequestStatuswithMonthYearCreatedAtCompositeKeyInput
+  gt: ModelPurchaseRequestStatuswithMonthYearCreatedAtCompositeKeyInput
+  between: [ModelPurchaseRequestStatuswithMonthYearCreatedAtCompositeKeyInput]
+  beginsWith: ModelPurchaseRequestStatuswithMonthYearCreatedAtCompositeKeyInput
+}
+
+input ModelPurchaseRequestStatuswithMonthYearCreatedAtCompositeKeyInput {
+  monthYear: String
+  createdAt: String
+}
+
+input ModelPurchaseRequestApprovedwithMonthYearCreatedAtCompositeKeyConditionInput {
+  eq: ModelPurchaseRequestApprovedwithMonthYearCreatedAtCompositeKeyInput
+  le: ModelPurchaseRequestApprovedwithMonthYearCreatedAtCompositeKeyInput
+  lt: ModelPurchaseRequestApprovedwithMonthYearCreatedAtCompositeKeyInput
+  ge: ModelPurchaseRequestApprovedwithMonthYearCreatedAtCompositeKeyInput
+  gt: ModelPurchaseRequestApprovedwithMonthYearCreatedAtCompositeKeyInput
+  between: [ModelPurchaseRequestApprovedwithMonthYearCreatedAtCompositeKeyInput]
+  beginsWith: ModelPurchaseRequestApprovedwithMonthYearCreatedAtCompositeKeyInput
+}
+
+input ModelPurchaseRequestApprovedwithMonthYearCreatedAtCompositeKeyInput {
+  monthYear: String
+  createdAt: String
+}
+
+input ModelPurchaseRequestStatuswithDayMonthYearCreatedAtCompositeKeyConditionInput {
+  eq: ModelPurchaseRequestStatuswithDayMonthYearCreatedAtCompositeKeyInput
+  le: ModelPurchaseRequestStatuswithDayMonthYearCreatedAtCompositeKeyInput
+  lt: ModelPurchaseRequestStatuswithDayMonthYearCreatedAtCompositeKeyInput
+  ge: ModelPurchaseRequestStatuswithDayMonthYearCreatedAtCompositeKeyInput
+  gt: ModelPurchaseRequestStatuswithDayMonthYearCreatedAtCompositeKeyInput
+  between: [ModelPurchaseRequestStatuswithDayMonthYearCreatedAtCompositeKeyInput]
+  beginsWith: ModelPurchaseRequestStatuswithDayMonthYearCreatedAtCompositeKeyInput
+}
+
+input ModelPurchaseRequestStatuswithDayMonthYearCreatedAtCompositeKeyInput {
+  dayMonthYear: String
+  createdAt: String
+}
+
+input ModelPurchaseRequestApprovedwithDayMonthYearCreatedAtCompositeKeyConditionInput {
+  eq: ModelPurchaseRequestApprovedwithDayMonthYearCreatedAtCompositeKeyInput
+  le: ModelPurchaseRequestApprovedwithDayMonthYearCreatedAtCompositeKeyInput
+  lt: ModelPurchaseRequestApprovedwithDayMonthYearCreatedAtCompositeKeyInput
+  ge: ModelPurchaseRequestApprovedwithDayMonthYearCreatedAtCompositeKeyInput
+  gt: ModelPurchaseRequestApprovedwithDayMonthYearCreatedAtCompositeKeyInput
+  between: [ModelPurchaseRequestApprovedwithDayMonthYearCreatedAtCompositeKeyInput]
+  beginsWith: ModelPurchaseRequestApprovedwithDayMonthYearCreatedAtCompositeKeyInput
+}
+
+input ModelPurchaseRequestApprovedwithDayMonthYearCreatedAtCompositeKeyInput {
+  dayMonthYear: String
+  createdAt: String
+}
+
+input ModelPurchaseRequestStatuswithApprovedMonthYearCompositeKeyConditionInput {
+  eq: ModelPurchaseRequestStatuswithApprovedMonthYearCompositeKeyInput
+  le: ModelPurchaseRequestStatuswithApprovedMonthYearCompositeKeyInput
+  lt: ModelPurchaseRequestStatuswithApprovedMonthYearCompositeKeyInput
+  ge: ModelPurchaseRequestStatuswithApprovedMonthYearCompositeKeyInput
+  gt: ModelPurchaseRequestStatuswithApprovedMonthYearCompositeKeyInput
+  between: [ModelPurchaseRequestStatuswithApprovedMonthYearCompositeKeyInput]
+  beginsWith: ModelPurchaseRequestStatuswithApprovedMonthYearCompositeKeyInput
+}
+
+input ModelPurchaseRequestStatuswithApprovedMonthYearCompositeKeyInput {
+  isApproved: isApproved
+  monthYear: String
+}
+
+input ModelPurchaseRequestStatuswithApprovedCreatedAtCompositeKeyConditionInput {
+  eq: ModelPurchaseRequestStatuswithApprovedCreatedAtCompositeKeyInput
+  le: ModelPurchaseRequestStatuswithApprovedCreatedAtCompositeKeyInput
+  lt: ModelPurchaseRequestStatuswithApprovedCreatedAtCompositeKeyInput
+  ge: ModelPurchaseRequestStatuswithApprovedCreatedAtCompositeKeyInput
+  gt: ModelPurchaseRequestStatuswithApprovedCreatedAtCompositeKeyInput
+  between: [ModelPurchaseRequestStatuswithApprovedCreatedAtCompositeKeyInput]
+  beginsWith: ModelPurchaseRequestStatuswithApprovedCreatedAtCompositeKeyInput
+}
+
+input ModelPurchaseRequestStatuswithApprovedCreatedAtCompositeKeyInput {
+  isApproved: isApproved
+  createdAt: String
+}
+
+input ModelPurchaseRequestStatuswithApprovedDayMonthYearCompositeKeyConditionInput {
+  eq: ModelPurchaseRequestStatuswithApprovedDayMonthYearCompositeKeyInput
+  le: ModelPurchaseRequestStatuswithApprovedDayMonthYearCompositeKeyInput
+  lt: ModelPurchaseRequestStatuswithApprovedDayMonthYearCompositeKeyInput
+  ge: ModelPurchaseRequestStatuswithApprovedDayMonthYearCompositeKeyInput
+  gt: ModelPurchaseRequestStatuswithApprovedDayMonthYearCompositeKeyInput
+  between: [ModelPurchaseRequestStatuswithApprovedDayMonthYearCompositeKeyInput]
+  beginsWith: ModelPurchaseRequestStatuswithApprovedDayMonthYearCompositeKeyInput
+}
+
+input ModelPurchaseRequestStatuswithApprovedDayMonthYearCompositeKeyInput {
+  isApproved: isApproved
+  dayMonthYear: String
+}
+
+input SearchableStringFilterInput {
+  ne: String
+  gt: String
+  lt: String
+  gte: String
+  lte: String
+  eq: String
+  match: String
+  matchPhrase: String
+  matchPhrasePrefix: String
+  multiMatch: String
+  exists: Boolean
+  wildcard: String
+  regexp: String
+}
+
+input SearchableIDFilterInput {
+  ne: ID
+  gt: ID
+  lt: ID
+  gte: ID
+  lte: ID
+  eq: ID
+  match: ID
+  matchPhrase: ID
+  matchPhrasePrefix: ID
+  multiMatch: ID
+  exists: Boolean
+  wildcard: ID
+  regexp: ID
+}
+
+input SearchableIntFilterInput {
+  ne: Int
+  gt: Int
+  lt: Int
+  gte: Int
+  lte: Int
+  eq: Int
+  range: [Int]
+}
+
+input SearchableFloatFilterInput {
+  ne: Float
+  gt: Float
+  lt: Float
+  gte: Float
+  lte: Float
+  eq: Float
+  range: [Float]
+}
+
+input SearchableBooleanFilterInput {
+  eq: Boolean
+  ne: Boolean
+}
+
+input SearchableVendorFilterInput {
+  id: SearchableIDFilterInput
+  vendorName: SearchableStringFilterInput
+  location: SearchableStringFilterInput
+  telNo: SearchableStringFilterInput
+  terms: SearchableStringFilterInput
+  createdAt: SearchableStringFilterInput
+  updatedAt: SearchableStringFilterInput
+  and: [SearchableVendorFilterInput]
+  or: [SearchableVendorFilterInput]
+  not: SearchableVendorFilterInput
+}
+
+enum SearchableSortDirection {
+  asc
+  desc
+}
+
+enum SearchableVendorSortableFields {
+  id
+  vendorName
+  location
+  telNo
+  terms
+  createdAt
+  updatedAt
+}
+
+input SearchableVendorSortInput {
+  field: SearchableVendorSortableFields
+  direction: SearchableSortDirection
+}
+
+type SearchableVendorConnection {
+  items: [Vendor]
+  nextToken: String
+  total: Int
+}
+
+input SearchablePurchaseRequestFilterInput {
+  id: SearchableIDFilterInput
+  purchaseRequestNo: SearchableStringFilterInput
+  count: SearchableIntFilterInput
+  monthYear: SearchableStringFilterInput
+  dayMonthYear: SearchableStringFilterInput
+  createdAt: SearchableStringFilterInput
+  updatedAt: SearchableStringFilterInput
+  and: [SearchablePurchaseRequestFilterInput]
+  or: [SearchablePurchaseRequestFilterInput]
+  not: SearchablePurchaseRequestFilterInput
+}
+
+enum SearchablePurchaseRequestSortableFields {
+  id
+  purchaseRequestNo
+  count
+  monthYear
+  dayMonthYear
+  createdAt
+  updatedAt
+}
+
+input SearchablePurchaseRequestSortInput {
+  field: SearchablePurchaseRequestSortableFields
+  direction: SearchableSortDirection
+}
+
+type SearchablePurchaseRequestConnection {
+  items: [PurchaseRequest]
+  nextToken: String
+  total: Int
+}
+
+input SearchableOrderFilterInput {
+  id: SearchableIDFilterInput
+  purchaseRequestId: SearchableIDFilterInput
+  unit: SearchableStringFilterInput
+  quantity: SearchableIntFilterInput
+  price: SearchableFloatFilterInput
+  createdAt: SearchableStringFilterInput
+  updatedAt: SearchableStringFilterInput
+  and: [SearchableOrderFilterInput]
+  or: [SearchableOrderFilterInput]
+  not: SearchableOrderFilterInput
+}
+
+enum SearchableOrderSortableFields {
+  id
+  purchaseRequestId
+  unit
+  quantity
+  price
+  createdAt
+  updatedAt
+}
+
+input SearchableOrderSortInput {
+  field: SearchableOrderSortableFields
+  direction: SearchableSortDirection
+}
+
+type SearchableOrderConnection {
+  items: [Order]
+  nextToken: String
+  total: Int
+}
+
+input SearchableProductFilterInput {
+  id: SearchableIDFilterInput
+  name: SearchableStringFilterInput
+  description: SearchableStringFilterInput
+  createdAt: SearchableStringFilterInput
+  updatedAt: SearchableStringFilterInput
+  and: [SearchableProductFilterInput]
+  or: [SearchableProductFilterInput]
+  not: SearchableProductFilterInput
+}
+
+enum SearchableProductSortableFields {
+  id
+  name
+  description
+  createdAt
+  updatedAt
+}
+
+input SearchableProductSortInput {
+  field: SearchableProductSortableFields
+  direction: SearchableSortDirection
+}
+
+type SearchableProductConnection {
+  items: [Product]
+  nextToken: String
+  total: Int
+}

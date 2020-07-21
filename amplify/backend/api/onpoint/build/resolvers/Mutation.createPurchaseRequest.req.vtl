@@ -1,0 +1,187 @@
+## [Start] Set default values. **
+$util.qr($context.args.input.put("id", $util.defaultIfNull($ctx.args.input.id, $util.autoId())))
+#set( $createdAt = $util.time.nowISO8601() )
+## Automatically set the createdAt timestamp. **
+$util.qr($context.args.input.put("createdAt", $util.defaultIfNull($ctx.args.input.createdAt, $createdAt)))
+## Automatically set the updatedAt timestamp. **
+$util.qr($context.args.input.put("updatedAt", $util.defaultIfNull($ctx.args.input.updatedAt, $createdAt)))
+## [End] Set default values. **
+## [Start] Validate create mutation for @key 'StatuswithApprovedDayMonthYear'. **
+#set( $hasSeenSomeKeyArg = false )
+#set( $keyFieldNames = ["isApproved", "dayMonthYear"] )
+#foreach( $keyFieldName in $keyFieldNames )
+#if( $ctx.args.input.containsKey("$keyFieldName") ) #set( $hasSeenSomeKeyArg = true ) #end
+#end
+#foreach( $keyFieldName in $keyFieldNames )
+  #if( $hasSeenSomeKeyArg && !$ctx.args.input.containsKey("$keyFieldName") )
+    $util.error("When creating any part of the composite sort key for @key 'StatuswithApprovedDayMonthYear', you must provide all fields for the key. Missing key: '$keyFieldName'.")
+  #end
+#end
+## [End] Validate create mutation for @key 'StatuswithApprovedDayMonthYear'. **
+#if( $util.isNull($dynamodbNameOverrideMap) )
+  #set( $dynamodbNameOverrideMap = {
+  "isApproved#dayMonthYear": "isApprovedDayMonthYear"
+} )
+#else
+  $util.qr($dynamodbNameOverrideMap.put("isApproved#dayMonthYear", "isApprovedDayMonthYear"))
+#end
+$util.qr($ctx.args.input.put("isApproved#dayMonthYear","${ctx.args.input.isApproved}#${ctx.args.input.dayMonthYear}"))
+## [Start] Validate create mutation for @key 'StatuswithApprovedCreatedAt'. **
+#set( $hasSeenSomeKeyArg = false )
+#set( $keyFieldNames = ["isApproved", "createdAt"] )
+#foreach( $keyFieldName in $keyFieldNames )
+#if( $ctx.args.input.containsKey("$keyFieldName") ) #set( $hasSeenSomeKeyArg = true ) #end
+#end
+#foreach( $keyFieldName in $keyFieldNames )
+  #if( $hasSeenSomeKeyArg && !$ctx.args.input.containsKey("$keyFieldName") )
+    $util.error("When creating any part of the composite sort key for @key 'StatuswithApprovedCreatedAt', you must provide all fields for the key. Missing key: '$keyFieldName'.")
+  #end
+#end
+## [End] Validate create mutation for @key 'StatuswithApprovedCreatedAt'. **
+#if( $util.isNull($dynamodbNameOverrideMap) )
+  #set( $dynamodbNameOverrideMap = {
+  "isApproved#createdAt": "isApprovedCreatedAt"
+} )
+#else
+  $util.qr($dynamodbNameOverrideMap.put("isApproved#createdAt", "isApprovedCreatedAt"))
+#end
+$util.qr($ctx.args.input.put("isApproved#createdAt","${ctx.args.input.isApproved}#${ctx.args.input.createdAt}"))
+## [Start] Validate create mutation for @key 'StatuswithApprovedMonthYear'. **
+#set( $hasSeenSomeKeyArg = false )
+#set( $keyFieldNames = ["isApproved", "monthYear"] )
+#foreach( $keyFieldName in $keyFieldNames )
+#if( $ctx.args.input.containsKey("$keyFieldName") ) #set( $hasSeenSomeKeyArg = true ) #end
+#end
+#foreach( $keyFieldName in $keyFieldNames )
+  #if( $hasSeenSomeKeyArg && !$ctx.args.input.containsKey("$keyFieldName") )
+    $util.error("When creating any part of the composite sort key for @key 'StatuswithApprovedMonthYear', you must provide all fields for the key. Missing key: '$keyFieldName'.")
+  #end
+#end
+## [End] Validate create mutation for @key 'StatuswithApprovedMonthYear'. **
+#if( $util.isNull($dynamodbNameOverrideMap) )
+  #set( $dynamodbNameOverrideMap = {
+  "isApproved#monthYear": "isApprovedMonthYear"
+} )
+#else
+  $util.qr($dynamodbNameOverrideMap.put("isApproved#monthYear", "isApprovedMonthYear"))
+#end
+$util.qr($ctx.args.input.put("isApproved#monthYear","${ctx.args.input.isApproved}#${ctx.args.input.monthYear}"))
+
+
+
+
+## [Start] Validate create mutation for @key 'ApprovedwithDayMonthYearCreatedAt'. **
+#set( $hasSeenSomeKeyArg = false )
+#set( $keyFieldNames = ["dayMonthYear", "createdAt"] )
+#foreach( $keyFieldName in $keyFieldNames )
+#if( $ctx.args.input.containsKey("$keyFieldName") ) #set( $hasSeenSomeKeyArg = true ) #end
+#end
+#foreach( $keyFieldName in $keyFieldNames )
+  #if( $hasSeenSomeKeyArg && !$ctx.args.input.containsKey("$keyFieldName") )
+    $util.error("When creating any part of the composite sort key for @key 'ApprovedwithDayMonthYearCreatedAt', you must provide all fields for the key. Missing key: '$keyFieldName'.")
+  #end
+#end
+## [End] Validate create mutation for @key 'ApprovedwithDayMonthYearCreatedAt'. **
+#if( $util.isNull($dynamodbNameOverrideMap) )
+  #set( $dynamodbNameOverrideMap = {
+  "dayMonthYear#createdAt": "dayMonthYearCreatedAt"
+} )
+#else
+  $util.qr($dynamodbNameOverrideMap.put("dayMonthYear#createdAt", "dayMonthYearCreatedAt"))
+#end
+$util.qr($ctx.args.input.put("dayMonthYear#createdAt","${ctx.args.input.dayMonthYear}#${ctx.args.input.createdAt}"))
+## [Start] Validate create mutation for @key 'StatuswithDayMonthYearCreatedAt'. **
+#set( $hasSeenSomeKeyArg = false )
+#set( $keyFieldNames = ["dayMonthYear", "createdAt"] )
+#foreach( $keyFieldName in $keyFieldNames )
+#if( $ctx.args.input.containsKey("$keyFieldName") ) #set( $hasSeenSomeKeyArg = true ) #end
+#end
+#foreach( $keyFieldName in $keyFieldNames )
+  #if( $hasSeenSomeKeyArg && !$ctx.args.input.containsKey("$keyFieldName") )
+    $util.error("When creating any part of the composite sort key for @key 'StatuswithDayMonthYearCreatedAt', you must provide all fields for the key. Missing key: '$keyFieldName'.")
+  #end
+#end
+## [End] Validate create mutation for @key 'StatuswithDayMonthYearCreatedAt'. **
+#if( $util.isNull($dynamodbNameOverrideMap) )
+  #set( $dynamodbNameOverrideMap = {
+  "dayMonthYear#createdAt": "dayMonthYearCreatedAt"
+} )
+#else
+  $util.qr($dynamodbNameOverrideMap.put("dayMonthYear#createdAt", "dayMonthYearCreatedAt"))
+#end
+$util.qr($ctx.args.input.put("dayMonthYear#createdAt","${ctx.args.input.dayMonthYear}#${ctx.args.input.createdAt}"))
+## [Start] Validate create mutation for @key 'ApprovedwithMonthYearCreatedAt'. **
+#set( $hasSeenSomeKeyArg = false )
+#set( $keyFieldNames = ["monthYear", "createdAt"] )
+#foreach( $keyFieldName in $keyFieldNames )
+#if( $ctx.args.input.containsKey("$keyFieldName") ) #set( $hasSeenSomeKeyArg = true ) #end
+#end
+#foreach( $keyFieldName in $keyFieldNames )
+  #if( $hasSeenSomeKeyArg && !$ctx.args.input.containsKey("$keyFieldName") )
+    $util.error("When creating any part of the composite sort key for @key 'ApprovedwithMonthYearCreatedAt', you must provide all fields for the key. Missing key: '$keyFieldName'.")
+  #end
+#end
+## [End] Validate create mutation for @key 'ApprovedwithMonthYearCreatedAt'. **
+#if( $util.isNull($dynamodbNameOverrideMap) )
+  #set( $dynamodbNameOverrideMap = {
+  "monthYear#createdAt": "monthYearCreatedAt"
+} )
+#else
+  $util.qr($dynamodbNameOverrideMap.put("monthYear#createdAt", "monthYearCreatedAt"))
+#end
+$util.qr($ctx.args.input.put("monthYear#createdAt","${ctx.args.input.monthYear}#${ctx.args.input.createdAt}"))
+## [Start] Validate create mutation for @key 'StatuswithMonthYearCreatedAt'. **
+#set( $hasSeenSomeKeyArg = false )
+#set( $keyFieldNames = ["monthYear", "createdAt"] )
+#foreach( $keyFieldName in $keyFieldNames )
+#if( $ctx.args.input.containsKey("$keyFieldName") ) #set( $hasSeenSomeKeyArg = true ) #end
+#end
+#foreach( $keyFieldName in $keyFieldNames )
+  #if( $hasSeenSomeKeyArg && !$ctx.args.input.containsKey("$keyFieldName") )
+    $util.error("When creating any part of the composite sort key for @key 'StatuswithMonthYearCreatedAt', you must provide all fields for the key. Missing key: '$keyFieldName'.")
+  #end
+#end
+## [End] Validate create mutation for @key 'StatuswithMonthYearCreatedAt'. **
+#if( $util.isNull($dynamodbNameOverrideMap) )
+  #set( $dynamodbNameOverrideMap = {
+  "monthYear#createdAt": "monthYearCreatedAt"
+} )
+#else
+  $util.qr($dynamodbNameOverrideMap.put("monthYear#createdAt", "monthYearCreatedAt"))
+#end
+$util.qr($ctx.args.input.put("monthYear#createdAt","${ctx.args.input.monthYear}#${ctx.args.input.createdAt}"))
+
+
+
+
+## [Start] Prepare DynamoDB PutItem Request. **
+$util.qr($context.args.input.put("__typename", "PurchaseRequest"))
+#set( $condition = {
+  "expression": "attribute_not_exists(#id)",
+  "expressionNames": {
+      "#id": "id"
+  }
+} )
+#if( $context.args.condition )
+  #set( $condition.expressionValues = {} )
+  #set( $conditionFilterExpressions = $util.parseJson($util.transform.toDynamoDBConditionExpression($context.args.condition)) )
+  $util.qr($condition.put("expression", "($condition.expression) AND $conditionFilterExpressions.expression"))
+  $util.qr($condition.expressionNames.putAll($conditionFilterExpressions.expressionNames))
+  $util.qr($condition.expressionValues.putAll($conditionFilterExpressions.expressionValues))
+#end
+#if( $condition.expressionValues && $condition.expressionValues.size() == 0 )
+  #set( $condition = {
+  "expression": $condition.expression,
+  "expressionNames": $condition.expressionNames
+} )
+#end
+{
+  "version": "2018-05-29",
+  "operation": "PutItem",
+  "key": #if( $modelObjectKey ) $util.toJson($modelObjectKey) #else {
+  "id":   $util.dynamodb.toDynamoDBJson($ctx.args.input.id)
+} #end,
+  "attributeValues": $util.dynamodb.toMapValuesJson($context.args.input),
+  "condition": $util.toJson($condition)
+}
+## [End] Prepare DynamoDB PutItem Request. **
