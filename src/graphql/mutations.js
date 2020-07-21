@@ -65,10 +65,7 @@ export const createPurchaseRequest = /* GraphQL */ `
           unit
           quantity
           price
-<<<<<<< HEAD
           category
-=======
->>>>>>> d35c3536f28098e8a0c286287b6894e2e8a0be8d
           createdAt
           updatedAt
         }
@@ -78,10 +75,6 @@ export const createPurchaseRequest = /* GraphQL */ `
       monthYear
       dayMonthYear
       status
-<<<<<<< HEAD
-=======
-      totalPrice
->>>>>>> d35c3536f28098e8a0c286287b6894e2e8a0be8d
       createdAt
       updatedAt
     }
@@ -103,10 +96,7 @@ export const updatePurchaseRequest = /* GraphQL */ `
           unit
           quantity
           price
-<<<<<<< HEAD
           category
-=======
->>>>>>> d35c3536f28098e8a0c286287b6894e2e8a0be8d
           createdAt
           updatedAt
         }
@@ -116,10 +106,6 @@ export const updatePurchaseRequest = /* GraphQL */ `
       monthYear
       dayMonthYear
       status
-<<<<<<< HEAD
-=======
-      totalPrice
->>>>>>> d35c3536f28098e8a0c286287b6894e2e8a0be8d
       createdAt
       updatedAt
     }
@@ -141,10 +127,7 @@ export const deletePurchaseRequest = /* GraphQL */ `
           unit
           quantity
           price
-<<<<<<< HEAD
           category
-=======
->>>>>>> d35c3536f28098e8a0c286287b6894e2e8a0be8d
           createdAt
           updatedAt
         }
@@ -154,10 +137,6 @@ export const deletePurchaseRequest = /* GraphQL */ `
       monthYear
       dayMonthYear
       status
-<<<<<<< HEAD
-=======
-      totalPrice
->>>>>>> d35c3536f28098e8a0c286287b6894e2e8a0be8d
       createdAt
       updatedAt
     }
@@ -181,10 +160,7 @@ export const createOrder = /* GraphQL */ `
       unit
       quantity
       price
-<<<<<<< HEAD
       category
-=======
->>>>>>> d35c3536f28098e8a0c286287b6894e2e8a0be8d
       createdAt
       updatedAt
     }
@@ -208,10 +184,7 @@ export const updateOrder = /* GraphQL */ `
       unit
       quantity
       price
-<<<<<<< HEAD
       category
-=======
->>>>>>> d35c3536f28098e8a0c286287b6894e2e8a0be8d
       createdAt
       updatedAt
     }
@@ -235,10 +208,7 @@ export const deleteOrder = /* GraphQL */ `
       unit
       quantity
       price
-<<<<<<< HEAD
       category
-=======
->>>>>>> d35c3536f28098e8a0c286287b6894e2e8a0be8d
       createdAt
       updatedAt
     }
