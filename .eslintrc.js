@@ -42,7 +42,7 @@ module.exports = {
         'brace-style': 1,
         camelcase: 1,
         'comma-dangle': 1,
-        indent: 1,
+        "indent": [1, 2],
         'key-spacing': 1,
         'jsx-quotes': 1,
         'keyword-spacing': 1,
