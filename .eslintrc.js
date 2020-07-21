@@ -80,7 +80,6 @@ module.exports = {
         'prefer-const': 1,
         'prefer-destructuring': 1,
         'no-console': [1, {allow: ['warn', 'error']}],
-        // 'react/jsx-filename-extension': [1, { extensions: ['.js', '.jsx'] }],
         'react/jsx-props-no-spreading': 'off',
         'react/no-unescaped-entities': 'off',
         'react/prop-types': 'off',
