@@ -5,11 +5,6 @@
 /.pnp
 .pnp.js
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> d35c3536f28098e8a0c286287b6894e2e8a0be8d
 # testing
 /coverage
 
@@ -26,8 +21,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-<<<<<<< HEAD
-=======
 
 #amplify
 amplify/\#current-cloud-backend
@@ -44,4 +37,3 @@ amplifyconfiguration.json
 amplify-build-config.json
 amplify-gradle-config.json
 amplifytools.xcconfig
->>>>>>> d35c3536f28098e8a0c286287b6894e2e8a0be8d
