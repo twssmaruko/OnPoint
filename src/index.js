@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { HashRouter } from 'react-router-dom';
+import {HashRouter} from 'react-router-dom';
 import './index.css';
-import { Provider } from 'react-redux';
+import {Provider} from 'react-redux';
 import {
-  createStore, applyMiddleware, compose,
-  combineReducers,
+    createStore, applyMiddleware, compose,
+    combineReducers
 } from 'redux';
 import thunk from 'redux-thunk';
 import Amplify from 'aws-amplify';
@@ -24,28 +24,25 @@ Amplify.configure(AWSexports);
 const composeEnhancers = compose;
 
 const rootReducer = combineReducers({
-  auth: authReducer,
-  vendor: vendorReducer,
-  products: productsReducer,
-  ui: uiReducer,
-  purchaseRequests: purchaseRequestReducer,
-  purchaseOrder: purchaseOrderReducer,
+    auth: authReducer,
+    vendor: vendorReducer,
+    products: productsReducer,
+    ui: uiReducer,
+    purchaseRequests: purchaseRequestReducer,
+    purchaseOrder: purchaseOrderReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(
-  applyMiddleware(thunk),
+    applyMiddleware(thunk)
 ));
 
-const indexApp = (
+const indexApp =
   <Provider store={store}>
-    <HashRouter>
-      <App />
-    </HashRouter>
-  </Provider>
-
-);
-
+      <HashRouter>
+          <App />
+      </HashRouter>
+  </Provider>;
 ReactDOM.render(
-  indexApp,
-  document.getElementById('root'),
+    indexApp,
+    document.getElementById('root')
 );

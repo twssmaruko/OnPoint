@@ -53,6 +53,7 @@ export const onCreatePurchaseRequest = /* GraphQL */ `
           unit
           quantity
           price
+          category
           createdAt
           updatedAt
         }
@@ -62,7 +63,6 @@ export const onCreatePurchaseRequest = /* GraphQL */ `
       monthYear
       dayMonthYear
       status
-      totalPrice
       createdAt
       updatedAt
     }
@@ -81,6 +81,7 @@ export const onUpdatePurchaseRequest = /* GraphQL */ `
           unit
           quantity
           price
+          category
           createdAt
           updatedAt
         }
@@ -90,7 +91,6 @@ export const onUpdatePurchaseRequest = /* GraphQL */ `
       monthYear
       dayMonthYear
       status
-      totalPrice
       createdAt
       updatedAt
     }
@@ -109,6 +109,7 @@ export const onDeletePurchaseRequest = /* GraphQL */ `
           unit
           quantity
           price
+          category
           createdAt
           updatedAt
         }
@@ -118,7 +119,6 @@ export const onDeletePurchaseRequest = /* GraphQL */ `
       monthYear
       dayMonthYear
       status
-      totalPrice
       createdAt
       updatedAt
     }
@@ -139,6 +139,7 @@ export const onCreateOrder = /* GraphQL */ `
       unit
       quantity
       price
+      category
       createdAt
       updatedAt
     }
@@ -159,6 +160,7 @@ export const onUpdateOrder = /* GraphQL */ `
       unit
       quantity
       price
+      category
       createdAt
       updatedAt
     }
@@ -179,6 +181,7 @@ export const onDeleteOrder = /* GraphQL */ `
       unit
       quantity
       price
+      category
       createdAt
       updatedAt
     }

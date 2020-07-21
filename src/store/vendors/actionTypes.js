@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/prefer-default-export
 export const FETCH_VENDORS_START = 'FETCH_VENDORS_START';
 export const FETCH_VENDORS_SUCCESS = 'FETCH_VENDORS_SUCCESS';
 export const FETCH_VENDORS_FAIL = 'FETCH_VENDORS_FAIL';

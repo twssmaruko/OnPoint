@@ -36,7 +36,7 @@ type PurchaseRequest @model @searchable
   monthYear: String!
   dayMonthYear: String!
   status: Status!
-  totalPrice: Float!
+  # totalPrice: Float!
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
 }
@@ -49,6 +49,7 @@ type PurchaseRequest @model @searchable
    unit: String!
    quantity: Int!
    price: Float!
+   category: Category
    createdAt: AWSDateTime!
    updatedAt: AWSDateTime!
  }
@@ -70,4 +71,10 @@ type PurchaseRequest @model @searchable
  enum isApproved {
    APPROVED
    NOTAPPROVED
+ }
+
+ enum Category {
+   CATEGORY1
+   CATEGORY2
+   CATEGORY3
  }

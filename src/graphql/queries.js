@@ -52,6 +52,7 @@ export const getPurchaseRequest = /* GraphQL */ `
           unit
           quantity
           price
+          category
           createdAt
           updatedAt
         }
@@ -61,7 +62,6 @@ export const getPurchaseRequest = /* GraphQL */ `
       monthYear
       dayMonthYear
       status
-      totalPrice
       createdAt
       updatedAt
     }
@@ -89,7 +89,6 @@ export const listPurchaseRequests = /* GraphQL */ `
         monthYear
         dayMonthYear
         status
-        totalPrice
         createdAt
         updatedAt
       }
@@ -112,6 +111,7 @@ export const getOrder = /* GraphQL */ `
       unit
       quantity
       price
+      category
       createdAt
       updatedAt
     }
@@ -137,6 +137,7 @@ export const listOrders = /* GraphQL */ `
         unit
         quantity
         price
+        category
         createdAt
         updatedAt
       }
@@ -201,7 +202,6 @@ export const purchaseRequestDayCreatedAt = /* GraphQL */ `
         monthYear
         dayMonthYear
         status
-        totalPrice
         createdAt
         updatedAt
       }
@@ -237,7 +237,6 @@ export const purchaseRequestMonthCreatedAt = /* GraphQL */ `
         monthYear
         dayMonthYear
         status
-        totalPrice
         createdAt
         updatedAt
       }
@@ -273,7 +272,6 @@ export const purchaseRequestStatusMonthYearCreatedAt = /* GraphQL */ `
         monthYear
         dayMonthYear
         status
-        totalPrice
         createdAt
         updatedAt
       }
@@ -309,7 +307,6 @@ export const purchaseRequestIsApprovedMonthYearCreatedAt = /* GraphQL */ `
         monthYear
         dayMonthYear
         status
-        totalPrice
         createdAt
         updatedAt
       }
@@ -345,7 +342,6 @@ export const purchaseRequestStatusDayMonthYearCreatedAt = /* GraphQL */ `
         monthYear
         dayMonthYear
         status
-        totalPrice
         createdAt
         updatedAt
       }
@@ -381,7 +377,6 @@ export const purchaseRequestIsApprovedDayMonthYearcreatedAt = /* GraphQL */ `
         monthYear
         dayMonthYear
         status
-        totalPrice
         createdAt
         updatedAt
       }
@@ -417,7 +412,6 @@ export const purchaseRequestStatusCreatedAt = /* GraphQL */ `
         monthYear
         dayMonthYear
         status
-        totalPrice
         createdAt
         updatedAt
       }
@@ -453,7 +447,6 @@ export const purchaseRequestIsApprovedCreatedAt = /* GraphQL */ `
         monthYear
         dayMonthYear
         status
-        totalPrice
         createdAt
         updatedAt
       }
@@ -489,7 +482,6 @@ export const purchaseRequestStatusIsApprovedMonthYear = /* GraphQL */ `
         monthYear
         dayMonthYear
         status
-        totalPrice
         createdAt
         updatedAt
       }
@@ -525,7 +517,6 @@ export const purchaseRequestStatusIsApprovedCreatedAt = /* GraphQL */ `
         monthYear
         dayMonthYear
         status
-        totalPrice
         createdAt
         updatedAt
       }
@@ -561,7 +552,6 @@ export const purchaseRequestStatusIsApprovedDayMonthYear = /* GraphQL */ `
         monthYear
         dayMonthYear
         status
-        totalPrice
         createdAt
         updatedAt
       }
@@ -620,7 +610,6 @@ export const searchPurchaseRequests = /* GraphQL */ `
         monthYear
         dayMonthYear
         status
-        totalPrice
         createdAt
         updatedAt
       }
@@ -655,6 +644,7 @@ export const searchOrders = /* GraphQL */ `
         unit
         quantity
         price
+        category
         createdAt
         updatedAt
       }
