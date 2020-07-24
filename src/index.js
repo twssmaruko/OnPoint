@@ -16,6 +16,7 @@ import productsReducer from './store/products/reducer/Reducer';
 import uiReducer from './store/ui/reducer/Reducer';
 import purchaseRequestReducer from './store/purchaserequest/reducer/Reducer';
 import purchaseOrderReducer from './store/purchaseorders/reducer/Reducer';
+import projectReducer from './store/projects/reducer/reducer';
 
 import AWSexports from './aws-exports';
 
@@ -29,7 +30,8 @@ const rootReducer = combineReducers({
   products: productsReducer,
   ui: uiReducer,
   purchaseRequests: purchaseRequestReducer,
-  purchaseOrder: purchaseOrderReducer
+  purchaseOrder: purchaseOrderReducer,
+  project: projectReducer
 });
 
 const store = createStore(rootReducer, composeEnhancers(
