@@ -12,14 +12,14 @@ import * as actions from '../../store/purchaserequest/actions/Actions';
 const Updatemodal = (props) => {
   const dispatcher = useDispatch();
   const {Option} = Select;
-  const {initialValue} = props;
+  const {purchaseRequestData} = props;
   const {
-    purchaseRequestData,
+    // purchaseRequestData,
     openAnotherModal
     // showSpin,
-  } = useSelector(({ui, purchaseRequests}) => ({
+  } = useSelector(({ui}) => ({
     // showSpin: ui.showSpin1,
-    purchaseRequestData: purchaseRequests.purchaseRequestData,
+    // purchaseRequestData: purchaseRequests.purchaseRequestData,
     openAnotherModal: ui.openModal2
   }));
 
@@ -27,8 +27,8 @@ const Updatemodal = (props) => {
 
   const {orders} = purchaseRequestData;
 
-  const ordersItems = orders.items.map((item) => <div key={item.id}>{`-- ${item.quantity} 
-    ${item.unit} of ${item.product.name}  for ${item.price} Php` }</div>);
+  const ordersItems = orders.map((item) => <div key={item.product}>{`-- ${item.quantity} 
+    ${item.unit} of ${item.product}` }</div>);
 
   const setStatus = (value) => {
     setUpdateParams({...updateParams,
@@ -119,7 +119,7 @@ const Updatemodal = (props) => {
           <Row style={{marginTop: 20}}>
             <h3>Status:</h3>
             <Select
-              defaultValue={initialValue.status}
+              defaultValue={purchaseRequestData.status}
               style={{marginLeft: 10,
                 width: 170}}
               onChange={setStatus}
@@ -133,7 +133,7 @@ const Updatemodal = (props) => {
             <h3>Approval:</h3>
             <Switch style={{marginLeft: 10}}
               onChange={setApproved}
-              defaultChecked={initialValue.isApproved === 'APPROVED'} />
+              defaultChecked={purchaseRequestData.isApproved === 'APPROVED'} />
           </Row>
         </>
         {/* </Spin> */}

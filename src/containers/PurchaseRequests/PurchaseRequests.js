@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {lazy, useState, useEffect} from 'react';
 import {
   Row,
   Button,
@@ -10,32 +10,36 @@ import {
 } from 'antd';
 
 import {CloseCircleFilled, CheckCircleFilled, EditTwoTone} from '@ant-design/icons';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector, useDispatch, shallowEqual} from 'react-redux';
 
 import moment from 'moment';
 import _ from 'lodash';
 
-// import { SearchOutlined } from '@ant-design/icons';
-import PurchaseRequestFormModal from './PurchaseRequestFormModal';
 import * as uiActions from '../../store/ui/actions/Actions';
 import * as actions from '../../store/purchaserequest/actions/Actions';
 import TableButton from '../../components/button/OnpointButton';
-import Updatemodal from './UpdateModal';
+
+
+const PurchaseRequestFormModal = lazy(() => import('./PurchaseRequestFormModal'));
+const UpdateModal = lazy(() => import ('./UpdateModal'));
 
 const PurchaseRequests = () => {
+  const dispatcher = useDispatch();
   const {Option} = Select;
   // const childRef = useRef();
-  const dispatcher = useDispatch();
-  const [initialPurchaseRequest, setInitialPurchaseRequest] = useState({});
+  const [displayAddModal, setDisplayAddModal] = useState(null);
+  const [displayUpdateModal, setDisplayUpdateModal] = useState(null);
+
+
+  // const [purchaseRequestValue, setPurchaseRequestValue] = useState({orders: []});
   const [params, setParams] = useState({});
   const {
     purchaseRequestsList,
     tableSpin
   } = useSelector(({ui, purchaseRequests}) => ({
-    openAnotherModal: ui.openModal2,
     purchaseRequestsList: purchaseRequests.purchaseRequests,
     tableSpin: ui.showSpin3
-  }));
+  }), shallowEqual);
 
   useEffect(() => {
     dispatcher(actions.getMonthlyPurchaseRequests());
@@ -46,8 +50,10 @@ const PurchaseRequests = () => {
   }, [dispatcher]);
 
   const onDetailsClick = (item) => {
-    setInitialPurchaseRequest(item);
-    dispatcher(actions.initiateUpdateModal(item.id));
+    // setPurchaseRequestValue(item);
+    setDisplayUpdateModal(<UpdateModal  purchaseRequestData={item}/>)
+    dispatcher(uiActions.setOpenModal2(true));
+    // dispatcher(actions.initiateUpdateModal(item.id));
   };
 
   const editButton = (item) =>
@@ -101,9 +107,16 @@ const PurchaseRequests = () => {
 
   ];
 
+
   const setModal = () => {
-    dispatcher(uiActions.setOpenModal1(true));
-  };
+    if (displayAddModal === null) {
+      setDisplayAddModal(<PurchaseRequestFormModal />);
+    }
+    dispatcher(uiActions.setOpenModal1(true))
+  }
+
+  // dispatcher(uiActions.setOpenModal1(true));
+
 
   const onSearch = () => {
     if (!_.isEmpty(params)) {
@@ -266,8 +279,9 @@ const PurchaseRequests = () => {
           </Spin>
         </div>
       </Row>
-      <PurchaseRequestFormModal />
-      <Updatemodal initialValue={initialPurchaseRequest} />
+      {displayAddModal}
+      {displayUpdateModal}
+      {/* <Updatemodal initialValue={initialPurchaseRequest} /> */}
     </div>
   );
 };

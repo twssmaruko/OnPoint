@@ -37,12 +37,13 @@ export const getPurchaseRequests = (data) => async (dispatch) => {
       limit: 5
     }));
     const purchaseRequests = queryData.data.searchPurchaseRequests.items;
+    console.log(purchaseRequests)
     dispatch(setPurchaseRequests(purchaseRequests));
     dispatch(setShowSpin1(false));
   } catch (e) {
     console.error(e)
     dispatch(setShowSpin1(false));
-    message.error('Error getting products');
+    message.error('Error getting Purchase Request!');
   }
 };
 

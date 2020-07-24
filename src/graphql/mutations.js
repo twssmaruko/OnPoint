@@ -59,17 +59,10 @@ export const createPurchaseRequest = /* GraphQL */ `
       purchaseRequestNo
       isApproved
       orders {
-        items {
-          id
-          purchaseRequestId
-          unit
-          quantity
-          price
-          category
-          createdAt
-          updatedAt
-        }
-        nextToken
+        product
+        unit
+        quantity
+        category
       }
       count
       monthYear
@@ -90,17 +83,10 @@ export const updatePurchaseRequest = /* GraphQL */ `
       purchaseRequestNo
       isApproved
       orders {
-        items {
-          id
-          purchaseRequestId
-          unit
-          quantity
-          price
-          category
-          createdAt
-          updatedAt
-        }
-        nextToken
+        product
+        unit
+        quantity
+        category
       }
       count
       monthYear
@@ -121,94 +107,15 @@ export const deletePurchaseRequest = /* GraphQL */ `
       purchaseRequestNo
       isApproved
       orders {
-        items {
-          id
-          purchaseRequestId
-          unit
-          quantity
-          price
-          category
-          createdAt
-          updatedAt
-        }
-        nextToken
+        product
+        unit
+        quantity
+        category
       }
       count
       monthYear
       dayMonthYear
       status
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const createOrder = /* GraphQL */ `
-  mutation CreateOrder(
-    $input: CreateOrderInput!
-    $condition: ModelOrderConditionInput
-  ) {
-    createOrder(input: $input, condition: $condition) {
-      id
-      purchaseRequestId
-      product {
-        id
-        name
-        description
-        createdAt
-        updatedAt
-      }
-      unit
-      quantity
-      price
-      category
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const updateOrder = /* GraphQL */ `
-  mutation UpdateOrder(
-    $input: UpdateOrderInput!
-    $condition: ModelOrderConditionInput
-  ) {
-    updateOrder(input: $input, condition: $condition) {
-      id
-      purchaseRequestId
-      product {
-        id
-        name
-        description
-        createdAt
-        updatedAt
-      }
-      unit
-      quantity
-      price
-      category
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const deleteOrder = /* GraphQL */ `
-  mutation DeleteOrder(
-    $input: DeleteOrderInput!
-    $condition: ModelOrderConditionInput
-  ) {
-    deleteOrder(input: $input, condition: $condition) {
-      id
-      purchaseRequestId
-      product {
-        id
-        name
-        description
-        createdAt
-        updatedAt
-      }
-      unit
-      quantity
-      price
-      category
       createdAt
       updatedAt
     }

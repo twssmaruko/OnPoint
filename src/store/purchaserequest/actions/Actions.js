@@ -4,7 +4,7 @@ import moment from 'moment';
 import _ from 'lodash';
 import {
   searchProducts,
-  getPurchaseRequest,
+  // getPurchaseRequest,
   purchaseRequestDayCreatedAt,
   purchaseRequestMonthCreatedAt,
   purchaseRequestStatusCreatedAt,
@@ -23,7 +23,6 @@ import {
 } from '../../ui/actions/Actions';
 import {
   createPurchaseRequest,
-  createOrder,
   updatePurchaseRequest
 } from '../../../graphql/mutations';
 
@@ -93,22 +92,22 @@ export const invokeUpdatePurchaseRequest = (data) => async (dispatch) => {
   }
 };
 
-export const initiateUpdateModal = (data) => async (dispatch) => {
-  try {
-    // dispatch(setShowSpin1(true));
-    const queryData = await API.graphql(graphqlOperation(getPurchaseRequest, {
-      id: data
-    }));
-    const purchaseRequestData = queryData.data.getPurchaseRequest;
-    dispatch(setPurchaseRequestData(purchaseRequestData));
-    dispatch(setOpenModal2(true));
-    // dispatch(setShowSpin1(false));
-  } catch (e) {
-    console.error(e);
-    dispatch(setOpenModal2(false));
-    message.error('Error getting Purchase Request data!');
-  }
-};
+// export const initiateUpdateModal = (data) => async (dispatch) => {
+//   try {
+//     // dispatch(setShowSpin1(true));
+//     const queryData = await API.graphql(graphqlOperation(getPurchaseRequest, {
+//       id: data
+//     }));
+//     const purchaseRequestData = queryData.data.getPurchaseRequest;
+//     dispatch(setPurchaseRequestData(purchaseRequestData));
+//     dispatch(setOpenModal2(true));
+//     // dispatch(setShowSpin1(false));
+//   } catch (e) {
+//     console.error(e);
+//     dispatch(setOpenModal2(false));
+//     message.error('Error getting Purchase Request data!');
+//   }
+// };
 
 export const getMonthlyPurchaseRequests = () => async (dispatch) => {
   try {
@@ -250,37 +249,38 @@ export const addPurchaseRequest = (data) => async (dispatch, getState) => {
       return;
     }
 
-    const body = {...data};
-    delete body.orders;
+    // const body = {...data};
+    // delete body.orders;
 
     const {purchaseRequestCount} = getState().purchaseRequests;
 
     const count = purchaseRequestCount + 1;
-    const purchaseRequestNo = `${body.monthYear}-${count}`;
+    const purchaseRequestNo = `${data.monthYear}-${count}`;
 
-    const createdData = await API.graphql(graphqlOperation(createPurchaseRequest, {
+
+    await API.graphql(graphqlOperation(createPurchaseRequest, {
       input: {
-        ...body,
+        ...data,
         count,
         purchaseRequestNo
       }
     }));
 
-    const {id} = createdData.data.createPurchaseRequest;
+    // const {id} = createdData.data.createPurchaseRequest;
 
-    data.orders.forEach(async (order) => {
-      const {
-        price, product, quantity, unit
-      } = order;
-      const input = {
-        price,
-        orderProductId: product.id,
-        purchaseRequestId: id,
-        quantity,
-        unit
-      };
-      await API.graphql(graphqlOperation(createOrder, {input}));
-    });
+    // data.orders.forEach(async (order) => {
+    //   const {
+    //     price, product, quantity, unit
+    //   } = order;
+    //   const input = {
+    //     price,
+    //     orderProductId: product.id,
+    //     purchaseRequestId: id,
+    //     quantity,
+    //     unit
+    //   };
+    //   await API.graphql(graphqlOperation(createOrder, {input}));
+    // });
     message.success('Purchase Request added succesfully!');
     dispatch(setShowSpin2(false));
     dispatch(setOpenModal1(false));

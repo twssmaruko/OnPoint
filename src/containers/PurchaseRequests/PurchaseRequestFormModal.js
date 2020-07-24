@@ -13,7 +13,7 @@ import _ from 'lodash';
 
 import moment from 'moment';
 
-import {useDispatch, useSelector} from 'react-redux';
+import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import * as actions from '../../store/purchaserequest/actions/Actions';
 import * as uiActions from '../../store/ui/actions/Actions';
 import OnPointButton from '../../components/button/OnpointButton';
@@ -32,7 +32,7 @@ const PurchaseRequestForm = () => {
     openModal: ui.openModal1,
     showSpin: ui.showSpin1,
     productsList: products.products
-  }));
+  }), shallowEqual);
 
   const fetchProduct = (value) => {
     dispatcher(actions.getProducts(value));
@@ -50,6 +50,7 @@ const PurchaseRequestForm = () => {
       // totalPrice,
       orders: ordersList
     };
+
     dispatcher(actions.addPurchaseRequest(prData));
   };
 
@@ -65,17 +66,14 @@ const PurchaseRequestForm = () => {
     const order = [
       {
         ...value,
-        product: {
-          name: value.product.label,
-          id: value.product.key
-        }
+        product: value.product.label
       }
     ];
 
     const newList = order.concat(ordersList);
     setListItems(newList.map((data) =>
       <h3 key={data.id}>
-        {`${data.quantity} ${data.unit} of ${data.product.name}  for ${data.price} Php`}
+        {`${data.quantity} ${data.unit} of ${data.product} `}
       </h3>));
     setOrdersList(newList);
     form.resetFields();
@@ -91,19 +89,22 @@ const PurchaseRequestForm = () => {
     newOrdersList.splice(index, 1);
     setListItems(newOrdersList.map((data) =>
       <h3 key={data.id}>
-        {`${data.quantity} ${data.unit} of ${data.product.name}  for ${data.price} Php`}
+        {`${data.quantity} ${data.unit} of ${data.product} `}
       </h3>));
     setOrdersList(newOrdersList);
   };
 
-  const handleCancel = () => {
-    dispatcher(uiActions.setOpenModal1(false));
-  };
+  const handleCancel =  () => {
+    dispatcher(uiActions.setOpenModal1(false))
+  }
 
   const afterModalClose = () => {
-    setOrdersList([]);
-    setListItems([]);
-  };
+    if (ordersList.length) {
+      setOrdersList([]);
+      setListItems([]);
+    }
+  }
+
 
   return (
     <Modal
@@ -155,7 +156,9 @@ const PurchaseRequestForm = () => {
               label="Unit"
               rules={[
                 {required: true,
-                  message: 'Please input Unit!'}
+                  message: 'Please input Unit!'},
+                {type: 'string',
+                  message: 'Should be in letters/words!'}
               ]}
             >
               <Input style={{width: 170}} />
@@ -165,13 +168,14 @@ const PurchaseRequestForm = () => {
               label="Quantity"
               rules={[
                 {required: true,
-                  message: 'Please input Quantity!'}, {type: 'number',
+                  message: 'Please input Quantity!'},
+                {type: 'number',
                   message: 'Should be a number!'}
               ]}
             >
               <InputNumber style={{width: 170}} />
             </Form.Item>
-            <Form.Item
+            {/* <Form.Item
               name="price"
               label="Price"
               rules={[
@@ -182,7 +186,7 @@ const PurchaseRequestForm = () => {
               ]}
             >
               <InputNumber style={{width: 170}} />
-            </Form.Item>
+            </Form.Item> */}
             <Form.Item
               name="category"
               label="Category"
@@ -193,9 +197,9 @@ const PurchaseRequestForm = () => {
               ]}
             >
               <Select  style={{width: 170}} >
-                <Option value="Category1">Category1</Option>
-                <Option value="Category2">Category2</Option>
-                <Option value="Category3">Category3</Option>
+                <Option value="CATEGORY1">CATEGORY1</Option>
+                <Option value="CATEGORY2">CATEGORY2</Option>
+                <Option value="CATEGORY3">CATEGORY3</Option>
               </Select>
               {/* <InputNumber style={{width: 170}} /> */}
             </Form.Item>
@@ -243,3 +247,5 @@ const PurchaseRequestForm = () => {
 };
 
 export default PurchaseRequestForm;
+
+
