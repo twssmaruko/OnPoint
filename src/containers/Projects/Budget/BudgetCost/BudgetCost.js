@@ -5,17 +5,19 @@ import {
 } from 'antd';
 import SubCategory from './SubCategory/SubCategory';
 
-const BudgetCost = () => {
+const BudgetCost = (props) => {
   const [subCategoryState, setSubCategoryState] = useState([]);
   const addSubCategoryClicked = () => {
     const newSubCategory = subCategoryState.concat(<SubCategory />);
     setSubCategoryState(newSubCategory);
   };
+  const {reference} = props;
   return (
     <>
       <Form
         name="basic"
         style={{marginTop: '10px'}}
+        ref= {reference}
       >
         <Form.Item
           rules={{required: true,

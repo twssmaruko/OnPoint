@@ -1,36 +1,45 @@
 /* eslint-disable no-restricted-syntax */
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   Row, Col,
   Form, Input, Button
 } from 'antd';
+import {connect} from 'react-redux';
 import BudgetCost from './BudgetCost/BudgetCost';
+import * as actions from '../../../store/projects/index';
 
-const Budget = () => {
+const Budget = (props) => {
+
+  const formRef = useRef(null);
   const [budgetCostState, setBudgetCostState] = useState([]);
-  const [budgetComponentState, setBudgetComponentState] = useState({
-    budget: {
-      contractPrice: 0
-    }
-  });
+  // const [budgetComponentState, setBudgetComponentState] = useState({
+  //   budget: {
+  //     contractPrice: 0,
+  //     budgetPrice: 0,
+  //     profit: 0,
+  //     profitMargin: '0%',
+  //     budgetCost: []
+  //   }
+  // });
+
+
   const addCostClicked = () => {
-    const newBudgetCostState = budgetCostState.concat(<BudgetCost />);
+    const newBudgetCostState = budgetCostState.concat(<BudgetCost reference={formRef}/>);
     setBudgetCostState(newBudgetCostState);
   };
 
   const onChangeHandler = (e) => {
     const inputValues = parseFloat(e).toFixed(2);
     // setBudgetComponentState(inputValues);
-    setBudgetComponentState({
-      ...budgetComponentState,
-      budget: {
-        ...budgetComponentState.budget,
-        contractPrice: inputValues
-      }
-    });
+    props.onContractPriceUpdated(inputValues);
+
   };
 
-  useEffect(() => console.log(budgetComponentState.budget.contractPrice));
+  const testDataHandler = () => {
+    budgetCostState.forEach()
+  }
+
+  useEffect(() => console.log(props.bdgt));
 
   return (
     <>
@@ -136,9 +145,19 @@ const Budget = () => {
           </Row>
           {budgetCostState}
         </Form.Item>
+        <Button onClick={testDataHandler}>Test</Button>
       </Form>
     </>
   );
 };
 
-export default Budget;
+const mapStateToProps = (state) => ({
+  bdgt: state.project.budget
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  onContractPriceUpdated: (contractPrice) => dispatch(actions.updateContractPrice(contractPrice))
+});
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(Budget);
