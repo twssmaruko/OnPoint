@@ -5,23 +5,14 @@ import React, {
   useCallback,
   Suspense
 } from 'react';
-import {
-  Row
-  // Select,
-} from 'antd';
-// import {CSSTransitionGroup} from 'react-transition-group';
+import {Transition} from 'react-transition-group';
+import './PurchaseOrders.css'
 
-
-
-import {
-  useDispatch
-} from 'react-redux';
 import PurchaseOrderTable from './Components/PurchaseOrderTable'
 // import moment from 'moment';
 // import PurchaseOrderAddModal from './AddPurchaseOrderModal';
 
 // import { SearchOutlined } from '@ant-design/icons';
-import * as uiActions from '../../store/ui/actions/Actions';
 // import * as actions from '../../store/purchaserequest/actions/Actions';
 import Header from './Components/PurchaseOrderHeader';
 
@@ -31,49 +22,115 @@ const PurchaseOrderAddModal = lazy(() => import('./Components/AddPurchaseOrder')
 
 
 const PurchaseOrders = () => {
-  // const childRef = useRef();
-  const dispatcher = useDispatch();
-  const [addModal, setAddModal] = useState(false);
-
-  // const {
-  //   // purchaseRequestsList,
-  //   tableSpin
-  // } = useSelector(({ui, purchaseRequests}) => ({
-  //   openAnotherModal: ui.openModal2,
-  //   purchaseRequestsList: purchaseRequests.purchaseRequests,
-  //   tableSpin: ui.showSpin3
-  // }));
-
-  // useEffect(() => {
-  //   // dispatcher(actions.getMonthlyPurchaseRequests());
-  //   // dispatcher(actions.initSubscriptions());
-  //   // return () => {
-  //   //   dispatcher(actions.unsubscribe());
-  //   // };
-  // }, []);
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [showTable, setShowTable] = useState(true)
 
 
+  const setShowPurchaseOrdersRender = useCallback(() => {
+    setShowTable(false)
+  }, [])
 
-  const setModal = useCallback(() => {
-    // if (addModal === null) {
-    // }
-    dispatcher(uiActions.setOpenModal2(true));
-    setAddModal(true)
-    // dispatcher(uiActions.setOpenModal1(true));
-  }, [dispatcher]);
+  const setAddPurchaseOrderRender = useCallback(() => {
+    setShowAddForm(false)
+  },[])
 
+  const transitionStyles = {
+    entering: {
+      opacity: 1,
+      transform: 'translateX(0)',
+      transition: 'all 250ms ease-out'
+    },
+    entered: {opacity: 1},
+    exiting: {
+      opacity: 0,
+      transform: 'translateX(-100%)',
+      transition: 'all 250ms ease-out'
+    },
+    exited: {
+      opacity: 0,
+      transform: 'translateX(-100%)'
+    }
+  };
 
+  const addFormStyle = {
+    entering: {
+      opacity: 1,
+      transform: 'translateX(0)',
+      transition: 'all 250ms ease-out'
+    },
+    entered: {
+      opacity: 1
+    },
+    exiting: {
+      opacity: 0,
+      transform: 'translateX(-100%)',
+      transition: 'all 250ms ease-out'
+    },
+    exited: {
+      opacity: 0,
+      transform: 'translateX(100%)'
+
+    }
+  };
+
+  const onTableExit = useCallback(() => {
+    setShowAddForm(true);
+  }, [])
+
+  const onAddExit = useCallback(() => {
+    setShowTable(true);
+  }, [])
 
   return (
     <div>
-      <Header onClickProp={setModal}/>
-      <Row>
-        <Suspense fallback={<div style={{marginLeft: '20%'}}> Loading</div>}>
-          {addModal? <PurchaseOrderAddModal/> : null}
-        </Suspense>
-      </Row>
-      {addModal ? null : <PurchaseOrderTable />
-      }
+      <Header
+        onClickShowPurchaseOrders={setShowPurchaseOrdersRender}
+        onClickAddProp={setAddPurchaseOrderRender}
+      />
+      <Transition
+        in={showAddForm}
+        timeout={{
+          enter: 250,
+          exit: 250
+        }}
+        onExited={onAddExit}
+        mountOnEnter
+        unmountOnExit
+      >
+        {
+          state =>
+            <div style={{
+              ...addFormStyle[state]
+            }}>
+              <Suspense fallback={<div style={{marginLeft: '20%'}}> Loading</div>}>
+                <PurchaseOrderAddModal/>
+              </Suspense>
+
+            </div>
+        }
+      </Transition>
+      <Transition
+        in={showTable}
+        // appear={true}
+        timeout={{
+          enter: 250,
+          exit: 250
+        }}
+        onExited={onTableExit}
+        mountOnEnter
+        unmountOnExit
+        // classNames="addPurchaseorder"
+      >
+        {
+          state =>
+            <div style={{
+              ...transitionStyles[state]
+            }}>
+              <PurchaseOrderTable />
+            </div>
+        }
+
+      </Transition>
       {/* {addModal} */}
     </div>
   );

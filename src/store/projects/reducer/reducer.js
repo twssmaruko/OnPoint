@@ -47,6 +47,7 @@ const projectReducer = (state = initialState, action) => {
         contractPrice: action.data
       }
     }
+  default: return state;
   }
 }
 

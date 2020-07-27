@@ -54,7 +54,7 @@ module.exports = {
                 ignoreUrls: true,
                 ignoreComments: true,
                 ignoreRegExpLiterals: true,
-                ignoreStrings: false,
+                ignoreStrings: true,
                 ignoreTemplateLiterals: false
             }
         ],

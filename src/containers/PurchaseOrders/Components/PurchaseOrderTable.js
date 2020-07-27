@@ -17,6 +17,8 @@ import {
   // useDispatch
 } from 'react-redux';
 
+import './PurchaseOrder.css'
+
 const {Option} = Select;
 
 const PurchaseOrderTable = memo(() => {
@@ -144,97 +146,100 @@ const PurchaseOrderTable = memo(() => {
   };
 
   return (
-    <Row style={{
-      marginTop: 50,
-      marginLeft: '20%',
-      marginRight: '20%'
-    }}
-    >
-      <div style={{display: 'flex',
-        alignItems: 'center'}}>
-        <h4>Requested On:</h4>
-        <div>
+    <div>
+      <Row style={{
+        marginTop: 20,
+        marginLeft: '20%',
+        marginRight: '20%'
+      }}
+      >
+        <div style={{display: 'flex',
+          alignItems: 'center'}}>
+          <h4>Requested On:</h4>
+          <div>
+            <DatePicker
+              disabled={params.monthYear}
+              allowClear
+              placeholder="Specific Day"
+              style={{
+                marginLeft: 15,
+                marginBottom: 10,
+                width: 130,
+                border: '0.5px solid black'
+              }}
+              onChange={onDateSelect}
+            />
+          </div>
+
           <DatePicker
-            disabled={params.monthYear}
+            disabled={params.dayMonthYear}
             allowClear
-            placeholder="Specific Day"
+            picker="month"
+            placeholder="Year/Month"
             style={{
-              marginLeft: 15,
+              marginLeft: 5,
               marginBottom: 10,
               width: 130,
               border: '0.5px solid black'
             }}
-            onChange={onDateSelect}
+            onChange={onMonthYearSelect}
           />
-        </div>
-
-        <DatePicker
-          disabled={params.dayMonthYear}
-          allowClear
-          picker="month"
-          placeholder="Year/Month"
-          style={{
-            marginLeft: 5,
-            marginBottom: 10,
-            width: 130,
-            border: '0.5px solid black'
-          }}
-          onChange={onMonthYearSelect}
-        />
-        <h4 style={{marginLeft: 110}}>Status</h4>
-        <Select
-          allowClear
-          style={{
-            marginLeft: 10,
-            marginBottom: 10,
-            width: 170,
-            border: '0.5px solid black'
-          }}
-          onChange={handleStatusChange}
-        >
-          <Option value="ORDERED">ORDERED</Option>
-          <Option value="PENDING">PENDING</Option>
-          <Option value="RECEIVED">RECEIVED</Option>
-        </Select>
-        <h4 style={{marginLeft: 20}}>Approved</h4>
-        <Select
-          allowClear
-          onChange={onApprovedChange}
-          style={{
-            marginLeft: 10,
-            marginBottom: 10,
-            width: 170,
-            border: '0.5px solid black'
-          }}
-        >
-          <Option value="APPROVED">APPROVED</Option>
-          <Option value="NOTAPPROVED">NOT APPROVED</Option>
-        </Select>
-
-        <Button
-          type="primary"
-          style={{marginLeft: 10,
-            marginBottom: 10}}
-          onClick={onSearch}
-        >
-                Search
-        </Button>
-
-      </div>
-      <div style={{border: '1px solid black'}}>
-        <Spin spinning={tableSpin}>
-          <Table
-            columns={columns}
-            // dataSource={purchaseRequestsList}
-            size="small"
-            rowKey="id"
-            pagination={{
-              pageSize: 10
+          <h4 style={{marginLeft: 110}}>Status</h4>
+          <Select
+            allowClear
+            style={{
+              marginLeft: 10,
+              marginBottom: 10,
+              width: 170,
+              border: '0.5px solid black'
             }}
-          />
-        </Spin>
-      </div>
-    </Row>
+            onChange={handleStatusChange}
+          >
+            <Option value="ORDERED">ORDERED</Option>
+            <Option value="PENDING">PENDING</Option>
+            <Option value="RECEIVED">RECEIVED</Option>
+          </Select>
+          <h4 style={{marginLeft: 20}}>Approved</h4>
+          <Select
+            allowClear
+            onChange={onApprovedChange}
+            style={{
+              marginLeft: 10,
+              marginBottom: 10,
+              width: 170,
+              border: '0.5px solid black'
+            }}
+          >
+            <Option value="APPROVED">APPROVED</Option>
+            <Option value="NOTAPPROVED">NOT APPROVED</Option>
+          </Select>
+
+          <Button
+            style={{marginLeft: 10,
+              backgroundColor: '#13407F',
+              color: 'white',
+              marginBottom: 10}}
+            onClick={onSearch}
+          >
+                Search
+          </Button>
+
+        </div>
+        <div style={{border: '1px solid black'}}>
+          <Spin spinning={tableSpin}>
+            <Table
+              columns={columns}
+              // dataSource={purchaseRequestsList}
+              size="small"
+              rowKey="id"
+              pagination={{
+                pageSize: 10
+              }}
+            />
+          </Spin>
+        </div>
+      </Row>
+    </div>
   )
 
 });

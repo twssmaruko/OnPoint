@@ -7,7 +7,8 @@ import {
   Button,
   List,
   Spin,
-  InputNumber
+  InputNumber,
+  message
 } from 'antd';
 import _ from 'lodash';
 
@@ -39,6 +40,13 @@ const PurchaseRequestForm = () => {
   };
 
   const addPurchaseRequest = () => {
+
+    if (modalSpin) {
+      console.log("still adding...")
+      return;
+    }
+
+
     const dateNow = new Date();
     // const totalPrice = ordersList.reduce((accumulator,
     //     current) => accumulator + current.price * current.quantity, 0);
@@ -63,12 +71,14 @@ const PurchaseRequestForm = () => {
   );
 
   const onSubmit = (value) => {
+
     const order = [
       {
         ...value,
         product: value.product.label
       }
     ];
+
 
     const newList = order.concat(ordersList);
     setListItems(newList.map((data) =>
@@ -102,6 +112,14 @@ const PurchaseRequestForm = () => {
     if (ordersList.length) {
       setOrdersList([]);
       setListItems([]);
+    }
+  }
+
+  const checkProduct = (value) => {
+    const found = ordersList.find((data) => data.product === value.label)
+    if (found) {
+      message.error(`Cannot have repeating products! ${value.label}`)
+      form.resetFields();
     }
   }
 
@@ -147,6 +165,7 @@ const PurchaseRequestForm = () => {
                 filterOption={false}
                 onSearch={debounceFetchProduct}
                 style={{width: 170}}
+                onSelect={checkProduct}
               >
                 {searchOptionList()}
               </Select>
