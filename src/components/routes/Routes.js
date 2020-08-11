@@ -23,13 +23,13 @@ const Projects = lazy(() => import('../../containers/Projects/Projects'))
 const Routes = () => {
   const routes =
     <Switch>
-      <Route path="/purchaseorders" exact render={(props) => <PurchaseOrders {...props}/>} />
-      <Route path="/purchaserequest" exact render={(props) => <PurchaseRequests {...props}/>} />
+      <Route path="/purchaseorders" exact render={(props) => <PurchaseOrders key="purchaseOrdersKey" {...props}/>} />
+      <Route path="/purchaserequest" exact render={(props) => <PurchaseRequests key="purchaseRequestsKey" {...props}/>} />
       <Route path="/auth" exact component={Auth} />
       <Route path="/vendors" exact render={(props) => <Vendors {...props}/>} />
-      <Route path="/projects" exact render={(props) => <Projects {...props}/>}/>
+      <Route path="/projects" exact render={(props) => <Projects key="projectKey" {...props}/>}/>
       <Route path="/" exact component={Homepage} />
-      <Route path="/products" exact render={(props) => <Products {...props}/>} />
+      <Route path="/products" exact render={(props) => <Products key="productsKey" {...props}/>} />
       <Redirect to="/" />
     </Switch>;
   return (

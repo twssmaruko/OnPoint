@@ -39,9 +39,9 @@ const store = createStore(rootReducer, composeEnhancers(
 ));
 
 const indexApp =
-  <Provider store={store}>
-    <HashRouter>
-      <App />
+  <Provider key ="provider" store={store}>
+    <HashRouter key="hashRouter">
+      <App key="App"/>
     </HashRouter>
   </Provider>;
 ReactDOM.render(

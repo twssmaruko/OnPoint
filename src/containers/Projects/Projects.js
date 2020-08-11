@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Row, Col,
   Button,
@@ -8,18 +8,32 @@ import {
 } from 'antd';
 import {SearchOutlined} from '@ant-design/icons';
 import ProjectForm from './ProjectForm';
+import {connect, useDispatch} from 'react-redux';
+import * as actions from '../../store/projects/index';
 
-const Projects = () => {
+const Projects = (props) => {
   const [modalVisible, setModalVisible] = useState(false);
   // const renderInput = () =>
   //     <div>
   //         <Input> Search </Input>
   //     </div>;
+
+  // const dispatcher = useDispatch();
+
+  // useEffect(() => {
+  //   dispatcher(actions.fetchProjects());
+  // }, [dispatcher]);
+
+  // useEffect(console.log(props.bdgt));
+
+
   const projectList = [
     {
+      key: 'projectKey',
       projectName: 'something',
       projectCode: 'GB003'
     }, {
+      key: 'anotherOne',
       projectName: 'something else',
       projectCode: 'lol'
     }
@@ -29,6 +43,7 @@ const Projects = () => {
     <div style={{marginTop: 15}}>
       <p style={{display: 'inline-block'}}>Project</p>
       <Button
+        key="buttonKey1"
         size="small"
         style={{width: 20,
           marginLeft: 30,
@@ -56,6 +71,7 @@ const Projects = () => {
     setModalVisible(true);
   };
   const handleOk = () => {
+    props.onProjectCreated(props.bdgt)
     setModalVisible(false);
   };
   const handleCancel = () => {
@@ -63,7 +79,7 @@ const Projects = () => {
   };
   return (
     <>
-      <Row>
+      <Row key="rowKey" >
         <Col offset={5} style={{marginTop: '40px'}}>
           <Row>
             <h1>
@@ -71,7 +87,9 @@ const Projects = () => {
             </h1>
           </Row>
           <Row>
-            <Button type="primary" onClick={setModal}>NEW PROJECT</Button>
+            <Button
+              key="buttonKey2"
+              type="primary" onClick={setModal}>NEW PROJECT</Button>
           </Row>
           <Row style={{marginTop: '30px'}}>
             <Col span={24}>
@@ -86,6 +104,7 @@ const Projects = () => {
         </Col>
       </Row>
       <Modal
+        key="projectModal"
         title="New Project"
         visible={modalVisible}
         onOk={handleOk}
@@ -94,10 +113,19 @@ const Projects = () => {
         okText="Save"
         cancelText="Cancel"
       >
-        <ProjectForm />
+        <ProjectForm key="projectKey"/>
       </Modal>
     </>
   );
 };
 
-export default Projects;
+const mapStateToProps = (state) => ({
+  bdgt: state.project.budget
+})
+
+const mapDispatchToProps = (dispatch) => ({
+  onProjectsFetched: () => dispatch(actions.fetchProjects()),
+  onProjectCreated: (projectData) => dispatch(actions.createProject(projectData))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Projects);

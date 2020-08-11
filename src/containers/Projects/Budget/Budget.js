@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-syntax */
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Row, Col,
   Form, Input, Button
@@ -9,8 +9,6 @@ import BudgetCost from './BudgetCost/BudgetCost';
 import * as actions from '../../../store/projects/index';
 
 const Budget = (props) => {
-
-  const formRef = useRef(null);
   const [budgetCostState, setBudgetCostState] = useState([]);
   // const [budgetComponentState, setBudgetComponentState] = useState({
   //   budget: {
@@ -21,31 +19,36 @@ const Budget = (props) => {
   //     budgetCost: []
   //   }
   // });
-
+  const budgetCostIndex = props.bdgt.budgetCostCount;
 
   const addCostClicked = () => {
-    const newBudgetCostState = budgetCostState.concat(<BudgetCost reference={formRef}/>);
+    props.onBudgetCostAdded();
+    const newBudgetCostState =
+    budgetCostState.concat(<BudgetCost
+      budgetCostIndex={budgetCostIndex}
+      key={"budgetCost" + props.bdgt.budgetCostCount}/>);
     setBudgetCostState(newBudgetCostState);
   };
 
-  const onChangeHandler = (e) => {
-    const inputValues = parseFloat(e).toFixed(2);
+  const onChangeHandler = (input) => {
+    const inputValues = parseFloat(input.split(',').join(''));
     // setBudgetComponentState(inputValues);
     props.onContractPriceUpdated(inputValues);
 
   };
+  const budgetPrice = parseFloat(props.bdgt.budgetPrice).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+  const profit = parseFloat(props.bdgt.profit).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+  const profitMargin = parseFloat(props.bdgt.profitMargin).toFixed(2).toString() + '%';
 
-  const testDataHandler = () => {
-    budgetCostState.forEach()
-  }
-
+  useEffect(() => console.log("BUDGET: "));
   useEffect(() => console.log(props.bdgt));
 
   return (
     <>
       <Form
         name="basic"
-        style={{marginRight: '0px'}}
+        style={{marginRight: '0px',
+          marginLeft: '10px'}}
       >
         <Form.Item
           name="contractPrice"
@@ -88,9 +91,10 @@ const Budget = (props) => {
             </Col>
             <Col flex="125px" style={{borderWidth: 'thin',
               borderStyle: 'solid'}}>
-              <Input disabled="true" style={{fontWeight: 'bold',
+              <Input disabled={true} style={{fontWeight: 'bold',
                 fontSize: 12,
-                textAlign: 'right'}} />
+                textAlign: 'right'}}
+              value={budgetPrice} />
             </Col>
             <Col flex="32.5px" />
           </Row>
@@ -111,9 +115,10 @@ const Budget = (props) => {
             </Col>
             <Col flex="125px" style={{borderWidth: 'thin',
               borderStyle: 'solid'}}>
-              <Input disabled="true" style={{fontWeight: 'bold',
+              <Input disabled={true} style={{fontWeight: 'bold',
                 fontSize: 12,
-                textAlign: 'right'}} />
+                textAlign: 'right'}}
+              value={profit} />
             </Col>
             <Col flex="32.5px" />
           </Row>
@@ -127,6 +132,7 @@ const Budget = (props) => {
           ]}
           style={{marginBottom: '20px',
             marginRight: '0px'}}
+          value={profitMargin}
         >
           <Row style={{width: '850px'}}>
             <Col flex="auto" style={{borderWidth: 'thin',
@@ -135,18 +141,18 @@ const Budget = (props) => {
             </Col>
             <Col flex="125px" style={{borderWidth: 'thin',
               borderStyle: 'solid'}}>
-              <Input disabled="true" style={{fontWeight: 'bold',
+              <Input disabled={true} style={{fontWeight: 'bold',
                 fontSize: 12,
-                textAlign: 'center'}} />
+                textAlign: 'center'}}
+              value={profitMargin} />
             </Col>
             <Col flex="25px">
               <Button onClick={addCostClicked} shape="circle" type="primary">+</Button>
             </Col>
           </Row>
-          {budgetCostState}
         </Form.Item>
-        <Button onClick={testDataHandler}>Test</Button>
       </Form>
+      {budgetCostState}
     </>
   );
 };
@@ -156,7 +162,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  onContractPriceUpdated: (contractPrice) => dispatch(actions.updateContractPrice(contractPrice))
+  onContractPriceUpdated: (contractPrice) => dispatch(actions.updateContractPrice(contractPrice)),
+  onBudgetCostAdded: () => dispatch(actions.addBudgetCost())
 });
 
 

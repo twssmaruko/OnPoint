@@ -16,7 +16,6 @@ const ProjectForm = () => {
         <h3 style={{color: '#512E0E'}}><Logo /></h3>
       </div>
       <div style={{
-        display: 'flex',
         justifyContent: 'center',
         marginTop: 20,
         width: '100%'
@@ -72,10 +71,8 @@ const ProjectForm = () => {
 
           </Form.Item>
           <h3 style={{textAlign: 'center'}}><b>BUDGET PROPOSAL</b></h3>
-          <Form.Item>
-            <Budget />
-          </Form.Item>
         </Form>
+        <Budget key="budgetKey" />
       </div>
     </div>
   );

@@ -18,7 +18,7 @@ const App = () => {
   return (
     <div className="App">
       <Header />
-      <Routes />
+      <Routes key="routes"/>
     </div>
   );
 };
