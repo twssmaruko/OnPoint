@@ -25,43 +25,55 @@ export const setVendors = (data) => ({
 
 export const getPurchaseRequests = (data) => async (dispatch) => {
   try {
-    dispatch(setShowSpin1(true));
-    const queryData = await API.graphql(graphqlOperation(searchPurchaseRequests, {
-      filter:
+    if (data) {
+      dispatch(setShowSpin1(true));
+      const queryData = await API.graphql(graphqlOperation(searchPurchaseRequests, {
+        filter:
           {
             purchaseRequestNo:
               {
                 matchPhrasePrefix: data
               }
           },
-      limit: 5
-    }));
-    const purchaseRequests = queryData.data.searchPurchaseRequests.items;
-    dispatch(setPurchaseRequests(purchaseRequests));
-    dispatch(setShowSpin1(false));
+        limit: 5
+      }));
+      const purchaseRequests = queryData.data.searchPurchaseRequests.items;
+      if (purchaseRequests.length) {
+        dispatch(setPurchaseRequests(purchaseRequests));
+        dispatch(setShowSpin1(false));
+      }
+    }
+
   } catch (e) {
     console.error(e)
     dispatch(setShowSpin1(false));
-    message.error('Error getting products');
+    message.error('Error getting Purchase Request!');
   }
 };
 
 export const getVendors = (data) => async (dispatch) => {
   try {
-    dispatch(setShowSpin2(true));
-    const queryData = await API.graphql(graphqlOperation(searchVendors, {
-      filter:
-          {
-            vendorName:
-              {
-                matchPhrasePrefix: data
-              }
-          },
-      limit: 5
-    }));
-    const vendors = queryData.data.searchVendors.items;
-    dispatch(setVendors(vendors));
-    dispatch(setShowSpin2(false));
+    if (data) {
+      dispatch(setShowSpin2(true));
+      const queryData = await API.graphql(graphqlOperation(searchVendors, {
+        filter:
+            {
+              vendorName:
+                {
+                  matchPhrasePrefix: data
+                }
+            },
+        limit: 5
+      }));
+      const vendors = queryData.data.searchVendors.items;
+      if (vendors.length) {
+        dispatch(setVendors(vendors));
+        dispatch(setShowSpin2(false));
+      }
+    }
+
+
+
   } catch (e) {
     console.error(e)
     dispatch(setShowSpin2(false));

@@ -1,272 +1,139 @@
 import React, {
-  useState
+  useState,
   // useEffect,
+  lazy,
+  useCallback,
+  Suspense
 } from 'react';
-import {
-  Row,
-  Button,
-  Select,
-  Table,
-  DatePicker,
-  Spin
-} from 'antd';
+import {Transition} from 'react-transition-group';
+import './PurchaseOrders.css'
 
-import {CloseCircleFilled, CheckCircleFilled, EditTwoTone} from '@ant-design/icons';
-import {
-  useSelector,
-  useDispatch
-} from 'react-redux';
-
-import moment from 'moment';
-import PurchaseOrderAddModal from './AddPurchaseOrderModal';
+import PurchaseOrderTable from './Components/PurchaseOrderTable'
+// import moment from 'moment';
+// import PurchaseOrderAddModal from './AddPurchaseOrderModal';
 
 // import { SearchOutlined } from '@ant-design/icons';
-import * as uiActions from '../../store/ui/actions/Actions';
 // import * as actions from '../../store/purchaserequest/actions/Actions';
-import TableButton from '../../components/button/OnpointButton';
+import Header from './Components/PurchaseOrderHeader';
 
-const PurchaseRequests = () => {
-  const {Option} = Select;
-  // const childRef = useRef();
-  const dispatcher = useDispatch();
-  const [params, setParams] = useState({});
-  const {
-    // purchaseRequestsList,
-    tableSpin
-  } = useSelector(({ui, purchaseRequests}) => ({
-    openAnotherModal: ui.openModal2,
-    purchaseRequestsList: purchaseRequests.purchaseRequests,
-    tableSpin: ui.showSpin3
-  }));
 
-  // useEffect(() => {
-  //   // dispatcher(actions.getMonthlyPurchaseRequests());
-  //   // dispatcher(actions.initSubscriptions());
-  //   // return () => {
-  //   //   dispatcher(actions.unsubscribe());
-  //   // };
-  // }, []);
+const PurchaseOrderAddModal = lazy(() => import('./Components/AddPurchaseOrder'));
 
-  const onDetailsClick = () => {
-    // dispatcher(actions.initiateUpdateModal(item.id));
-  };
 
-  const editButton = (item) =>
-    <div>
-      <TableButton
-        value={item}
-        type="primary"
-        icon={<EditTwoTone />}
-        onClick={onDetailsClick} />
-    </div>;
-  const approvedDisplay = (isApproved) =>
-    isApproved === 'APPROVED' ? <CheckCircleFilled style={{marginLeft: 20,
-      color: 'green'}} />
-      : <CloseCircleFilled style={{marginLeft: 20,
-        color: 'red'}} />;
-  const prNumberDisplay = (data) => `PR ${data.monthYear}-${data.count}`;
 
-  const columns = [
-    {
-      title: 'Details',
-      key: 'details',
-      width: 100,
-      render: editButton
+const PurchaseOrders = () => {
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [showTable, setShowTable] = useState(true)
+
+
+  const setShowPurchaseOrdersRender = useCallback(() => {
+    setShowTable(false)
+  }, [])
+
+  const setAddPurchaseOrderRender = useCallback(() => {
+    setShowAddForm(false)
+  },[])
+
+  const transitionStyles = {
+    entering: {
+      opacity: 1,
+      transform: 'translateX(0)',
+      transition: 'all 250ms ease-out'
     },
-    {
-      title: 'PR Number',
-      key: 'PurchaseRequestNo',
-      width: 250,
-      render: prNumberDisplay
+    entered: {opacity: 1},
+    exiting: {
+      opacity: 0,
+      transform: 'translateX(-100%)',
+      transition: 'all 250ms ease-out'
     },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      width: 250
+    exited: {
+      opacity: 0,
+      transform: 'translateX(-100%)'
+    }
+  };
+
+  const addFormStyle = {
+    entering: {
+      opacity: 1,
+      transform: 'translateX(0)',
+      transition: 'all 250ms ease-out'
     },
-    {
-      title: 'Approved',
-      dataIndex: 'isApproved',
-      key: 'isApproved',
-      width: 200,
-      render: approvedDisplay
+    entered: {
+      opacity: 1
     },
-    {
-      title: 'Requested On',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      width: 250,
-      render: (createdAt) => moment(createdAt).format('MMMM Do YYYY, h:mm:ss A')
+    exiting: {
+      opacity: 0,
+      transform: 'translateX(-100%)',
+      transition: 'all 250ms ease-out'
+    },
+    exited: {
+      opacity: 0,
+      transform: 'translateX(100%)'
+
     }
-
-  ];
-
-  const setModal = () => {
-    dispatcher(uiActions.setOpenModal2(true));
-    // dispatcher(uiActions.setOpenModal1(true));
   };
 
-  const onSearch = () => {
-    // dispatcher(actions.getPurchaseRequests(params));
-  };
+  const onTableExit = useCallback(() => {
+    setShowAddForm(true);
+  }, [])
 
-  const onDateSelect = (date) => {
-    if (!date) {
-      const newParams = params;
-      delete newParams.dayMonthYear;
-      setParams({...newParams});
-      return;
-    }
-    setParams({...params,
-      dayMonthYear: moment(date).format('DD-MM-YYYY')});
-  };
-
-  const onMonthYearSelect = (date) => {
-    if (!date) {
-      const newParams = params;
-      delete newParams.monthYear;
-      setParams({...newParams});
-      return;
-    }
-    setParams({...params,
-      monthYear: moment(date).format('MM-YYYY')});
-  };
-
-  const handleStatusChange = (value) => {
-    if (!value) {
-      const newParams = params;
-      delete newParams.status;
-      setParams({...newParams});
-      return;
-    }
-    setParams({...params,
-      status: value});
-  };
-
-  const onApprovedChange = (value) => {
-    if (!value) {
-      const newParams = params;
-      delete newParams.isApproved;
-      setParams({...newParams});
-      return;
-    }
-    setParams({...params,
-      isApproved: value});
-  };
+  const onAddExit = useCallback(() => {
+    setShowTable(true);
+  }, [])
 
   return (
     <div>
-      <Row style={{
-        display: 'flex',
-        flexDirection: 'column',
-        marginLeft: '20%',
-        marginTop: 20
-      }}
+      <Header
+        onClickShowPurchaseOrders={setShowPurchaseOrdersRender}
+        onClickAddProp={setAddPurchaseOrderRender}
+      />
+      <Transition
+        in={showAddForm}
+        timeout={{
+          enter: 250,
+          exit: 250
+        }}
+        onExited={onAddExit}
+        mountOnEnter
+        unmountOnExit
       >
-        <Row>
-          <h1>Purchase Orders</h1>
-        </Row>
-        <Row>
-          <Button type="primary" onClick={setModal}>
-            New Purchase Orders
-          </Button>
-        </Row>
-      </Row>
-      <Row style={{
-        marginTop: 50,
-        marginLeft: '20%',
-        marginRight: '20%'
-      }}
+        {
+          state =>
+            <div style={{
+              ...addFormStyle[state]
+            }}>
+              <Suspense fallback={<div style={{marginLeft: '20%'}}> Loading</div>}>
+                <PurchaseOrderAddModal/>
+              </Suspense>
+
+            </div>
+        }
+      </Transition>
+      <Transition
+        in={showTable}
+        // appear={true}
+        timeout={{
+          enter: 250,
+          exit: 250
+        }}
+        onExited={onTableExit}
+        mountOnEnter
+        unmountOnExit
+        // classNames="addPurchaseorder"
       >
-        <div style={{display: 'flex',
-          alignItems: 'center'}}>
-          <h4>Requested On:</h4>
-          <div>
-            <DatePicker
-              disabled={params.monthYear}
-              allowClear
-              placeholder="Specific Day"
-              style={{
-                marginLeft: 15,
-                marginBottom: 10,
-                width: 130,
-                border: '0.5px solid black'
-              }}
-              onChange={onDateSelect}
-            />
-          </div>
+        {
+          state =>
+            <div style={{
+              ...transitionStyles[state]
+            }}>
+              <PurchaseOrderTable />
+            </div>
+        }
 
-          <DatePicker
-            disabled={params.dayMonthYear}
-            allowClear
-            picker="month"
-            placeholder="Year/Month"
-            style={{
-              marginLeft: 5,
-              marginBottom: 10,
-              width: 130,
-              border: '0.5px solid black'
-            }}
-            onChange={onMonthYearSelect}
-          />
-          <h4 style={{marginLeft: 110}}>Status</h4>
-          <Select
-            allowClear
-            style={{
-              marginLeft: 10,
-              marginBottom: 10,
-              width: 170,
-              border: '0.5px solid black'
-            }}
-            onChange={handleStatusChange}
-          >
-            <Option value="ORDERED">ORDERED</Option>
-            <Option value="PENDING">PENDING</Option>
-            <Option value="RECEIVED">RECEIVED</Option>
-          </Select>
-          <h4 style={{marginLeft: 20}}>Approved</h4>
-          <Select
-            allowClear
-            onChange={onApprovedChange}
-            style={{
-              marginLeft: 10,
-              marginBottom: 10,
-              width: 170,
-              border: '0.5px solid black'
-            }}
-          >
-            <Option value="APPROVED">APPROVED</Option>
-            <Option value="NOTAPPROVED">NOT APPROVED</Option>
-          </Select>
-
-          <Button
-            type="primary"
-            style={{marginLeft: 10,
-              marginBottom: 10}}
-            onClick={onSearch}
-          >
-            Search
-          </Button>
-
-        </div>
-        <div style={{border: '1px solid black'}}>
-          <Spin spinning={tableSpin}>
-            <Table
-              columns={columns}
-              // dataSource={purchaseRequestsList}
-              size="small"
-              rowKey="id"
-              pagination={{
-                pageSize: 10
-              }}
-            />
-          </Spin>
-        </div>
-      </Row>
-      <PurchaseOrderAddModal />
+      </Transition>
+      {/* {addModal} */}
     </div>
   );
 };
 
-export default PurchaseRequests;
+export default PurchaseOrders;

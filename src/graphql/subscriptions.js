@@ -47,17 +47,10 @@ export const onCreatePurchaseRequest = /* GraphQL */ `
       purchaseRequestNo
       isApproved
       orders {
-        items {
-          id
-          purchaseRequestId
-          unit
-          quantity
-          price
-          category
-          createdAt
-          updatedAt
-        }
-        nextToken
+        product
+        unit
+        quantity
+        category
       }
       count
       monthYear
@@ -75,17 +68,10 @@ export const onUpdatePurchaseRequest = /* GraphQL */ `
       purchaseRequestNo
       isApproved
       orders {
-        items {
-          id
-          purchaseRequestId
-          unit
-          quantity
-          price
-          category
-          createdAt
-          updatedAt
-        }
-        nextToken
+        product
+        unit
+        quantity
+        category
       }
       count
       monthYear
@@ -103,85 +89,15 @@ export const onDeletePurchaseRequest = /* GraphQL */ `
       purchaseRequestNo
       isApproved
       orders {
-        items {
-          id
-          purchaseRequestId
-          unit
-          quantity
-          price
-          category
-          createdAt
-          updatedAt
-        }
-        nextToken
+        product
+        unit
+        quantity
+        category
       }
       count
       monthYear
       dayMonthYear
       status
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onCreateOrder = /* GraphQL */ `
-  subscription OnCreateOrder {
-    onCreateOrder {
-      id
-      purchaseRequestId
-      product {
-        id
-        name
-        description
-        createdAt
-        updatedAt
-      }
-      unit
-      quantity
-      price
-      category
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdateOrder = /* GraphQL */ `
-  subscription OnUpdateOrder {
-    onUpdateOrder {
-      id
-      purchaseRequestId
-      product {
-        id
-        name
-        description
-        createdAt
-        updatedAt
-      }
-      unit
-      quantity
-      price
-      category
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeleteOrder = /* GraphQL */ `
-  subscription OnDeleteOrder {
-    onDeleteOrder {
-      id
-      purchaseRequestId
-      product {
-        id
-        name
-        description
-        createdAt
-        updatedAt
-      }
-      unit
-      quantity
-      price
-      category
       createdAt
       updatedAt
     }

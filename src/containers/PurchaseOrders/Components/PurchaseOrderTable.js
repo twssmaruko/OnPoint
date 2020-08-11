@@ -1,60 +1,42 @@
-import React, {lazy, useState, useEffect} from 'react';
+import React, {useState, memo} from 'react';
+
 import {
   Row,
-  Button,
-  Select,
   Table,
   DatePicker,
   Spin,
-  message
+  Button,
+  Select
 } from 'antd';
-
-import {CloseCircleFilled, CheckCircleFilled, EditTwoTone} from '@ant-design/icons';
-import {useSelector, useDispatch, shallowEqual} from 'react-redux';
-
 import moment from 'moment';
-import _ from 'lodash';
+import {CloseCircleFilled, CheckCircleFilled, EditTwoTone} from '@ant-design/icons';
+import TableButton from '../../../components/button/OnpointButton';
 
-import * as uiActions from '../../store/ui/actions/Actions';
-import * as actions from '../../store/purchaserequest/actions/Actions';
-import TableButton from '../../components/button/OnpointButton';
+import {
+  useSelector, shallowEqual
+  // useDispatch
+} from 'react-redux';
 
+import './PurchaseOrder.css'
 
-const PurchaseRequestFormModal = lazy(() => import('./PurchaseRequestFormModal'));
-const UpdateModal = lazy(() => import ('./UpdateModal'));
+const {Option} = Select;
 
-const PurchaseRequests = () => {
-  const dispatcher = useDispatch();
-  const {Option} = Select;
-  // const childRef = useRef();
-  const [displayAddModal, setDisplayAddModal] = useState(null);
-  const [displayUpdateModal, setDisplayUpdateModal] = useState(null);
+const PurchaseOrderTable = memo(() => {
 
 
-  // const [purchaseRequestValue, setPurchaseRequestValue] = useState({orders: []});
-  const [params, setParams] = useState({});
   const {
-    purchaseRequestsList,
+    // purchaseRequestsList,
     tableSpin
-  } = useSelector(({ui, purchaseRequests}) => ({
-    purchaseRequestsList: purchaseRequests.purchaseRequests,
+  } = useSelector(({ui}) => ({
+    // openAnotherModal: ui.openModal2,
+    // purchaseRequestsList: purchaseRequests.purchaseRequests,
     tableSpin: ui.showSpin3
   }), shallowEqual);
 
-  useEffect(() => {
-    dispatcher(actions.getMonthlyPurchaseRequests());
-    dispatcher(actions.initSubscriptions());
-    return () => {
-      dispatcher(actions.unsubscribe());
-    };
-  }, [dispatcher]);
 
-  const onDetailsClick = (item) => {
-    // setPurchaseRequestValue(item);
-    setDisplayUpdateModal(<UpdateModal  purchaseRequestData={item}/>)
-    dispatcher(uiActions.setOpenModal2(true));
-    // dispatcher(actions.initiateUpdateModal(item.id));
-  };
+  console.log("hey")
+
+  const [params, setParams] = useState({});
 
   const editButton = (item) =>
     <div>
@@ -64,12 +46,15 @@ const PurchaseRequests = () => {
         icon={<EditTwoTone />}
         onClick={onDetailsClick} />
     </div>;
+
+
   const approvedDisplay = (isApproved) =>
     isApproved === 'APPROVED' ? <CheckCircleFilled style={{marginLeft: 20,
       color: 'green'}} />
       : <CloseCircleFilled style={{marginLeft: 20,
         color: 'red'}} />;
-  const prNumberDisplay = (data) => `PR ${data.purchaseRequestNo}`;
+  const prNumberDisplay = (data) => `PR ${data.monthYear}-${data.count}`;
+
 
   const columns = [
     {
@@ -104,26 +89,16 @@ const PurchaseRequests = () => {
       width: 250,
       render: (createdAt) => moment(createdAt).format('MMMM Do YYYY, h:mm:ss A')
     }
-
   ];
 
+  const onDetailsClick = () => {
+    // dispatcher(actions.initiateUpdateModal(item.id));
+  };
 
-  const setModal = () => {
-    if (displayAddModal === null) {
-      setDisplayAddModal(<PurchaseRequestFormModal />);
-    }
-    dispatcher(uiActions.setOpenModal1(true))
-  }
-
-  // dispatcher(uiActions.setOpenModal1(true));
 
 
   const onSearch = () => {
-    if (!_.isEmpty(params)) {
-      dispatcher(actions.getPurchaseRequests(params));
-      return;
-    }
-    message.info('Select options first');
+    // dispatcher(actions.getPurchaseRequests(params));
   };
 
   const onDateSelect = (date) => {
@@ -173,23 +148,7 @@ const PurchaseRequests = () => {
   return (
     <div>
       <Row style={{
-        display: 'flex',
-        flexDirection: 'column',
-        marginLeft: '20%',
-        marginTop: 20
-      }}
-      >
-        <Row>
-          <h1>Purchase Request</h1>
-        </Row>
-        <Row>
-          <Button type="primary" onClick={setModal}>
-            New Purchase Request
-          </Button>
-        </Row>
-      </Row>
-      <Row style={{
-        marginTop: 50,
+        marginTop: 20,
         marginLeft: '20%',
         marginRight: '20%'
       }}
@@ -256,12 +215,13 @@ const PurchaseRequests = () => {
           </Select>
 
           <Button
-            type="primary"
             style={{marginLeft: 10,
+              backgroundColor: '#13407F',
+              color: 'white',
               marginBottom: 10}}
             onClick={onSearch}
           >
-            Search
+                Search
           </Button>
 
         </div>
@@ -269,7 +229,7 @@ const PurchaseRequests = () => {
           <Spin spinning={tableSpin}>
             <Table
               columns={columns}
-              dataSource={purchaseRequestsList}
+              // dataSource={purchaseRequestsList}
               size="small"
               rowKey="id"
               pagination={{
@@ -279,11 +239,9 @@ const PurchaseRequests = () => {
           </Spin>
         </div>
       </Row>
-      {displayAddModal}
-      {displayUpdateModal}
-      {/* <Updatemodal initialValue={initialPurchaseRequest} /> */}
     </div>
-  );
-};
+  )
 
-export default PurchaseRequests;
+});
+
+export default PurchaseOrderTable;

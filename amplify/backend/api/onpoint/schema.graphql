@@ -31,7 +31,8 @@ type PurchaseRequest @model @searchable
   id: ID!
   purchaseRequestNo: String!
   isApproved: isApproved!
-  orders: [Order] @connection(keyName: "byPurchaseRequest", fields: ["id"])
+  # orders: [Order] @connection(keyName: "byPurchaseRequest", fields: ["id"])
+  orders: [PurchaseRequestOrder!] 
   count: Int!
   monthYear: String!
   dayMonthYear: String!
@@ -41,26 +42,36 @@ type PurchaseRequest @model @searchable
   updatedAt: AWSDateTime!
 }
 
- type Order @model  @searchable  
- @key(name: "byPurchaseRequest", fields: ["purchaseRequestId"])  {
-   id: ID!,
-   purchaseRequestId: ID!
-   product: Product! @connection
-   unit: String!
-   quantity: Int!
-   price: Float!
-   category: Category
-   createdAt: AWSDateTime!
-   updatedAt: AWSDateTime!
- }
+#  type Order @model  @searchable  
+#  @key(name: "byPurchaseRequest", fields: ["purchaseRequestId"])  {
+#    id: ID!,
+#    purchaseRequestId: ID!
+#    product: Product! @connection
+#    unit: String!
+#    quantity: Int!
+#   #  price: Float!
+#    category: Category #temporary not required
+#    createdAt: AWSDateTime!
+#    updatedAt: AWSDateTime!
+#  }
 
- type Product @model @searchable {
+ type Product @model @searchable 
+ {
   id: ID!
   name: String!
   description: String!
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
 }
+
+ type PurchaseRequestOrder {
+   product: String!
+   unit: String!
+   quantity: Float!
+   category: Category! 
+ }
+
+
 
  enum Status {
    ORDERED
