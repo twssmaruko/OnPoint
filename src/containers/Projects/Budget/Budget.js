@@ -20,13 +20,15 @@ const Budget = (props) => {
   //   }
   // });
   const budgetCostIndex = props.bdgt.budgetCostCount;
-
+  const {projectKey} = props;
   const addCostClicked = () => {
     props.onBudgetCostAdded();
     const newBudgetCostState =
     budgetCostState.concat(<BudgetCost
       budgetCostIndex={budgetCostIndex}
-      key={"budgetCost" + props.bdgt.budgetCostCount}/>);
+      key={projectKey + "-budgetCost-" + props.bdgt.budgetCostCount}
+      projectKey = {projectKey}
+    />);
     setBudgetCostState(newBudgetCostState);
   };
 
@@ -158,7 +160,7 @@ const Budget = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  bdgt: state.project.budget
+  bdgt: state.project.project.budget
 });
 
 const mapDispatchToProps = (dispatch) => ({

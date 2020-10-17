@@ -9,7 +9,7 @@ import * as actions from '../../../../store/projects/index';
 
 const BudgetCost = (props) => {
   const [subCategoryState, setSubCategoryState] = useState([]);
-  const {budgetCostIndex} = props;
+  const {budgetCostIndex, projectKey} = props;
   const [subCategoriesCounter, setSubCategoriesCounter] = useState(1);
   const [subCategoryStateItem, setSubCategoryStateItem] = useState(
     {
@@ -29,7 +29,8 @@ const BudgetCost = (props) => {
     const newSubCategory = subCategoryState.concat(<SubCategory
       budgetCostIndex = {budgetCostIndex}
       subCategoriesIndex = {subCategoriesCounter - 1}
-      key={subCategoryKey}/>);
+      key={projectKey + subCategoryKey}
+      projectKey = {projectKey}/>);
 
     setSubCategoryState(newSubCategory);
     const newCount = subCategoriesCounter + 1;
@@ -120,7 +121,7 @@ const BudgetCost = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  bdgt: state.project.budget
+  bdgt: state.project.project.budget
 });
 
 const mapDispatchToProps = (dispatch) => ({

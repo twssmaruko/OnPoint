@@ -11,7 +11,7 @@ const SubCategory = (props) => {
   const [subCategoryItemState, setSubCategoryItemState] = useState([]);
   const [subCategoryItemCounter, setSubCategoryItemCounter] = useState(1);
   const [stateFlag, setStateFlag] = useState([false]);
-  const {budgetCostIndex, subCategoriesIndex} = props;
+  const {budgetCostIndex, subCategoriesIndex, projectKey} = props;
   const index = {
     budgetCostIndex: budgetCostIndex,
     subCategoriesIndex: subCategoriesIndex
@@ -33,7 +33,8 @@ const SubCategory = (props) => {
     const newSubCategoryItem = subCategoryItemState.concat(<SubCategoryItem
       itemCount={subCategoryItemCounter}
       subCategoriesIndex={index}
-      key={subCategoryItemKey}
+      key={projectKey + subCategoryItemKey}
+      projectKey = {projectKey}
       stateFlag={stateFlag}
       changeState={setStateFlag}
     />);
@@ -154,7 +155,7 @@ const SubCategory = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  bdgt: state.project.budget.budgetCost
+  bdgt: state.project.project.budget.budgetCost
 });
 
 const mapDispatchToProps = (dispatch) => ({

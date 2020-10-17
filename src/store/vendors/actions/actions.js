@@ -23,26 +23,27 @@ export const fetchVendorsFail = (error) => ({
   error
 });
 
-export const fetchVendors = () => async (dispatch) => {
+export const fetchVendors = () => {
   // marco code
-  dispatch(fetchVendorsStart());
-  axios.get('/vendors.json')
-    .then((res) => {
-      const fetchedVendors = [];
-      for (const key in res.data) {
-        fetchedVendors.push({
-          ...res.data[key],
-          id: key
-        });
-      }
-      // eslint-disable-next-line no-console
-      console.log(fetchedVendors);
-      dispatch(fetchVendorsSuccess(fetchedVendors));
-    })
-    .catch((err) => {
-      dispatch(fetchVendorsFail(err));
-    });
-
+  return dispatch => {
+    dispatch(fetchVendorsStart());
+    axios.get('/vendors.json')
+      .then((res) => {
+        const fetchedVendors = [];
+        for (const key in res.data) {
+          fetchedVendors.push({
+            ...res.data[key],
+            id: key
+          });
+        }
+        // eslint-disable-next-line no-console
+        console.log(fetchedVendors);
+        dispatch(fetchVendorsSuccess(fetchedVendors));
+      })
+      .catch((err) => {
+        dispatch(fetchVendorsFail(err));
+      });
+  }
   // Jtaw code
   // try {
   //   dispatch(fetchVendorsStart());
@@ -70,19 +71,20 @@ export const newVendorFail = (error) => ({
   error
 });
 
-export const newVendor = (vendorData) => async (dispatch) => {
+export const newVendor = (vendorData) => {
   // Marco Code
-  dispatch(newVendorStart());
-  axios.post('/vendors.json', vendorData)
-    .then((response) => {
+  return dispatch => {
+    dispatch(newVendorStart());
+    axios.post('/vendors.json', vendorData)
+      .then((response) => {
       // eslint-disable-next-line no-console
-      console.log(response.data);
-      dispatch(newVendorSuccess(response.data.name, vendorData));
-    })
-    .catch((error) => {
-      dispatch(newVendorFail(error));
-    });
-
+        console.log(response.data);
+        dispatch(newVendorSuccess(response.data.name, vendorData));
+      })
+      .catch((error) => {
+        dispatch(newVendorFail(error));
+      });
+  }
   // Jtaw Code
   // try {
   //   const queryData = await API.graphql(graphqlOperation(createVendor, {input: vendorData}));

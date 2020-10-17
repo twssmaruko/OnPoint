@@ -14,7 +14,7 @@ const Header = (props) => {
     disableTable: false
   })
 
-  console.log("wew")
+  //console.log("wew")
 
   const {onClickShowPurchaseOrders, onClickAddProp} = props;
 

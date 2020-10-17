@@ -4,9 +4,7 @@ import {useSelector, useDispatch, shallowEqual} from 'react-redux';
 import * as uiActions from '../../../store/ui/actions/Actions';
 import _ from 'lodash'
 
-const PurchaseRequestModal = (props) => {
-
-  console.log("modal")
+const PurchaseRequestModal = () => {
 
   const {openModal} = useSelector(({ui}) => ({
     openModal: ui.openModal1
@@ -17,9 +15,7 @@ const PurchaseRequestModal = (props) => {
     dispatcher(uiActions.setOpenModal1(false))
   }
 
-  const {purchaseRequest} = props
-
-  console.log(purchaseRequest)
+  //const {purchaseRequest} = props
 
   //   const newOrders = purchaseRequest.orders.map((order) => `${order.quantity} ${order.unit} of ${order.product} `);
 

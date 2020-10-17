@@ -2,8 +2,9 @@ import {message} from 'antd';
 import {API, graphqlOperation} from 'aws-amplify';
 import moment from 'moment';
 import _ from 'lodash';
+import axios from '../../../axios-orders';
 import {
-  searchProducts,
+  //searchProducts,
   // getPurchaseRequest,
   purchaseRequestDayCreatedAt,
   purchaseRequestMonthCreatedAt,
@@ -22,7 +23,7 @@ import {
   setShowSpin1, setShowSpin2, setOpenModal1, setOpenModal2, setShowSpin3
 } from '../../ui/actions/Actions';
 import {
-  createPurchaseRequest,
+  // createPurchaseRequest,
   updatePurchaseRequest
 } from '../../../graphql/mutations';
 
@@ -55,28 +56,93 @@ export const setSubscriptions = (data) => ({
   type: actionTypes.SET_PURCHASEREQUESTSUBSCRIPTIONS,
   data
 });
+const addPurchaseRequestStart = () => ({
+  type: actionTypes.ADD_PURCHASEREQUEST_START
+})
+const addPurchaseRequestSuccess = (id, purchaseRequestData) => ({
+  type: actionTypes.ADD_PURCHASEREQUEST_SUCCESS,
+  purchaseRequestId: id,
+  purchaseRequestData
+})
 
-export const getProducts = (data) => async (dispatch) => {
-  try {
+const addPurchaseRequestFail = (error) => ({
+  type: actionTypes.ADD_PURCHASEREQUEST_FAIL,
+  error
+})
+
+const fetchPurchaseRequestsStart = () => ({
+  type: actionTypes.FETCH_PURCHASEREQUESTS_START
+})
+const fetchPurchaseRequestsSuccess = (purchaseRequests) => ({
+  type: actionTypes.FETCH_PURCHASEREQUESTS_SUCCESS,
+  purchaseRequests
+})
+const fetchPurchaseRequestsFail = (error) => ({
+  type: actionTypes.FETCH_PURCHASEREQUESTS_FAIL,
+  error
+})
+
+const updatePurchaseRequestStart = () => ({
+  type: actionTypes.UPDATE_PURCHASEREQUEST_START
+})
+
+const updatePurchaseRequestFail = (error) => ({
+  type: actionTypes.UPDATE_PURCHASEREQUEST_FAIL,
+  error
+})
+
+const updatePurchaseRequestSuccess = (id, purchaseRequestData) => ({
+  type: actionTypes.UPDATE_PURCHASEREQUEST_SUCCESS,
+  purchaseRequestId: id,
+  purchaseRequestData
+})
+
+const updatePurchaseRequestIdInStore = (purchaseRequestId) => ({
+  type: actionTypes.UPDATE_PURCHASEREQUESTID_IN_STORE,
+  purchaseRequestId
+})
+
+export const getProducts = () =>  {
+  return dispatch => {
     dispatch(setShowSpin1(true));
-    const queryData = await API.graphql(graphqlOperation(searchProducts, {
-      filter:
-        {
-          name:
-            {
-              matchPhrasePrefix: data
-            }
-        },
-      limit: 5
-    }));
-    const itemsInProducts = queryData.data.searchProducts.items;
-    dispatch(setProducts(itemsInProducts));
-    dispatch(setShowSpin1(false));
-  } catch (e) {
-    console.error(e);
-    dispatch(setShowSpin1(false));
-    message.error('Error getting products');
+    axios.get('/products.json')
+      .then((response) => {
+        const fetchedProducts = [];
+        for (const key in response.data) {
+          fetchedProducts.push({
+            ...response.data[key],
+            id: key
+          });
+        }
+        // console.log(fetchedProducts);
+        dispatch(setProducts(fetchedProducts));
+        dispatch(setShowSpin1(false));
+      })
+      .catch((error) => {
+        console.error(error);
+        dispatch(setShowSpin1(false));
+        message.error('Error fetching products');
+      })
   }
+  //try {}
+  // const queryData = await API.graphql(graphqlOperation(searchProducts, {
+  //   filter:
+  //     {
+  //       name:
+  //         {
+  //           matchPhrasePrefix: data
+  //         }
+  //     },
+  //   limit: 5
+  // }));
+  // const itemsInProducts = queryData.data.searchProducts.items;
+  // dispatch(setProducts(itemsInProducts));
+  // dispatch(setShowSpin1(false));
+  // } catch (e) {
+  //   console.error(e);
+  //   dispatch(setShowSpin1(false));
+  //   message.error('Error getting products');
+  // }
 };
 
 export const invokeUpdatePurchaseRequest = (data) => async (dispatch) => {
@@ -128,6 +194,37 @@ export const getMonthlyPurchaseRequests = () => async (dispatch) => {
     message.error('Cannot get latest List of  Purchase Requests');
   }
 };
+
+export const fetchPurchaseRequests = () => {
+  return dispatch => {
+    dispatch(fetchPurchaseRequestsStart());
+    dispatch(setShowSpin1(true));
+    axios.get('/purchaserequests.json')
+      .then((response) => {
+        const fetchedPurchaseRequests = [];
+        for (const key in response.data) {
+          fetchedPurchaseRequests.push({
+            ...response.data[key],
+            id: key
+          })
+        }
+        dispatch(setShowSpin1(false));
+        dispatch(fetchPurchaseRequestsSuccess(fetchedPurchaseRequests));
+      }).catch((error) => {
+        message.error('Error fetching purchase requests');
+        dispatch(setShowSpin1(false));
+        dispatch(fetchPurchaseRequestsFail(error));
+      })
+
+    axios.get('/currentPurchaseRequestId.json')
+      .then((response) => {
+        dispatch(updatePurchaseRequestIdInStore(response.data))
+      })
+      .catch(() => {
+        message.error('unable to update purchase request id');
+      })
+  }
+}
 
 export const getPurchaseRequests = (params) => async (dispatch) => {
   try {
@@ -240,56 +337,119 @@ export const getPurchaseRequests = (params) => async (dispatch) => {
   }
 };
 
-export const addPurchaseRequest = (data) => async (dispatch, getState) => {
-  try {
-    dispatch(setShowSpin2(true));
-    if (!data.orders.length) {
-      message.error('Cannot add purchase request without orders!');
-      dispatch(setShowSpin2(false));
-      return;
-    }
+// export const addPurchaseRequest = (purchaseRequestData) => (dispatch, getState) => {
+export const addPurchaseRequest = (purchaseRequestData) => (dispatch, getState) => {
 
-    // const body = {...data};
-    // delete body.orders;
-
-    const {purchaseRequestCount} = getState().purchaseRequests;
-
-    const count = purchaseRequestCount + 1;
-    const purchaseRequestNo = `${data.monthYear}-${count}`;
-
-
-    await API.graphql(graphqlOperation(createPurchaseRequest, {
-      input: {
-        ...data,
-        count,
-        purchaseRequestNo
-      }
-    }));
-
-    // const {id} = createdData.data.createPurchaseRequest;
-
-    // data.orders.forEach(async (order) => {
-    //   const {
-    //     price, product, quantity, unit
-    //   } = order;
-    //   const input = {
-    //     price,
-    //     orderProductId: product.id,
-    //     purchaseRequestId: id,
-    //     quantity,
-    //     unit
-    //   };
-    //   await API.graphql(graphqlOperation(createOrder, {input}));
-    // });
-    message.success('Purchase Request added succesfully!');
+  dispatch(setShowSpin2(true));
+  dispatch(addPurchaseRequestStart());
+  if (!purchaseRequestData.orders.length) {
+    message.error('Please create orders');
     dispatch(setShowSpin2(false));
-    dispatch(setOpenModal1(false));
-  } catch (e) {
-    console.error(e);
-    message.error('Adding Purchase Request failed!');
-    dispatch(setShowSpin1(false));
   }
+  // const {purchaseRequestCount} = getState().purchaseRequests;
+
+  // const count = purchaseRequestCount + 1;
+  // const purchaseRequestNo = `${purchaseRequestData.monthyear}-${count}`;
+  // console.log(purchaseRequestNo);
+  const count = getState().purchaseRequests.purchaseRequestIds + 1;
+  const purchaseRequestNo = purchaseRequestData.year.toString() + "-" + count;
+  const newPurchaseRequestData = {
+    ...purchaseRequestData,
+    purchaseRequestIds: count,
+    purchaseRequestNo: purchaseRequestNo
+  }
+  axios.post('/purchaserequests.json', newPurchaseRequestData)
+    .then((response) => {
+      dispatch(setShowSpin2(false));
+      dispatch(setOpenModal1(false));
+      dispatch(addPurchaseRequestSuccess(response.data.name, newPurchaseRequestData))
+      message.success('Purchase request created');
+    })
+    .catch((error) => {
+      dispatch(addPurchaseRequestFail(error))
+      dispatch(setShowSpin2(false));
+      dispatch(setOpenModal1(false));
+      message.error('Error creating purchase request!');
+    });
+
+  axios.put('/currentPurchaseRequestId.json', count)
+    .then(() => {
+      dispatch(updatePurchaseRequestIdInStore(count));
+    })
+    .catch(() => {
+      message.error('unable to update purchase request Id after adding');
+    })
+  // try {
+  //   dispatch(setShowSpin2(true));
+  //   if (!data.orders.length) {
+  //     message.error('Cannot add purchase request without orders!');
+  //     dispatch(setShowSpin2(false));
+  //     return;
+  //   }
+
+  //   // const body = {...data};
+  //   // delete body.orders;
+
+  //   const {purchaseRequestCount} = getState().purchaseRequests;
+
+  //   const count = purchaseRequestCount + 1;
+  // const purchaseRequestNo = `${data.monthYear}-${count}`;
+
+
+  //   await API.graphql(graphqlOperation(createPurchaseRequest, {
+  //     input: {
+  //       ...data,
+  //       count,
+  //       purchaseRequestNo
+  //     }
+  //   }));
+
+  //   // const {id} = createdData.data.createPurchaseRequest;
+
+  //   // data.orders.forEach(async (order) => {
+  //   //   const {
+  //   //     price, product, quantity, unit
+  //   //   } = order;
+  //   //   const input = {
+  //   //     price,
+  //   //     orderProductId: product.id,
+  //   //     purchaseRequestId: id,
+  //   //     quantity,
+  //   //     unit
+  //   //   };
+  //   //   await API.graphql(graphqlOperation(createOrder, {input}));
+  //   // });
+  //   message.success('Purchase Request added succesfully!');
+  //   dispatch(setShowSpin2(false));
+  //   dispatch(setOpenModal1(false));
+  // } catch (e) {
+  //   console.error(e);
+  //   message.error('Adding Purchase Request failed!');
+  //   dispatch(setShowSpin1(false));
+  // }
 };
+
+export const editPurchaseRequest = (purchaseRequestData) => {
+  return dispatch => {
+    dispatch(setShowSpin1(true));
+    dispatch(updatePurchaseRequestStart());
+    const prURL = 'purchaserequests/' + purchaseRequestData.id + '.json';
+    axios.put(prURL, purchaseRequestData)
+      .then(() => {
+        dispatch(updatePurchaseRequestSuccess(purchaseRequestData.id, purchaseRequestData));
+        message.success('Purchase request updated');
+        dispatch(setShowSpin1(false));
+        dispatch(setOpenModal1(false));
+      })
+      .catch((error) => {
+        message.error('Error updating purchase request');
+        dispatch(updatePurchaseRequestFail(error));
+        dispatch(setShowSpin1(false));
+        dispatch(setOpenModal2(false));
+        dispatch(setOpenModal1(false));
+      })
+  }
+}
 
 export const initSubscriptions = () => (dispatch, getState) => {
   try {

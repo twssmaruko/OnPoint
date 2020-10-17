@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Modal,
   Form,
@@ -10,7 +10,7 @@ import {
   InputNumber,
   message
 } from 'antd';
-import _ from 'lodash';
+// import _ from 'lodash';
 
 import moment from 'moment';
 
@@ -18,6 +18,7 @@ import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import * as actions from '../../store/purchaserequest/actions/Actions';
 import * as uiActions from '../../store/ui/actions/Actions';
 import OnPointButton from '../../components/button/OnpointButton';
+//import PurchaseRequests from './PurchaseRequests';
 
 const {Option} = Select;
 
@@ -25,19 +26,24 @@ const PurchaseRequestForm = () => {
   const [form] = Form.useForm();
   const [ordersList, setOrdersList] = useState([]);
   const [listItems, setListItems] = useState([]);
+  const [orderId, setOrderId] = useState(1);
   const dispatcher = useDispatch();
+  useEffect(() => {
+    dispatcher(actions.getProducts());
+  }, [dispatcher]);
   const {
     productsList, showSpin, openModal, modalSpin
-  } = useSelector(({ui, products}) => ({
+  } = useSelector(({ui, products, purchaseRequests}) => ({
     modalSpin: ui.showSpin2,
     openModal: ui.openModal1,
+    prNo: purchaseRequests.purchaseRequestCount,
     showSpin: ui.showSpin1,
     productsList: products.products
   }), shallowEqual);
 
-  const fetchProduct = (value) => {
-    dispatcher(actions.getProducts(value));
-  };
+  // const fetchProduct = () => {
+  //   dispatcher(actions.getProducts());
+  // };
 
   const addPurchaseRequest = () => {
 
@@ -45,25 +51,22 @@ const PurchaseRequestForm = () => {
       console.log("still adding...")
       return;
     }
-
-
     const dateNow = new Date();
     // const totalPrice = ordersList.reduce((accumulator,
     //     current) => accumulator + current.price * current.quantity, 0);
     const prData = {
       status: 'PENDING',
       isApproved: 'NOTAPPROVED',
-      monthYear: moment(dateNow).format('MM-YYYY'),
-      dayMonthYear: moment(dateNow).format('DD-MM-YYYY'),
+      year: dateNow.getFullYear(),
+      //dayMonthYear: moment(dateNow).format('DD-MM-YYYY'),
+      dayMonthYear: moment(dateNow, "DD-MM-YYYY"),
       // totalPrice,
       orders: ordersList
     };
 
     dispatcher(actions.addPurchaseRequest(prData));
   };
-
-  const debounceFetchProduct = _.debounce(fetchProduct, 1000);
-
+  // const debounceFetchProduct = _.debounce(fetchProduct, 1000);
   const searchOptionList = () => productsList.map((product) =>
     <Option key={product.id}>
       {product.name}
@@ -71,14 +74,17 @@ const PurchaseRequestForm = () => {
   );
 
   const onSubmit = (value) => {
-
+    let count = orderId;
     const order = [
       {
         ...value,
-        product: value.product.label
+        product: value.product.label,
+        quantityLeft: value.quantity,
+        id: count
       }
     ];
-
+    count += 1;
+    setOrderId(count);
 
     const newList = order.concat(ordersList);
     setListItems(newList.map((data) =>
@@ -163,7 +169,7 @@ const PurchaseRequestForm = () => {
                 placeholder="Select products"
                 notFoundContent={<Spin spinning={showSpin} />}
                 filterOption={false}
-                onSearch={debounceFetchProduct}
+                // onSearch={fetchProduct}
                 style={{width: 170}}
                 onSelect={checkProduct}
               >
@@ -206,22 +212,6 @@ const PurchaseRequestForm = () => {
             >
               <InputNumber style={{width: 170}} />
             </Form.Item> */}
-            <Form.Item
-              name="category"
-              label="Category"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input Category!'}
-              ]}
-            >
-              <Select  style={{width: 170}} >
-                <Option value="CATEGORY1">CATEGORY1</Option>
-                <Option value="CATEGORY2">CATEGORY2</Option>
-                <Option value="CATEGORY3">CATEGORY3</Option>
-              </Select>
-              {/* <InputNumber style={{width: 170}} /> */}
-            </Form.Item>
             <Form.Item style={{marginLeft: 80}}>
               <Button type="primary" htmlType="submit">
                             Add Order

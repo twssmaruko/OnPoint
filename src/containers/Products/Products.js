@@ -33,10 +33,10 @@ const Products = () => {
 
   // next line is componentwillmount hooks version, where you get the products para ishow sa table
   useEffect(() => {
-    dispatcher(actions.getProducts());
-    dispatcher(actions.initSubscriptions());
+    dispatcher(actions.fetchProducts());
+    //  dispatcher(actions.initSubscriptions());
     return () => {
-      dispatcher(actions.unsubscribe());
+      //   dispatcher(actions.unsubscribe());
     };
   }, [dispatcher]);
 
@@ -47,8 +47,8 @@ const Products = () => {
   };
 
   const deleteItem = (item) => {
-    const {id} = item;
-    dispatcher(actions.removeProduct(id));
+    // const {id} = item;
+    dispatcher(actions.removeProduct(item));
   };
 
   const editButton = (item) =>

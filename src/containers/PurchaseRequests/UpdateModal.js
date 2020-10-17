@@ -27,8 +27,9 @@ const Updatemodal = (props) => {
 
   const {orders} = purchaseRequestData;
 
-  const ordersItems = orders.map((item) => <div key={item.product}>{`-- ${item.quantity} 
-    ${item.unit} of ${item.product}` }</div>);
+  const ordersItems = orders.map((item) => <div key={item.product}>{`-- ${item.quantity - item.quantityLeft}
+   out of ${item.quantity} 
+    ${item.unit} of ${item.product} ordered` }</div>);
 
   const setStatus = (value) => {
     setUpdateParams({...updateParams,
@@ -47,9 +48,11 @@ const Updatemodal = (props) => {
   const invokeUpdate = () => {
     const newData = {...purchaseRequestData,
       ...updateParams};
-    delete newData.orders;
-    delete newData.updatedAt;
-    dispatcher(actions.invokeUpdatePurchaseRequest(newData));
+      //console.log(newData);
+    //delete newData.orders;
+    //delete newData.updatedAt;
+    dispatcher(actions.editPurchaseRequest(newData));
+    dispatcher(uiActions.setOpenModal2(false));
   };
 
   const confirm = () => {

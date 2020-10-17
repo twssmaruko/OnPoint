@@ -1,4 +1,4 @@
-import React, {useState, memo} from 'react';
+import React, {useState, memo, useEffect} from 'react';
 
 import {
   Row,
@@ -11,9 +11,12 @@ import {
 import moment from 'moment';
 import {CloseCircleFilled, CheckCircleFilled, EditTwoTone} from '@ant-design/icons';
 import TableButton from '../../../components/button/OnpointButton';
+import PurchaseOrderDetails from './PurchaseOrderDetails';
+import * as uiActions from '../../../store/ui/actions/Actions';
+import * as actions from '../../../store/purchaseorders/actions/Actions';
 
 import {
-  useSelector, shallowEqual
+  useSelector, shallowEqual, useDispatch
   // useDispatch
 } from 'react-redux';
 
@@ -23,28 +26,36 @@ const {Option} = Select;
 
 const PurchaseOrderTable = memo(() => {
 
-
+  const dispatcher = useDispatch();
+  useEffect(() => {
+    dispatcher(actions.fetchPurchaseOrders())
+  }, [dispatcher])
   const {
     // purchaseRequestsList,
-    tableSpin
-  } = useSelector(({ui}) => ({
+    tableSpin,
+    purchaseOrders
+    // ordersReceived
+  } = useSelector(({ui, purchaseOrder}) => ({
     // openAnotherModal: ui.openModal2,
     // purchaseRequestsList: purchaseRequests.purchaseRequests,
-    tableSpin: ui.showSpin3
+    tableSpin: ui.showSpin3,
+    purchaseOrders: purchaseOrder.purchaseOrders,
+    ordersReceived: purchaseOrder.ordersReceived
   }), shallowEqual);
 
 
-  console.log("hey")
+  // console.log("hey")
 
   const [params, setParams] = useState({});
-
+  const [, setCurrentPurchaseOrder] = useState({});
+  const [purchaseOrderDetailsModal , setPurchaseOrderDetailsModal] = useState(null);
   const editButton = (item) =>
     <div>
       <TableButton
         value={item}
         type="primary"
         icon={<EditTwoTone />}
-        onClick={onDetailsClick} />
+        onClick={(e) => onDetailsClick(e)} />
     </div>;
 
 
@@ -53,7 +64,7 @@ const PurchaseOrderTable = memo(() => {
       color: 'green'}} />
       : <CloseCircleFilled style={{marginLeft: 20,
         color: 'red'}} />;
-  const prNumberDisplay = (data) => `PR ${data.monthYear}-${data.count}`;
+  const poNumberDisplay = (data) => `${data.purchaseOrderNo}`;
 
 
   const columns = [
@@ -64,10 +75,12 @@ const PurchaseOrderTable = memo(() => {
       render: editButton
     },
     {
-      title: 'PR Number',
-      key: 'PurchaseRequestNo',
+      title: 'PO Number',
+      key: 'purchaseOrderNo',
       width: 250,
-      render: prNumberDisplay
+      defaultSortOrder: 'ascend',
+      sorter: (a,b) => b.purchaseOrderId - a.purchaseOrderId,
+      render: poNumberDisplay
     },
     {
       title: 'Status',
@@ -84,15 +97,18 @@ const PurchaseOrderTable = memo(() => {
     },
     {
       title: 'Requested On',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      width: 250,
-      render: (createdAt) => moment(createdAt).format('MMMM Do YYYY, h:mm:ss A')
+      dataIndex: 'dateCreated',
+      key: 'dateCreated',
+      width: 250
+      //render: (dateCreated) => moment(dateCreated).format('MMMM Do YYYY, h:mm:ss A')
     }
   ];
 
-  const onDetailsClick = () => {
+  const onDetailsClick = (e) => {
     // dispatcher(actions.initiateUpdateModal(item.id));
+    setCurrentPurchaseOrder(e);
+    dispatcher(uiActions.setOpenModal1(true));
+    setPurchaseOrderDetailsModal(<PurchaseOrderDetails purchaseOrder={e} initOrders={[]}/>)
   };
 
 
@@ -229,7 +245,7 @@ const PurchaseOrderTable = memo(() => {
           <Spin spinning={tableSpin}>
             <Table
               columns={columns}
-              // dataSource={purchaseRequestsList}
+              dataSource={purchaseOrders}
               size="small"
               rowKey="id"
               pagination={{
@@ -239,6 +255,7 @@ const PurchaseOrderTable = memo(() => {
           </Spin>
         </div>
       </Row>
+      {purchaseOrderDetailsModal}
     </div>
   )
 

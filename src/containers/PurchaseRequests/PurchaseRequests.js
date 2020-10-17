@@ -9,7 +9,7 @@ import {
   message
 } from 'antd';
 
-import {CloseCircleFilled, CheckCircleFilled, EditTwoTone} from '@ant-design/icons';
+import {CloseCircleFilled, CheckCircleFilled, EditTwoTone, ExclamationCircleOutlined} from '@ant-design/icons';
 import {useSelector, useDispatch, shallowEqual} from 'react-redux';
 
 import moment from 'moment';
@@ -42,11 +42,12 @@ const PurchaseRequests = () => {
   }), shallowEqual);
 
   useEffect(() => {
-    dispatcher(actions.getMonthlyPurchaseRequests());
-    dispatcher(actions.initSubscriptions());
-    return () => {
-      dispatcher(actions.unsubscribe());
-    };
+    // dispatcher(actions.getMonthlyPurchaseRequests());
+    dispatcher(actions.fetchPurchaseRequests());
+    // dispatcher(actions.initSubscriptions());
+    // return () => {
+    //   dispatcher(actions.unsubscribe());
+    // };
   }, [dispatcher]);
 
   const onDetailsClick = (item) => {
@@ -69,6 +70,11 @@ const PurchaseRequests = () => {
       color: 'green'}} />
       : <CloseCircleFilled style={{marginLeft: 20,
         color: 'red'}} />;
+  const prStatusDisplay = (status) =>
+    status === 'PENDING' ? <div>PENDING<ExclamationCircleOutlined style={{marginLeft: 20,
+      color: 'orange'}} /></div>: <div> ORDERED
+      <CheckCircleFilled style={{marginLeft: 20,
+        color: 'green'}} /></div>
   const prNumberDisplay = (data) => `PR ${data.purchaseRequestNo}`;
 
   const columns = [
@@ -82,26 +88,32 @@ const PurchaseRequests = () => {
       title: 'PR Number',
       key: 'PurchaseRequestNo',
       width: 250,
+      defaultSortOrder: 'ascend',
+      sorter: (a,b) => b.purchaseRequestIds - a.purchaseRequestIds,
       render: prNumberDisplay
     },
     {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      width: 250
+      width: 250,
+      render: prStatusDisplay
     },
     {
       title: 'Approved',
       dataIndex: 'isApproved',
       key: 'isApproved',
       width: 200,
+      sorter: (a,b) => b.isApproved.length - a.isApproved.length,
       render: approvedDisplay
     },
     {
       title: 'Requested On',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
+      dataIndex: 'dayMonthYear',
+      key: 'dayMonthYear',
       width: 250,
+      // defaultSortOrder: 'ascend',
+      // sorter: (a,b) => b.isApproved.length - a.dayMonthYear.length,
       render: (createdAt) => moment(createdAt).format('MMMM Do YYYY, h:mm:ss A')
     }
 
@@ -120,7 +132,7 @@ const PurchaseRequests = () => {
 
   const onSearch = () => {
     if (!_.isEmpty(params)) {
-      dispatcher(actions.getPurchaseRequests(params));
+      // dispatcher(actions.fetchPurchaseRequests(params));
       return;
     }
     message.info('Select options first');

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {connect, useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {
   Row, Col,
   Button,
@@ -12,20 +12,18 @@ import {SearchOutlined} from '@ant-design/icons';
 import VendorList from './VendorList';
 import * as actions from '../../store/vendors/index';
 
-const Vendors = (props) => {
+const Vendors = () => {
   const [modalVisible, setModalVisible] = useState(false);
-
-  // const renderInput = () => {
-  //     console.log('eh');
-  // };
-
-  // const [projectState, setProjectState] = useState([]);
   const dispatcher = useDispatch();
   const formRef = useRef(null);
 
   useEffect(() => {
     dispatcher(actions.fetchVendors());
   }, [dispatcher]);
+
+  const {vndr} = useSelector(({vendor}) => ({
+    vndr: vendor.vendors
+  }));
 
   const title =
     <div style={{marginTop: 15}}>
@@ -81,7 +79,7 @@ const Vendors = (props) => {
     // eslint-disable-next-line no-console
     console.log('Success', values);
 
-    props.onVendorAdded(values);
+    dispatcher(actions.newVendor(values));
     setModalVisible(false);
   };
 
@@ -107,7 +105,7 @@ const Vendors = (props) => {
               <Table
                 columns={columns}
                 // eslint-disable-next-line react/destructuring-assignment
-                dataSource={props.vndr}
+                dataSource={vndr}
                 size="large"
                 rowKey="id"
               />
@@ -117,6 +115,7 @@ const Vendors = (props) => {
       </Row>
       <Modal
         title="Add Vendor"
+        maskClosable = {false}
         visible={modalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -130,13 +129,4 @@ const Vendors = (props) => {
   );
 };
 
-const mapStateToProps = (state) => ({
-  vndr: state.vendor.vendors
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  onVendorAdded: (vendor) => dispatch(actions.newVendor(vendor)),
-  onVendorsFetched: () => dispatch(actions.fetchVendors())
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Vendors);
+export default Vendors;

@@ -10,5 +10,11 @@ export {
   updateSubCategoryItemName,
   updateSubCategoryItemCost,
   fetchProjects,
-  createProject
+  createProject,
+  updateClient,
+  updateLocation,
+  updateProjectName,
+  updateProjectCode,
+  setProjectId,
+  fetchSelectedProject
 } from './actions/actions'

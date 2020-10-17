@@ -76,7 +76,7 @@ const SubCategoryItem = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-  bdgt: state.project.budget.budgetCost
+  bdgt: state.project.project.budget.budgetCost
 });
 
 const mapDispatchToProps = (dispatch) => ({
