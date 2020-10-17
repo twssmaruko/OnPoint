@@ -6,7 +6,7 @@ const Homepage = () =>
       On Point Construction
     </h1>
     <h3>
-      v0.3
+      v0.3.0.1
     </h3>
   </div>;
 export default Homepage;
