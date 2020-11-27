@@ -4,6 +4,7 @@ import {updateObject} from '../../utility';
 const initialState = {
   products: [],
   purchaseRequests: [],
+  purchaseRequestsPending: [],
   purchaseRequestCount: 0,
   purchaseRequestIds: 0,
   purchaseRequestData: {orders: {items: []}},
@@ -51,7 +52,8 @@ const addPurchaseRequestSuccess = (state, action) => {
   return updateObject(state, {
     loading: false,
     purchaseRequestCount: newCount,
-    purchaseRequests: state.purchaseRequests.concat(newPurchaseRequest)
+    purchaseRequests: state.purchaseRequests.concat(newPurchaseRequest),
+    purchaseRequestsPending: state.purchaseRequestsPending.concat(newPurchaseRequest)
   })
 }
 
@@ -59,6 +61,7 @@ const fetchPurchaseRequestsStart = (state) => updateObject(state, {loading: true
 const fetchPurchaseRequestsSuccess = (state, action) => updateObject(state,
   {loading: false,
     purchaseRequests: action.purchaseRequests,
+    purchaseRequestsPending: action.purchaseRequestsPending,
     purchaseRequestCount: action.purchaseRequests.length});
 
 const fetchPurchaseRequestsFail = (state) => updateObject(state, {loading: false})
@@ -89,6 +92,10 @@ const updatePurchaseRequestIdInStore = (state, action) => {
   return updateObject(state, {purchaseRequestIds: purchaseRequestId})
 };
 
+const updatePurchaseRequestNumber = (state, action) =>
+  updateObject(state, {purchaseRequestIds: action.data});
+
+
 
 const purchaseRequestReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -107,6 +114,7 @@ const purchaseRequestReducer = (state = initialState, action) => {
   case actions.UPDATE_PURCHASEREQUEST_START: return updatePurchaseRequestStart(state)
   case actions.UPDATE_PURCHASEREQUEST_SUCCESS: return updatePurchaseRequestSuccess(state, action)
   case actions.UPDATE_PURCHASEREQUEST_FAIL: return updatePurchaseRequestFail(state)
+  case actions.UPDATE_PURCHASEREQUEST_NUMBER: return updatePurchaseRequestNumber(state, action)
   case actions.UPDATE_PURCHASEREQUESTID_IN_STORE:
     return updatePurchaseRequestIdInStore(state, action)
   default:

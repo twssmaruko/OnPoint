@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {
-  Row, Select, Switch, Modal, message
+  Row, Switch, Modal, message, Col, Input
   // Spin,
 } from 'antd';
 import {AlertTwoTone} from '@ant-design/icons';
@@ -11,7 +11,7 @@ import * as actions from '../../store/purchaserequest/actions/Actions';
 
 const Updatemodal = (props) => {
   const dispatcher = useDispatch();
-  const {Option} = Select;
+  //const {Option} = Select;
   const {purchaseRequestData} = props;
   const {
     // purchaseRequestData,
@@ -23,18 +23,51 @@ const Updatemodal = (props) => {
     openAnotherModal: ui.openModal2
   }));
 
+  useEffect(() => {
+    // console.log('purchaseRequestData: ', purchaseRequestData);
+  }, [purchaseRequestData])
+
+  const [borderVisible, setBorderVisible] = useState(false);
   const [updateParams, setUpdateParams] = useState({ });
 
   const {orders} = purchaseRequestData;
 
-  const ordersItems = orders.map((item) => <div key={item.product}>{`-- ${item.quantity - item.quantityLeft}
-   out of ${item.quantity} 
-    ${item.unit} of ${item.product} ordered` }</div>);
+  const onMouseOver = () => {
+    setBorderVisible(true);
+  }
 
-  const setStatus = (value) => {
-    setUpdateParams({...updateParams,
-      status: value});
-  };
+  const onMouseLeaver = () => {
+    setBorderVisible(false);
+  }
+
+  const ordersItems = orders.map((item) =>
+    <Row key={item.product}>
+      <Col span={11}>
+        <Input.TextArea
+          onMouseEnter={onMouseOver}
+          onMouseLeave={onMouseLeaver}
+          bordered= {borderVisible}
+          autoSize={{minRows: 1,
+            maxRows: 6}}
+          defaultValue={item.product}/>
+      </Col>
+      <Col style={{color: 'white'}}>
+      _</Col>
+      <Col span={5}>
+        {item.quantity - item.quantityLeft} / {item.quantity}
+      </Col>
+      <Col span={3}>
+        {item.unit}
+      </Col>
+      <Col span={4}>
+      Ordered
+      </Col>
+    </Row>);
+
+  // const setStatus = (value) => {
+  //   setUpdateParams({...updateParams,
+  //     status: value});
+  // };
 
   const setApproved = (value) => {
     setUpdateParams({...updateParams,
@@ -105,7 +138,7 @@ const Updatemodal = (props) => {
           </div> */}
         <div style={{marginTop: -20}}>
           <h3>Orders:</h3>
-          <div style={{border: '1px solid #D3D3D3'}}>
+          <div>
             <div style={{margin: '2%',
               color: 'black'}}>
               {ordersItems}
@@ -120,17 +153,7 @@ const Updatemodal = (props) => {
                 </div> */}
         <>
           <Row style={{marginTop: 20}}>
-            <h3>Status:</h3>
-            <Select
-              defaultValue={purchaseRequestData.status}
-              style={{marginLeft: 10,
-                width: 170}}
-              onChange={setStatus}
-            >
-              <Option value="ORDERED">ORDERED</Option>
-              <Option value="PENDING">PENDING</Option>
-              <Option value="RECEIVED">RECEIVED</Option>
-            </Select>
+            <h3>Status:  {purchaseRequestData.status}</h3>
           </Row>
           <Row style={{marginTop: 10}}>
             <h3>Approval:</h3>

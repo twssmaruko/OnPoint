@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {Row, Col, Switch, Modal, Spin} from 'antd';
+import React, {useState, useEffect} from 'react';
+import {Row, Col, Switch, Modal, Spin, Select} from 'antd';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
 import Logo from './../../../assets/images/Logo.png';
 import * as actions from '../../../store/purchaseorders/actions/Actions';
@@ -11,21 +11,26 @@ const PurchaseOrderDetails = (props) => {
 
   const [ordersReceived, setOrdersReceived] = useState([]);
   const [loadingFlag, setLoadingFlag] = useState(false);
-
+  const [projectCategories, setProjectCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const {Option} = Select;
   const dispatcher = useDispatch();
 
-  // useEffect(() => {
-  //   setOrdersReceived(initOrders)
-  //   console.log(purchaseOrder);
-  // }, [initOrders]);
 
   const {
     openModal,
-    showSpin
-  } = useSelector(({ui}) => ({
+    showSpin,
+    project
+  } = useSelector(({ui, purchaseOrder}) => ({
     openModal: ui.openModal1,
-    showSpin: ui.showSpin1
+    showSpin: ui.showSpin1,
+    project: purchaseOrder.project
   }), shallowEqual);
+
+  useEffect(() => {
+    dispatcher(actions.fetchProjectForPurchaseOrder(purchaseOrder.project))
+    setProjectCategories([]);
+  }, [dispatcher])
 
   const onChecked = (e, checkbox) => {
     const orders = ordersReceived;
@@ -34,7 +39,7 @@ const PurchaseOrderDetails = (props) => {
       const newOrders = orders.filter((result) =>
         result.product !== e.product || e.didReceive === true);
       newOrders.push({
-        category: e.category,
+        category: selectedCategory,
         didReceive: e.didReceive,
         id: e.id,
         itemTotal: e.itemTotal,
@@ -42,7 +47,6 @@ const PurchaseOrderDetails = (props) => {
         quantity: e.quantity,
         unit: e.unit,
         unitPrice: e.unitPrice,
-        idLink: purchaseOrder.id,
         purchaseOrderNo: purchaseOrder.purchaseOrderNo,
         projectCode: purchaseOrder.project
       })
@@ -56,7 +60,8 @@ const PurchaseOrderDetails = (props) => {
   }
 
   const onOk = () => {
-    dispatcher(actions.setOrdersReceived(ordersReceived));
+    dispatcher(actions.setOrdersReceived(purchaseOrder.orders, ordersReceived, purchaseOrder.id));
+
     setOrdersReceived([]);
     // dispatcher(uiActions.setOpenModal1(false))
   }
@@ -64,6 +69,46 @@ const PurchaseOrderDetails = (props) => {
   const onCancel = () => {
     setOrdersReceived([]);
     dispatcher(uiActions.setOpenModal1(false))
+  }
+
+  const showedCategories = () => {
+    if (projectCategories === null) {
+      return <Option key = "0" value = "0">
+        Please select a Project
+      </Option>
+    }
+    return projectCategories.map((e) =>
+      <Option key={'category-' + e} value={e}>
+        {e}
+      </Option>
+    ).concat(<Option key="Not Specified">Not Specified</Option>);
+  }
+
+  const onSelectClick = () => {
+    const categories = [];
+
+    for (const budgetCost in project.budget.budgetCost) {
+      for (const subCategories in project.budget.budgetCost[budgetCost].subCategories) {
+        for (const subCategoryItems in project.budget
+          .budgetCost[budgetCost]
+          .subCategories[subCategories]
+          .subCategoryItem) {
+
+          const newCategories = project.budget.budgetCost[budgetCost].itemCode
+          + '.' + project.budget.budgetCost[budgetCost].subCategories[subCategories].itemCode
+          + '.' + project.budget.budgetCost[budgetCost].subCategories[subCategories].subCategoryItem[subCategoryItems].itemCode
+          categories.push(newCategories);
+
+        }
+      }
+    }
+
+    setProjectCategories(categories);
+
+  }
+
+  const onSelected = (selectedCategory) => {
+    setSelectedCategory(selectedCategory);
   }
 
   const mappedOrders = purchaseOrder.orders.map((e) => {
@@ -91,7 +136,10 @@ const PurchaseOrderDetails = (props) => {
             {parseFloat(e.itemTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
           </Col>
           <Col span={4}>
-            {e.category}
+            <Select defaultValue={e.category}
+              onClick={onSelectClick} style={{width: 100}} onSelect={(e) => onSelected(e)}>
+              {showedCategories()}
+            </Select>
           </Col>
           <Col span={1}>
             <Switch size="small"

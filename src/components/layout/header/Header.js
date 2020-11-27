@@ -101,6 +101,15 @@ const Header = () => {
               Products
             </Link>
           </Menu.Item>
+          <Menu.Item>
+            <Link
+              style={{color: 'black'}}
+              exact="true"
+              to="purchaseordertest"
+            >
+              Purchase Order Test
+            </Link>
+          </Menu.Item>
         </Menu>
       </Col>
       <Col

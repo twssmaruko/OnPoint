@@ -37,7 +37,6 @@ export const fetchVendors = () => {
           });
         }
         // eslint-disable-next-line no-console
-        console.log(fetchedVendors);
         dispatch(fetchVendorsSuccess(fetchedVendors));
       })
       .catch((err) => {

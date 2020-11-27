@@ -133,8 +133,9 @@ const Projects = () => {
       <Row key={uuidv4} >
         <Col offset={5} style={{marginTop: '40px'}}>
           <Row>
-            <h1>
-              Projects
+            <h1 style={{fontWeight: 'bold',
+              color: '#FF111B'}}>
+              PROJECTS
             </h1>
           </Row>
           <Row>

@@ -2,6 +2,7 @@
 import {message} from 'antd';
 //import {purchaseRequestDayCreatedAt} from '../../../graphql/queries';
 import {setShowSpin1, setShowSpin2, setOpenModal1} from '../../ui/actions/Actions';
+import {v4 as uuidv4} from 'uuid';
 import * as actionTypes from '../ActionTypes';
 import axios from '../../../axios-orders';
 
@@ -40,8 +41,14 @@ const fetchPurchaseOrderIdInStore = (data) => ({
   data
 })
 
-const fetchPurchaseOrdersToStore = (data) => ({
+const fetchPurchaseOrdersToStore = (purchaseOrders, purchaseOrdersPending) => ({
   type: actionTypes.FETCH_PURCHASEORDERS,
+  purchaseOrders,
+  purchaseOrdersPending
+})
+
+const setVendorInStore = (data) => ({
+  type: actionTypes.SET_VENDOR,
   data
 })
 
@@ -51,13 +58,57 @@ export const setProject = (projectData) => {
   }
 }
 
-export const setOrdersReceived = (ordersData) => async (dispatch, getState) => {
+export const setPurchaseRequestData = (purchaseRequestId) => async (dispatch) => {
+  try {
+    const fetchedPurchaseRequest = await axios.get('/purchaserequests/' + purchaseRequestId + '.json');
+    const newPurchaseRequest = fetchedPurchaseRequest.data
+    dispatch(setPurchaseRequest(newPurchaseRequest));
+  } catch (error) {
+    message.error(error);
+  }
+}
+
+export const fetchProjectForPurchaseOrder = (projectCodeData) => async (dispatch) => {
+  const fetchedProjects = [];
+  try {
+    const result = await axios.get('/projects.json')
+    for (const key in result.data) {
+      fetchedProjects.push({
+        ...result.data[key],
+        id: key
+      })
+    }
+    const projectSelected = fetchedProjects
+      .find(project => project.projectCode === projectCodeData);
+    dispatch(setProjectInStore(projectSelected));
+  } catch (error) {
+    message.error(error);
+  }
+}
+
+export const setVendor = (vendorName) => async (dispatch) => {
+  try {
+    const fetchedVendors = [];
+    const result = await axios.get('/vendors.json');
+    for (const key in result.data) {
+      fetchedVendors.push({
+        ...result.data[key],
+        id: key
+      })
+    }
+    const newVendor = fetchedVendors.find((vendor) => vendor.vendorName === vendorName);
+    dispatch(setVendorInStore(newVendor));
+  } catch (error) {
+    message.error(error)
+  }
+}
+
+export const setOrdersReceived = (initOrders, ordersData, idLink) => async (dispatch, getState) => {
   const newOrders = [];
   if (!ordersData.length) {
     message.success('no changes made');
     return;
   }
-
   for (const key in ordersData) {
     newOrders.push({
       ...ordersData[key],
@@ -140,7 +191,7 @@ export const setOrdersReceived = (ordersData) => async (dispatch, getState) => {
             const newPurchaseOrderData = {
               category: newOrders[key].category,
               didReceive: true,
-              id: newOrders[key].id,
+              id: newOrders[key].product + newOrders[key].id + uuidv4,
               itemTotal: newOrders[key].itemTotal,
               product: newOrders[key].product,
               quantity: newOrders[key].quantity,
@@ -154,17 +205,43 @@ export const setOrdersReceived = (ordersData) => async (dispatch, getState) => {
         }
       }
     }
+
+    const finalPurchaseOrderOrders = [...initOrders];
+    for (const key in finalPurchaseOrderOrders) {
+      const orderFound = newPurchaseOrderOrders.find(
+        (e) => e.product === finalPurchaseOrderOrders[key].product);
+      if (orderFound !== undefined) {
+        finalPurchaseOrderOrders[key] = orderFound;
+      }
+    }
+
+
+    let newPoStatus = 'Pending';
+    let didReceiveFlag = 0;
+    for (const key in finalPurchaseOrderOrders) {
+      if (finalPurchaseOrderOrders[key].didReceive === true ||
+        finalPurchaseOrderOrders[key].didReceive === undefined) {
+        didReceiveFlag += 1;
+      }
+    }
+
+    if (didReceiveFlag === initOrders.length) {
+      newPoStatus = 'Received';
+    }
+
     const editedProject = getState().purchaseOrder.project;
-    const fetchedPurchaseOrder = await axios.get('/purchaseorders/' + ordersData[0].idLink + '.json');
+    const fetchedPurchaseOrder = await axios.get('/purchaseorders/' + idLink + '.json');
     const finalPurchaseOrder = {
       ...fetchedPurchaseOrder.data,
-      orders: newPurchaseOrderOrders
+      status: newPoStatus,
+      orders: finalPurchaseOrderOrders
     }
     await axios.put('/projects/' + projectSelected.id + '.json', editedProject);
-    await axios.put('purchaseorders/' + ordersData[0].idLink + '.json', finalPurchaseOrder);
+    await axios.put('purchaseorders/' + idLink + '.json', finalPurchaseOrder);
     message.success('Budget updated!');
     dispatch(setShowSpin1(false));
     dispatch(setOpenModal1(false))
+    window.location.reload(false);
   } catch (error) {
     message.error('Purchase Order Error!');
     dispatch(setShowSpin1(false));
@@ -184,7 +261,16 @@ export const fetchPurchaseOrders = () => async (dispatch) => {
         id: key
       })
     }
-    dispatch(fetchPurchaseOrdersToStore(fetchedPurchaseOrders));
+    const pendingPurchaseOrders = [];
+    for (const key in fetchedPurchaseOrders) {
+      if (fetchedPurchaseOrders[key].status === 'Pending') {
+        pendingPurchaseOrders.push({
+          ...fetchedPurchaseOrders[key],
+          id: key
+        })
+      }
+    }
+    dispatch(fetchPurchaseOrdersToStore(fetchedPurchaseOrders, pendingPurchaseOrders));
     dispatch(setShowSpin2(false));
   } catch (error) {
     message.error('failed to retrieve purchase orders');
@@ -326,12 +412,12 @@ export const addPurchaseOrder = (purchaseOrderData) => async (dispatch) => {
     vendor: purchaseOrderData.vendor,
     addNotes: purchaseOrderData.addNotes,
     status: "Pending",
-    isApproved: false
+    isApproved: true
   }
   const newPurchaseOrderNo = purchaseOrderData.currentId + 1;
   try {
 
-    await axios.put('/purchaserequests/' + newPurchaseRequest.id + '.json', newPurchaseRequest);
+    await axios.put('/purchaserequests/' + purchaseOrderData.prId + '.json', newPurchaseRequest);
     await axios.put('/currentPurchaseOrderId.json', newPurchaseOrderNo)
     await axios.post('/purchaseorders.json', newPurchaseOrderData);
 

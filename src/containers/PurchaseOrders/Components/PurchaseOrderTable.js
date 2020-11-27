@@ -5,13 +5,16 @@ import {
   Table,
   DatePicker,
   Spin,
+  Col,
+  Checkbox,
   Button,
   Select
 } from 'antd';
 import moment from 'moment';
-import {CloseCircleFilled, CheckCircleFilled, EditTwoTone} from '@ant-design/icons';
+import {CloseCircleFilled, CheckCircleFilled, EditTwoTone, ExclamationCircleOutlined} from '@ant-design/icons';
 import TableButton from '../../../components/button/OnpointButton';
 import PurchaseOrderDetails from './PurchaseOrderDetails';
+import PurchaseOrderModal from './PurchaseOrderModal';
 import * as uiActions from '../../../store/ui/actions/Actions';
 import * as actions from '../../../store/purchaseorders/actions/Actions';
 
@@ -33,14 +36,18 @@ const PurchaseOrderTable = memo(() => {
   const {
     // purchaseRequestsList,
     tableSpin,
-    purchaseOrders
+    purchaseOrders,
+    pendingPurchaseOrders,
+    project
     // ordersReceived
   } = useSelector(({ui, purchaseOrder}) => ({
     // openAnotherModal: ui.openModal2,
     // purchaseRequestsList: purchaseRequests.purchaseRequests,
     tableSpin: ui.showSpin3,
     purchaseOrders: purchaseOrder.purchaseOrders,
-    ordersReceived: purchaseOrder.ordersReceived
+    pendingPurchaseOrders: purchaseOrder.purchaseOrdersPending,
+    ordersReceived: purchaseOrder.ordersReceived,
+    project: purchaseOrder.project
   }), shallowEqual);
 
 
@@ -48,6 +55,7 @@ const PurchaseOrderTable = memo(() => {
 
   const [params, setParams] = useState({});
   const [, setCurrentPurchaseOrder] = useState({});
+  const [seeAll, setSeeAll] = useState(false);
   const [purchaseOrderDetailsModal , setPurchaseOrderDetailsModal] = useState(null);
   const editButton = (item) =>
     <div>
@@ -60,11 +68,17 @@ const PurchaseOrderTable = memo(() => {
 
 
   const approvedDisplay = (isApproved) =>
-    isApproved === 'APPROVED' ? <CheckCircleFilled style={{marginLeft: 20,
+    isApproved === true ? <CheckCircleFilled style={{marginLeft: 20,
       color: 'green'}} />
       : <CloseCircleFilled style={{marginLeft: 20,
         color: 'red'}} />;
+  const poStatusDisplay = (status) =>
+    status === 'Pending' ? <div>PENDING<ExclamationCircleOutlined style={{marginLeft: 20,
+      color: 'orange'}} /></div>: <div> RECEIVED
+      <CheckCircleFilled style={{marginLeft: 20,
+        color: 'green'}} /></div>
   const poNumberDisplay = (data) => `${data.purchaseOrderNo}`;
+  const projectDisplay = (data) => `${data.project}`;
 
 
   const columns = [
@@ -83,10 +97,17 @@ const PurchaseOrderTable = memo(() => {
       render: poNumberDisplay
     },
     {
+      title: 'Project',
+      key: 'project',
+      width: 250,
+      render: projectDisplay
+    },
+    {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      width: 250
+      width: 250,
+      render: poStatusDisplay
     },
     {
       title: 'Approved',
@@ -105,9 +126,12 @@ const PurchaseOrderTable = memo(() => {
   ];
 
   const onDetailsClick = (e) => {
+    // dispatcher(actions.fetchProjectForPurchaseOrder(e.project))
+
     // dispatcher(actions.initiateUpdateModal(item.id));
     setCurrentPurchaseOrder(e);
     dispatcher(uiActions.setOpenModal1(true));
+    // setPurchaseOrderDetailsModal(<PurchaseOrderModal />)
     setPurchaseOrderDetailsModal(<PurchaseOrderDetails purchaseOrder={e} initOrders={[]}/>)
   };
 
@@ -161,15 +185,24 @@ const PurchaseOrderTable = memo(() => {
       isApproved: value});
   };
 
+  const onChecked = () => {
+    const boolFlag = seeAll;
+    setSeeAll(!boolFlag);
+  }
+
+  const checkDisplay = () => {
+    if (!seeAll) {
+      return pendingPurchaseOrders
+    }
+    return purchaseOrders
+  }
+
   return (
-    <div>
-      <Row style={{
-        marginTop: 20,
-        marginLeft: '20%',
-        marginRight: '20%'
-      }}
-      >
-        <div style={{display: 'flex',
+    <div style={{
+      marginTop: 20,
+      marginLeft: '20%',
+      marginRight: '20%'}}>
+      {/* <div style={{display: 'flex',
           alignItems: 'center'}}>
           <h4>Requested On:</h4>
           <div>
@@ -240,12 +273,22 @@ const PurchaseOrderTable = memo(() => {
                 Search
           </Button>
 
-        </div>
+        </div> */}
+      <Row style={{marginBottom: 10}}>
+        <Col span={5}>
+          <Checkbox onChange={onChecked}
+            style={{fontWeight: 'bold',
+              fontSize: 18}}>
+              See ALL
+          </Checkbox>
+        </Col>
+      </Row>
+      <Row>
         <div style={{border: '1px solid black'}}>
           <Spin spinning={tableSpin}>
             <Table
               columns={columns}
-              dataSource={purchaseOrders}
+              dataSource={checkDisplay()}
               size="small"
               rowKey="id"
               pagination={{

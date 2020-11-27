@@ -63,17 +63,21 @@ const Header = (props) => {
           <Button
             className="ant-btn-menu"
             type="link"
+            style={{fontWeight: 'bold',
+              fontSize: 26}}
             onClick={runAddPurchaseOrder}
             disabled={disableButton.disableAdd}>
                 Show Purchase Orders
           </Button>
         </div>
         <div className="ant-btn-div">
-          <Button style={{marginLeft: 1}}
-            className="ant-btn-menu"
-            type="link" onClick={runShowPurchaseORder}
-            disabled={disableButton.disableTable}>
-                Add a Purchase Order
+          <Button style={{marginLeft: 1,
+            fontWeight: 'bold',
+            fontSize: 26}}
+          className="ant-btn-menu"
+          type="link" onClick={runShowPurchaseORder}
+          disabled={disableButton.disableTable}>
+                Add Purchase Order
           </Button>
         </div>
       </Row>

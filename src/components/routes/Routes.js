@@ -2,6 +2,7 @@ import React, {lazy, Suspense} from 'react';
 import {Route, Switch, Redirect} from 'react-router-dom';
 import Homepage from '../homepage/Homepage';
 import Auth from '../../containers/Auth/Auth';
+//import PurchaseOrderTest from '../../containers/PurchaseOrders/Components/PurchaseOrderTest';
 // import PurchaseRequests from '../../containers/PurchaseRequests/PurchaseRequests';
 // import Vendors from '../../containers/Vendors/Vendors';
 // import Products from '../../containers/Products/Products';
@@ -16,6 +17,7 @@ const PurchaseOrders = lazy(() =>
   import('../../containers/PurchaseOrders/PurchaseOrders'));
 const Projects = lazy(() => import('../../containers/Projects/Projects'))
 const ProjectDetails = lazy(() => import('../../containers/Projects/ProjectDetails'));
+const PurchaseOrderTest = lazy(() => import('../../containers/PurchaseOrders/Components/PurchaseOrderTest'));
 
 // const Checkout = React.lazy(() => {
 //     return import('./containers/Checkout/Checkout');
@@ -32,6 +34,7 @@ const Routes = () => {
       <Route path="/project" exact render={(props) => <ProjectDetails key="projectDetailsKey" {...props}/>}/>
       <Route path="/" exact component={Homepage} />
       <Route path="/products" exact render={(props) => <Products key="productsKey" {...props}/>} />
+      <Route path="/purchaseordertest" exact render={(props) => <PurchaseOrderTest key="purchaseordertestkey" {...props}/>} />
       <Redirect to="/" />
     </Switch>;
   return (

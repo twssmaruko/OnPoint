@@ -3,12 +3,15 @@ import {
   Modal,
   Form,
   Input,
-  Select,
+  // Select,
   Button,
+  Row,
+  Col,
   List,
   Spin,
   InputNumber,
-  message
+  AutoComplete
+  //message
 } from 'antd';
 // import _ from 'lodash';
 
@@ -20,24 +23,25 @@ import * as uiActions from '../../store/ui/actions/Actions';
 import OnPointButton from '../../components/button/OnpointButton';
 //import PurchaseRequests from './PurchaseRequests';
 
-const {Option} = Select;
+//const {Option} = Select;
 
 const PurchaseRequestForm = () => {
   const [form] = Form.useForm();
   const [ordersList, setOrdersList] = useState([]);
   const [listItems, setListItems] = useState([]);
   const [orderId, setOrderId] = useState(1);
+  const [requestedBy, setRequestedBy] = useState('');
   const dispatcher = useDispatch();
   useEffect(() => {
     dispatcher(actions.getProducts());
   }, [dispatcher]);
   const {
-    productsList, showSpin, openModal, modalSpin
+    productsList, openModal, modalSpin
   } = useSelector(({ui, products, purchaseRequests}) => ({
     modalSpin: ui.showSpin2,
     openModal: ui.openModal1,
     prNo: purchaseRequests.purchaseRequestCount,
-    showSpin: ui.showSpin1,
+    // showSpin: ui.showSpin1,
     productsList: products.products
   }), shallowEqual);
 
@@ -48,7 +52,6 @@ const PurchaseRequestForm = () => {
   const addPurchaseRequest = () => {
 
     if (modalSpin) {
-      console.log("still adding...")
       return;
     }
     const dateNow = new Date();
@@ -56,29 +59,39 @@ const PurchaseRequestForm = () => {
     //     current) => accumulator + current.price * current.quantity, 0);
     const prData = {
       status: 'PENDING',
-      isApproved: 'NOTAPPROVED',
+      isApproved: 'APPROVED',
       year: dateNow.getFullYear(),
       //dayMonthYear: moment(dateNow).format('DD-MM-YYYY'),
       dayMonthYear: moment(dateNow, "DD-MM-YYYY"),
       // totalPrice,
-      orders: ordersList
+      orders: ordersList,
+      requestedBy: requestedBy
     };
 
     dispatcher(actions.addPurchaseRequest(prData));
   };
   // const debounceFetchProduct = _.debounce(fetchProduct, 1000);
-  const searchOptionList = () => productsList.map((product) =>
-    <Option key={product.id}>
-      {product.name}
-    </Option>
-  );
+  // const searchOptionList = () => productsList.map((product) =>
+  //   <Option key={product.id}>
+  //     {product.name}
+  //   </Option>
+  // );
+
+  const options = [];
+
+  productsList.map((product) => {
+    const newProduct = String(product.name)
+    options.push({
+      value: newProduct
+    })
+  })
 
   const onSubmit = (value) => {
     let count = orderId;
     const order = [
       {
         ...value,
-        product: value.product.label,
+        product: value.product,
         quantityLeft: value.quantity,
         id: count
       }
@@ -121,12 +134,16 @@ const PurchaseRequestForm = () => {
     }
   }
 
-  const checkProduct = (value) => {
-    const found = ordersList.find((data) => data.product === value.label)
-    if (found) {
-      message.error(`Cannot have repeating products! ${value.label}`)
-      form.resetFields();
-    }
+  // const checkProduct = (value) => {
+  //   const found = ordersList.find((data) => data.product === value.label)
+  //   if (found) {
+  //     message.error(`Cannot have repeating products! ${value.label}`)
+  //     form.resetFields();
+  //   }
+  // }
+
+  const onRequestedByChange = (value) => {
+    setRequestedBy(value);
   }
 
 
@@ -147,22 +164,24 @@ const PurchaseRequestForm = () => {
 
         <div style={{display: 'flex',
           justifyContent: 'flex-start'}}>
-          <Form
-            {...layout}
-            form={form}
+          <Row>
+            <Col>
+              <Form
+                {...layout}
+                form={form}
 
-            name="basic"
-            onFinish={onSubmit}
-          >
-            <Form.Item
-              label="Product"
-              name="product"
-              rules={[
-                {required: true,
-                  message: 'Please input PR #!'}
-              ]}
-            >
-              <Select
+                name="basic"
+                onFinish={onSubmit}
+              >
+                <Form.Item
+                  label="Product"
+                  name="product"
+                  rules={[
+                    {required: true,
+                      message: 'Please input a product'}
+                  ]}
+                >
+                  {/* <Select
                 showSearch
                 allowClear
                 labelInValue
@@ -174,33 +193,45 @@ const PurchaseRequestForm = () => {
                 onSelect={checkProduct}
               >
                 {searchOptionList()}
-              </Select>
-            </Form.Item>
-            <Form.Item
-              name="unit"
-              label="Unit"
-              rules={[
-                {required: true,
-                  message: 'Please input Unit!'},
-                {type: 'string',
-                  message: 'Should be in letters/words!'}
-              ]}
-            >
-              <Input style={{width: 170}} />
-            </Form.Item>
-            <Form.Item
-              name="quantity"
-              label="Quantity"
-              rules={[
-                {required: true,
-                  message: 'Please input Quantity!'},
-                {type: 'number',
-                  message: 'Should be a number!'}
-              ]}
-            >
-              <InputNumber style={{width: 170}} />
-            </Form.Item>
-            {/* <Form.Item
+              </Select> */}
+                  <AutoComplete
+                    showSearch
+                    allowClear
+                    style={{
+                      width: 170
+                    }}
+                    options={options}
+                    placeholder="Product"
+                    filterOption={(inputValue, option) =>
+                      option.value.toUpperCase().indexOf(inputValue.toUpperCase()) !== -1
+                    }
+                  />
+                </Form.Item>
+                <Form.Item
+                  name="unit"
+                  label="Unit"
+                  rules={[
+                    {required: true,
+                      message: 'Please input Unit!'},
+                    {type: 'string',
+                      message: 'Should be in letters/words!'}
+                  ]}
+                >
+                  <Input style={{width: 170}} />
+                </Form.Item>
+                <Form.Item
+                  name="quantity"
+                  label="Quantity"
+                  rules={[
+                    {required: true,
+                      message: 'Please input Quantity!'},
+                    {type: 'number',
+                      message: 'Should be a number!'}
+                  ]}
+                >
+                  <InputNumber style={{width: 170}} />
+                </Form.Item>
+                {/* <Form.Item
               name="price"
               label="Price"
               rules={[
@@ -212,12 +243,30 @@ const PurchaseRequestForm = () => {
             >
               <InputNumber style={{width: 170}} />
             </Form.Item> */}
-            <Form.Item style={{marginLeft: 80}}>
-              <Button type="primary" htmlType="submit">
+
+                <Form.Item style={{marginLeft: 80}}>
+                  <Button type="primary" htmlType="submit">
                             Add Order
-              </Button>
-            </Form.Item>
-          </Form>
+                  </Button>
+                </Form.Item>
+              </Form>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Form>
+                <Form.Item
+                  name="requestedBy"
+                  label="Requested By: "
+                  rules={[
+                    {required: true,
+                      message: 'Please input Requested By'}
+                  ]}>
+                  <Input onChange = {(e) => onRequestedByChange(e.target.value)}/>
+                </Form.Item>
+              </Form>
+            </Col>
+          </Row>
           <div style={{width: '70%',
             marginLeft: 40}}>
             <List

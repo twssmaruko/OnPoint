@@ -29,6 +29,7 @@ const ProjectDetails = () => {
   const newBudgetPrice = parseFloat(selectedProject.budget.budgetPrice).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
   const newProfit = parseFloat(selectedProject.budget.profit).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
   const newProfitMargin = parseFloat(selectedProject.budget.profitMargin).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+  const colSpans = [2,16,3,3];
   useEffect(() => {
     if (selectedProject.projectName === '') {
       history.push('/projects');
@@ -50,7 +51,8 @@ const ProjectDetails = () => {
     for (const budgetCostKey in selectedProject.budget.budgetCost) {
       const newState = thisState.concat(
         <Form key = {budgetCostKey} style={{
-          marginLeft: '500px'
+          marginLeft: '100px',
+          marginRight: '100px'
         }}>
           <Form.Item
             style={{
@@ -58,57 +60,57 @@ const ProjectDetails = () => {
               marginBottom: '0px'
             }}>
             <Row>
-              <Col  style={{
-                borderStyle: 'solid',
-                borderWidth: 'thin',
-                borderColor: 'black',
-                backgroundColor: 'yellow',
-                width: '50px',
-                textAlign: 'center',
-                fontWeight: 'bold',
-                color: '#5DADE2'
-              }}
+              <Col  span={colSpans[0]}
+                style={{
+                  borderStyle: 'solid',
+                  borderWidth: 'thin',
+                  borderColor: 'black',
+                  backgroundColor: 'yellow',
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                  color: '#5DADE2'
+                }}
               >
                 {selectedProject.budget.budgetCost[budgetCostKey].itemCode}
               </Col>
-              <Col style={{
-                borderStyle: 'solid',
-                borderWidth: 'thin',
-                borderColor: 'black',
-                backgroundColor: 'yellow',
-                width: '642px',
-                textAlign: 'center',
-                fontWeight: 'bold',
-                color: '#5DADE2'
-              }}>
+              <Col span ={colSpans[1]}
+                style={{
+                  borderStyle: 'solid',
+                  borderWidth: 'thin',
+                  borderColor: 'black',
+                  backgroundColor: 'yellow',
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                  color: '#5DADE2'
+                }}>
                 {selectedProject.budget.budgetCost[budgetCostKey].name}
               </Col>
-              <Col style={{
-                borderStyle: 'solid',
-                borderWidth: 'thin',
-                borderColor: 'black',
-                backgroundColor: 'yellow',
-                width: '125px',
-                textAlign: 'right',
-                fontWeight: 'bold',
-                fontSize: 12,
-                height: '32px',
-                color: '#5DADE2'
-              }}>
+              <Col span={colSpans[2]}
+                style={{
+                  borderStyle: 'solid',
+                  borderWidth: 'thin',
+                  borderColor: 'black',
+                  backgroundColor: 'yellow',
+                  textAlign: 'right',
+                  fontWeight: 'bold',
+                  fontSize: 12,
+                  height: '32px',
+                  color: '#5DADE2'
+                }}>
                 {parseFloat(selectedProject.budget.budgetCost[budgetCostKey].totalCost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
               </Col>
-              <Col style={{
-                borderStyle: 'solid',
-                borderWidth: 'thin',
-                borderColor: 'black',
-                backgroundColor: 'yellow',
-                borderLeftStyle: 'none',
-                fontSize: 12,
-                width: '100px',
-                textAlign: 'center',
-                fontWeight: 'bold',
-                color: '#5DADE2'
-              }}>
+              <Col span={colSpans[3]}
+                style={{
+                  borderStyle: 'solid',
+                  borderWidth: 'thin',
+                  borderColor: 'black',
+                  backgroundColor: 'yellow',
+                  borderLeftStyle: 'none',
+                  fontSize: 12,
+                  textAlign: 'right',
+                  fontWeight: 'bold',
+                  color: '#5DADE2'
+                }}>
                 {parseFloat(selectedProject.budget.budgetCost[budgetCostKey].amountSpent).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
               </Col>
             </Row>
@@ -120,61 +122,62 @@ const ProjectDetails = () => {
         const {subCategories} = selectedProject.budget.budgetCost[budgetCostKey];
         const newState = thisState.concat(
           <Form key = {budgetCostKey + subCategoryKey} style={{
-            marginLeft: '500px',
+            marginLeft: '100px',
+            marginRight: '100px',
             marginTop: '0px'}}>
             <Form.Item style={{marginBottom: '0px',
               marginTop: '10px'}}>
               <Row>
-                <Col style={{
-                  borderStyle: 'solid',
-                  borderWidth: 'thin',
-                  borderColor: 'black',
-                  backgroundColor: '#DCDCDC',
-                  width: '50px',
-                  height: '31.5px',
-                  textAlign: 'center',
-                  fontSize: 12,
-                  fontWeight: 'bold'
-                }}>
+                <Col span={colSpans[0]}
+                  style={{
+                    borderStyle: 'solid',
+                    borderWidth: 'thin',
+                    borderColor: 'black',
+                    backgroundColor: '#DCDCDC',
+                    height: '31.5px',
+                    textAlign: 'center',
+                    fontSize: 12,
+                    fontWeight: 'bold'
+                  }}>
                   {subCategories[subCategoryKey].itemCode}
                 </Col>
-                <Col style={{
-                  borderStyle: 'solid',
-                  borderWidth: 'thin',
-                  borderColor: 'black',
-                  backgroundColor: '#DCDCDC',
-                  width: '642px',
-                  height: '31.5px',
-                  textAlign: 'left',
-                  fontSize: 12,
-                  fontWeight: 'bold'
-                }}>
+                <Col span={colSpans[1]}
+                  style={{
+                    borderStyle: 'solid',
+                    borderWidth: 'thin',
+                    borderColor: 'black',
+                    backgroundColor: '#DCDCDC',
+                    height: '31.5px',
+                    textAlign: 'left',
+                    fontSize: 12,
+                    fontWeight: 'bold'
+                  }}>
                   {subCategories[subCategoryKey].name}
                 </Col>
-                <Col style={{
-                  borderStyle: 'solid',
-                  borderWidth: 'thin',
-                  borderColor: 'black',
-                  backgroundColor: '#DCDCDC',
-                  width: '125px',
-                  fontSize: 12,
-                  height: '31.5px',
-                  textAlign: 'right',
-                  fontWeight: 'bold'
-                }}>
+                <Col span={colSpans[2]}
+                  style={{
+                    borderStyle: 'solid',
+                    borderWidth: 'thin',
+                    borderColor: 'black',
+                    backgroundColor: '#DCDCDC',
+                    fontSize: 12,
+                    height: '31.5px',
+                    textAlign: 'right',
+                    fontWeight: 'bold'
+                  }}>
                   {parseFloat(subCategories[subCategoryKey].totalCost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
                 </Col>
-                <Col style={{
-                  borderStyle: 'solid',
-                  borderWidth: 'thin',
-                  borderColor: 'black',
-                  backgroundColor: '#DCDCDC',
-                  width: '100px',
-                  fontSize: 12,
-                  height: '31.5px',
-                  textAlign: 'right',
-                  fontWeight: 'bold'
-                }}>
+                <Col span={colSpans[3]}
+                  style={{
+                    borderStyle: 'solid',
+                    borderWidth: 'thin',
+                    borderColor: 'black',
+                    backgroundColor: '#DCDCDC',
+                    fontSize: 12,
+                    height: '31.5px',
+                    textAlign: 'right',
+                    fontWeight: 'bold'
+                  }}>
                   {parseFloat(subCategories[subCategoryKey].amountSpent).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
                 </Col>
               </Row>
@@ -182,56 +185,56 @@ const ProjectDetails = () => {
             <Form.Item style={{marginBottom: '0px',
               marginTop: '0px'}}>
               <Row>
-                <Col style={{
-                  borderStyle: 'solid',
-                  borderWidth: 'thin',
-                  borderColor: 'black',
-                  width: '50px',
-                  textAlign: 'center',
-                  fontSize: '10px',
-                  color: '#5DADE2',
-                  height: '31.5px',
-                  fontWeight: 'bold'
-                }}>
+                <Col span={colSpans[0]}
+                  style={{
+                    borderStyle: 'solid',
+                    borderWidth: 'thin',
+                    borderColor: 'black',
+                    textAlign: 'center',
+                    fontSize: '10px',
+                    color: '#5DADE2',
+                    height: '31.5px',
+                    fontWeight: 'bold'
+                  }}>
                   ITEM NO.
                 </Col>
-                <Col style={{
-                  borderStyle: 'solid',
-                  borderWidth: 'thin',
-                  borderColor: 'black',
-                  width: '642px',
-                  fontSize: '10px',
-                  textAlign: 'center',
-                  color: '#5DADE2',
-                  height: '31.5px',
-                  fontWeight: 'bold'
-                }}>
+                <Col span={colSpans[1]}
+                  style={{
+                    borderStyle: 'solid',
+                    borderWidth: 'thin',
+                    borderColor: 'black',
+                    fontSize: '10px',
+                    textAlign: 'center',
+                    color: '#5DADE2',
+                    height: '31.5px',
+                    fontWeight: 'bold'
+                  }}>
                 DESCRIPTION
                 </Col>
-                <Col style={{
-                  borderStyle: 'solid',
-                  borderWidth: 'thin',
-                  borderColor: 'black',
-                  fontSize: '10px',
-                  width: '125px',
-                  textAlign: 'center',
-                  color: '#5DADE2',
-                  height: '31.5px',
-                  fontWeight: 'bold'
-                }}>
+                <Col span={colSpans[2]}
+                  style={{
+                    borderStyle: 'solid',
+                    borderWidth: 'thin',
+                    borderColor: 'black',
+                    fontSize: '10px',
+                    textAlign: 'center',
+                    color: '#5DADE2',
+                    height: '31.5px',
+                    fontWeight: 'bold'
+                  }}>
                 AMOUNT
                 </Col>
-                <Col style={{
-                  borderStyle: 'solid',
-                  borderWidth: 'thin',
-                  borderColor: 'black',
-                  fontSize: '10px',
-                  width: '100px',
-                  textAlign: 'center',
-                  color: '#5DADE2',
-                  height: '31.5px',
-                  fontWeight: 'bold'
-                }}>
+                <Col span={colSpans[3]}
+                  style={{
+                    borderStyle: 'solid',
+                    borderWidth: 'thin',
+                    borderColor: 'black',
+                    fontSize: '10px',
+                    textAlign: 'center',
+                    color: '#5DADE2',
+                    height: '31.5px',
+                    fontWeight: 'bold'
+                  }}>
                 AMOUNT SPENT
                 </Col>
               </Row>
@@ -248,7 +251,8 @@ const ProjectDetails = () => {
           const newState = thisState.concat(
             <Form key = {budgetCostKey + subCategoryKey + subCategoryItemKey}
               style={{
-                marginLeft: '500px',
+                marginLeft: '100px',
+                marginRight: '100px',
                 marginTop: '0px'
               }}>
               <Form.Item style={{
@@ -256,48 +260,48 @@ const ProjectDetails = () => {
                 marginBottom: '0px'
               }}>
                 <Row>
-                  <Col style={{
-                    borderStyle: 'solid',
-                    borderWidth: 'thin',
-                    borderColor: 'black',
-                    width: '50px',
-                    textAlign: 'center',
-                    fontSize: 12,
-                    height: '31.5px'
-                  }}>
+                  <Col span={colSpans[0]}
+                    style={{
+                      borderStyle: 'solid',
+                      borderWidth: 'thin',
+                      borderColor: 'black',
+                      textAlign: 'center',
+                      fontSize: 12,
+                      height: '31.5px'
+                    }}>
                     {subCategoryItem[subCategoryItemKey].itemCode}
                   </Col>
-                  <Col style={{
-                    borderStyle: 'solid',
-                    borderWidth: 'thin',
-                    borderColor: 'black',
-                    width: '642px',
-                    textAlign: 'left',
-                    fontSize: 12,
-                    height: '31.5px'
-                  }}>
+                  <Col span={colSpans[1]}
+                    style={{
+                      borderStyle: 'solid',
+                      borderWidth: 'thin',
+                      borderColor: 'black',
+                      textAlign: 'left',
+                      fontSize: 12,
+                      height: '31.5px'
+                    }}>
                     {subCategoryItem[subCategoryItemKey].name}
                   </Col>
-                  <Col  style={{
-                    borderStyle: 'solid',
-                    borderWidth: 'thin',
-                    borderColor: 'black',
-                    width: '125px',
-                    textAlign: 'right',
-                    fontSize: 12,
-                    height: '31.5px'
-                  }}>
+                  <Col  span={colSpans[2]}
+                    style={{
+                      borderStyle: 'solid',
+                      borderWidth: 'thin',
+                      borderColor: 'black',
+                      textAlign: 'right',
+                      fontSize: 12,
+                      height: '31.5px'
+                    }}>
                     {parseFloat(subCategoryItem[subCategoryItemKey].cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
                   </Col>
-                  <Col  style={{
-                    borderStyle: 'solid',
-                    borderWidth: 'thin',
-                    borderColor: 'black',
-                    width: '100px',
-                    textAlign: 'right',
-                    fontSize: 12,
-                    height: '31.5px'
-                  }}>
+                  <Col  span={colSpans[3]}
+                    style={{
+                      borderStyle: 'solid',
+                      borderWidth: 'thin',
+                      borderColor: 'black',
+                      textAlign: 'right',
+                      fontSize: 12,
+                      height: '31.5px'
+                    }}>
                     {parseFloat(subCategoryItem[subCategoryItemKey].amountSpent).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
                   </Col>
                 </Row>
@@ -320,15 +324,16 @@ const ProjectDetails = () => {
         <h3 style={{color: '#512E0E'}}><Logo /></h3>
       </div>
       <div style={{
-        justifyContent: 'flex',
         marginTop: 20,
-        width: '100%'
+        width: '65%',
+        alignContent: 'center'
       }}
       >
         <Form
           id={"project" + uuidv4}
           name="basic"
-          style={{marginLeft: '500px'}}
+          style={{marginLeft: '100px',
+            marginRight: '100px'}}
         >
           <Form.Item>
             <Button ref={btnRef} onClick={setProject}>
@@ -342,7 +347,6 @@ const ProjectDetails = () => {
               justifyContent: 'flex'}}
           >
             <div style ={{fontWeight: 'bold',
-              width: '500px',
               textAlign: 'left'}}>
               {selectedProject.clientName}
             </div>
@@ -355,7 +359,6 @@ const ProjectDetails = () => {
             //onBlur = {e => onBlurProjectName(e.target.value)}
           >
             <div style ={{fontWeight: 'bold',
-              width: '500px',
               textAlign: 'left'}}>
               {selectedProject.projectName}
             </div>
@@ -368,7 +371,6 @@ const ProjectDetails = () => {
             // onBlur = {e => onBlurLocation(e.target.value)}
           >
             <div style ={{fontWeight: 'bold',
-              width: '500px',
               textAlign: 'left'}}>
               {selectedProject.location}
             </div>
@@ -379,21 +381,22 @@ const ProjectDetails = () => {
         <Form
           id={"budget" + uuidv4}
           name="basic"
-          style={{marginLeft: '500px'}}
+          style={{marginLeft: '100px',
+            marginRight: '100px'}}
         >
           <Form.Item
             name="contractPrice"
             style={{marginBottom: '0px'}}
           >
-            <Row style={{width: '850px',
+            <Row style={{
               height: '27px',
               marginBottom: '0px'}}>
-              <Col flex="auto" style={{borderWidth: 'thin',
+              <Col span={colSpans[0] + colSpans[1]} style={{borderWidth: 'thin',
                 borderStyle: 'solid',
                 textAlign: 'left'}}>
                 <b>CONTRACT PRICE</b>
               </Col>
-              <Col flex="125px" style={{borderWidth: 'thin',
+              <Col span={colSpans[2]} style={{borderWidth: 'thin',
                 borderStyle: 'solid',
                 fontSize: 12,
                 fontWeight: 'bold',
@@ -406,16 +409,16 @@ const ProjectDetails = () => {
           <Form.Item
             style ={{marginBottom: '0px',
               marginTop: '0px'}}>
-            <Row style = {{width: '850px',
+            <Row style = {{
               height: '27px',
               marginBottom: '0px',
               marginTop: '0px'}}>
-              <Col flex ="auto" style={{borderWidth: 'thin',
+              <Col span ={colSpans[0] + colSpans[1]} style={{borderWidth: 'thin',
                 borderStyle: 'solid',
                 textAlign: 'left'}}>
                 <b>BUDGET</b>
               </Col>
-              <Col flex="125px" style = {{borderWidth: 'thin',
+              <Col span={colSpans[2]} style = {{borderWidth: 'thin',
                 borderStyle: 'solid',
                 fontSize: 12,
                 fontWeight: 'bold',
@@ -428,16 +431,16 @@ const ProjectDetails = () => {
           <Form.Item
             style={{marginBottom: '0px',
               marginTop: '0px'}}>
-            <Row style={{width: '850px',
+            <Row style={{
               marginBottom: '0px',
               marginTop: '0px',
               height: '27px'}}>
-              <Col flex="auto" style={{borderWidth: 'thin',
+              <Col span={colSpans[0] + colSpans[1]} style={{borderWidth: 'thin',
                 borderStyle: 'solid',
                 textAlign: 'left'}}>
                 <b>PROFIT</b>
               </Col>
-              <Col flex="125px" style={{borderWidth: 'thin',
+              <Col span={colSpans[2]} style={{borderWidth: 'thin',
                 borderStyle: 'solid',
                 fontSize: 12,
                 fontWeight: 'bold',
@@ -452,20 +455,20 @@ const ProjectDetails = () => {
             style={{marginBottom: '5px',
               marginRight: '0px'}}
           >
-            <Row style={{width: '843px',
+            <Row style={{
               height: '27px'}}>
-              <Col flex="auto" style={{borderWidth: 'thin',
+              <Col span={18} style={{borderWidth: 'thin',
                 borderStyle: 'solid',
                 textAlign: 'left'}}>
                 <b>PROFIT MARGIN</b>
               </Col>
-              <Col flex="125px" style={{borderWidth: 'thin',
+              <Col span={colSpans[2]} style={{borderWidth: 'thin',
                 borderStyle: 'solid',
                 fontSize: 12,
                 fontWeight: 'bold'}}>
                 {budgetParameters.profitMargin}%
               </Col>
-              <Col flex="25px">
+              <Col span={colSpans[3]}>
               </Col>
             </Row>
           </Form.Item>

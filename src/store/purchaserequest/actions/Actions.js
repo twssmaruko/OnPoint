@@ -56,6 +56,10 @@ export const setSubscriptions = (data) => ({
   type: actionTypes.SET_PURCHASEREQUESTSUBSCRIPTIONS,
   data
 });
+export const updatePurchaseRequestNumber = (data) => ({
+  type: actionTypes.UPDATE_PURCHASEREQUEST_NUMBER,
+  data
+})
 const addPurchaseRequestStart = () => ({
   type: actionTypes.ADD_PURCHASEREQUEST_START
 })
@@ -73,9 +77,10 @@ const addPurchaseRequestFail = (error) => ({
 const fetchPurchaseRequestsStart = () => ({
   type: actionTypes.FETCH_PURCHASEREQUESTS_START
 })
-const fetchPurchaseRequestsSuccess = (purchaseRequests) => ({
+const fetchPurchaseRequestsSuccess = (purchaseRequests, purchaseRequestsPending) => ({
   type: actionTypes.FETCH_PURCHASEREQUESTS_SUCCESS,
-  purchaseRequests
+  purchaseRequests,
+  purchaseRequestsPending
 })
 const fetchPurchaseRequestsFail = (error) => ({
   type: actionTypes.FETCH_PURCHASEREQUESTS_FAIL,
@@ -208,21 +213,30 @@ export const fetchPurchaseRequests = () => {
             id: key
           })
         }
+        const pendingPurchaseRequests = [];
+        for (const key in fetchedPurchaseRequests) {
+          if (fetchedPurchaseRequests[key].status === 'PENDING') {
+            pendingPurchaseRequests.push({
+              ...fetchedPurchaseRequests[key],
+              id: key
+            })
+          }
+        }
         dispatch(setShowSpin1(false));
-        dispatch(fetchPurchaseRequestsSuccess(fetchedPurchaseRequests));
+        dispatch(fetchPurchaseRequestsSuccess(fetchedPurchaseRequests, pendingPurchaseRequests));
       }).catch((error) => {
         message.error('Error fetching purchase requests');
         dispatch(setShowSpin1(false));
         dispatch(fetchPurchaseRequestsFail(error));
       })
 
-    axios.get('/currentPurchaseRequestId.json')
-      .then((response) => {
-        dispatch(updatePurchaseRequestIdInStore(response.data))
-      })
-      .catch(() => {
-        message.error('unable to update purchase request id');
-      })
+    // axios.get('/currentPurchaseRequestId.json')
+    //   .then((response) => {
+    //     dispatch(updatePurchaseRequestIdInStore(response.data))
+    //   })
+    //   .catch(() => {
+    //     message.error('unable to update purchase request id');
+    //   })
   }
 }
 
@@ -351,11 +365,11 @@ export const addPurchaseRequest = (purchaseRequestData) => (dispatch, getState) 
   // const count = purchaseRequestCount + 1;
   // const purchaseRequestNo = `${purchaseRequestData.monthyear}-${count}`;
   // console.log(purchaseRequestNo);
-  const count = getState().purchaseRequests.purchaseRequestIds + 1;
-  const purchaseRequestNo = purchaseRequestData.year.toString() + "-" + count;
+  const count = getState().purchaseRequests.purchaseRequestIds;
+  //console.log('count: ', count);
+  const purchaseRequestNo = count;
   const newPurchaseRequestData = {
     ...purchaseRequestData,
-    purchaseRequestIds: count,
     purchaseRequestNo: purchaseRequestNo
   }
   axios.post('/purchaserequests.json', newPurchaseRequestData)

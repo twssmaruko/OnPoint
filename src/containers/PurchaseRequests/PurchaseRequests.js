@@ -2,22 +2,27 @@ import React, {lazy, useState, useEffect} from 'react';
 import {
   Row,
   Button,
-  Select,
+  // Select,
   Table,
-  DatePicker,
+  // DatePicker,
   Spin,
-  message
+  Col,
+  Checkbox,
+  //message,
+  Modal
 } from 'antd';
-
+import './PurchaseRequest.css'
 import {CloseCircleFilled, CheckCircleFilled, EditTwoTone, ExclamationCircleOutlined} from '@ant-design/icons';
 import {useSelector, useDispatch, shallowEqual} from 'react-redux';
-
+import {v4 as uuidv4} from 'uuid';
+import PurchaseRequestNumberModal from './PurchaseRequestNumberModal';
 import moment from 'moment';
-import _ from 'lodash';
+//import _ from 'lodash';
 
 import * as uiActions from '../../store/ui/actions/Actions';
 import * as actions from '../../store/purchaserequest/actions/Actions';
 import TableButton from '../../components/button/OnpointButton';
+//import {setPurchaseRequest} from '../../store/purchaseorders/actions/Actions';
 
 
 const PurchaseRequestFormModal = lazy(() => import('./PurchaseRequestFormModal'));
@@ -25,19 +30,21 @@ const UpdateModal = lazy(() => import ('./UpdateModal'));
 
 const PurchaseRequests = () => {
   const dispatcher = useDispatch();
-  const {Option} = Select;
+  //const {Option} = Select;
   // const childRef = useRef();
   const [displayAddModal, setDisplayAddModal] = useState(null);
   const [displayUpdateModal, setDisplayUpdateModal] = useState(null);
-
+  const [modalVisible, setModalVisible] = useState(false);
 
   // const [purchaseRequestValue, setPurchaseRequestValue] = useState({orders: []});
-  const [params, setParams] = useState({});
+  //const [params, setParams] = useState({});
   const {
     purchaseRequestsList,
+    pendingPurchaseRequests,
     tableSpin
   } = useSelector(({ui, purchaseRequests}) => ({
     purchaseRequestsList: purchaseRequests.purchaseRequests,
+    pendingPurchaseRequests: purchaseRequests.purchaseRequestsPending,
     tableSpin: ui.showSpin3
   }), shallowEqual);
 
@@ -50,12 +57,42 @@ const PurchaseRequests = () => {
     // };
   }, [dispatcher]);
 
+
+
+
   const onDetailsClick = (item) => {
     // setPurchaseRequestValue(item);
     setDisplayUpdateModal(<UpdateModal  purchaseRequestData={item}/>)
     dispatcher(uiActions.setOpenModal2(true));
     // dispatcher(actions.initiateUpdateModal(item.id));
   };
+
+  const handleCancel = () => {
+    setModalVisible(false);
+  }
+
+  const setModal = () => {
+    setModalVisible(false);
+    if (displayAddModal === null) {
+      setDisplayAddModal(<PurchaseRequestFormModal />);
+    }
+    dispatcher(uiActions.setOpenModal1(true))
+  }
+
+  const [seeAll, setSeeAll] = useState(false);
+
+  const purchaseRequestNumberModal = <Modal
+    maskClosable = {false}
+    key={"projectCodeModal-" + uuidv4}
+    title="Project Code"
+    visible={modalVisible}
+    onOk={setModal}
+    onCancel={handleCancel}
+    width={250}
+    okText="Proceed"
+    cancelText="Cancel">
+    <PurchaseRequestNumberModal key={"purchaseRequestNumber-" + uuidv4} purchaseRequestKey = {"purchaseRequestKey-" + uuidv4} />
+  </Modal>
 
   const editButton = (item) =>
     <div>
@@ -89,7 +126,7 @@ const PurchaseRequests = () => {
       key: 'PurchaseRequestNo',
       width: 250,
       defaultSortOrder: 'ascend',
-      sorter: (a,b) => b.purchaseRequestIds - a.purchaseRequestIds,
+      sorter: (a,b) => a.purchaseRequestIds > b.purchaseRequestIds ? 1 : -1,
       render: prNumberDisplay
     },
     {
@@ -97,6 +134,20 @@ const PurchaseRequests = () => {
       dataIndex: 'status',
       key: 'status',
       width: 250,
+      // filters: [
+      //   {
+      //     text: 'PENDING',
+      //     value: 'PENDING'
+      //   },
+      //   {
+      //     text: 'ORDERED',
+      //     value: 'ORDERED'
+      //   }
+      // ],
+      // filterMultiple: false,
+      // onFilter: (value, record) => record.status.indexOf(value) === 0,
+      sorter: (a,b) => a.status.length - b.status.length,
+      sortDirections: ['descend', 'ascend'],
       render: prStatusDisplay
     },
     {
@@ -120,67 +171,74 @@ const PurchaseRequests = () => {
   ];
 
 
-  const setModal = () => {
-    if (displayAddModal === null) {
-      setDisplayAddModal(<PurchaseRequestFormModal />);
-    }
-    dispatcher(uiActions.setOpenModal1(true))
-  }
+
 
   // dispatcher(uiActions.setOpenModal1(true));
 
 
-  const onSearch = () => {
-    if (!_.isEmpty(params)) {
-      // dispatcher(actions.fetchPurchaseRequests(params));
-      return;
-    }
-    message.info('Select options first');
-  };
+  // const onSearch = () => {
+  //   if (!_.isEmpty(params)) {
+  //     // dispatcher(actions.fetchPurchaseRequests(params));
+  //     return;
+  //   }
+  //   message.info('Select options first');
+  // };
 
-  const onDateSelect = (date) => {
-    if (!date) {
-      const newParams = params;
-      delete newParams.dayMonthYear;
-      setParams({...newParams});
-      return;
-    }
-    setParams({...params,
-      dayMonthYear: moment(date).format('DD-MM-YYYY')});
-  };
+  // const onDateSelect = (date) => {
+  //   if (!date) {
+  //     const newParams = params;
+  //     delete newParams.dayMonthYear;
+  //     setParams({...newParams});
+  //     return;
+  //   }
+  //   setParams({...params,
+  //     dayMonthYear: moment(date).format('DD-MM-YYYY')});
+  // };
 
-  const onMonthYearSelect = (date) => {
-    if (!date) {
-      const newParams = params;
-      delete newParams.monthYear;
-      setParams({...newParams});
-      return;
-    }
-    setParams({...params,
-      monthYear: moment(date).format('MM-YYYY')});
-  };
+  // const onMonthYearSelect = (date) => {
+  //   if (!date) {
+  //     const newParams = params;
+  //     delete newParams.monthYear;
+  //     setParams({...newParams});
+  //     return;
+  //   }
+  //   setParams({...params,
+  //     monthYear: moment(date).format('MM-YYYY')});
+  // };
 
-  const handleStatusChange = (value) => {
-    if (!value) {
-      const newParams = params;
-      delete newParams.status;
-      setParams({...newParams});
-      return;
-    }
-    setParams({...params,
-      status: value});
-  };
+  // const handleStatusChange = (value) => {
+  //   if (!value) {
+  //     const newParams = params;
+  //     delete newParams.status;
+  //     setParams({...newParams});
+  //     return;
+  //   }
+  //   setParams({...params,
+  //     status: value});
+  // };
 
-  const onApprovedChange = (value) => {
-    if (!value) {
-      const newParams = params;
-      delete newParams.isApproved;
-      setParams({...newParams});
-      return;
+  // const onApprovedChange = (value) => {
+  //   if (!value) {
+  //     const newParams = params;
+  //     delete newParams.isApproved;
+  //     setParams({...newParams});
+  //     return;
+  //   }
+  //   setParams({...params,
+  //     isApproved: value});
+  // };
+
+  const onChecked = () => {
+    const booleanFlag = seeAll
+    setSeeAll(!booleanFlag);
+  }
+
+  const checkDisplay = () => {
+    if (!seeAll) {
+      return pendingPurchaseRequests
     }
-    setParams({...params,
-      isApproved: value});
-  };
+    return purchaseRequestsList
+  }
 
   return (
     <div>
@@ -192,21 +250,41 @@ const PurchaseRequests = () => {
       }}
       >
         <Row>
-          <h1>Purchase Request</h1>
+          <h1  style={{fontWeight: 'bold',
+            color: '#FF111B'}}>PURCHASE REQUESTS</h1>
         </Row>
-        <Row>
-          <Button type="primary" onClick={setModal}>
+        <Row style={{marginLeft: 0}}>
+          <Col span={5} style={{textAlign: 'left'}}>
+            <div className="ant-btn-div">
+              <Button
+                type="link"
+                style={{fontWeight: 'bold',
+                  fontSize: 26,
+                  color: '#13407F'}}
+                className = "ant-btn-menu"
+                onClick={() => setModalVisible(true)}>
             New Purchase Request
-          </Button>
+              </Button>
+            </div>
+          </Col>
+          <Col span={3}>
+            <Checkbox style={{fontWeight: 'bold',
+              fontSize: 18}}
+            onChange={onChecked}>
+            See ALL
+            </Checkbox>
+          </Col>
         </Row>
       </Row>
+
       <Row style={{
-        marginTop: 50,
+        marginTop: 3,
         marginLeft: '20%',
         marginRight: '20%'
       }}
       >
-        <div style={{display: 'flex',
+
+        {/* <div style={{display: 'flex',
           alignItems: 'center'}}>
           <h4>Requested On:</h4>
           <div>
@@ -276,12 +354,12 @@ const PurchaseRequests = () => {
             Search
           </Button>
 
-        </div>
+        </div> */}
         <div style={{border: '1px solid black'}}>
           <Spin spinning={tableSpin}>
             <Table
               columns={columns}
-              dataSource={purchaseRequestsList}
+              dataSource={checkDisplay()}
               size="small"
               rowKey="id"
               pagination={{
@@ -291,6 +369,7 @@ const PurchaseRequests = () => {
           </Spin>
         </div>
       </Row>
+      {purchaseRequestNumberModal}
       {displayAddModal}
       {displayUpdateModal}
       {/* <Updatemodal initialValue={initialPurchaseRequest} /> */}
