@@ -3,6 +3,7 @@ import {message} from 'antd';
 //import {purchaseRequestDayCreatedAt} from '../../../graphql/queries';
 import {setShowSpin1, setShowSpin2, setOpenModal1} from '../../ui/actions/Actions';
 import {v4 as uuidv4} from 'uuid';
+import moment from 'moment';
 import * as actionTypes from '../ActionTypes';
 import axios from '../../../axios-orders';
 
@@ -31,7 +32,7 @@ const setOrdersReceivedInStore = (data) => ({
   data
 })
 
-const setProjectInStore = (data) => ({
+export const setProjectInStore = (data) => ({
   type: actionTypes.FETCH_PROJECT,
   data
 })
@@ -52,24 +53,117 @@ const setVendorInStore = (data) => ({
   data
 })
 
+const setTotalPriceInStore = (data) => ({
+  type: actionTypes.SET_TOTALPRICE,
+  data
+})
+
+const setLoading = (data) => ({
+  type: actionTypes.SET_LOADING,
+  data
+})
+
+export const setSamplePurchaseOrder = (data) => ({
+  type: actionTypes.SET_SAMPLE_PURCHASEORDER,
+  data
+})
+
+export const getSamplePO = () => async (dispatch) => {
+  const fetchedPurchaseOrders = [];
+  try {
+    const result = await axios.get('/purchaseorders.json');
+    for (const key in result.data) {
+      fetchedPurchaseOrders.push({
+        ...result.data[key],
+        id: key
+      })
+    }
+    dispatch(setSamplePurchaseOrder(fetchedPurchaseOrders));
+  } catch (error) {
+    message.error('Error getting the purchaseOrders!');
+    console.error(error);
+  }
+
+}
+
+export const setPurchaseOrder = (data) => ({
+  type: actionTypes.SET_PURCHASEORDER,
+  data
+})
+
+export const initOrders = (data) => (dispatch) => {
+  dispatch(setTotalPriceInStore(data));
+}
+
+
+export const newVendor = (vendorData) => async (dispatch, getState) => {
+  // Marco Code
+  dispatch(setLoading(true));
+  const vendorsList = getState().purchaseOrder.vendors;
+  const newVendors = vendorsList;
+  newVendors.push(vendorData);
+  try {
+    await axios.post('/vendors.json',vendorData);
+    dispatch(setVendorInStore(vendorData))
+    dispatch(setVendors(newVendors));
+    dispatch(setLoading(false));
+    message.success('New Vendor created');
+  } catch (error) {
+    message.error('Cannot add new Vendor');
+    console.error(error);
+    dispatch(setLoading(false));
+  }
+}
+
+export const setOrder = (data, index) => (dispatch, getState) => {
+  dispatch(setLoading(true));
+  const oldOrder = getState().purchaseOrder.totalPrice;
+  const oldPurchaseOrder = getState().purchaseOrder.purchaseOrder;
+  const newOrder = oldOrder;
+  newOrder[index] = data
+  let finalTotalPrice = 0;
+  const newPurchaseOrder = {
+    ...oldPurchaseOrder,
+    orders: newOrder
+  }
+
+
+  for (const key in newOrder) {
+    finalTotalPrice += newOrder[key].totalPrice
+  }
+  const finalPurchaseOrder = {
+    ...newPurchaseOrder,
+    totalPrice: finalTotalPrice
+  }
+  // console.log('finalTotalPrice: ', finalTotalPrice);
+  dispatch(setPurchaseOrder(finalPurchaseOrder));
+  dispatch(setLoading(false));
+}
+
 export const setProject = (projectData) => {
   return dispatch => {
+    dispatch(setLoading(true));
     dispatch(setProjectInStore(projectData));
+    dispatch(setLoading(false));
   }
 }
 
 export const setPurchaseRequestData = (purchaseRequestId) => async (dispatch) => {
   try {
+    dispatch(setLoading(true));
     const fetchedPurchaseRequest = await axios.get('/purchaserequests/' + purchaseRequestId + '.json');
     const newPurchaseRequest = fetchedPurchaseRequest.data
     dispatch(setPurchaseRequest(newPurchaseRequest));
+    dispatch(setLoading(false));
   } catch (error) {
     message.error(error);
+    dispatch(setLoading(false));
   }
 }
 
 export const fetchProjectForPurchaseOrder = (projectCodeData) => async (dispatch) => {
   const fetchedProjects = [];
+  dispatch(setLoading(true));
   try {
     const result = await axios.get('/projects.json')
     for (const key in result.data) {
@@ -81,13 +175,16 @@ export const fetchProjectForPurchaseOrder = (projectCodeData) => async (dispatch
     const projectSelected = fetchedProjects
       .find(project => project.projectCode === projectCodeData);
     dispatch(setProjectInStore(projectSelected));
+    dispatch(setLoading(false));
   } catch (error) {
+    dispatch(setLoading(false));
     message.error(error);
   }
 }
 
 export const setVendor = (vendorName) => async (dispatch) => {
   try {
+    dispatch(setLoading(true));
     const fetchedVendors = [];
     const result = await axios.get('/vendors.json');
     for (const key in result.data) {
@@ -98,6 +195,7 @@ export const setVendor = (vendorName) => async (dispatch) => {
     }
     const newVendor = fetchedVendors.find((vendor) => vendor.vendorName === vendorName);
     dispatch(setVendorInStore(newVendor));
+    dispatch(setLoading(false));
   } catch (error) {
     message.error(error)
   }
@@ -252,6 +350,7 @@ export const setOrdersReceived = (initOrders, ordersData, idLink) => async (disp
 
 export const fetchPurchaseOrders = () => async (dispatch) => {
   dispatch(setShowSpin2(true));
+  dispatch(setLoading(true));
   try {
     const result = await axios.get('/purchaseorders.json');
     const fetchedPurchaseOrders = [];
@@ -263,7 +362,7 @@ export const fetchPurchaseOrders = () => async (dispatch) => {
     }
     const pendingPurchaseOrders = [];
     for (const key in fetchedPurchaseOrders) {
-      if (fetchedPurchaseOrders[key].status === 'Pending') {
+      if (fetchedPurchaseOrders[key].status === 'pending') {
         pendingPurchaseOrders.push({
           ...fetchedPurchaseOrders[key],
           id: key
@@ -272,15 +371,17 @@ export const fetchPurchaseOrders = () => async (dispatch) => {
     }
     dispatch(fetchPurchaseOrdersToStore(fetchedPurchaseOrders, pendingPurchaseOrders));
     dispatch(setShowSpin2(false));
+    dispatch(setLoading(false));
   } catch (error) {
     message.error('failed to retrieve purchase orders');
     console.error(error);
+    dispatch(setLoading(false));
     dispatch(setShowSpin2(false));
   }
 }
 export const getProjects = () => {
   return dispatch => {
-
+    dispatch(setLoading(true));
     dispatch(setShowSpin2(true));
     axios.get('/projects.json')
       .then((response) => {
@@ -293,8 +394,10 @@ export const getProjects = () => {
         }
         dispatch(setProjectsInStore(fetchedProjects));
         dispatch(setShowSpin2(false));
+        dispatch(setLoading(false));
       })
       .catch((error) => {
+        dispatch(setLoading(false));
         message.error('unable to fetch projects');
         console.error(error);
       })
@@ -302,6 +405,7 @@ export const getProjects = () => {
 }
 export const getPurchaseRequests = () => {
   return dispatch => {
+    dispatch(setLoading(true));
     dispatch(setShowSpin1(true));
     axios.get('/purchaserequests.json')
       .then((response) => {
@@ -315,48 +419,28 @@ export const getPurchaseRequests = () => {
           }
         }
         dispatch(setShowSpin1(false));
+        dispatch(setLoading(false));
         dispatch(setPurchaseRequests(fetchedPurchaseRequests))
       })
       .catch((error) => {
+        dispatch(setLoading(false));
         message.error('Could not obtain purchase requests');
         console.error(error);
       })
-    // try {
-    //   if (data) {
-    //     dispatch(setShowSpin1(true));
-    //     const queryData = await API.graphql(graphqlOperation(searchPurchaseRequests, {
-    //       filter:
-    //         {
-    //           purchaseRequestNo:
-    //             {
-    //               matchPhrasePrefix: data
-    //             }
-    //         },
-    //       limit: 5
-    //     }));
-    //     const purchaseRequests = queryData.data.searchPurchaseRequests.items;
-    //     if (purchaseRequests.length) {
-    //       dispatch(setPurchaseRequests(purchaseRequests));
-    //       dispatch(setShowSpin1(false));
-    //     }
-    //   }
-
-  // } catch (e) {
-  //   console.error(e)
-  //   dispatch(setShowSpin1(false));
-  //   message.error('Error getting Purchase Request!');
-  // }
   }
 };
 
 export const fetchPurchaseOrderId = () => async (dispatch) => {
+  dispatch(setLoading(true));
   dispatch(setShowSpin2(true));
   try {
     const response = await axios.get('/currentPurchaseOrderId.json');
+    dispatch(setLoading(false));
     dispatch(fetchPurchaseOrderIdInStore(response.data));
     dispatch(setShowSpin2(false));
   } catch (error) {
     message.error('failed to fetch purchase order id');
+    dispatch(setLoading(false));
     console.error(error);
     dispatch(setShowSpin2(false));
   }
@@ -364,24 +448,41 @@ export const fetchPurchaseOrderId = () => async (dispatch) => {
 
 export const addPurchaseOrder = (purchaseOrderData) => async (dispatch) => {
   dispatch(setShowSpin2(true));
-  // const newUnitPrice =  parseFloat(purchaseOrderData.unitPrice.split(',').join(''));
-  // const newItemTotal = parseFloat(purchaseOrderData.itemTotal.split(',').join(''))
-  const newOrders = [];
-  for (const key in purchaseOrderData.orders) {
-    const newUnitPrice = parseFloat(purchaseOrderData.orders[key].unitPrice.split(',').join(''));
-    const newItemTotal = parseFloat(purchaseOrderData.orders[key].itemTotal.split(',').join(''));
-    newOrders.push({
-      quantity: purchaseOrderData.orders[key].quantityLeft,
-      id: purchaseOrderData.orders[key].id,
-      category: purchaseOrderData.orders[key].category,
-      product: purchaseOrderData.orders[key].product,
-      unit: purchaseOrderData.orders[key].unit,
-      unitPrice: newUnitPrice,
-      didReceive: false,
-      itemTotal: newItemTotal
+  dispatch(setLoading(true));
+
+  const date = new Date();
+  const newDate = moment(date, 'DD-MM-YYYY');
+
+  const fetchedPurchaseRequests = await axios.get('/purchaserequests.json');
+  const purchaseRequests = []
+  for (const key in fetchedPurchaseRequests.data) {
+    purchaseRequests.push({
+      ...fetchedPurchaseRequests.data[key],
+      id: key
     })
   }
-  const newPurchaseRequestOrders = purchaseOrderData.prOrders;
+  const selectedPurchaseRequest = purchaseRequests.find((element) =>
+    element.purchaseRequestNo === purchaseOrderData.purchaseRequestNo);
+
+  const newPurchaseRequestOrders = [];
+  for (const key in selectedPurchaseRequest.orders) {
+    const orderFound = purchaseOrderData.orders.find((element) =>
+      element.product === selectedPurchaseRequest.orders[key].product);
+    if (orderFound === undefined) {
+      newPurchaseRequestOrders.push({
+        ...selectedPurchaseRequest.orders[key]
+      })
+
+    } else {
+      const newQuantityLeft = selectedPurchaseRequest.orders[key].quantityLeft - orderFound.quantity
+      newPurchaseRequestOrders.push({
+        ...selectedPurchaseRequest.orders[key],
+        quantityLeft: newQuantityLeft
+      })
+    }
+  }
+
+
   let prFlag = 0;
   let newPrStatus = 'PENDING';
   for (const key in newPurchaseRequestOrders) {
@@ -396,32 +497,40 @@ export const addPurchaseOrder = (purchaseOrderData) => async (dispatch) => {
   }
 
   const newPurchaseRequest = {
-    ...purchaseOrderData.purchaseRequest,
+    ...selectedPurchaseRequest,
     orders: newPurchaseRequestOrders,
     status: newPrStatus
   }
 
-  const newPurchaseOrderData = {
-    purchaseOrderNo: purchaseOrderData.purchaseOrderNo,
-    purchaseOrderId: purchaseOrderData.currentId,
-    orders: newOrders,
-    dateCreated: purchaseOrderData.dateCreated,
-    project: purchaseOrderData.project,
-    purchaseRequestNo: purchaseOrderData.purchaseRequestNo,
-    requestedBy: purchaseOrderData.requestedBy,
-    vendor: purchaseOrderData.vendor,
-    addNotes: purchaseOrderData.addNotes,
-    status: "Pending",
-    isApproved: true
+  const currentPurchaseOrderNo = await axios.get('/currentPurchaseOrderId.json');
+  const updatedPurchaseOrderOrders = [];
+  for (const key in purchaseOrderData.orders) {
+    if (purchaseOrderData.orders[key].quantity !== 0) {
+      updatedPurchaseOrderOrders.push({
+        ...purchaseOrderData.orders[key]
+      })
+    }
   }
-  const newPurchaseOrderNo = purchaseOrderData.currentId + 1;
+  console.log(purchaseOrderData);
+  const newPurchaseOrderId = currentPurchaseOrderNo.data;
+  const purchaseOrderNoDisplay = purchaseOrderData.purchaseOrderNo
+  const purchaseOrderIdDisplay = purchaseOrderData.purchaseOrderNo
+  const newPurchaseOrderData = {
+    ...purchaseOrderData,
+    orders: updatedPurchaseOrderOrders,
+    purchaseOrderId: parseFloat(purchaseOrderIdDisplay),
+    purchaseOrderNo: purchaseOrderNoDisplay,
+    dateCreated: newDate
+  }
+  const newPurchaseOrderNo = parseFloat(purchaseOrderIdDisplay) + 1
   try {
 
-    await axios.put('/purchaserequests/' + purchaseOrderData.prId + '.json', newPurchaseRequest);
-    await axios.put('/currentPurchaseOrderId.json', newPurchaseOrderNo)
+    await axios.put('/purchaserequests/' + selectedPurchaseRequest.id + '.json', newPurchaseRequest);
+    //await axios.put('/currentPurchaseOrderId.json', newPurchaseOrderNo)
     await axios.post('/purchaseorders.json', newPurchaseOrderData);
 
     // console.log(response.data);
+    dispatch(setLoading(false));
     dispatch(setShowSpin2(false));
     alert('Purchase order created!');
     dispatch(setOpenModal1(false));
@@ -429,6 +538,7 @@ export const addPurchaseOrder = (purchaseOrderData) => async (dispatch) => {
 
   } catch (error) {
     message.error('Failed to add purchase order');
+    dispatch(setLoading(false));
     console.error(error);
   }
 

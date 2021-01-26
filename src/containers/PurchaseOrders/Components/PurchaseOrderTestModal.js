@@ -1,42 +1,23 @@
-import React, {useEffect, useState} from 'react'
-import {
-  Modal, Button
-  // Input,
-} from 'antd';
-import {useDispatch, useSelector, shallowEqual} from 'react-redux';
+import React, {useEffect} from 'react'
 import Logopng from './../../../assets/images/Logo.png';
-import {PDFDownloadLink, Document, Page, Text, View, Image, StyleSheet, Font} from '@react-pdf/renderer';
+import {Document, Page, Text, View, PDFViewer, Image, StyleSheet, Font} from '@react-pdf/renderer';
 import Arial from './../../../assets/Fonts/ARIAL.TTF';
 import ArialBold from './../../../assets/Fonts/ARIALBD.TTF';
-import * as actions from './../../../store/purchaseorders/actions/Actions';
 
-const PurchaseOrderTest = () => {
+const PurchaseOrderTestModal = (props) => {
 
   Font.register({family: 'Arial',
     src: Arial});
   Font.register({family: 'ArialBold',
     src: ArialBold})
 
-  const flexProps = [11,1.5,9.8];
-  const flexProps3 = [1,10,60,12,12,18,14,1];
-
-  const dispatcher = useDispatch();
-
-  const {
-    samplePO,
-    vendor,
-    purchaseOrder
-  } = useSelector(({purchaseOrder}) => ({
-    samplePO: purchaseOrder.samplePO,
-    vendor: purchaseOrder.vendor,
-    purchaseOrder: purchaseOrder.purchaseOrder
-  }), shallowEqual);
+  const {purchaseOrder, vendor} = props;
 
   useEffect(() => {
-    dispatcher(actions.getSamplePO());
-    dispatcher(actions.getVendors());
-  }, [dispatcher, vendor])
+  }, [purchaseOrder, vendor])
 
+  const flexProps = [11,1.5,9.8];
+  const flexProps3 = [1,10,60,12,12,18,14,1];
   const styles = StyleSheet.create({
     page: {
       display: 'grid',
@@ -131,7 +112,7 @@ const PurchaseOrderTest = () => {
             PURCHASE ORDER
             </Text>
             <Text style={styles.purchaseOrderNo}>
-              {purchaseOrder.purchaseOrderNo}
+              {purchaseOrder[0].purchaseOrderNo}
             </Text>
 
             <View style={styles.prDoc}>
@@ -142,7 +123,7 @@ const PurchaseOrderTest = () => {
               </View>
               <View style={styles.flexOne}>
                 <Text style={styles.centerText}>
-                  {purchaseOrder.purchaseRequestNo}
+                  {purchaseOrder[0].purchaseRequestNo}
                 </Text>
               </View>
             </View>
@@ -251,7 +232,7 @@ const PurchaseOrderTest = () => {
                   {vendor.location}
                 </Text>
                 <Text style={{marginBottom: 2}}>
-                  {vendor.location}
+                  {vendor.telNo}
                 </Text>
                 <Text style={{marginBottom: 2}}>
                   {vendor.terms}
@@ -301,10 +282,10 @@ const PurchaseOrderTest = () => {
 
               <View style={{flex: 3}}>
                 <Text style={{marginBottom: 2}}>
-                  {purchaseOrder.requestedBy}
+                  {purchaseOrder[0].requestedBy}
                 </Text>
                 <Text style={{marginBottom: 2}}>
-                  {purchaseOrder.project}
+                  {purchaseOrder[0].project}
                 </Text>
                 <Text style={{marginBottom: 2}}>
 
@@ -378,9 +359,6 @@ const PurchaseOrderTest = () => {
 
         <View style={{marginTop: 15}}>
           {ordersDisplay2}
-        </View>
-        <View>
-          {ordersDisplay3}
         </View>
 
         <View>
@@ -595,6 +573,88 @@ const PurchaseOrderTest = () => {
 
   // Create Document Component
 
+  const orders = [];
+  orders.push({
+    category: 'I.A.6',
+    didReceive: false,
+    id: 1,
+    itemTotal: 6750,
+    product: 'GI Tie Wire #16',
+    quantity: 50,
+    unit: 'Bags',
+    unitPrice: 135
+  })
+  orders.push({
+    category: 'I.A.6',
+    didReceive: false,
+    id: 2,
+    itemTotal: 6750,
+    product: 'Pan Head Screw 1/2',
+    quantity: 1500,
+    unit: 'Bags',
+    unitPrice: 135
+  })
+  orders.push({
+    category: 'I.A.6',
+    didReceive: false,
+    id: 3,
+    itemTotal: 6750,
+    product: 'Republic Portland Cement',
+    quantity: 50,
+    unit: 'Bags',
+    unitPrice: 135
+  })
+  orders.push({
+    category: 'I.A.6',
+    didReceive: false,
+    id: 4,
+    itemTotal: 6750,
+    product: 'Pozzolan Cement',
+    quantity: 50,
+    unit: 'Bags',
+    unitPrice: 135
+  })
+  orders.push({
+    category: 'I.A.6',
+    didReceive: false,
+    id: 5,
+    itemTotal: 6750,
+    product: 'Pozzolan Cement',
+    quantity: 50,
+    unit: 'Bags',
+    unitPrice: 135
+  })
+  orders.push({
+    category: 'I.A.6',
+    didReceive: false,
+    id: 6,
+    itemTotal: 6750,
+    product: 'Pozzolan Cement',
+    quantity: 50,
+    unit: 'Bags',
+    unitPrice: 135
+  })
+  orders.push({
+    category: 'I.A.6',
+    didReceive: false,
+    id: 7,
+    itemTotal: 6750,
+    product: 'Pozzolan Cement',
+    quantity: 50,
+    unit: 'Bags',
+    unitPrice: 135
+  })
+  orders.push({
+    category: 'I.A.6',
+    didReceive: false,
+    id: 8,
+    itemTotal: 6750,
+    product: 'Pozzolan Cement',
+    quantity: 50,
+    unit: 'Bags',
+    unitPrice: 135
+  })
+
   const ordersDisplay2 = purchaseOrder.orders.map((order, index) =>
     <View key={order.id} style={{fontFamily: 'Arial',
       fontSize: 10,
@@ -626,83 +686,14 @@ const PurchaseOrderTest = () => {
       </View>
     </View>
   )
-
-  const newOrdersDisplay = [];
-  for (let i = 0; i <= 9 - purchaseOrder.orders.length; i += 1) {
-    newOrdersDisplay.push({key: i});
-  }
-
-  const ordersDisplay3 = newOrdersDisplay.map((order) =>
-    <View key={order.key} style={{fontFamily: 'Arial',
-      fontSize: 10,
-      textAlign: 'center',
-      flexDirection: 'row'}}>
-      <View style={{flex: flexProps3[0]}}>
-      </View>
-      <View style={{flex: flexProps3[1]}}>
-        <Text style={{color: 'white'}}>_</Text>
-      </View>
-      <View style={{flex: flexProps3[2],
-        textAlign: 'left',
-        marginLeft: 20}}>
-        <Text style={{color: 'white'}}>_</Text>
-      </View>
-      <View style={{flex: flexProps3[3]}}>
-        <Text style={{color: 'white'}}>_</Text>
-      </View>
-      <View style={{flex: flexProps3[4]}}>
-        <Text style={{color: 'white'}}>_</Text>
-      </View>
-      <View style={{flex: flexProps3[5]}}>
-        <Text style={{color: 'white'}}>_</Text>
-      </View>
-      <View style={{flex: flexProps3[6]}}>
-        <Text style={{color: 'white'}}>_</Text>
-      </View>
-      <View style={{flex: flexProps3[7]}}>
-      </View>
-    </View>)
-
-  const [modalVisible, setModalVisible] = useState(false);
-
-  const setStuff = () => {
-    dispatcher(actions.setVendor(samplePO[0].vendor))
-    dispatcher(actions.setPurchaseOrder(samplePO[0]))
-  }
-
-  const onOk = () => {
-    setModalVisible(false);
-  }
-
-  const onCancel = () => {
-    setModalVisible(false);
-  }
-
-  const onButtonClick = () => {
-    setModalVisible(true);
-  }
   return (
     <>
-      <Modal visible = {modalVisible}
-        onCancel={onCancel}
-        onOk={onOk}
-        style={{width: 1000,
-          height: 1000}}>
-        {/* <PurchaseOrderTestModal purchaseOrder = {samplePO} vendor={vendor}/> */}
-        <PDFDownloadLink  fileName= "sample" document= {<MyDocument purchaseOrder = {purchaseOrder} vendor={vendor}/>}>
-          Download
-        </PDFDownloadLink>
-      </Modal>
-      <Button onClick = {setStuff}>
-        Set
-      </Button>
-      <Button onClick = {onButtonClick}>
-        Hello
-      </Button>
-
+      <PDFViewer style={styles.page} size="A4">
+        <MyDocument />
+      </PDFViewer>
     </>
   )
 
 }
 
-export default PurchaseOrderTest;
+export default PurchaseOrderTestModal;

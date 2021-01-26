@@ -42,7 +42,7 @@ const PurchaseOrderDetails = (props) => {
         category: selectedCategory,
         didReceive: e.didReceive,
         id: e.id,
-        itemTotal: e.itemTotal,
+        itemTotal: e.totalPrice,
         product: e.product,
         quantity: e.quantity,
         unit: e.unit,
@@ -111,9 +111,9 @@ const PurchaseOrderDetails = (props) => {
     setSelectedCategory(selectedCategory);
   }
 
-  const mappedOrders = purchaseOrder.orders.map((e) => {
+  const mappedOrders = purchaseOrder.orders.map((e, index) => {
     return (
-      <div key={e.id}>
+      <div key={index}>
         <Row style={{marginBottom: '10px',
           marginLeft: 25,
           marginRight: 35}}>
@@ -123,31 +123,23 @@ const PurchaseOrderDetails = (props) => {
           <Col span={6}>
             {e.product}
           </Col>
-          <Col span={3}>
+          <Col span={1}>
             {e.quantity}
           </Col>
-          <Col span={3}>
+          <Col span={3} style={{textAlign: 'center'}}>
+            {e.quantityReceived}
+          </Col>
+          <Col span={2}>
             {e.unit}
           </Col>
           <Col span={3}>
             {parseFloat(e.unitPrice).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
           </Col>
           <Col span={3}>
-            {parseFloat(e.itemTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+            {parseFloat(e.totalPrice).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
           </Col>
           <Col span={4}>
-            <Select defaultValue={e.category}
-              onClick={onSelectClick} style={{width: 100}} onSelect={(e) => onSelected(e)}>
-              {showedCategories()}
-            </Select>
-          </Col>
-          <Col span={1}>
-            <Switch size="small"
-              onChange= {(checkbox) => onChecked(e, checkbox)}
-              disabled={e.didReceive}
-              defaultChecked={e.didReceive}
-              loading={loadingFlag}
-            />
+            {e.category}
           </Col>
         </Row>
       </div>
@@ -215,10 +207,13 @@ const PurchaseOrderDetails = (props) => {
           <Col span={6}>
             Description
           </Col>
-          <Col span={3}>
+          <Col span={1}>
             Qty
           </Col>
-          <Col span={3}>
+          <Col span={3} style={{textAlign: 'center'}}>
+            Received
+          </Col>
+          <Col span={2}>
             Unit
           </Col>
           <Col span={3}>
@@ -229,9 +224,6 @@ const PurchaseOrderDetails = (props) => {
           </Col>
           <Col span={4}>
             Category
-          </Col>
-          <Col span={1}>
-        ✓
           </Col>
           <br />
         </Row>

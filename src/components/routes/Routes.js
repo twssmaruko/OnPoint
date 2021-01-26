@@ -18,6 +18,7 @@ const PurchaseOrders = lazy(() =>
 const Projects = lazy(() => import('../../containers/Projects/Projects'))
 const ProjectDetails = lazy(() => import('../../containers/Projects/ProjectDetails'));
 const PurchaseOrderTest = lazy(() => import('../../containers/PurchaseOrders/Components/PurchaseOrderTest'));
+const MaterialsReceiving = lazy(() => import('../../containers/MaterialsReceiving/MaterialsReceiving'));
 
 // const Checkout = React.lazy(() => {
 //     return import('./containers/Checkout/Checkout');
@@ -28,6 +29,7 @@ const Routes = () => {
     <Switch>
       <Route path="/purchaseorders" exact render={(props) => <PurchaseOrders key="purchaseOrdersKey" {...props}/>} />
       <Route path="/purchaserequest" exact render={(props) => <PurchaseRequests key="purchaseRequestsKey" {...props}/>} />
+      <Route path="/materialsreceiving" exact render={(props) => <MaterialsReceiving key="materialsReceivingKey" {...props} />} />
       <Route path="/auth" exact component={Auth} />
       <Route path="/vendors" exact render={(props) => <Vendors {...props}/>} />
       <Route path="/projects" exact render={(props) => <Projects key="projectKey" {...props}/>}/>

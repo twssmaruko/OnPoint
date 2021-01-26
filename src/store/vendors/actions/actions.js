@@ -79,6 +79,7 @@ export const newVendor = (vendorData) => {
       // eslint-disable-next-line no-console
         console.log(response.data);
         dispatch(newVendorSuccess(response.data.name, vendorData));
+        console.log('SUCCESS!');
       })
       .catch((error) => {
         dispatch(newVendorFail(error));

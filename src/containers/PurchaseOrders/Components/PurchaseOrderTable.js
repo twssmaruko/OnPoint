@@ -1,20 +1,15 @@
 import React, {useState, memo, useEffect} from 'react';
-
+import moment from 'moment';
 import {
   Row,
   Table,
-  DatePicker,
   Spin,
   Col,
-  Checkbox,
-  Button,
-  Select
+  Checkbox
 } from 'antd';
-import moment from 'moment';
-import {CloseCircleFilled, CheckCircleFilled, EditTwoTone, ExclamationCircleOutlined} from '@ant-design/icons';
+import {CheckCircleFilled, EditTwoTone, ExclamationCircleOutlined} from '@ant-design/icons';
 import TableButton from '../../../components/button/OnpointButton';
 import PurchaseOrderDetails from './PurchaseOrderDetails';
-import PurchaseOrderModal from './PurchaseOrderModal';
 import * as uiActions from '../../../store/ui/actions/Actions';
 import * as actions from '../../../store/purchaseorders/actions/Actions';
 
@@ -25,7 +20,6 @@ import {
 
 import './PurchaseOrder.css'
 
-const {Option} = Select;
 
 const PurchaseOrderTable = memo(() => {
 
@@ -37,8 +31,7 @@ const PurchaseOrderTable = memo(() => {
     // purchaseRequestsList,
     tableSpin,
     purchaseOrders,
-    pendingPurchaseOrders,
-    project
+    pendingPurchaseOrders
     // ordersReceived
   } = useSelector(({ui, purchaseOrder}) => ({
     // openAnotherModal: ui.openModal2,
@@ -53,7 +46,6 @@ const PurchaseOrderTable = memo(() => {
 
   // console.log("hey")
 
-  const [params, setParams] = useState({});
   const [, setCurrentPurchaseOrder] = useState({});
   const [seeAll, setSeeAll] = useState(false);
   const [purchaseOrderDetailsModal , setPurchaseOrderDetailsModal] = useState(null);
@@ -67,13 +59,13 @@ const PurchaseOrderTable = memo(() => {
     </div>;
 
 
-  const approvedDisplay = (isApproved) =>
-    isApproved === true ? <CheckCircleFilled style={{marginLeft: 20,
-      color: 'green'}} />
-      : <CloseCircleFilled style={{marginLeft: 20,
-        color: 'red'}} />;
+  // const approvedDisplay = (isApproved) =>
+  //   isApproved === true ? <CheckCircleFilled style={{marginLeft: 20,
+  //     color: 'green'}} />
+  //     : <CloseCircleFilled style={{marginLeft: 20,
+  //       color: 'red'}} />;
   const poStatusDisplay = (status) =>
-    status === 'Pending' ? <div>PENDING<ExclamationCircleOutlined style={{marginLeft: 20,
+    status === 'pending' ? <div>PENDING<ExclamationCircleOutlined style={{marginLeft: 20,
       color: 'orange'}} /></div>: <div> RECEIVED
       <CheckCircleFilled style={{marginLeft: 20,
         color: 'green'}} /></div>
@@ -110,18 +102,11 @@ const PurchaseOrderTable = memo(() => {
       render: poStatusDisplay
     },
     {
-      title: 'Approved',
-      dataIndex: 'isApproved',
-      key: 'isApproved',
-      width: 200,
-      render: approvedDisplay
-    },
-    {
       title: 'Requested On',
       dataIndex: 'dateCreated',
       key: 'dateCreated',
-      width: 250
-      //render: (dateCreated) => moment(dateCreated).format('MMMM Do YYYY, h:mm:ss A')
+      width: 250,
+      render: (createdAt) => moment(createdAt).format('MMMM Do YYYY, h:mm:ss A')
     }
   ];
 
@@ -133,56 +118,6 @@ const PurchaseOrderTable = memo(() => {
     dispatcher(uiActions.setOpenModal1(true));
     // setPurchaseOrderDetailsModal(<PurchaseOrderModal />)
     setPurchaseOrderDetailsModal(<PurchaseOrderDetails purchaseOrder={e} initOrders={[]}/>)
-  };
-
-
-
-  const onSearch = () => {
-    // dispatcher(actions.getPurchaseRequests(params));
-  };
-
-  const onDateSelect = (date) => {
-    if (!date) {
-      const newParams = params;
-      delete newParams.dayMonthYear;
-      setParams({...newParams});
-      return;
-    }
-    setParams({...params,
-      dayMonthYear: moment(date).format('DD-MM-YYYY')});
-  };
-
-  const onMonthYearSelect = (date) => {
-    if (!date) {
-      const newParams = params;
-      delete newParams.monthYear;
-      setParams({...newParams});
-      return;
-    }
-    setParams({...params,
-      monthYear: moment(date).format('MM-YYYY')});
-  };
-
-  const handleStatusChange = (value) => {
-    if (!value) {
-      const newParams = params;
-      delete newParams.status;
-      setParams({...newParams});
-      return;
-    }
-    setParams({...params,
-      status: value});
-  };
-
-  const onApprovedChange = (value) => {
-    if (!value) {
-      const newParams = params;
-      delete newParams.isApproved;
-      setParams({...newParams});
-      return;
-    }
-    setParams({...params,
-      isApproved: value});
   };
 
   const onChecked = () => {

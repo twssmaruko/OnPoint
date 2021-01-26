@@ -3,27 +3,21 @@ import {
   Modal, Row, Col
   // Input,
 } from 'antd';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 import moment from 'moment';
-import * as actions from '../../../store/purchaseorders/actions/Actions';
-import * as uiActions from '../../../store/ui/actions/Actions';
 import Logo from './../../../components/logo/Logo';
-import {jsPDF} from 'jspdf';
-import html2canvas from 'html2canvas';
-import ReactPDF, {PDFDownloadLink, Document, Page, Text, View, StyleSheet, PDFViewer, Image} from '@react-pdf/renderer';
+//import {Document, Page} from '@react-pdf/renderer';
 
 
 const PurchaseOrderModal = (props) => {
-  const dispatcher = useDispatch();
-  const {purchaseOrder, transfers, count, prOrders, projectCategories} = props;
+  const {purchaseOrder} = props;
   const {
     requestedBy,
     project,
     purchaseRequestNo,
     purchaseOrderNo,
     vendor,
-    orders,
-    addNotes
+    orders
   } = purchaseOrder;
 
   const {openModal} = useSelector(({ui}) => ({
@@ -32,38 +26,9 @@ const PurchaseOrderModal = (props) => {
   const [newTotalPrice, setNewTotalPrice] = useState(0);
   //const {orders} = purchaseRequestData;
 
-  const printDocument = () => {
-    const input = document.getElementById('divToPrint');
-    html2canvas(input)
-      .then((canvas) => {
-        const imgData = canvas.toDataURL('image/png');
-        const pdf = new jsPDF();
-        pdf.addImage(imgData, 'PNG', 0, 10);
-        // pdf.output('dataurlnewwindow');
-        pdf.save(purchaseOrder.purchaseOrderNo + '.pdf');
-      });
-  }
 
-  const addPurchaseOrder = (purchaseOrderData) => {
-    const newOrdersInPurchaseOrder = transfers.slice(0, transfers.length - count);
-    const finalOrders = [];
-    for (const key in prOrders) {
-      const newOrder = newOrdersInPurchaseOrder.find((e) => e.product === prOrders[key].product);
-      if (newOrder === undefined) {
-        finalOrders.push(prOrders[key]);
-      } else {
-        finalOrders.push(newOrder);
-      }
-    }
-    const newPurchaseOrderData = {
-      ...purchaseOrder,
-      prOrders: finalOrders
-    }
-    dispatcher(actions.addPurchaseOrder(newPurchaseOrderData, projectCategories))
-    printDocument();
-  };
   const borderStyle = 'none';
-  const flexProps = [40,10.5,9.5,40];
+  //const flexProps = [40,10.5,9.5,40];
   // const orders = [];
   // orders.push({
   //   category: 'I.A.6',
@@ -206,7 +171,6 @@ const PurchaseOrderModal = (props) => {
   )
 
   const handleCancel = () => {
-    dispatcher(uiActions.setOpenModal1(false));
   };
   useEffect(() => {
     let priceTotal = 0;
@@ -217,17 +181,6 @@ const PurchaseOrderModal = (props) => {
     setNewTotalPrice(totalPriceString);
   }, [orders])
 
-  const styles = StyleSheet.create({
-    page: {
-      flexDirection: 'row',
-      backgroundColor: '#E4E4E4'
-    },
-    section: {
-      margin: 10,
-      padding: 10,
-      flexGrow: 1
-    }
-  });
   const OldPurchaseOrderModal = () =>
     <div id="divToPrint" style={{
       minWidth: '210mm',
@@ -781,427 +734,426 @@ const PurchaseOrderModal = (props) => {
       </Row>
     </div>
 
-  const PurchaseOrderDocument = () =>
-    <Document id="toPrint">
-      <Page size="A4">
-        <Row style={{marginBottom: 50}}>
-        </Row>
-        <Row style={{
-          marginLeft: '5.0%',
-          marginRight: '7%'
-        }}>
-          <Col span={10} style={{
-            textAlign: 'left',
-            borderStyle: borderStyle,
-            marginLeft: '0%'
-          }}>
-            <Logo />
-          </Col>
-          <Col span={1} />
-          <Col span={11} style={{
-            alignContent: 'start',
-            borderStyle: borderStyle,
-            textAlign: 'center',
-            marginLeft: '7.5%'
-          }}>
-            <Row style={{
-              fontSize: 18,
-              borderColor: 'black',
-              backgroundColor: '#7f7f7f',
-              color: 'white',
-              marginTop: 10,
-              borderStyle: 'solid',
-              borderWidth: 'thin',
-              borderBottom: 'none',
-              fontFamily: 'Arial',
-              fontWeight: 'bold',
-              textAlign: 'center',
-              height: 25,
-              marginBottom: 0
-            }}>
-              <Col span={24} style={{textAlign: 'center'}}>
-                PURCHASE ORDER
-              </Col>
-            </Row>
-            <Row style={{
-              borderColor: 'black',
-              marginTop: 0,
-              fontSize: 13,
-              fontFamily: 'Arial',
-              textAlign: 'center',
-              borderStyle: 'solid',
-              borderTop: 'none',
-              borderWidth: 'thin',
-              marginBottom: 10}}
-            >
-              <Col span={24} style={{textAlign: 'center',
-                color: 'black'}}>
-                  OPC-2020-1600
-              </Col>
-            </Row>
-            <Row style={{
-              fontFamily: 'Arial',
-              fontSize: 13,
-              textAlign: 'left',
-              borderStyle: borderStyle
-            }}>
-              <Col span={2}></Col>
-              <Col span={10}>
-                PR / Doc # :
-              </Col>
-              <Col span={10}>
-            455
-              </Col>
-              <Col span={2}></Col>
-            </Row>
-          </Col>
-          <Col span={7}>
-          </Col>
-        </Row>
+  // const PurchaseOrderDocument = () =>
+  //   <Document id="toPrint">
+  //     <Page size="A4">
+  //       <Row style={{marginBottom: 50}}>
+  //       </Row>
+  //       <Row style={{
+  //         marginLeft: '5.0%',
+  //         marginRight: '7%'
+  //       }}>
+  //         <Col span={10} style={{
+  //           textAlign: 'left',
+  //           borderStyle: borderStyle,
+  //           marginLeft: '0%'
+  //         }}>
+  //           <Logo />
+  //         </Col>
+  //         <Col span={1} />
+  //         <Col span={11} style={{
+  //           alignContent: 'start',
+  //           borderStyle: borderStyle,
+  //           textAlign: 'center',
+  //           marginLeft: '7.5%'
+  //         }}>
+  //           <Row style={{
+  //             fontSize: 18,
+  //             borderColor: 'black',
+  //             backgroundColor: '#7f7f7f',
+  //             color: 'white',
+  //             marginTop: 10,
+  //             borderStyle: 'solid',
+  //             borderWidth: 'thin',
+  //             borderBottom: 'none',
+  //             fontFamily: 'Arial',
+  //             fontWeight: 'bold',
+  //             textAlign: 'center',
+  //             height: 25,
+  //             marginBottom: 0
+  //           }}>
+  //             <Col span={24} style={{textAlign: 'center'}}>
+  //               PURCHASE ORDER
+  //             </Col>
+  //           </Row>
+  //           <Row style={{
+  //             borderColor: 'black',
+  //             marginTop: 0,
+  //             fontSize: 13,
+  //             fontFamily: 'Arial',
+  //             textAlign: 'center',
+  //             borderStyle: 'solid',
+  //             borderTop: 'none',
+  //             borderWidth: 'thin',
+  //             marginBottom: 10}}
+  //           >
+  //             <Col span={24} style={{textAlign: 'center',
+  //               color: 'black'}}>
+  //                 OPC-2020-1600
+  //             </Col>
+  //           </Row>
+  //           <Row style={{
+  //             fontFamily: 'Arial',
+  //             fontSize: 13,
+  //             textAlign: 'left',
+  //             borderStyle: borderStyle
+  //           }}>
+  //             <Col span={2}></Col>
+  //             <Col span={10}>
+  //               PR / Doc # :
+  //             </Col>
+  //             <Col span={10}>
+  //           455
+  //             </Col>
+  //             <Col span={2}></Col>
+  //           </Row>
+  //         </Col>
+  //         <Col span={7}>
+  //         </Col>
+  //       </Row>
 
 
 
-        <Row style={{marginBottom: 10,
-          color: 'black',
-          fontFamily: 'Arial'}}>
-          <Col span={6}></Col>
-          <Col span={4} style={{display: 'block',
-            textAlign: 'left',
-            marginLeft: '6%',
-            borderStyle: borderStyle
-          }}>
-            <Row style={{marginBottom: 0,
-              height: 16}}>
-              <Col span={24} style={{fontWeight: 'bold',
-                fontFamily: 'Arial',
-                letterSpacing: '-0.5px',
-                fontSize: 17}}>
-              ON POINT CONSTRUCTION
-              </Col>
-            </Row>
-            <Row style={{marginBottom: 0,
-              height: 16}}>
-              <Col span={24} style={{
-                fontFamily: 'Arial',
-                textAlign: 'left',
-                fontSize: 14}}>
-              28A Sanson Road, Lahug
-              </Col>
-            </Row>
-            <Row style={{marginBottom: 0,
-              height: 16}}>
-              <Col span={24} style={{
-                fontFamily: 'Arial',
-                fontSize: 14}}>
-              Cebu City, Philippines
-              </Col>
-            </Row>
-          </Col>
-          <Col span={4} style={{alignContent: 'start',
-            borderStyle: borderStyle,
-            textAlign: 'left',
-            marginLeft: '5%'}}>
-            <Row>
-              <Col span={24}>
-                <br />
-              </Col>
-            </Row>
-            <Row style={{borderStyle: borderStyle}}>
-              <Col span={2}></Col>
-              <Col span={10}>
-                    Order Date:
-              </Col>
-              <Col span={10}>
-                    3/22/2019
-              </Col>
-              <Col span={2}></Col>
-            </Row>
-            <Row>
-              <Col span={24}>
-                <br />
-              </Col>
-            </Row>
-          </Col>
-          <Col span={6}></Col>
-        </Row>
+  //       <Row style={{marginBottom: 10,
+  //         color: 'black',
+  //         fontFamily: 'Arial'}}>
+  //         <Col span={6}></Col>
+  //         <Col span={4} style={{display: 'block',
+  //           textAlign: 'left',
+  //           marginLeft: '6%',
+  //           borderStyle: borderStyle
+  //         }}>
+  //           <Row style={{marginBottom: 0,
+  //             height: 16}}>
+  //             <Col span={24} style={{fontWeight: 'bold',
+  //               fontFamily: 'Arial',
+  //               letterSpacing: '-0.5px',
+  //               fontSize: 17}}>
+  //             ON POINT CONSTRUCTION
+  //             </Col>
+  //           </Row>
+  //           <Row style={{marginBottom: 0,
+  //             height: 16}}>
+  //             <Col span={24} style={{
+  //               fontFamily: 'Arial',
+  //               textAlign: 'left',
+  //               fontSize: 14}}>
+  //             28A Sanson Road, Lahug
+  //             </Col>
+  //           </Row>
+  //           <Row style={{marginBottom: 0,
+  //             height: 16}}>
+  //             <Col span={24} style={{
+  //               fontFamily: 'Arial',
+  //               fontSize: 14}}>
+  //             Cebu City, Philippines
+  //             </Col>
+  //           </Row>
+  //         </Col>
+  //         <Col span={4} style={{alignContent: 'start',
+  //           borderStyle: borderStyle,
+  //           textAlign: 'left',
+  //           marginLeft: '5%'}}>
+  //           <Row>
+  //             <Col span={24}>
+  //               <br />
+  //             </Col>
+  //           </Row>
+  //           <Row style={{borderStyle: borderStyle}}>
+  //             <Col span={2}></Col>
+  //             <Col span={10}>
+  //                   Order Date:
+  //             </Col>
+  //             <Col span={10}>
+  //                   3/22/2019
+  //             </Col>
+  //             <Col span={2}></Col>
+  //           </Row>
+  //           <Row>
+  //             <Col span={24}>
+  //               <br />
+  //             </Col>
+  //           </Row>
+  //         </Col>
+  //         <Col span={6}></Col>
+  //       </Row>
 
 
-        <Row style={{color: 'black',
-          fontFamily: 'Arial'}}>
-          <Col flex={flexProps[0]} style={{borderStyle: borderStyle}}>
-          </Col>
-          <Col flex={flexProps[1]} style={{borderStyle: 'solid',
-            borderWidth: 'thin',
-            borderColor: 'black',
-            borderTop: 'none'}}>
-            <Row style={{marginBottom: 20}}>
-              <Col span ={24} style={{
-                borderStyle: 'solid',
-                borderWidth: 'thin',
-                fontFamily: 'Arial',
-                fontSize: 14,
-                borderColor: 'black',
-                backgroundColor: '#EEECE1',
-                borderLeft: 'none',
-                borderRight: 'none'
-              }}>
-     VENDOR
-              </Col>
-            </Row>
-            <Row>
-              <Col span={2} style={{textAlign: 'start',
-                marginLeft: 5}}>
-                  Name:
-              </Col>
-              <Col span={2}>
-              </Col>
-              <Col span={18} style={{textAlign: 'start',
-                marginLeft: 5}}>
-                Vic Enterprises
-              </Col>
-            </Row>
-            <Row>
-              <Col span={2} style={{textAlign: 'start',
-                marginLeft: 5}}>
-                  Address:
-              </Col>
-              <Col span={2}>
-              </Col>
-              <Col span={18} style={{textAlign: 'start',
-                marginLeft: 5}}>
-                MJ Cuenco Ave Cebu City
-              </Col>
-            </Row>
-            <Row>
-              <Col span={2} style={{textAlign: 'start',
-                marginLeft: 5}}>
-                  Tel:
-              </Col>
-              <Col span={2}>
-              </Col>
-              <Col span={18} style={{textAlign: 'start',
-                marginLeft: 5}}>
-                412-8502
-              </Col>
-            </Row>
-            <Row style={{marginBottom: 35}}>
-              <Col span={2} style={{textAlign: 'start',
-                marginLeft: 5}}>
-                  Terms:
-              </Col>
-              <Col span={2}>
-              </Col>
-              <Col span={18} style={{textAlign: 'start',
-                marginLeft: 5}}>
-                30 Days
-              </Col>
-            </Row>
-          </Col>
-          <Col flex={flexProps[2]} style={{marginLeft: '2.4%',
-            borderStyle: 'solid',
-            borderWidth: 'thin',
-            borderColor: 'black',
-            borderTop: 'none'}}>
-            <Row style={{marginBottom: 20}}>
-              <Col span={24} style={{
-                borderStyle: 'solid',
-                borderWidth: 'thin',
-                fontFamily: 'Arial',
-                fontSize: 14,
-                borderColor: 'black',
-                backgroundColor: '#EEECE1',
-                borderLeft: 'none',
-                borderRight: 'none'}}>
-                    JOB ADDRESS
-              </Col>
-            </Row>
-            <Row>
-              <Col span={5} style={{textAlign: 'start',
-                marginLeft: 5}}>
-                  Req By:
-              </Col>
-              <Col style={{textAlign: 'start',
-                marginLeft: '2.4%'}}>
-                Engr. Jojo Salamanes
-              </Col>
-            </Row>
-            <Row>
-              <Col span={5} style={{textAlign: 'start',
-                marginLeft: 5}}>
-                  Project:
-              </Col>
-              <Col style={{textAlign: 'start',
-                marginLeft: '2.4%'}}>
-                GB003-BANILAD
-              </Col>
-            </Row>
-            <Row>
-              <Col span={5} style={{textAlign: 'start',
-                marginLeft: 5}}>
-                  Category:
-              </Col>
-              <Col style={{textAlign: 'start',
-                marginLeft: '2.4%'}}>
-                II-III.B.2
-              </Col>
-            </Row>
-          </Col>
-          <Col flex={flexProps[3]} style={{borderStyle: borderStyle}}/>
-        </Row>
+  //       <Row style={{color: 'black',
+  //         fontFamily: 'Arial'}}>
+  //         <Col flex={flexProps[0]} style={{borderStyle: borderStyle}}>
+  //         </Col>
+  //         <Col flex={flexProps[1]} style={{borderStyle: 'solid',
+  //           borderWidth: 'thin',
+  //           borderColor: 'black',
+  //           borderTop: 'none'}}>
+  //           <Row style={{marginBottom: 20}}>
+  //             <Col span ={24} style={{
+  //               borderStyle: 'solid',
+  //               borderWidth: 'thin',
+  //               fontFamily: 'Arial',
+  //               fontSize: 14,
+  //               borderColor: 'black',
+  //               backgroundColor: '#EEECE1',
+  //               borderLeft: 'none',
+  //               borderRight: 'none'
+  //             }}>
+  //    VENDOR
+  //             </Col>
+  //           </Row>
+  //           <Row>
+  //             <Col span={2} style={{textAlign: 'start',
+  //               marginLeft: 5}}>
+  //                 Name:
+  //             </Col>
+  //             <Col span={2}>
+  //             </Col>
+  //             <Col span={18} style={{textAlign: 'start',
+  //               marginLeft: 5}}>
+  //               Vic Enterprises
+  //             </Col>
+  //           </Row>
+  //           <Row>
+  //             <Col span={2} style={{textAlign: 'start',
+  //               marginLeft: 5}}>
+  //                 Address:
+  //             </Col>
+  //             <Col span={2}>
+  //             </Col>
+  //             <Col span={18} style={{textAlign: 'start',
+  //               marginLeft: 5}}>
+  //               MJ Cuenco Ave Cebu City
+  //             </Col>
+  //           </Row>
+  //           <Row>
+  //             <Col span={2} style={{textAlign: 'start',
+  //               marginLeft: 5}}>
+  //                 Tel:
+  //             </Col>
+  //             <Col span={2}>
+  //             </Col>
+  //             <Col span={18} style={{textAlign: 'start',
+  //               marginLeft: 5}}>
+  //               412-8502
+  //             </Col>
+  //           </Row>
+  //           <Row style={{marginBottom: 35}}>
+  //             <Col span={2} style={{textAlign: 'start',
+  //               marginLeft: 5}}>
+  //                 Terms:
+  //             </Col>
+  //             <Col span={2}>
+  //             </Col>
+  //             <Col span={18} style={{textAlign: 'start',
+  //               marginLeft: 5}}>
+  //               30 Days
+  //             </Col>
+  //           </Row>
+  //         </Col>
+  //         <Col flex={flexProps[2]} style={{marginLeft: '2.4%',
+  //           borderStyle: 'solid',
+  //           borderWidth: 'thin',
+  //           borderColor: 'black',
+  //           borderTop: 'none'}}>
+  //           <Row style={{marginBottom: 20}}>
+  //             <Col span={24} style={{
+  //               borderStyle: 'solid',
+  //               borderWidth: 'thin',
+  //               fontFamily: 'Arial',
+  //               fontSize: 14,
+  //               borderColor: 'black',
+  //               backgroundColor: '#EEECE1',
+  //               borderLeft: 'none',
+  //               borderRight: 'none'}}>
+  //                   JOB ADDRESS
+  //             </Col>
+  //           </Row>
+  //           <Row>
+  //             <Col span={5} style={{textAlign: 'start',
+  //               marginLeft: 5}}>
+  //                 Req By:
+  //             </Col>
+  //             <Col style={{textAlign: 'start',
+  //               marginLeft: '2.4%'}}>
+  //               Engr. Jojo Salamanes
+  //             </Col>
+  //           </Row>
+  //           <Row>
+  //             <Col span={5} style={{textAlign: 'start',
+  //               marginLeft: 5}}>
+  //                 Project:
+  //             </Col>
+  //             <Col style={{textAlign: 'start',
+  //               marginLeft: '2.4%'}}>
+  //               GB003-BANILAD
+  //             </Col>
+  //           </Row>
+  //           <Row>
+  //             <Col span={5} style={{textAlign: 'start',
+  //               marginLeft: 5}}>
+  //                 Category:
+  //             </Col>
+  //             <Col style={{textAlign: 'start',
+  //               marginLeft: '2.4%'}}>
+  //               II-III.B.2
+  //             </Col>
+  //           </Row>
+  //         </Col>
+  //         <Col flex={flexProps[3]} style={{borderStyle: borderStyle}}/>
+  //       </Row>
 
 
-        <Row style={{marginTop: 20,
-          fontFamily: 'Arial',
-          color: 'black'}}>
-          <Col span={24} style={{textAlign: 'center',
-            fontSize: 15}}>
-              PLEASE SUPPLY THE FOLLOWING:
-          </Col>
-        </Row>
+  //       <Row style={{marginTop: 20,
+  //         fontFamily: 'Arial',
+  //         color: 'black'}}>
+  //         <Col span={24} style={{textAlign: 'center',
+  //           fontSize: 15}}>
+  //             PLEASE SUPPLY THE FOLLOWING:
+  //         </Col>
+  //       </Row>
 
-        <Row style={{marginTop: '1%',
-          fontFamily: 'Arial',
-          color: 'black'}}>
-          <Col span={7} style={{borderStyle: borderStyle}}></Col>
-          <Col span={10} style={{borderStyle: borderStyle
-            ,borderTop: 'solid',
-            borderBottom: 'solid',
-            borderWidth: 'thin',
-            height: '70px'}}>
-            <Row style={{marginTop: '3%'}}>
-              <Col span={4} style={{borderStyle: borderStyle}}>IT</Col>
-              <Col span={11} style={{borderStyle: borderStyle}}>DESCRIPTION</Col>
-              <Col span={1} style={{borderStyle: borderStyle}}>QTY</Col>
-              <Col span={2} style={{borderStyle: borderStyle}}>UNIT</Col>
-              <Col span={3} style={{borderStyle: borderStyle}}>UNIT PRICE</Col>
-              <Col span={3} style={{borderStyle: borderStyle}}>TOTAL</Col>
-            </Row>
-          </Col>
-          <Col span={7} style={{borderStyle: borderStyle}}></Col>
-        </Row>
+  //       <Row style={{marginTop: '1%',
+  //         fontFamily: 'Arial',
+  //         color: 'black'}}>
+  //         <Col span={7} style={{borderStyle: borderStyle}}></Col>
+  //         <Col span={10} style={{borderStyle: borderStyle
+  //           ,borderTop: 'solid',
+  //           borderBottom: 'solid',
+  //           borderWidth: 'thin',
+  //           height: '70px'}}>
+  //           <Row style={{marginTop: '3%'}}>
+  //             <Col span={4} style={{borderStyle: borderStyle}}>IT</Col>
+  //             <Col span={11} style={{borderStyle: borderStyle}}>DESCRIPTION</Col>
+  //             <Col span={1} style={{borderStyle: borderStyle}}>QTY</Col>
+  //             <Col span={2} style={{borderStyle: borderStyle}}>UNIT</Col>
+  //             <Col span={3} style={{borderStyle: borderStyle}}>UNIT PRICE</Col>
+  //             <Col span={3} style={{borderStyle: borderStyle}}>TOTAL</Col>
+  //           </Row>
+  //         </Col>
+  //         <Col span={7} style={{borderStyle: borderStyle}}></Col>
+  //       </Row>
 
 
-        <Row style={{marginTop: '0.5%',
-          color: 'black',
-          fontFamily: 'Arial'}}>
-          <Col span= {7} style={{borderStyle: borderStyle}}></Col>
-          <Col span= {10} style={{borderStyle: borderStyle}}>
-            {ordersDisplay}
-          </Col>
-          <Col span={7} style={{borderStyle: borderStyle}}></Col>
-        </Row>
+  //       <Row style={{marginTop: '0.5%',
+  //         color: 'black',
+  //         fontFamily: 'Arial'}}>
+  //         <Col span= {7} style={{borderStyle: borderStyle}}></Col>
+  //         <Col span= {10} style={{borderStyle: borderStyle}}>
+  //           {ordersDisplay}
+  //         </Col>
+  //         <Col span={7} style={{borderStyle: borderStyle}}></Col>
+  //       </Row>
 
-        <Row style={{marginTop: '2%',
-          marginBottom: '20px',
-          color: 'black',
-          fontFamily: 'Arial'}}>
-          <Col span={14}></Col>
-          <Col span={3} style={{borderTop: 'solid',
-            borderWidth: 'thin',
-            textAlign: 'left'}}>Total Amount <b style={{fontSize: '10',
-              fontFamily: 'Arial',
-              textAlign: 'right'}}>131,275.00</b></Col>
-          <Col span={7}></Col>
-        </Row>
+  //       <Row style={{marginTop: '2%',
+  //         marginBottom: '20px',
+  //         color: 'black',
+  //         fontFamily: 'Arial'}}>
+  //         <Col span={14}></Col>
+  //         <Col span={3} style={{borderTop: 'solid',
+  //           borderWidth: 'thin',
+  //           textAlign: 'left'}}>Total Amount <b style={{fontSize: '10',
+  //             fontFamily: 'Arial',
+  //             textAlign: 'right'}}>131,275.00</b></Col>
+  //         <Col span={7}></Col>
+  //       </Row>
 
-        <Row style={{fontFamily: 'Arial',
-          color: 'black'}}>
-          <Col span={7}>
-          </Col>
-          <Col span={10}>
-            <Row  style={{borderTop: 'solid',
-              borderWidth: 'thin'}}>
-              <Col span={7} style={{textAlign: 'left'}}>Authorized by:</Col>
-              <Col span={9}></Col>
-              <Col span={8} style={{textAlign: 'left'}}>Conformed by:</Col>
-            </Row>
-          </Col>
-          <Col span={7}>
-          </Col>
-        </Row>
+  //       <Row style={{fontFamily: 'Arial',
+  //         color: 'black'}}>
+  //         <Col span={7}>
+  //         </Col>
+  //         <Col span={10}>
+  //           <Row  style={{borderTop: 'solid',
+  //             borderWidth: 'thin'}}>
+  //             <Col span={7} style={{textAlign: 'left'}}>Authorized by:</Col>
+  //             <Col span={9}></Col>
+  //             <Col span={8} style={{textAlign: 'left'}}>Conformed by:</Col>
+  //           </Row>
+  //         </Col>
+  //         <Col span={7}>
+  //         </Col>
+  //       </Row>
 
-        <Row style={{fontFamily: 'Arial',
-          color: 'black',
-          marginTop: '25px'}}>
-          <Col span={7}>
-          </Col>
-          <Col span={4}>
-          Mr. Martin Gerard Tan
-          </Col>
-        </Row>
+  //       <Row style={{fontFamily: 'Arial',
+  //         color: 'black',
+  //         marginTop: '25px'}}>
+  //         <Col span={7}>
+  //         </Col>
+  //         <Col span={4}>
+  //         Mr. Martin Gerard Tan
+  //         </Col>
+  //       </Row>
 
-        <Row style={{fontFamily: 'Arial',
-          color: 'black'}}>
-          <Col span={7}>
-          </Col>
-          <Col span={4}>
-        (Signature over printed name)
-          </Col>
-          <Col span={1}>
-          </Col>
-          <Col span ={7}>
-        (Print name & signature)
-          </Col>
-        </Row>
+  //       <Row style={{fontFamily: 'Arial',
+  //         color: 'black'}}>
+  //         <Col span={7}>
+  //         </Col>
+  //         <Col span={4}>
+  //       (Signature over printed name)
+  //         </Col>
+  //         <Col span={1}>
+  //         </Col>
+  //         <Col span ={7}>
+  //       (Print name & signature)
+  //         </Col>
+  //       </Row>
 
-        <Row style={{fontFamily: 'Arial',
-          color: 'black'}}>
-          <Col span={7}>
-          </Col>
-          <Col span={4} style={{fontWeight: 'bold',
-            borderTop: 'solid',
-            borderWidth: 'thin'}}>
-        On Point Construction
-          </Col>
-          <Col span={3}>
-          </Col>
-          <Col span ={3} style={{fontWeight: 'bold',
-            borderTop: 'solid',
-            borderWidth: 'thin'}}>
-        Vendor
-          </Col>
-        </Row>
+  //       <Row style={{fontFamily: 'Arial',
+  //         color: 'black'}}>
+  //         <Col span={7}>
+  //         </Col>
+  //         <Col span={4} style={{fontWeight: 'bold',
+  //           borderTop: 'solid',
+  //           borderWidth: 'thin'}}>
+  //       On Point Construction
+  //         </Col>
+  //         <Col span={3}>
+  //         </Col>
+  //         <Col span ={3} style={{fontWeight: 'bold',
+  //           borderTop: 'solid',
+  //           borderWidth: 'thin'}}>
+  //       Vendor
+  //         </Col>
+  //       </Row>
 
-        <Row style={{fontFamily: 'Arial',
-          color: 'black',
-          marginTop: '15px'}}>
-          <Col span ={14}></Col>
-          <Col span={3}>RR Reference:</Col>
-        </Row>
+  //       <Row style={{fontFamily: 'Arial',
+  //         color: 'black',
+  //         marginTop: '15px'}}>
+  //         <Col span ={14}></Col>
+  //         <Col span={3}>RR Reference:</Col>
+  //       </Row>
 
-        <Row style={{fontFamily: 'Arial',
-          color: 'black'}}>
-          <Col span ={14}></Col>
-          <Col span={3}>
-            <Row>
-              <Col span={6}>
-            OR#:
-              </Col>
-              <Col span={6}>
-            RR#:
-              </Col>
-              <Col span={6}>
-            Date:
-              </Col>
-              <Col span={6}>
-            By:
-              </Col>
-            </Row>
-          </Col>
-        </Row>
+  //       <Row style={{fontFamily: 'Arial',
+  //         color: 'black'}}>
+  //         <Col span ={14}></Col>
+  //         <Col span={3}>
+  //           <Row>
+  //             <Col span={6}>
+  //           OR#:
+  //             </Col>
+  //             <Col span={6}>
+  //           RR#:
+  //             </Col>
+  //             <Col span={6}>
+  //           Date:
+  //             </Col>
+  //             <Col span={6}>
+  //           By:
+  //             </Col>
+  //           </Row>
+  //         </Col>
+  //       </Row>
 
-        <Row style={{marginTop: '30px'}}>
+  //       <Row style={{marginTop: '30px'}}>
 
-        </Row>
-      </Page>
-    </Document>
+  //       </Row>
+  //     </Page>
+  //   </Document>
 
 
   return (
     <Modal
       title="Add a new purchase orders"
       visible={openModal}
-      onOk={(purchaseOrder) => addPurchaseOrder(purchaseOrder)}
       onCancel={handleCancel}
       width="210mm"
       //width={900}

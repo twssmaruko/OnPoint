@@ -69,6 +69,15 @@ const Header = () => {
             <Link
               style={{color: 'black'}}
               exact="true"
+              to="purchaserequest"
+            >
+              Purchase Requests
+            </Link>
+          </Menu.Item>
+          <Menu.Item>
+            <Link
+              style={{color: 'black'}}
+              exact="true"
               to="purchaseorders"
             >
               Purchase Orders
@@ -78,9 +87,9 @@ const Header = () => {
             <Link
               style={{color: 'black'}}
               exact="true"
-              to="purchaserequest"
+              to="materialsreceiving"
             >
-              Purchase Requests
+              Materials Receiving
             </Link>
           </Menu.Item>
           <Menu.Item>
@@ -101,7 +110,7 @@ const Header = () => {
               Products
             </Link>
           </Menu.Item>
-          <Menu.Item>
+          {/* <Menu.Item>
             <Link
               style={{color: 'black'}}
               exact="true"
@@ -109,7 +118,7 @@ const Header = () => {
             >
               Purchase Order Test
             </Link>
-          </Menu.Item>
+          </Menu.Item> */}
         </Menu>
       </Col>
       <Col

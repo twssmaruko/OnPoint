@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   // Row, Col,
   Form, Input
@@ -19,7 +19,11 @@ const VendorList = (props) => {
     // eslint-disable-next-line no-console
     console.log('Hi');
   };
-  const {reference, onSubmit} = props;
+  const {reference, onSubmit, initName} = props;
+
+  useEffect(() => {
+
+  }, [initName])
 
   return (
     <div>
@@ -47,6 +51,7 @@ const VendorList = (props) => {
           <Form.Item
             label="Name"
             name="vendorName"
+            initialValue= {initName}
             rules={[
               {required: true,
                 message: 'Please input vendor name!'}

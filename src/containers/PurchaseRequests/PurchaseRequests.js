@@ -170,64 +170,6 @@ const PurchaseRequests = () => {
 
   ];
 
-
-
-
-  // dispatcher(uiActions.setOpenModal1(true));
-
-
-  // const onSearch = () => {
-  //   if (!_.isEmpty(params)) {
-  //     // dispatcher(actions.fetchPurchaseRequests(params));
-  //     return;
-  //   }
-  //   message.info('Select options first');
-  // };
-
-  // const onDateSelect = (date) => {
-  //   if (!date) {
-  //     const newParams = params;
-  //     delete newParams.dayMonthYear;
-  //     setParams({...newParams});
-  //     return;
-  //   }
-  //   setParams({...params,
-  //     dayMonthYear: moment(date).format('DD-MM-YYYY')});
-  // };
-
-  // const onMonthYearSelect = (date) => {
-  //   if (!date) {
-  //     const newParams = params;
-  //     delete newParams.monthYear;
-  //     setParams({...newParams});
-  //     return;
-  //   }
-  //   setParams({...params,
-  //     monthYear: moment(date).format('MM-YYYY')});
-  // };
-
-  // const handleStatusChange = (value) => {
-  //   if (!value) {
-  //     const newParams = params;
-  //     delete newParams.status;
-  //     setParams({...newParams});
-  //     return;
-  //   }
-  //   setParams({...params,
-  //     status: value});
-  // };
-
-  // const onApprovedChange = (value) => {
-  //   if (!value) {
-  //     const newParams = params;
-  //     delete newParams.isApproved;
-  //     setParams({...newParams});
-  //     return;
-  //   }
-  //   setParams({...params,
-  //     isApproved: value});
-  // };
-
   const onChecked = () => {
     const booleanFlag = seeAll
     setSeeAll(!booleanFlag);
@@ -267,7 +209,7 @@ const PurchaseRequests = () => {
               </Button>
             </div>
           </Col>
-          <Col span={3}>
+          <Col span={18} style={{marginTop: 10}}>
             <Checkbox style={{fontWeight: 'bold',
               fontSize: 18}}
             onChange={onChecked}>
@@ -283,78 +225,6 @@ const PurchaseRequests = () => {
         marginRight: '20%'
       }}
       >
-
-        {/* <div style={{display: 'flex',
-          alignItems: 'center'}}>
-          <h4>Requested On:</h4>
-          <div>
-            <DatePicker
-              disabled={params.monthYear}
-              allowClear
-              placeholder="Specific Day"
-              style={{
-                marginLeft: 15,
-                marginBottom: 10,
-                width: 130,
-                border: '0.5px solid black'
-              }}
-              onChange={onDateSelect}
-            />
-          </div>
-
-          <DatePicker
-            disabled={params.dayMonthYear}
-            allowClear
-            picker="month"
-            placeholder="Year/Month"
-            style={{
-              marginLeft: 5,
-              marginBottom: 10,
-              width: 130,
-              border: '0.5px solid black'
-            }}
-            onChange={onMonthYearSelect}
-          />
-          <h4 style={{marginLeft: 110}}>Status</h4>
-          <Select
-            allowClear
-            style={{
-              marginLeft: 10,
-              marginBottom: 10,
-              width: 170,
-              border: '0.5px solid black'
-            }}
-            onChange={handleStatusChange}
-          >
-            <Option value="ORDERED">ORDERED</Option>
-            <Option value="PENDING">PENDING</Option>
-            <Option value="RECEIVED">RECEIVED</Option>
-          </Select>
-          <h4 style={{marginLeft: 20}}>Approved</h4>
-          <Select
-            allowClear
-            onChange={onApprovedChange}
-            style={{
-              marginLeft: 10,
-              marginBottom: 10,
-              width: 170,
-              border: '0.5px solid black'
-            }}
-          >
-            <Option value="APPROVED">APPROVED</Option>
-            <Option value="NOTAPPROVED">NOT APPROVED</Option>
-          </Select>
-
-          <Button
-            type="primary"
-            style={{marginLeft: 10,
-              marginBottom: 10}}
-            onClick={onSearch}
-          >
-            Search
-          </Button>
-
-        </div> */}
         <div style={{border: '1px solid black'}}>
           <Spin spinning={tableSpin}>
             <Table

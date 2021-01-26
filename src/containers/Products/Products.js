@@ -74,7 +74,9 @@ const Products = () => {
       title: 'Product',
       dataIndex: 'name',
       key: 'name',
-      width: 250
+      width: 250,
+      sorter: (a, b) => a.name.localeCompare(b.name),
+      defaultSortOrder: 'ascend'
     },
     {
       title: 'Description',

@@ -30,7 +30,7 @@ const PurchaseRequestForm = () => {
   const [ordersList, setOrdersList] = useState([]);
   const [listItems, setListItems] = useState([]);
   const [orderId, setOrderId] = useState(1);
-  const [requestedBy, setRequestedBy] = useState('');
+  const [requestedBy, setRequestedBy] = useState('Engr. Jojo Salamanes');
   const dispatcher = useDispatch();
   useEffect(() => {
     dispatcher(actions.getProducts());
@@ -258,6 +258,7 @@ const PurchaseRequestForm = () => {
                 <Form.Item
                   name="requestedBy"
                   label="Requested By: "
+                  initialValue="Engr. Jojo Salamanes"
                   rules={[
                     {required: true,
                       message: 'Please input Requested By'}
