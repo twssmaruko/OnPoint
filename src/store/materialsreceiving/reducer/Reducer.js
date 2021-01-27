@@ -5,7 +5,9 @@ const initialState = {
   purchaseOrderNo: '',
   loading: false,
   projects: '',
+  project: {},
   categories: [],
+  valid: false,
   materialsReceiving: {
     materialsReceivingNo: '',
     purchaseOrderNo: '',
@@ -57,6 +59,14 @@ const setCategories = (state, action) => updateObject(state, {
   categories: action.data
 })
 
+const setValid = (state, action) => updateObject(state, {
+  valid: action.data
+})
+
+const setProject = (state, action) => updateObject(state, {
+  project: action.data
+})
+
 const materialsReceivingReducer = (state = initialState, action) => {
   switch (action.type) {
   case actions.CREATE_MMR: return createMMR(state, action)
@@ -66,6 +76,8 @@ const materialsReceivingReducer = (state = initialState, action) => {
   case actions.SET_LOADING: return setLoading(state, action);
   case actions.FETCH_PROJECTS: return fetchProjects(state, action);
   case actions.SET_CATEGORIES: return setCategories(state, action);
+  case actions.SET_VALID: return setValid(state, action);
+  case actions.SET_PROJECT: return setProject(state, action);
   default: return state;
   }
 }

@@ -5,3 +5,5 @@ export const SET_MRR = "SET_MRR";
 export const SET_LOADING = "SET_LOADING";
 export const FETCH_PROJECTS = "FETCH_PROJECTS";
 export const SET_CATEGORIES = "SET_CATEGORIES";
+export const SET_VALID = "SET_VALID";
+export const SET_PROJECT= "SET_PROJECT";
