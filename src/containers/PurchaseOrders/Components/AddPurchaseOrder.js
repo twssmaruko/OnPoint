@@ -13,7 +13,7 @@ import {
   InputNumber,
   message
 } from 'antd';
-import {MinusCircleOutlined} from '@ant-design/icons';
+import {MinusCircleOutlined, WindowsFilled} from '@ant-design/icons';
 import Logopng from './../../../assets/images/Logo.png';
 import {PDFDownloadLink, Document, Page, Text, View, Image, StyleSheet, Font} from '@react-pdf/renderer';
 import {useSelector, useDispatch, shallowEqual} from 'react-redux';
@@ -44,6 +44,7 @@ const AddPurchaseOrder = memo(() => {
   const [orderCounter, setOrderCounter] = useState(0);
   const [projectCategories, setProjectCategories] = useState(0);
   const [myDocumentVisible, setMyDocumentVisible] = useState(false);
+  const [printDocument, setPrintDocument] = useState('');
   //const [selectedPurchaseRequest, setSelectedPurchaseRequest] = useState({});
 
 
@@ -449,8 +450,8 @@ const AddPurchaseOrder = memo(() => {
   }
 
   const onProceed = () => {
-
-    if (purchaseOrder.purchaseRequestNo === '' || purchaseOrder.orders.length > 8) {
+    setPrintDocument('')
+    if (purchaseOrder.purchaseRequestNo === '' || purchaseOrder.orders.length > 25) {
       message.error('Invalid Purchase Order!')
     } else {
       dispatcher(actions.addPurchaseOrder(purchaseOrder));
@@ -458,10 +459,13 @@ const AddPurchaseOrder = memo(() => {
   }
 
   const noClick = () => {
+    setPrintDocument('');
     setMyDocumentVisible(false);
   }
 
   const proceedClick = () => {
+    const newDocument = <MyDocument purchaseOrder = {purchaseOrder} vendor={vendor}/>
+    setPrintDocument(newDocument);
     setMyDocumentVisible(true);
   }
 
@@ -471,10 +475,9 @@ const AddPurchaseOrder = memo(() => {
   const styles = StyleSheet.create({
     page: {
       display: 'grid',
-      marginTop: 70,
+      marginTop: 35,
       paddingTop: 35,
       fontFamily: 'Arial',
-      paddingBottom: 65,
       paddingHorizontal: 35
     },
     image: {
@@ -485,7 +488,7 @@ const AddPurchaseOrder = memo(() => {
       flexDirection: 'row'
     },
     pdfViewer: {
-      height: '11in',
+      height: '13in',
       width: '8.5in'
     },
     flexOne: {
@@ -534,7 +537,7 @@ const AddPurchaseOrder = memo(() => {
 
   const MyDocument = () =>
     <Document>
-      <Page size="Letter" style={styles.page}>
+      <Page size="Folio" style={styles.page}>
 
         <View style={styles.firstRow}>
 
@@ -1072,7 +1075,7 @@ const AddPurchaseOrder = memo(() => {
   )
 
   const newOrdersDisplay = [];
-  for (let i = 0; i <= 9 - newPurchaseOrderOrders.length; i += 1) {
+  for (let i = 0; i <= 30 - newPurchaseOrderOrders.length; i += 1) {
     newOrdersDisplay.push({key: i});
   }
 
@@ -1925,7 +1928,7 @@ const AddPurchaseOrder = memo(() => {
                 <Button onOK = {onProceed}>
                   <PDFDownloadLink
                     fileName= {purchaseOrder.purchaseOrderNo}
-                    document= {<MyDocument purchaseOrder = {purchaseOrder} vendor={vendor}/>}>
+                    document= {printDocument}>
                   Download
                   </PDFDownloadLink>
                 </Button>
