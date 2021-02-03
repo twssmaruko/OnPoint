@@ -9,6 +9,7 @@ const initialState = {
   projects: [],
   project: {},
   samplePO: [],
+  worksheet: [],
   totalPrice: 5,
   purchaseOrder: {requestedBy: 'Engr. Jojo Salamanes',
     project: '',
@@ -79,6 +80,24 @@ const setSamplePurchaseOrder = (state, action) => updateObject(state, {
   samplePO: action.data
 })
 
+const deletePurchaseOrder = (state, action) => {
+  const newPurchaseOrders = updateObject(action.data, {id: action.id})
+  const statePurchaseOrders = state.purchaseOrders;
+  for (const id in state.purchaseOrders) {
+    if (statePurchaseOrders[id].id === newPurchaseOrders.id) {
+      statePurchaseOrders.splice(id, 1);
+      break;
+    }
+  }
+  return updateObject(state, {
+    purchaseOrders: statePurchaseOrders.concat()
+  })
+}
+
+const fetchWorksheet = (state, action) => updateObject(state, {
+  worksheet: action.data
+})
+
 const purchaseOrderReducer = (state = initialState, action) => {
   switch (action.type) {
   case actions.SET_PURCHASEREQUESTSINPURCHASEORDER:
@@ -98,6 +117,8 @@ const purchaseOrderReducer = (state = initialState, action) => {
   case actions.SET_PURCHASEORDER: return setPurchaseOrder(state, action);
   case actions.SET_LOADING: return setLoading(state, action);
   case actions.SET_SAMPLE_PURCHASEORDER: return setSamplePurchaseOrder(state, action);
+  case actions.DELETE_PURCHASEORDER: return deletePurchaseOrder(state, action);
+  case actions.FETCH_WORKSHEET: return fetchWorksheet(state, action);
   default:
     return state;
   }

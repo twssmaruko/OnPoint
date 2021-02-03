@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
 import * as actionTypes from '../ActionTypes';
 import axios from '../../../axios-orders';
+import { RestOutlined } from '@ant-design/icons';
 
 export const setPurchaseRequests = (data) => ({
   type: actionTypes.SET_PURCHASEREQUESTSINPURCHASEORDER,
@@ -37,6 +38,11 @@ export const setProjectInStore = (data) => ({
   data
 })
 
+const fetchWorksheetToStore = (data) => ({
+  type: actionTypes.FETCH_WORKSHEET,
+  data
+})
+
 const fetchPurchaseOrderIdInStore = (data) => ({
   type: actionTypes.FETCH_PURCHASEORDER_ID,
   data
@@ -60,6 +66,12 @@ const setTotalPriceInStore = (data) => ({
 
 const setLoading = (data) => ({
   type: actionTypes.SET_LOADING,
+  data
+})
+
+const deletePurchaseOrderInStore = (id, data) => ({
+  type: actionTypes.DELETE_PURCHASEORDER,
+  id,
   data
 })
 
@@ -361,10 +373,10 @@ export const fetchPurchaseOrders = () => async (dispatch) => {
       })
     }
     const pendingPurchaseOrders = [];
-    for (const key in fetchedPurchaseOrders) {
-      if (fetchedPurchaseOrders[key].status === 'pending') {
+    for (const key in result.data) {
+      if (result.data[key].status === 'pending') {
         pendingPurchaseOrders.push({
-          ...fetchedPurchaseOrders[key],
+          ...result.data[key],
           id: key
         })
       }
@@ -621,4 +633,37 @@ export const getPurchaseRequestData = (data) => async (dispatch) => {
   //   console.error(e);
   //   message.error('Cannot get Purchase Request data.');
   // }
+
 };
+
+export const deletePurchaseOrder = (data) => async(dispatch) => {
+  const newURL = 'purchaseorders/'+ data.id + '.json';
+
+  try{
+    
+    const fetchedPurchaseOrder = data
+    await axios.delete(newURL);
+    dispatch(deletePurchaseOrderInStore(data.id, fetchedPurchaseOrder))
+    dispatch(fetchPurchaseOrders());
+    message.success('purchase order removed');
+
+
+  }catch(error) {
+    message.error('unable to delete purchase order');
+    console.error(error);
+  }
+
+}
+
+export const fetchWorksheet = () => async (dispatch) => {
+  
+  try{
+
+    const result = await axios.get('/purchaseorders.json');
+    console.log('result: ', result.data);
+
+  } catch (error) {
+    message.error('failed to fetch worksheets!');
+    console.error(error);
+  }
+}

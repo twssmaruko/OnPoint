@@ -10,7 +10,7 @@ const Homepage = () => {
 
   const dispatcher = useDispatch();
   useEffect(() => {
-    dispatcher(actions.fetchPurchaseOrders());
+    dispatcher(actions.fetchWorksheet());
   }, [dispatcher])
 
   const columns = [
@@ -87,10 +87,10 @@ const Homepage = () => {
     </h3>
       <Row>
         <Col span={3}></Col>
-        <Col span={18}>
-          <Table columns={columns} />
+        <Col span={17}>
+          <Table columns={columns} style={{fontSize: '6'}}/>
         </Col>
-        <Col span={3} />
+        <Col span={3}></Col>
       </Row>
 
     </div>

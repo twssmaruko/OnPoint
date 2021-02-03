@@ -47,7 +47,6 @@ const Products = () => {
   };
 
   const deleteItem = (item) => {
-    // const {id} = item;
     dispatcher(actions.removeProduct(item));
   };
 

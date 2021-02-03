@@ -197,6 +197,7 @@ export const editProduct = (productData) => {
 };
 
 export const removeProduct = (productData) => {
+  console.log(productData);
   return dispatch => {
     dispatch(setShowSpin3(true));
     dispatch(removeProductStart());

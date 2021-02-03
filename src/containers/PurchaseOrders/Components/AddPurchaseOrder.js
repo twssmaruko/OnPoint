@@ -155,6 +155,7 @@ const AddPurchaseOrder = memo(() => {
       }
       const ordersDisplay = purchaseRequestData.orders.map((order, index) => {
         const emptyOrders = [];
+        order.totalPrice = order.quantityLeft * order.unitPrice
         setDisplayedOrders(emptyOrders);
         if (purchaseRequestData.orders[index].quantityLeft > 0) {
           if (orderCounter === newCounterFlag) {
@@ -564,7 +565,7 @@ const AddPurchaseOrder = memo(() => {
   const styles = StyleSheet.create({
     page: {
       display: "grid",
-      marginTop: 35,
+      marginTop: 30,
       paddingTop: 35,
       fontFamily: "Arial",
       paddingHorizontal: 35,
@@ -1126,6 +1127,1072 @@ const AddPurchaseOrder = memo(() => {
             </View>
           </View>
         </View> */}
+        <View
+        style={{
+          flexDirection: "row",
+          fontFamily: "Arial",
+          fontSize: "10",
+          marginTop: 10
+        }}>
+          <View style={{flex: 1}}>
+
+          </View>
+          <View style={{flex: 1,
+          textAlign: 'center'}}>
+            <Text>
+              Warehouse Copy
+            </Text>
+          </View>
+          <View style={{flex: 1}}>
+
+          </View>
+        </View>
+      </Page>
+      <Page size="Folio" style={styles.page}>
+        <View style={styles.firstRow}>
+          <View style={{ flex: flexProps[0] }}>
+            <Image src={Logopng} style={styles.image} />
+          </View>
+
+          <View style={{ flex: flexProps[1] }}></View>
+
+          <View style={{ flex: flexProps[2], alignContent: "center" }}>
+            <Text
+              style={{
+                padding: "1",
+                justifyContent: "center",
+                fontSize: 14,
+                fontFamily: "ArialBold",
+                borderStyle: "solid",
+                textAlign: "center",
+                color: "white",
+                height: "20px",
+                backgroundColor: "#7f7f7f",
+                borderColor: "black",
+                borderWidth: "1",
+              }}
+            >
+              PURCHASE ORDER
+            </Text>
+            <Text style={styles.purchaseOrderNo}>
+              {purchaseOrder.purchaseOrderNo}
+            </Text>
+
+            <View style={styles.prDoc}>
+              <View style={styles.flexOne}>
+                <Text style={styles.centerText}>PR / Doc # :</Text>
+              </View>
+              <View style={styles.flexOne}>
+                <Text style={styles.centerText}>
+                  {purchaseOrder.purchaseRequestNo}
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        <View style={{ flexDirection: "row" }}>
+          <View style={{ flex: flexProps[0] }}>
+            <View>
+              <Text style={{ fontFamily: "ArialBold", fontSize: 12 }}>
+                ON POINT CONSTRUCTION
+              </Text>
+            </View>
+            <View>
+              <Text style={{ fontSize: 10 }}>28 A Sanson Road, Lahug</Text>
+            </View>
+            <View>
+              <Text style={{ fontSize: 10 }}>Cebu City, Philippines</Text>
+            </View>
+            <View>
+              <Text style={{ fontSize: 10 }}>(032) 266 3356</Text>
+            </View>
+            <View>
+              <Text style={{ fontSize: 10 }}>onpointconstruction.ph@gmail.com</Text>
+            </View>
+          </View>
+
+          <View style={{ flex: flexProps[1] }} />
+
+          <View style={{ flex: flexProps[2], textAlign: "center" }}>
+            <View style={{ flexDirection: "column" }}>
+              <View style={{ flex: 1 }}>
+                <Text style={{ color: "white", fontSize: 10 }}>_</Text>
+              </View>
+              <View style={{ flex: 2, flexDirection: "row" }}>
+                <View style={{ flex: 1 }}>
+                  <Text style={{ fontSize: 10 }}>Order Date:</Text>
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={{ fontSize: 10 }}>
+                    {`${moment(new Date()).format("L")}`}
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        <View style={{ flexDirection: "row", marginTop: 20 }}>
+          <View
+            style={{
+              flex: flexProps[0],
+              fontFamily: "Arial",
+              borderStyle: "solid",
+              borderColor: "black",
+              borderWidth: "1",
+              fontSize: 10,
+            }}
+          >
+            <View
+              style={{
+                flex: 1,
+                height: "15px",
+                backgroundColor: "#eeece1",
+                borderWidth: "1",
+                borderStyle: "solid",
+                borderLeftWidth: "0",
+                borderRightWidth: "0",
+                borderTopWidth: "0",
+              }}
+            >
+              <Text style={{ textAlign: "center", fontSize: 10 }}>VENDOR</Text>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                marginTop: 10,
+                marginBottom: 30,
+                marginLeft: 5,
+              }}
+            >
+              <View style={{ flex: 1 }}>
+                <Text style={{ marginBottom: 2 }}>Name:</Text>
+                <Text style={{ marginBottom: 2 }}>Address:</Text>
+                <Text style={{ marginBottom: 2 }}>Tel:</Text>
+                <Text style={{ marginBottom: 2 }}>Terms:</Text>
+              </View>
+
+              <View style={{ flex: 3 }}>
+                <Text style={{ marginBottom: 2 }}>{vendor.vendorName}</Text>
+                <Text style={{ marginBottom: 2 }}>{vendor.location}</Text>
+                <Text style={{ marginBottom: 2 }}>{vendor.telNo}</Text>
+                <Text style={{ marginBottom: 2 }}>{vendor.terms}</Text>
+              </View>
+            </View>
+          </View>
+
+          <View style={{ flex: flexProps[1] }}></View>
+
+          <View
+            style={{
+              flex: flexProps[2],
+              borderStyle: "solid",
+              borderWidth: "1",
+              fontSize: 10,
+            }}
+          >
+            <View
+              style={{
+                borderStyle: "solid",
+                backgroundColor: "#eeece1",
+                borderWidth: "1",
+                height: "15px",
+                borderLeftWidth: "0",
+                borderRightWidth: "0",
+                borderTopWidth: "0",
+              }}
+            >
+              <Text style={{ textAlign: "center", fontSize: 10 }}>
+                JOB ADDRESS
+              </Text>
+            </View>
+            <View
+              style={{ flexDirection: "row", marginTop: 10, marginLeft: 5 }}
+            >
+              <View style={{ flex: 1 }}>
+                <Text style={{ marginBottom: 2 }}>Req By:</Text>
+                <Text style={{ marginBottom: 2 }}>Project:</Text>
+                <Text style={{ marginBottom: 2 }}>Category:</Text>
+              </View>
+
+              <View style={{ flex: 3 }}>
+                <Text style={{ marginBottom: 2 }}>
+                  {purchaseOrder.requestedBy}
+                </Text>
+                <Text style={{ marginBottom: 2 }}>{purchaseOrder.project}</Text>
+                <Text style={{ marginBottom: 2 }}></Text>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        <View style={{ marginTop: 20 }}>
+          <Text style={{ textAlign: "center", fontSize: 10 }}>
+            PLEASE SUPPLY THE FOLLOWING:
+          </Text>
+        </View>
+
+        <View style={{ marginTop: 10 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              fontFamily: "Arial",
+              fontSize: 10,
+              borderStyle: "solid",
+              textAlign: "center",
+              height: "50px",
+              borderTopWidth: "1",
+              borderBottomWidth: "1",
+            }}
+          >
+            <View style={{ flex: flexProps3[0] }}></View>
+            <View style={{ flex: flexProps3[1], marginVertical: 18 }}>
+              <Text>IT</Text>
+            </View>
+            <View style={{ flex: flexProps3[2], marginVertical: 18 }}>
+              <Text>DESCRIPTION</Text>
+            </View>
+            <View style={{ flex: flexProps3[3], marginVertical: 18 }}>
+              <Text>QTY</Text>
+            </View>
+            <View style={{ flex: flexProps3[4], marginVertical: 18 }}>
+              <Text>UNIT</Text>
+            </View>
+            <View style={{ flex: flexProps3[5], marginVertical: 18 }}>
+              <Text>UNIT PRICE</Text>
+            </View>
+            <View style={{ flex: flexProps3[6], marginVertical: 18 }}>
+              <Text>TOTAL</Text>
+            </View>
+            <View style={{ flex: flexProps3[7] }}></View>
+          </View>
+        </View>
+
+        <View style={{ marginTop: 15 }}>{ordersDisplay2}</View>
+        <View>
+          <View
+            style={{
+              fontFamily: "Arial",
+              fontSize: 10,
+              textAlign: "center",
+              flexDirection: "row",
+            }}
+          >
+            <View style={{ flex: flexProps3[0] }}></View>
+            <View style={{ flex: flexProps3[1] }}>
+              <Text></Text>
+            </View>
+            <View
+              style={{ flex: flexProps3[2], textAlign: "left", marginLeft: 20 }}
+            >
+              <Text></Text>
+            </View>
+            <View style={{ flex: flexProps3[3] }}>
+              <Text></Text>
+            </View>
+            <View style={{ flex: flexProps3[4] }}>
+              <Text></Text>
+            </View>
+            <View style={{ flex: flexProps3[5] }}>
+              <Text></Text>
+            </View>
+            <View style={{ flex: flexProps3[6] }}>
+              <Text>---</Text>
+            </View>
+            <View style={{ flex: flexProps3[7] }}></View>
+          </View>
+        </View>
+        <View>{ordersDisplay3}</View>
+
+        <View style={{ marginTop: 10 }}>
+          <View style={{ flexDirection: "row" }}>
+            <View style={{ flex: 5 }}>
+              <Text style={{ color: "white" }}>_</Text>
+            </View>
+
+            <View
+              style={{
+                borderStyle: "solid",
+                borderTopWidth: 1,
+                flex: 2,
+                flexDirection: "row",
+              }}
+            >
+              <View style={{ flex: 7, marginLeft: 10, marginTop: 5 }}>
+                <Text style={{ fontFamily: "Arial", fontSize: 10 }}>
+                  Total Amount
+                </Text>
+              </View>
+              <View style={{ flex: 4, marginTop: 5 }}>
+                <Text style={{ fontFamily: "Arial", fontSize: 10 }}>
+                  {parseFloat(purchaseOrder.totalPrice)
+                    .toFixed(2)
+                    .replace(/\d(?=(\d{3})+\.)/g, "$&,")}
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        <View style={{ flexDirection: 'row', fontFamily: "Arial", fontSize: 10, marginTop: 15, marginBottom: 15 }}>
+          <View>
+            <Text>Notes: {purchaseOrder.notes}</Text>
+          </View>
+        </View>
+
+        {/* <View style={{flexDirection: 'row', fontFamily: "Arial", fontSize: 10, marginTop: 15, marginBottom: 15}}>
+          <View>
+            <Text>REMARKS:</Text>
+          </View>
+        </View>
+
+        <View style={{flexDirection: 'row', fontFamily: "Arial", fontSize: 10}}>
+          <View>
+            <Text>If you have any questions about this purchase order, please contact us. Thank you.</Text>
+          </View>
+        </View> */}
+
+        <View>
+          <View
+            style={{ borderStyle: "solid", borderTopWidth: 1, marginTop: 15 }}
+          ></View>
+        </View>
+
+
+
+        <View>
+          <View
+            style={{ flexDirection: "row", fontFamily: "Arial", fontSize: 10 }}
+          >
+            <View style={{ flex: 18, marginLeft: 5 }}>
+              <Text>Prepared by:</Text>
+            </View>
+            <View style={{ flex: 15 }}>
+              <Text>Approved by:</Text>
+            </View>
+            <View style={{ flex: 8 }}>
+              <Text>Conformed by:</Text>
+            </View>
+          </View>
+        </View>
+
+        <View style={{ marginTop: 40 }}>
+          <View style={{ flexDirection: "row" }}>
+            <View style={{ flex: 6 }}>
+              <Text
+                style={{
+                  fontSize: "9",
+                  fontFamily: "Arial",
+                  textAlign: "left",
+                }}
+              >
+                HAROLD FLORES
+              </Text>
+            </View>
+            <View style={{ flex: 4 }} />
+            <View style={{ flex: 6 }}>
+              <Text
+                style={{
+                  fontSize: "9",
+                  fontFamily: "Arial",
+                  textAlign: "center",
+                }}
+              >
+                MGT1/BMC/MGT3
+              </Text>
+            </View>
+            <View style={{ flex: 4 }} />
+            <View style={{ flex: 5 }}></View>
+          </View>
+        </View>
+
+        {/* <View
+          style={{
+            flexDirection: "row",
+            fontFamily: "Arial",
+            textAlign: "center",
+            fontSize: 10,
+          }}
+        >
+          <View style={{ flex: 6 }}>
+            <Text>(Signature over printed name)</Text>
+          </View>
+          <View style={{ flex: 4 }}></View>
+          <View style={{ flex: 5 }}>
+            <Text>(Print name & signature)</Text>
+          </View>
+        </View> */}
+
+        <View
+          style={{
+            flexDirection: "row",
+            fontFamily: "ArialBold",
+            fontSize: "10",
+          }}
+        >
+          <View
+            style={{
+              flex: 6,
+              borderStyle: "solid",
+              borderTopWidth: 1,
+              textAlight: "left",
+            }}
+          >
+            <Text>ON POINT CONSTRUCTION</Text>
+          </View>
+          <View style={{ flex: 4 }}></View>
+          <View
+            style={{
+              flex: 6,
+              borderStyle: "solid",
+              borderTopWidth: 1,
+              textAlign: "center",
+            }}
+          >
+            <Text>ON POINT CONSTRUCTION</Text>
+          </View>
+          <View style={{ flex: 4 }}></View>
+          <View
+            style={{
+              flex: 5,
+              borderStyle: "solid",
+              borderTopWidth: 1,
+              textAlign: "center",
+            }}
+          >
+            <Text>VENDOR</Text>
+          </View>
+        </View>
+
+        {/* <View style={{ marginTop: 20 }}>
+          <View style={{ flexDirection: "row" }}>
+            <View style={{ flex: 10 }}>
+              <Text
+                style={{
+                  fontSize: 10,
+                  fontFamily: "Arial",
+                  textAlign: "center",
+                }}
+              ></Text>
+            </View>
+            <View style={{ flex: 5 }}>
+              <Text
+                style={{
+                  fontSize: 10,
+                  fontFamily: "Arial",
+                  textAlign: "center",
+                }}
+              >
+                RR Reference:
+              </Text>
+            </View>
+          </View>
+        </View> */}
+
+        {/* <View>
+          <View style={{ flexDirection: "row" }}>
+            <View style={{ flex: 10 }}>
+              <Text
+                style={{
+                  fontSize: 10,
+                  fontFamily: "Arial",
+                  textAlign: "center",
+                }}
+              ></Text>
+            </View>
+            <View style={{ flex: 5, flexDirection: "row" }}>
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={{
+                    fontFamily: "Arial",
+                    fontSize: 10,
+                    textAlign: "center",
+                  }}
+                >
+                  OR#:
+                </Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={{
+                    fontFamily: "Arial",
+                    fontSize: 10,
+                    textAlign: "center",
+                  }}
+                >
+                  RR#:
+                </Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={{
+                    fontFamily: "Arial",
+                    fontSize: 10,
+                    textAlign: "center",
+                  }}
+                >
+                  Date:
+                </Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={{
+                    fontFamily: "Arial",
+                    fontSize: 10,
+                    textAlign: "center",
+                  }}
+                >
+                  By:
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View> */}
+        <View
+        style={{
+          flexDirection: "row",
+          fontFamily: "Arial",
+          fontSize: "10",
+          marginTop: 10
+        }}>
+          <View style={{flex: 1}}>
+
+          </View>
+          <View style={{flex: 1,
+          textAlign: 'center'}}>
+            <Text>
+              Accounting Copy
+            </Text>
+          </View>
+          <View style={{flex: 1}}>
+
+          </View>
+        </View>
+      </Page>
+      <Page size="Folio" style={styles.page}>
+        <View style={styles.firstRow}>
+          <View style={{ flex: flexProps[0] }}>
+            <Image src={Logopng} style={styles.image} />
+          </View>
+
+          <View style={{ flex: flexProps[1] }}></View>
+
+          <View style={{ flex: flexProps[2], alignContent: "center" }}>
+            <Text
+              style={{
+                padding: "1",
+                justifyContent: "center",
+                fontSize: 14,
+                fontFamily: "ArialBold",
+                borderStyle: "solid",
+                textAlign: "center",
+                color: "white",
+                height: "20px",
+                backgroundColor: "#7f7f7f",
+                borderColor: "black",
+                borderWidth: "1",
+              }}
+            >
+              PURCHASE ORDER
+            </Text>
+            <Text style={styles.purchaseOrderNo}>
+              {purchaseOrder.purchaseOrderNo}
+            </Text>
+
+            <View style={styles.prDoc}>
+              <View style={styles.flexOne}>
+                <Text style={styles.centerText}>PR / Doc # :</Text>
+              </View>
+              <View style={styles.flexOne}>
+                <Text style={styles.centerText}>
+                  {purchaseOrder.purchaseRequestNo}
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        <View style={{ flexDirection: "row" }}>
+          <View style={{ flex: flexProps[0] }}>
+            <View>
+              <Text style={{ fontFamily: "ArialBold", fontSize: 12 }}>
+                ON POINT CONSTRUCTION
+              </Text>
+            </View>
+            <View>
+              <Text style={{ fontSize: 10 }}>28 A Sanson Road, Lahug</Text>
+            </View>
+            <View>
+              <Text style={{ fontSize: 10 }}>Cebu City, Philippines</Text>
+            </View>
+            <View>
+              <Text style={{ fontSize: 10 }}>(032) 266 3356</Text>
+            </View>
+            <View>
+              <Text style={{ fontSize: 10 }}>onpointconstruction.ph@gmail.com</Text>
+            </View>
+          </View>
+
+          <View style={{ flex: flexProps[1] }} />
+
+          <View style={{ flex: flexProps[2], textAlign: "center" }}>
+            <View style={{ flexDirection: "column" }}>
+              <View style={{ flex: 1 }}>
+                <Text style={{ color: "white", fontSize: 10 }}>_</Text>
+              </View>
+              <View style={{ flex: 2, flexDirection: "row" }}>
+                <View style={{ flex: 1 }}>
+                  <Text style={{ fontSize: 10 }}>Order Date:</Text>
+                </View>
+                <View style={{ flex: 1 }}>
+                  <Text style={{ fontSize: 10 }}>
+                    {`${moment(new Date()).format("L")}`}
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        <View style={{ flexDirection: "row", marginTop: 20 }}>
+          <View
+            style={{
+              flex: flexProps[0],
+              fontFamily: "Arial",
+              borderStyle: "solid",
+              borderColor: "black",
+              borderWidth: "1",
+              fontSize: 10,
+            }}
+          >
+            <View
+              style={{
+                flex: 1,
+                height: "15px",
+                backgroundColor: "#eeece1",
+                borderWidth: "1",
+                borderStyle: "solid",
+                borderLeftWidth: "0",
+                borderRightWidth: "0",
+                borderTopWidth: "0",
+              }}
+            >
+              <Text style={{ textAlign: "center", fontSize: 10 }}>VENDOR</Text>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                marginTop: 10,
+                marginBottom: 30,
+                marginLeft: 5,
+              }}
+            >
+              <View style={{ flex: 1 }}>
+                <Text style={{ marginBottom: 2 }}>Name:</Text>
+                <Text style={{ marginBottom: 2 }}>Address:</Text>
+                <Text style={{ marginBottom: 2 }}>Tel:</Text>
+                <Text style={{ marginBottom: 2 }}>Terms:</Text>
+              </View>
+
+              <View style={{ flex: 3 }}>
+                <Text style={{ marginBottom: 2 }}>{vendor.vendorName}</Text>
+                <Text style={{ marginBottom: 2 }}>{vendor.location}</Text>
+                <Text style={{ marginBottom: 2 }}>{vendor.telNo}</Text>
+                <Text style={{ marginBottom: 2 }}>{vendor.terms}</Text>
+              </View>
+            </View>
+          </View>
+
+          <View style={{ flex: flexProps[1] }}></View>
+
+          <View
+            style={{
+              flex: flexProps[2],
+              borderStyle: "solid",
+              borderWidth: "1",
+              fontSize: 10,
+            }}
+          >
+            <View
+              style={{
+                borderStyle: "solid",
+                backgroundColor: "#eeece1",
+                borderWidth: "1",
+                height: "15px",
+                borderLeftWidth: "0",
+                borderRightWidth: "0",
+                borderTopWidth: "0",
+              }}
+            >
+              <Text style={{ textAlign: "center", fontSize: 10 }}>
+                JOB ADDRESS
+              </Text>
+            </View>
+            <View
+              style={{ flexDirection: "row", marginTop: 10, marginLeft: 5 }}
+            >
+              <View style={{ flex: 1 }}>
+                <Text style={{ marginBottom: 2 }}>Req By:</Text>
+                <Text style={{ marginBottom: 2 }}>Project:</Text>
+                <Text style={{ marginBottom: 2 }}>Category:</Text>
+              </View>
+
+              <View style={{ flex: 3 }}>
+                <Text style={{ marginBottom: 2 }}>
+                  {purchaseOrder.requestedBy}
+                </Text>
+                <Text style={{ marginBottom: 2 }}>{purchaseOrder.project}</Text>
+                <Text style={{ marginBottom: 2 }}></Text>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        <View style={{ marginTop: 20 }}>
+          <Text style={{ textAlign: "center", fontSize: 10 }}>
+            PLEASE SUPPLY THE FOLLOWING:
+          </Text>
+        </View>
+
+        <View style={{ marginTop: 10 }}>
+          <View
+            style={{
+              flexDirection: "row",
+              fontFamily: "Arial",
+              fontSize: 10,
+              borderStyle: "solid",
+              textAlign: "center",
+              height: "50px",
+              borderTopWidth: "1",
+              borderBottomWidth: "1",
+            }}
+          >
+            <View style={{ flex: flexProps3[0] }}></View>
+            <View style={{ flex: flexProps3[1], marginVertical: 18 }}>
+              <Text>IT</Text>
+            </View>
+            <View style={{ flex: flexProps3[2], marginVertical: 18 }}>
+              <Text>DESCRIPTION</Text>
+            </View>
+            <View style={{ flex: flexProps3[3], marginVertical: 18 }}>
+              <Text>QTY</Text>
+            </View>
+            <View style={{ flex: flexProps3[4], marginVertical: 18 }}>
+              <Text>UNIT</Text>
+            </View>
+            <View style={{ flex: flexProps3[5], marginVertical: 18 }}>
+              <Text>UNIT PRICE</Text>
+            </View>
+            <View style={{ flex: flexProps3[6], marginVertical: 18 }}>
+              <Text>TOTAL</Text>
+            </View>
+            <View style={{ flex: flexProps3[7] }}></View>
+          </View>
+        </View>
+
+        <View style={{ marginTop: 15 }}>{ordersDisplay2}</View>
+        <View>
+          <View
+            style={{
+              fontFamily: "Arial",
+              fontSize: 10,
+              textAlign: "center",
+              flexDirection: "row",
+            }}
+          >
+            <View style={{ flex: flexProps3[0] }}></View>
+            <View style={{ flex: flexProps3[1] }}>
+              <Text></Text>
+            </View>
+            <View
+              style={{ flex: flexProps3[2], textAlign: "left", marginLeft: 20 }}
+            >
+              <Text></Text>
+            </View>
+            <View style={{ flex: flexProps3[3] }}>
+              <Text></Text>
+            </View>
+            <View style={{ flex: flexProps3[4] }}>
+              <Text></Text>
+            </View>
+            <View style={{ flex: flexProps3[5] }}>
+              <Text></Text>
+            </View>
+            <View style={{ flex: flexProps3[6] }}>
+              <Text>---</Text>
+            </View>
+            <View style={{ flex: flexProps3[7] }}></View>
+          </View>
+        </View>
+        <View>{ordersDisplay3}</View>
+
+        <View style={{ marginTop: 10 }}>
+          <View style={{ flexDirection: "row" }}>
+            <View style={{ flex: 5 }}>
+              <Text style={{ color: "white" }}>_</Text>
+            </View>
+
+            <View
+              style={{
+                borderStyle: "solid",
+                borderTopWidth: 1,
+                flex: 2,
+                flexDirection: "row",
+              }}
+            >
+              <View style={{ flex: 7, marginLeft: 10, marginTop: 5 }}>
+                <Text style={{ fontFamily: "Arial", fontSize: 10 }}>
+                  Total Amount
+                </Text>
+              </View>
+              <View style={{ flex: 4, marginTop: 5 }}>
+                <Text style={{ fontFamily: "Arial", fontSize: 10 }}>
+                  {parseFloat(purchaseOrder.totalPrice)
+                    .toFixed(2)
+                    .replace(/\d(?=(\d{3})+\.)/g, "$&,")}
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        <View style={{ flexDirection: 'row', fontFamily: "Arial", fontSize: 10, marginTop: 15, marginBottom: 15 }}>
+          <View>
+            <Text>Notes: {purchaseOrder.notes}</Text>
+          </View>
+        </View>
+
+        {/* <View style={{flexDirection: 'row', fontFamily: "Arial", fontSize: 10, marginTop: 15, marginBottom: 15}}>
+          <View>
+            <Text>REMARKS:</Text>
+          </View>
+        </View>
+
+        <View style={{flexDirection: 'row', fontFamily: "Arial", fontSize: 10}}>
+          <View>
+            <Text>If you have any questions about this purchase order, please contact us. Thank you.</Text>
+          </View>
+        </View> */}
+
+        <View>
+          <View
+            style={{ borderStyle: "solid", borderTopWidth: 1, marginTop: 15 }}
+          ></View>
+        </View>
+
+
+
+        <View>
+          <View
+            style={{ flexDirection: "row", fontFamily: "Arial", fontSize: 10 }}
+          >
+            <View style={{ flex: 18, marginLeft: 5 }}>
+              <Text>Prepared by:</Text>
+            </View>
+            <View style={{ flex: 15 }}>
+              <Text>Approved by:</Text>
+            </View>
+            <View style={{ flex: 8 }}>
+              <Text>Conformed by:</Text>
+            </View>
+          </View>
+        </View>
+
+        <View style={{ marginTop: 40 }}>
+          <View style={{ flexDirection: "row" }}>
+            <View style={{ flex: 6 }}>
+              <Text
+                style={{
+                  fontSize: "9",
+                  fontFamily: "Arial",
+                  textAlign: "left",
+                }}
+              >
+                HAROLD FLORES
+              </Text>
+            </View>
+            <View style={{ flex: 4 }} />
+            <View style={{ flex: 6 }}>
+              <Text
+                style={{
+                  fontSize: "9",
+                  fontFamily: "Arial",
+                  textAlign: "center",
+                }}
+              >
+                MGT1/BMC/MGT3
+              </Text>
+            </View>
+            <View style={{ flex: 4 }} />
+            <View style={{ flex: 5 }}></View>
+          </View>
+        </View>
+
+        {/* <View
+          style={{
+            flexDirection: "row",
+            fontFamily: "Arial",
+            textAlign: "center",
+            fontSize: 10,
+          }}
+        >
+          <View style={{ flex: 6 }}>
+            <Text>(Signature over printed name)</Text>
+          </View>
+          <View style={{ flex: 4 }}></View>
+          <View style={{ flex: 5 }}>
+            <Text>(Print name & signature)</Text>
+          </View>
+        </View> */}
+
+        <View
+          style={{
+            flexDirection: "row",
+            fontFamily: "ArialBold",
+            fontSize: "10",
+          }}
+        >
+          <View
+            style={{
+              flex: 6,
+              borderStyle: "solid",
+              borderTopWidth: 1,
+              textAlight: "left",
+            }}
+          >
+            <Text>ON POINT CONSTRUCTION</Text>
+          </View>
+          <View style={{ flex: 4 }}></View>
+          <View
+            style={{
+              flex: 6,
+              borderStyle: "solid",
+              borderTopWidth: 1,
+              textAlign: "center",
+            }}
+          >
+            <Text>ON POINT CONSTRUCTION</Text>
+          </View>
+          <View style={{ flex: 4 }}></View>
+          <View
+            style={{
+              flex: 5,
+              borderStyle: "solid",
+              borderTopWidth: 1,
+              textAlign: "center",
+            }}
+          >
+            <Text>VENDOR</Text>
+          </View>
+        </View>
+
+        {/* <View style={{ marginTop: 20 }}>
+          <View style={{ flexDirection: "row" }}>
+            <View style={{ flex: 10 }}>
+              <Text
+                style={{
+                  fontSize: 10,
+                  fontFamily: "Arial",
+                  textAlign: "center",
+                }}
+              ></Text>
+            </View>
+            <View style={{ flex: 5 }}>
+              <Text
+                style={{
+                  fontSize: 10,
+                  fontFamily: "Arial",
+                  textAlign: "center",
+                }}
+              >
+                RR Reference:
+              </Text>
+            </View>
+          </View>
+        </View> */}
+
+        {/* <View>
+          <View style={{ flexDirection: "row" }}>
+            <View style={{ flex: 10 }}>
+              <Text
+                style={{
+                  fontSize: 10,
+                  fontFamily: "Arial",
+                  textAlign: "center",
+                }}
+              ></Text>
+            </View>
+            <View style={{ flex: 5, flexDirection: "row" }}>
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={{
+                    fontFamily: "Arial",
+                    fontSize: 10,
+                    textAlign: "center",
+                  }}
+                >
+                  OR#:
+                </Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={{
+                    fontFamily: "Arial",
+                    fontSize: 10,
+                    textAlign: "center",
+                  }}
+                >
+                  RR#:
+                </Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={{
+                    fontFamily: "Arial",
+                    fontSize: 10,
+                    textAlign: "center",
+                  }}
+                >
+                  Date:
+                </Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text
+                  style={{
+                    fontFamily: "Arial",
+                    fontSize: 10,
+                    textAlign: "center",
+                  }}
+                >
+                  By:
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View> */}
+        <View
+        style={{
+          flexDirection: "row",
+          fontFamily: "Arial",
+          fontSize: "10",
+          marginTop: 10
+        }}>
+          <View style={{flex: 1}}>
+
+          </View>
+          <View style={{flex: 1,
+          textAlign: 'center'}}>
+            <Text>
+              Supplier's Copy
+            </Text>
+          </View>
+          <View style={{flex: 1}}>
+
+          </View>
+        </View>
       </Page>
     </Document>
   );

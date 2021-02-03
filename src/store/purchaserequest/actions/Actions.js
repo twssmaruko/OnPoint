@@ -107,6 +107,12 @@ const updatePurchaseRequestIdInStore = (purchaseRequestId) => ({
   purchaseRequestId
 })
 
+const deletePurchaseRequestInStore = (id, data) => ({
+  type: actionTypes.DELETE_PURCHASEREQUEST,
+  id,
+  data
+})
+
 export const getProducts = () =>  {
   return dispatch => {
     dispatch(setShowSpin1(true));
@@ -214,10 +220,10 @@ export const fetchPurchaseRequests = () => {
           })
         }
         const pendingPurchaseRequests = [];
-        for (const key in fetchedPurchaseRequests) {
-          if (fetchedPurchaseRequests[key].status === 'PENDING') {
+        for (const key in response.data) {
+          if (response.data[key].status === 'PENDING') {
             pendingPurchaseRequests.push({
-              ...fetchedPurchaseRequests[key],
+              ...response.data[key],
               id: key
             })
           }
@@ -514,3 +520,21 @@ export const unsubscribe = () => (dispatch, getState) => {
     message.error('Error while unsubscribing!');
   }
 };
+
+export const deletePurchaseRequest = (data) => async(dispatch) => {
+    const newURL = 'purchaserequests/'+ data.id + '.json';
+
+    try{
+      
+      const fetchedPurchaseRequest = data
+      await axios.delete(newURL);
+      dispatch(deletePurchaseRequestInStore(data.id, fetchedPurchaseRequest))
+      message.success('purchase request removed');
+
+
+    }catch(error) {
+      message.error('unable to delete purchase request');
+      console.error(error);
+    }
+  
+}

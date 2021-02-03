@@ -20,7 +20,7 @@ const Order = (props) => {
     unit: order.unit,
     quantityReceived: 0,
     unitPrice: 0,
-    totalPrice: purchaseOrder.orders[index].totalPrice,
+    totalPrice: order.totalPrice,
     category: ''
   });
 

@@ -95,6 +95,20 @@ const updatePurchaseRequestIdInStore = (state, action) => {
 const updatePurchaseRequestNumber = (state, action) =>
   updateObject(state, {purchaseRequestIds: action.data});
 
+  const deletePurchaseRequest = (state, action) => {
+    const newPurchaseRequests = updateObject(action.data, {id: action.id})
+    const statePurchaseRequests = state.purchaseRequests;
+    for (const id in state.purchaseRequests) {
+      if (statePurchaseRequests[id].id === newPurchaseRequests.id) {
+        statePurchaseRequests.splice(id, 1);
+        break;
+      }
+    }
+    return updateObject(state, {
+      purchaseRequests: statePurchaseRequests.concat()
+    })
+  }
+
 
 
 const purchaseRequestReducer = (state = initialState, action) => {
@@ -115,6 +129,7 @@ const purchaseRequestReducer = (state = initialState, action) => {
   case actions.UPDATE_PURCHASEREQUEST_SUCCESS: return updatePurchaseRequestSuccess(state, action)
   case actions.UPDATE_PURCHASEREQUEST_FAIL: return updatePurchaseRequestFail(state)
   case actions.UPDATE_PURCHASEREQUEST_NUMBER: return updatePurchaseRequestNumber(state, action)
+  case actions.DELETE_PURCHASEREQUEST: return deletePurchaseRequest(state, action)
   case actions.UPDATE_PURCHASEREQUESTID_IN_STORE:
     return updatePurchaseRequestIdInStore(state, action)
   default:

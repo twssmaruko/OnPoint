@@ -18,7 +18,8 @@ const initialState = {
         quantityReceived: '',
         unitPrice: 0,
         category: '',
-        receivedSoFar: 0
+        receivedSoFar: 0,
+        totalPrice: 0
 
       }
     ],

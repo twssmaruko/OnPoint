@@ -5,9 +5,10 @@ import {
   Table,
   Spin,
   Col,
-  Checkbox
+  Checkbox,
+  Modal
 } from 'antd';
-import { CheckCircleFilled, EditTwoTone, ExclamationCircleOutlined } from '@ant-design/icons';
+import { CheckCircleFilled, EditTwoTone, ExclamationCircleOutlined, DeleteFilled } from '@ant-design/icons';
 import TableButton from '../../../components/button/OnpointButton';
 import PurchaseOrderDetails from './PurchaseOrderDetails';
 import * as uiActions from '../../../store/ui/actions/Actions';
@@ -48,6 +49,8 @@ const PurchaseOrderTable = memo(() => {
 
   const [, setCurrentPurchaseOrder] = useState({});
   const [seeAll, setSeeAll] = useState(false);
+  const [deleteId, setDeleteId] = useState(0);
+  const [displayDeleteModal, setDisplayDeleteModal] = useState(false);
   const [purchaseOrderDetailsModal, setPurchaseOrderDetailsModal] = useState(null);
   const editButton = (item) =>
     <div>
@@ -75,6 +78,37 @@ const PurchaseOrderTable = memo(() => {
         }} /></div>
   const poNumberDisplay = (data) => `${data.purchaseOrderNo}`;
   const projectDisplay = (data) => `${data.project}`;
+
+  const onDeleteConfirmed = () => {
+    dispatcher(actions.deletePurchaseOrder(deleteId));
+    setDisplayDeleteModal(false);
+  }
+
+  const deleteModal = <Modal visible={displayDeleteModal}
+  onCancel={() => {
+    setDisplayDeleteModal(false)
+  }}
+  onOk={(e) => onDeleteConfirmed(e)}> 
+  Are you sure you want to delete this Purchase Request?
+  </Modal>;
+
+
+
+  const deleteItem = (data) => {
+    setDeleteId(data);
+    setDisplayDeleteModal(true);
+  };
+
+  const deleteButton = (item) => (
+    <div>
+      <TableButton
+        value={item}
+        type="danger"
+        icon={<DeleteFilled />}
+        onClick={deleteItem}
+      />
+    </div>
+  );
 
 
   const columns = [
@@ -111,7 +145,13 @@ const PurchaseOrderTable = memo(() => {
       key: 'dateCreated',
       width: 250,
       render: (createdAt) => moment(createdAt).format('MMMM Do YYYY, h:mm:ss A')
-    }
+    },
+    {
+      title: "Delete",
+      render: deleteButton,
+      key: "delete",
+      width: "1%",
+    },
   ];
 
   const onDetailsClick = (e) => {
@@ -241,6 +281,7 @@ const PurchaseOrderTable = memo(() => {
         </div>
       </Row>
       {purchaseOrderDetailsModal}
+      {deleteModal}
     </div>
   )
 
