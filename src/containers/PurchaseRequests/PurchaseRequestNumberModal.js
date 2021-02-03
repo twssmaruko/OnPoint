@@ -12,7 +12,7 @@ const PurchaseRequesNumberModal = () => {
 
   const onPurchaseRequestNumberChanged = (data) => {
     // console.log('purchaseRequestNumber: ', data);
-    const newPurchaseRequestNumber = data;
+    const newPurchaseRequestNumber = parseFloat(data);
     dispatcher(actions.updatePurchaseRequestNumber(newPurchaseRequestNumber));
   }
   return (

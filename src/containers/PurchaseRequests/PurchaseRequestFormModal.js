@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Modal,
   Form,
@@ -17,7 +17,7 @@ import {
 
 import moment from 'moment';
 
-import {shallowEqual, useDispatch, useSelector} from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import * as actions from '../../store/purchaserequest/actions/Actions';
 import * as uiActions from '../../store/ui/actions/Actions';
 import OnPointButton from '../../components/button/OnpointButton';
@@ -37,7 +37,7 @@ const PurchaseRequestForm = () => {
   }, [dispatcher]);
   const {
     productsList, openModal, modalSpin
-  } = useSelector(({ui, products, purchaseRequests}) => ({
+  } = useSelector(({ ui, products, purchaseRequests }) => ({
     modalSpin: ui.showSpin2,
     openModal: ui.openModal1,
     prNo: purchaseRequests.purchaseRequestCount,
@@ -109,8 +109,8 @@ const PurchaseRequestForm = () => {
   };
 
   const layout = {
-    labelCol: {span: 8},
-    wrapperCol: {span: 16}
+    labelCol: { span: 8 },
+    wrapperCol: { span: 16 }
   };
 
   const onDeleteItem = (index) => {
@@ -123,7 +123,7 @@ const PurchaseRequestForm = () => {
     setOrdersList(newOrdersList);
   };
 
-  const handleCancel =  () => {
+  const handleCancel = () => {
     dispatcher(uiActions.setOpenModal1(false))
   }
 
@@ -154,7 +154,7 @@ const PurchaseRequestForm = () => {
       onOk={addPurchaseRequest}
       onCancel={handleCancel}
       maskClosable={false}
-      width={900}
+      width={1200}
       okText="Add Purchase Request"
       cancelText="Cancel"
       destroyOnClose
@@ -162,8 +162,10 @@ const PurchaseRequestForm = () => {
     >
       <Spin spinning={modalSpin}>
 
-        <div style={{display: 'flex',
-          justifyContent: 'flex-start'}}>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'flex-start'
+        }}>
           <Row>
             <Col>
               <Form
@@ -174,11 +176,25 @@ const PurchaseRequestForm = () => {
                 onFinish={onSubmit}
               >
                 <Form.Item
+                  style={{ width: 250 }}
+                  label="Item Type"
+                  name="itemType"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Please input item type'
+                    }
+                  ]}>
+                  <Input style={{ width: 170 }} />
+                </Form.Item>
+                <Form.Item
                   label="Product"
                   name="product"
                   rules={[
-                    {required: true,
-                      message: 'Please input a product'}
+                    {
+                      required: true,
+                      message: 'Please input a product'
+                    }
                   ]}
                 >
                   {/* <Select
@@ -211,25 +227,47 @@ const PurchaseRequestForm = () => {
                   name="unit"
                   label="Unit"
                   rules={[
-                    {required: true,
-                      message: 'Please input Unit!'},
-                    {type: 'string',
-                      message: 'Should be in letters/words!'}
+                    {
+                      required: true,
+                      message: 'Please input Unit!'
+                    },
+                    {
+                      type: 'string',
+                      message: 'Should be in letters/words!'
+                    }
                   ]}
                 >
-                  <Input style={{width: 170}} />
+                  <Input style={{ width: 170 }} />
+                </Form.Item>
+                <Form.Item
+                name="unitPrice"
+                label="Unit Price"
+                initialValue={0}
+                rules={[
+                  {required: true,
+                  message: 'Please Input Unit Price'},
+                  {
+                    type: 'number',
+                    message: 'Please input a number'
+                  }
+                ]}>
+                  <InputNumber style={{width: 170}} />
                 </Form.Item>
                 <Form.Item
                   name="quantity"
                   label="Quantity"
                   rules={[
-                    {required: true,
-                      message: 'Please input Quantity!'},
-                    {type: 'number',
-                      message: 'Should be a number!'}
+                    {
+                      required: true,
+                      message: 'Please input Quantity!'
+                    },
+                    {
+                      type: 'number',
+                      message: 'Should be a number!'
+                    }
                   ]}
                 >
-                  <InputNumber style={{width: 170}} />
+                  <InputNumber style={{ width: 170 }} />
                 </Form.Item>
                 {/* <Form.Item
               name="price"
@@ -244,9 +282,9 @@ const PurchaseRequestForm = () => {
               <InputNumber style={{width: 170}} />
             </Form.Item> */}
 
-                <Form.Item style={{marginLeft: 80}}>
+                <Form.Item style={{ marginLeft: 80 }}>
                   <Button type="primary" htmlType="submit">
-                            Add Order
+                    Add Order
                   </Button>
                 </Form.Item>
               </Form>
@@ -254,22 +292,27 @@ const PurchaseRequestForm = () => {
           </Row>
           <Row>
             <Col>
-              <Form>
+              <Form style={{marginLeft: 10}}>
                 <Form.Item
+                  style={{ width: 300 }}
                   name="requestedBy"
                   label="Requested By: "
                   initialValue="Engr. Jojo Salamanes"
                   rules={[
-                    {required: true,
-                      message: 'Please input Requested By'}
+                    {
+                      required: true,
+                      message: 'Please input Requested By'
+                    }
                   ]}>
-                  <Input onChange = {(e) => onRequestedByChange(e.target.value)}/>
+                  <Input onChange={(e) => onRequestedByChange(e.target.value)} style={{ width: 170 }} />
                 </Form.Item>
               </Form>
             </Col>
           </Row>
-          <div style={{width: '70%',
-            marginLeft: 40}}>
+          <div style={{
+            width: '70%',
+            marginLeft: 40
+          }}>
             <List
               pagination={ordersList.length > 3 ? {
                 pageSize: 5,
@@ -280,6 +323,7 @@ const PurchaseRequestForm = () => {
               bordered
               dataSource={listItems}
               style={{
+                width: 500,
                 color: 'black'
               }}
               renderItem={(item, index) =>
@@ -290,7 +334,7 @@ const PurchaseRequestForm = () => {
                     value={index}
                     type="link"
                     name="Delete"
-                    style={{color: 'red'}}
+                    style={{ color: 'red' }}
                   />
                 ]}
                 >

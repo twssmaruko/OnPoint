@@ -1,4 +1,4 @@
-import React, {useState, memo, useEffect} from 'react';
+import React, { useState, memo, useEffect } from 'react';
 import moment from 'moment';
 import {
   Row,
@@ -7,7 +7,7 @@ import {
   Col,
   Checkbox
 } from 'antd';
-import {CheckCircleFilled, EditTwoTone, ExclamationCircleOutlined} from '@ant-design/icons';
+import { CheckCircleFilled, EditTwoTone, ExclamationCircleOutlined } from '@ant-design/icons';
 import TableButton from '../../../components/button/OnpointButton';
 import PurchaseOrderDetails from './PurchaseOrderDetails';
 import * as uiActions from '../../../store/ui/actions/Actions';
@@ -33,7 +33,7 @@ const PurchaseOrderTable = memo(() => {
     purchaseOrders,
     pendingPurchaseOrders
     // ordersReceived
-  } = useSelector(({ui, purchaseOrder}) => ({
+  } = useSelector(({ ui, purchaseOrder }) => ({
     // openAnotherModal: ui.openModal2,
     // purchaseRequestsList: purchaseRequests.purchaseRequests,
     tableSpin: ui.showSpin3,
@@ -48,7 +48,7 @@ const PurchaseOrderTable = memo(() => {
 
   const [, setCurrentPurchaseOrder] = useState({});
   const [seeAll, setSeeAll] = useState(false);
-  const [purchaseOrderDetailsModal , setPurchaseOrderDetailsModal] = useState(null);
+  const [purchaseOrderDetailsModal, setPurchaseOrderDetailsModal] = useState(null);
   const editButton = (item) =>
     <div>
       <TableButton
@@ -65,10 +65,14 @@ const PurchaseOrderTable = memo(() => {
   //     : <CloseCircleFilled style={{marginLeft: 20,
   //       color: 'red'}} />;
   const poStatusDisplay = (status) =>
-    status === 'pending' ? <div>PENDING<ExclamationCircleOutlined style={{marginLeft: 20,
-      color: 'orange'}} /></div>: <div> RECEIVED
-      <CheckCircleFilled style={{marginLeft: 20,
-        color: 'green'}} /></div>
+    status === 'pending' ? <div>PENDING<ExclamationCircleOutlined style={{
+      marginLeft: 20,
+      color: 'orange'
+    }} /></div> : <div> RECEIVED
+      <CheckCircleFilled style={{
+          marginLeft: 20,
+          color: 'green'
+        }} /></div>
   const poNumberDisplay = (data) => `${data.purchaseOrderNo}`;
   const projectDisplay = (data) => `${data.project}`;
 
@@ -85,7 +89,7 @@ const PurchaseOrderTable = memo(() => {
       key: 'purchaseOrderNo',
       width: 250,
       defaultSortOrder: 'ascend',
-      sorter: (a,b) => b.purchaseOrderId - a.purchaseOrderId,
+      sorter: (a, b) => b.purchaseOrderId - a.purchaseOrderId,
       render: poNumberDisplay
     },
     {
@@ -117,7 +121,7 @@ const PurchaseOrderTable = memo(() => {
     setCurrentPurchaseOrder(e);
     dispatcher(uiActions.setOpenModal1(true));
     // setPurchaseOrderDetailsModal(<PurchaseOrderModal />)
-    setPurchaseOrderDetailsModal(<PurchaseOrderDetails purchaseOrder={e} initOrders={[]}/>)
+    setPurchaseOrderDetailsModal(<PurchaseOrderDetails purchaseOrder={e} initOrders={[]} />)
   };
 
   const onChecked = () => {
@@ -136,7 +140,8 @@ const PurchaseOrderTable = memo(() => {
     <div style={{
       marginTop: 20,
       marginLeft: '20%',
-      marginRight: '20%'}}>
+      marginRight: '20%'
+    }}>
       {/* <div style={{display: 'flex',
           alignItems: 'center'}}>
           <h4>Requested On:</h4>
@@ -209,17 +214,19 @@ const PurchaseOrderTable = memo(() => {
           </Button>
 
         </div> */}
-      <Row style={{marginBottom: 10}}>
+      <Row style={{ marginBottom: 10 }}>
         <Col span={5}>
           <Checkbox onChange={onChecked}
-            style={{fontWeight: 'bold',
-              fontSize: 18}}>
-              See ALL
+            style={{
+              fontWeight: 'bold',
+              fontSize: 18
+            }}>
+            See ALL
           </Checkbox>
         </Col>
       </Row>
       <Row>
-        <div style={{border: '1px solid black'}}>
+        <div style={{ border: '1px solid black' }}>
           <Spin spinning={tableSpin}>
             <Table
               columns={columns}

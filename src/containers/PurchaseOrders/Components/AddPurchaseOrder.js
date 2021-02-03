@@ -55,6 +55,7 @@ const AddPurchaseOrder = memo(() => {
   const [projectCategories, setProjectCategories] = useState(0);
   const [myDocumentVisible, setMyDocumentVisible] = useState(false);
   const [printDocument, setPrintDocument] = useState("");
+  const [purchaseOrderId, setPurchaseOrderId] = useState([0, 0]);
   //const [selectedPurchaseRequest, setSelectedPurchaseRequest] = useState({});
 
   const [transferParams, setTransferParams] = useState({
@@ -220,6 +221,7 @@ const AddPurchaseOrder = memo(() => {
 
   useEffect(() => {
     ordersToDisplay();
+    console.log(purchaseOrder);
   }, [
     purchaseRequestData,
     projectCategories,
@@ -227,6 +229,7 @@ const AddPurchaseOrder = memo(() => {
     orderState,
     purchaseRequest,
     purchaseOrder,
+    console.log,
     vendorName,
     vendorsList,
     purchaseOrderData,
@@ -242,27 +245,32 @@ const AddPurchaseOrder = memo(() => {
     );
     dispatcher(actions.setPurchaseRequestData(data));
     const initTotalPrice = [];
+    let newTotalAmount = 0;
     for (const key in selectedPurchaseRequest.orders) {
       initTotalPrice.push({
         ...initTotalPrice[key],
         product: selectedPurchaseRequest.orders[key].product,
         quantity: selectedPurchaseRequest.orders[key].quantityLeft,
         unit: selectedPurchaseRequest.orders[key].unit,
-        unitPrice: 0,
-        totalPrice: 0,
+        itemType: selectedPurchaseRequest.orders[key].itemType,
+        unitPrice: selectedPurchaseRequest.orders[key].unitPrice,
+        totalPrice: selectedPurchaseRequest.orders[key].quantityLeft * selectedPurchaseRequest.orders[key].unitPrice,
       });
+      newTotalAmount += selectedPurchaseRequest.orders[key].quantityLeft * selectedPurchaseRequest.orders[key].unitPrice
       counterFlag += 1;
     }
+    console.log('initTotalPrice: ', initTotalPrice);
     const newKey = uuid();
     setOrdersKey(newKey);
     setOrderCounter(counterFlag);
     dispatcher(actions.initOrders(initTotalPrice));
     setPurchaseRequestData(selectedPurchaseRequest);
     const newPurchaseOrderData = {
-      ...purchaseOrderData,
+      ...purchaseOrder,
       purchaseRequestNo: selectedPurchaseRequest.purchaseRequestNo,
       purchaseOrderNo: purchaseOrder.purchaseOrderNo,
       requestedBy: selectedPurchaseRequest.requestedBy,
+      totalPrice: newTotalAmount,
       orders: initTotalPrice,
     };
     setOrderState(newPurchaseOrderData.orders);
@@ -389,10 +397,14 @@ const AddPurchaseOrder = memo(() => {
     };
     const newPurchaseOrder = {
       ...oldPurchaseOrder,
+      purchaseOrderId: parseFloat(purchaseOrderYear + purchaseOrderId[1]),
       purchaseOrderNo:
         "OPC-" + purchaseOrderYear + "-" + purchaseOrderNewNumber,
     };
     setPurchaseOrderYear(purchaseOrderYear);
+    const newPurchaseOrderId = purchaseOrderYear;
+    setPurchaseOrderId([purchaseOrderYear, purchaseOrderId[1]])
+    console.log(newPurchaseOrderId, purchaseOrderId[1])
     dispatcher(actions.setPurchaseOrder(newPurchaseOrder));
   };
 
@@ -402,9 +414,13 @@ const AddPurchaseOrder = memo(() => {
     };
     const newPurchaseOrder = {
       ...oldPurchaseOrder,
+      purchaseOrderId: parseFloat(purchaseOrderId[0] + purchaseOrderNumber),
       purchaseOrderNo: "OPC-" + purchaseOrderYear + "-" + purchaseOrderNumber,
     };
     setPurchaseOrderNewNumber(purchaseOrderNumber);
+    const newPurchaseOrderId = purchaseOrderNumber;
+    setPurchaseOrderId([purchaseOrderId[0], purchaseOrderNumber])
+    console.log(purchaseOrderId[0], newPurchaseOrderId);
     dispatcher(actions.setPurchaseOrder(newPurchaseOrder));
   };
 
@@ -523,10 +539,11 @@ const AddPurchaseOrder = memo(() => {
     setPrintDocument("");
     if (
       purchaseOrder.purchaseRequestNo === "" ||
-      purchaseOrder.orders.length > 25
+      purchaseOrder.orders.length > 24
     ) {
       message.error("Invalid Purchase Order!");
     } else {
+      console.log('purchaseOrder: ', purchaseOrder);
       dispatcher(actions.addPurchaseOrder(purchaseOrder));
     }
   };
@@ -895,12 +912,12 @@ const AddPurchaseOrder = memo(() => {
           </View>
         </View>
 
-        <View style={{flexDirection: 'row', fontFamily: "Arial", fontSize: 10, marginTop: 15, marginBottom: 15}}>
+        <View style={{ flexDirection: 'row', fontFamily: "Arial", fontSize: 10, marginTop: 15, marginBottom: 15 }}>
           <View>
             <Text>Notes: {purchaseOrder.notes}</Text>
           </View>
         </View>
-        
+
         {/* <View style={{flexDirection: 'row', fontFamily: "Arial", fontSize: 10, marginTop: 15, marginBottom: 15}}>
           <View>
             <Text>REMARKS:</Text>
@@ -919,7 +936,7 @@ const AddPurchaseOrder = memo(() => {
           ></View>
         </View>
 
-       
+
 
         <View>
           <View
@@ -2115,8 +2132,8 @@ const AddPurchaseOrder = memo(() => {
                                   value <= quantityLeft || value === undefined
                                     ? Promise.resolve()
                                     : Promise.reject(
-                                        `Should not exceed ${quantityLeft}`
-                                      ),
+                                      `Should not exceed ${quantityLeft}`
+                                    ),
                               },
                             ]}
                           >
@@ -2127,7 +2144,7 @@ const AddPurchaseOrder = memo(() => {
                                 border: "1px solid black",
                               }}
                               allowClear
-                              // placeholder={}
+                            // placeholder={}
                             />
                           </Form.Item>
                         </div>

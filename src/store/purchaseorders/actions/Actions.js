@@ -1,8 +1,8 @@
 //import {API, graphqlOperation} from 'aws-amplify';
-import {message} from 'antd';
+import { message } from 'antd';
 //import {purchaseRequestDayCreatedAt} from '../../../graphql/queries';
-import {setShowSpin1, setShowSpin2, setOpenModal1} from '../../ui/actions/Actions';
-import {v4 as uuidv4} from 'uuid';
+import { setShowSpin1, setShowSpin2, setOpenModal1 } from '../../ui/actions/Actions';
+import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
 import * as actionTypes from '../ActionTypes';
 import axios from '../../../axios-orders';
@@ -103,7 +103,7 @@ export const newVendor = (vendorData) => async (dispatch, getState) => {
   const newVendors = vendorsList;
   newVendors.push(vendorData);
   try {
-    await axios.post('/vendors.json',vendorData);
+    await axios.post('/vendors.json', vendorData);
     dispatch(setVendorInStore(vendorData))
     dispatch(setVendors(newVendors));
     dispatch(setLoading(false));
@@ -411,7 +411,7 @@ export const getPurchaseRequests = () => {
       .then((response) => {
         const fetchedPurchaseRequests = [];
         for (const key in response.data) {
-          if (response.data[key].isApproved==="APPROVED" && response.data[key].status !== 'ORDERED') {
+          if (response.data[key].isApproved === "APPROVED" && response.data[key].status !== 'ORDERED') {
             fetchedPurchaseRequests.push({
               ...response.data[key],
               id: key
@@ -449,7 +449,7 @@ export const fetchPurchaseOrderId = () => async (dispatch) => {
 export const addPurchaseOrder = (purchaseOrderData) => async (dispatch) => {
   dispatch(setShowSpin2(true));
   dispatch(setLoading(true));
-
+  console.log('purchaseOrderData: ', purchaseOrderData);
   const date = new Date();
   const newDate = moment(date, 'DD-MM-YYYY');
 
@@ -518,7 +518,6 @@ export const addPurchaseOrder = (purchaseOrderData) => async (dispatch) => {
   const newPurchaseOrderData = {
     ...purchaseOrderData,
     orders: updatedPurchaseOrderOrders,
-    purchaseOrderId: parseFloat(purchaseOrderIdDisplay),
     purchaseOrderNo: purchaseOrderNoDisplay,
     dateCreated: newDate
   }
