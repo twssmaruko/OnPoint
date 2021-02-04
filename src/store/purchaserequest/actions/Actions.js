@@ -529,6 +529,7 @@ export const deletePurchaseRequest = (data) => async(dispatch) => {
       const fetchedPurchaseRequest = data
       await axios.delete(newURL);
       dispatch(deletePurchaseRequestInStore(data.id, fetchedPurchaseRequest))
+      dispatch(fetchPurchaseRequests());
       message.success('purchase request removed');
 
 

@@ -4,7 +4,7 @@ import {
   // Input,
 } from 'antd';
 import {useDispatch, useSelector, shallowEqual} from 'react-redux';
-import Logopng from './../../../assets/images/Logo.png';
+import Logopng from './../../../assets/images/Logo.jpg';
 import {PDFDownloadLink, Document, Page, Text, View, Image, StyleSheet, Font} from '@react-pdf/renderer';
 import Arial from './../../../assets/Fonts/ARIAL.TTF';
 import ArialBold from './../../../assets/Fonts/ARIALBD.TTF';

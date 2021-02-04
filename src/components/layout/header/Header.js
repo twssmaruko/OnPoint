@@ -46,7 +46,7 @@ const Header = () => {
     <Row style={{backgroundColor: '#white'}}>
       <Col span={4} style={titleStyle}>
         <div>
-          <Logo />
+          <Logo style={{height: 76, width: 254}}/>
         </div>
       </Col>
       <Col span={14} style={{backgroundColor: '#white'}}>

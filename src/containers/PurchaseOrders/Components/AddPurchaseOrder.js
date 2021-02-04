@@ -14,7 +14,7 @@ import {
   message,
 } from "antd";
 import { MinusCircleOutlined, WindowsFilled } from "@ant-design/icons";
-import Logopng from "./../../../assets/images/Logo.png";
+import Logopng from "./../../../assets/images/Logo.jpg";
 import {
   PDFDownloadLink,
   Document,
@@ -400,7 +400,7 @@ const AddPurchaseOrder = memo(() => {
       ...oldPurchaseOrder,
       purchaseOrderId: parseFloat(purchaseOrderYear + purchaseOrderId[1]),
       purchaseOrderNo:
-        "OPC-" + purchaseOrderYear + "-" + purchaseOrderNewNumber,
+        "OPCDC-" + purchaseOrderYear + "-" + purchaseOrderNewNumber,
     };
     setPurchaseOrderYear(purchaseOrderYear);
     const newPurchaseOrderId = purchaseOrderYear;
@@ -416,7 +416,7 @@ const AddPurchaseOrder = memo(() => {
     const newPurchaseOrder = {
       ...oldPurchaseOrder,
       purchaseOrderId: parseFloat(purchaseOrderId[0] + purchaseOrderNumber),
-      purchaseOrderNo: "OPC-" + purchaseOrderYear + "-" + purchaseOrderNumber,
+      purchaseOrderNo: "OPCDC-" + purchaseOrderYear + "-" + purchaseOrderNumber,
     };
     setPurchaseOrderNewNumber(purchaseOrderNumber);
     const newPurchaseOrderId = purchaseOrderNumber;
@@ -2394,7 +2394,7 @@ const AddPurchaseOrder = memo(() => {
                       >
                         <Row>
                           <Col span={10} style={{ textAlign: "right" }}>
-                            OPC -
+                            OPCDC -
                           </Col>
                           <Col span={1} />
                           <Col span={5}>

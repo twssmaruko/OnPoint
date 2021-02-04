@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Row, Col, Switch, Modal, Spin, Select} from 'antd';
 import {shallowEqual, useDispatch, useSelector} from 'react-redux';
-import Logo from './../../../assets/images/Logo.png';
+import Logo from './../../../assets/images/Logo.jpg';
 import * as actions from '../../../store/purchaseorders/actions/Actions';
 import * as uiActions from '../../../store/ui/actions/Actions';
 import {RightOutlined} from '@ant-design/icons';
