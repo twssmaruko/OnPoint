@@ -93,8 +93,8 @@ const PurchaseRequests = () => {
   const purchaseRequestNumberModal = (
     <Modal
       maskClosable={false}
-      key={"projectCodeModal-" + uuidv4}
-      title="Project Code"
+      key={"purchaseRequestNo-" + uuidv4}
+      title="Purchase Request Number"
       visible={modalVisible}
       onOk={setModal}
       onCancel={handleCancel}
@@ -272,7 +272,8 @@ const PurchaseRequests = () => {
                 type="link"
                 style={{ fontWeight: "bold", fontSize: 26, color: "#13407F" }}
                 className="ant-btn-menu"
-                onClick={() => setModalVisible(true)}
+                onClick={() => {setDisplayAddModal(<PurchaseRequestFormModal />)
+                  dispatcher(uiActions.setOpenModal1(true));}}
               >
                 New Purchase Request
               </Button>

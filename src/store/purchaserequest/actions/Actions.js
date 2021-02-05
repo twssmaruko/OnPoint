@@ -371,18 +371,15 @@ export const addPurchaseRequest = (purchaseRequestData) => (dispatch, getState) 
   // const count = purchaseRequestCount + 1;
   // const purchaseRequestNo = `${purchaseRequestData.monthyear}-${count}`;
   // console.log(purchaseRequestNo);
-  const count = getState().purchaseRequests.purchaseRequestIds;
+  const count = purchaseRequestData.purchaseRequestNo
   //console.log('count: ', count);
   const purchaseRequestNo = count;
-  const newPurchaseRequestData = {
-    ...purchaseRequestData,
-    purchaseRequestNo: purchaseRequestNo
-  }
-  axios.post('/purchaserequests.json', newPurchaseRequestData)
+ 
+  axios.post('/purchaserequests.json', purchaseRequestData)
     .then((response) => {
       dispatch(setShowSpin2(false));
       dispatch(setOpenModal1(false));
-      dispatch(addPurchaseRequestSuccess(response.data.name, newPurchaseRequestData))
+      dispatch(addPurchaseRequestSuccess(response.data.name, purchaseRequestData))
       message.success('Purchase request created');
     })
     .catch((error) => {

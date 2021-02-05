@@ -178,6 +178,17 @@ const PurchaseOrderDetails = (props) => {
           </Col>
         </Row>
 
+        <Row id="PR NUMBER">
+          <Col span={8}>
+          </Col>
+          <Col span={8} style={{fontWeight: 'bold',
+            fontSize: 18}}>
+            {purchaseOrder.purchaseRequestNo}
+          </Col>
+          <Col span={8}>
+          </Col>
+        </Row>
+
         <Row id="VENDOR DETAILS">
           <Col span={5}>
             Vendor:

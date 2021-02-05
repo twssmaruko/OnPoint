@@ -9,6 +9,7 @@ import {
   Col,
   List,
   Spin,
+  message,
   InputNumber,
   AutoComplete,
   //message
@@ -28,7 +29,7 @@ import * as actions from "../../store/purchaserequest/actions/Actions";
 import * as uiActions from "../../store/ui/actions/Actions";
 import OnPointButton from "../../components/button/OnpointButton";
 import ReactDataSheet from "react-datasheet";
-import DataSheet from 'react-datasheet';
+import Logo from '../../components/logo/Logo';
 import "react-datasheet/lib/react-datasheet.css";
 //import PurchaseRequests from './PurchaseRequests';
 
@@ -39,11 +40,10 @@ const PurchaseRequestForm = () => {
   const [ordersList, setOrdersList] = useState([]);
   const [listItems, setListItems] = useState([]);
   const [orderId, setOrderId] = useState(1);
+  const [purchaseRequestNumber, setPurchaseRequestNumber] = useState('');
   const [requestedBy, setRequestedBy] = useState("Engr. Jojo Salamanes");
   const dispatcher = useDispatch();
-  useEffect(() => {
-    dispatcher(actions.getProducts());
-  }, [dispatcher]);
+
   const { productsList, openModal, modalSpin } = useSelector(
     ({ ui, products, purchaseRequests }) => ({
       modalSpin: ui.showSpin2,
@@ -68,12 +68,13 @@ const PurchaseRequestForm = () => {
     //     current) => accumulator + current.price * current.quantity, 0);
     const prData = {
       status: "PENDING",
+      purchaseRequestNo: parseFloat(purchaseRequestNumber),
       isApproved: "APPROVED",
       year: dateNow.getFullYear(),
       //dayMonthYear: moment(dateNow).format('DD-MM-YYYY'),
       dayMonthYear: moment(dateNow, "DD-MM-YYYY"),
       // totalPrice,
-      orders: ordersList,
+      orders: purchaseRequestOrders,
       requestedBy: requestedBy,
     };
 
@@ -161,25 +162,88 @@ const PurchaseRequestForm = () => {
     setRequestedBy(value);
   };
 
+  const [orderNumber, setOrderNumber] = useState(1);
+  const [purchaseRequestOrders, setPurchaseRequestOrders] = useState([]);
+
   const [gridState, setGridState] = useState([
     [
-      { readOnly: true, value: "" },
-      { value: "ITEM", readOnly: true },
-      { value: "ITEM DESCRIPTION", readOnly: true },
-      { value: "QTY", readOnly: true },
-      { value: "UNIT", readOnly: true },
-      { value: "UNIT PRICE", readOnly: true },
-      
+      { readOnly: true, value: "", width: 50 },
+      { value: "ITEM", readOnly: true, width: 250 },
+      { value: "DESCRIPTION", readOnly: true, width: 500 },
+      { value: "QTY", readOnly: true, width: 100 },
+      { value: "UNIT", readOnly: true, width: 150 },
+      { value: "UNIT PRICE", readOnly: true, width: 150 },
+
     ],
     [
-      { readOnly: true, value: "1" },
-      { value: "" },
+      { readOnly: true, value: 1 },
+      { value: "", textAlign: 'left' },
       { value: "" },
       { value: "" },
       { value: "" },
       { value: "" },
     ],
+
   ]);
+
+  const addPurchaseRequestOrder = () => {
+    const newGrid = gridState;
+    const newOrderNumber = orderNumber + 1
+    newGrid.push([
+      { readOnly: true, value: newOrderNumber },
+      { value: "" },
+      { value: "" },
+      { value: "" },
+      { value: "" },
+      { value: "" },
+    ]);
+    setOrderNumber(newOrderNumber);
+    setGridState(newGrid);
+  }
+
+  const removePurchaseRequestOrder = () => {
+    if (gridState.length <= 2) {
+      message.error('Cannot remove more!');
+    } else {
+      gridState.splice(gridState.length - 1, 1);
+      const newOrderNumber = orderNumber - 1;
+      setOrderNumber(newOrderNumber);
+    }
+  }
+
+  const onPRNumberChanged = (data) => {
+    setPurchaseRequestNumber(data);
+  }
+
+  const onCellsChanged = (changes) => {
+    console.log('changes: ', changes);
+    let newGrid = gridState;
+    changes.forEach(({ cell, row, col, value }) => {
+      newGrid[row][col] = { ...newGrid[row][col], value }
+    })
+    console.log('newGrid: ', newGrid)
+    console.log('newGridLength: ', newGrid.length - 1);
+    const newPurchaseRequestOrders = [];
+    for (let i = 0; i < newGrid.length - 1; i++) {
+      newPurchaseRequestOrders.push({
+        id: i,
+        itemType: newGrid[i + 1][1].value,
+        product: newGrid[i + 1][2].value,
+        quantity: parseFloat(newGrid[i + 1][3].value.split(',').join('')),
+        quantityLeft: parseFloat(newGrid[i + 1][3].value.split(',').join('')),
+        unit: newGrid[i + 1][4].value,
+        unitPrice: parseFloat(newGrid[i + 1][5].value.split(',').join(''))
+      })
+    }
+    setPurchaseRequestOrders(newPurchaseRequestOrders);
+    console.log(newPurchaseRequestOrders);
+    setGridState(newGrid);
+  }
+
+
+  useEffect(() => {
+    dispatcher(actions.getProducts());
+  }, [dispatcher]);
 
   return (
     <Modal
@@ -195,221 +259,92 @@ const PurchaseRequestForm = () => {
       afterClose={afterModalClose}
     >
       <Spin spinning={modalSpin}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "flex-start",
-          }}
-        >
-          <Row>
-            <Col span={3}>
-            <PlusCircleOutlined style={{color: 'green'}} />
+
+        <Row>
+          <Col span={8}>
+            <Logo />
+          </Col>
+          <Col span={8} />
+          <Col span={8} style={{ fontFamily: 'Arial', color: 'black', fontSize: 12 }}>
+            <Row>
+              <Col>
+                On Point Construction
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                28-A Sanson Road, Lahug, Cebu City
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                Telephone No.: (032) 266-3356
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                Email: onpointconstruction.ph@gmail.com
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+
+        <Row style={{ marginTop: 20, marginBottom: 25 }}>
+          <Col span={8} />
+          <Col span={8} style={{ textAlign: 'center', fontFamily: 'Arial', fontWeight: 'bold', color: 'black', fontSize: 16 }}>
+            PURCHASE REQUEST
+          </Col>
+          <Col span={8} />
+        </Row>
+
+        <Row style={{ marginTop: 10, marginBottom: 25 }} >
+          <Col span={8}>
+            <Row>
+              <Col style={{ marginRight: 10, fontFamily: 'Arial', fontWeight: 'bold' }}>
+                PR Number:
             </Col>
-            <Col span={18}>
-              <ReactDataSheet
-                size="large"
-                style={{ width: 250, height: 170 }}
+              <Col style={{ borderBottomStyle: 'solid', borderWidth: 1 }}>
+                <Input bordered={false} onChange={(e) => onPRNumberChanged(e.target.value)}/>
+              </Col>
+            </Row>
+          </Col>
+          <Col span={16} />
+        </Row>
+
+        <Row style={{ marginBottom: 25 }}>
+          <Col span={20}>
+            <Row>
+              <Col span={1} />
+              <Col span={1} style={{ marginRight: 0 }}>
+                <PlusCircleOutlined style={{ color: 'green' }} onClick={() => addPurchaseRequestOrder()} />
+              </Col>
+              <Col span={18} style={{ marginRight: 20 }}><ReactDataSheet
                 data={gridState}
                 valueRenderer={(cell) => cell.value}
-                onCellsChanged={(changes) => {
-                  let newGrid = gridState;
-                  changes.forEach(({cell, row, col, value}) => {
-                    newGrid[row][col] = {...newGrid[row][col], value}
-                })
-                setGridState(newGrid);
-              }}
+                onCellsChanged={(changes) => onCellsChanged(changes)}
               />
-              <Col span={4}>
-              <MinusCircleOutlined style={{color: 'red'}}/>
               </Col>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Form {...layout} form={form} name="basic" onFinish={onSubmit}>
-                <Form.Item
-                  style={{ width: 250 }}
-                  label="Item Type"
-                  name="itemType"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input item type",
-                    },
-                  ]}
-                >
-                  <Input style={{ width: 170 }} />
-                </Form.Item>
-                <Form.Item
-                  label="Product"
-                  name="product"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input a product",
-                    },
-                  ]}
-                >
-                  {/* <Select
-                showSearch
-                allowClear
-                labelInValue
-                placeholder="Select products"
-                notFoundContent={<Spin spinning={showSpin} />}
-                filterOption={false}
-                // onSearch={fetchProduct}
-                style={{width: 170}}
-                onSelect={checkProduct}
-              >
-                {searchOptionList()}
-              </Select> */}
-                  <AutoComplete
-                    showSearch
-                    allowClear
-                    style={{
-                      width: 170,
-                    }}
-                    options={options}
-                    placeholder="Product"
-                    filterOption={(inputValue, option) =>
-                      option.value
-                        .toUpperCase()
-                        .indexOf(inputValue.toUpperCase()) !== -1
-                    }
-                  />
-                </Form.Item>
-                <Form.Item
-                  name="unit"
-                  label="Unit"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input Unit!",
-                    },
-                    {
-                      type: "string",
-                      message: "Should be in letters/words!",
-                    },
-                  ]}
-                >
-                  <Input style={{ width: 170 }} />
-                </Form.Item>
-                <Form.Item
-                  name="unitPrice"
-                  label="Unit Price"
-                  initialValue={0}
-                  rules={[
-                    { required: true, message: "Please Input Unit Price" },
-                    {
-                      type: "number",
-                      message: "Please input a number",
-                    },
-                  ]}
-                >
-                  <InputNumber style={{ width: 170 }} />
-                </Form.Item>
-                <Form.Item
-                  name="quantity"
-                  label="Quantity"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input Quantity!",
-                    },
-                    {
-                      type: "number",
-                      message: "Should be a number!",
-                    },
-                  ]}
-                >
-                  <InputNumber style={{ width: 170 }} />
-                </Form.Item>
-                {/* <Form.Item
-              name="price"
-              label="Price"
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input Price!'}, {type: 'number',
-                  message: 'Should be a number!'}
-              ]}
-            >
-              <InputNumber style={{width: 170}} />
-            </Form.Item> */}
+              <Col span={1}>
+                <MinusCircleOutlined style={{ color: 'red' }} onClick={() => removePurchaseRequestOrder()} />
+              </Col>
+              <Col span={1} />
+            </Row>
+          </Col>
+        </Row>
 
-                <Form.Item style={{ marginLeft: 80 }}>
-                  <Button type="primary" htmlType="submit">
-                    Add Order
-                  </Button>
-                </Form.Item>
-              </Form>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Form style={{ marginLeft: 10 }}>
-                <Form.Item
-                  style={{ width: 300 }}
-                  name="requestedBy"
-                  label="Requested By: "
-                  initialValue="Engr. Jojo Salamanes"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input Requested By",
-                    },
-                  ]}
-                >
-                  <Input
-                    onChange={(e) => onRequestedByChange(e.target.value)}
-                    style={{ width: 170 }}
-                  />
-                </Form.Item>
-              </Form>
-            </Col>
-          </Row>
-          <div
-            style={{
-              width: "70%",
-              marginLeft: 40,
-            }}
-          >
-            <List
-              pagination={
-                ordersList.length > 3
-                  ? {
-                      pageSize: 5,
-                      position: "bottom",
-                    }
-                  : false
-              }
-              size="small"
-              header={<div>Orders</div>}
-              bordered
-              dataSource={listItems}
-              style={{
-                width: 500,
-                color: "black",
-              }}
-              renderItem={(item, index) => (
-                <List.Item
-                  actions={[
-                    <OnPointButton
-                      key={item.id}
-                      onClick={onDeleteItem}
-                      value={index}
-                      type="link"
-                      name="Delete"
-                      style={{ color: "red" }}
-                    />,
-                  ]}
-                >
-                  {item}
-                </List.Item>
-              )}
+        <Row style={{ color: 'black' }}>
+          <Col style={{ marginRigth: 10 }}> Requested By:
+          </Col>
+          <Col style={{ borderBottomStyle: 'solid', borderWidth: 1 }}>
+            <Input
+              defaultValue="Engr. Jojo Salamanes"
+              bordered={false}
+              onChange={(e) => onRequestedByChange(e.target.value)}
+              style={{ width: 170, marginLeft: 10 }}
             />
-          </div>
-        </div>
+          </Col>
+        </Row>
+
       </Spin>
     </Modal>
   );
