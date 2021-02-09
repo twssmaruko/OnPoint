@@ -21,7 +21,6 @@ import {
   Page,
   Text,
   View,
-  PDFViewer,
   Image,
   StyleSheet,
   Font,
@@ -222,7 +221,6 @@ const AddPurchaseOrder = memo(() => {
 
   useEffect(() => {
     ordersToDisplay();
-    console.log(purchaseOrder);
   }, [
     purchaseRequestData,
     projectCategories,
@@ -230,7 +228,6 @@ const AddPurchaseOrder = memo(() => {
     orderState,
     purchaseRequest,
     purchaseOrder,
-    console.log,
     vendorName,
     vendorsList,
     purchaseOrderData,
@@ -260,7 +257,6 @@ const AddPurchaseOrder = memo(() => {
       newTotalAmount += selectedPurchaseRequest.orders[key].quantityLeft * selectedPurchaseRequest.orders[key].unitPrice
       counterFlag += 1;
     }
-    console.log('initTotalPrice: ', initTotalPrice);
     const newKey = uuid();
     setOrdersKey(newKey);
     setOrderCounter(counterFlag);
@@ -405,7 +401,6 @@ const AddPurchaseOrder = memo(() => {
     setPurchaseOrderYear(purchaseOrderYear);
     const newPurchaseOrderId = purchaseOrderYear;
     setPurchaseOrderId([purchaseOrderYear, purchaseOrderId[1]])
-    console.log(newPurchaseOrderId, purchaseOrderId[1])
     dispatcher(actions.setPurchaseOrder(newPurchaseOrder));
   };
 
@@ -421,7 +416,6 @@ const AddPurchaseOrder = memo(() => {
     setPurchaseOrderNewNumber(purchaseOrderNumber);
     const newPurchaseOrderId = purchaseOrderNumber;
     setPurchaseOrderId([purchaseOrderId[0], purchaseOrderNumber])
-    console.log(purchaseOrderId[0], newPurchaseOrderId);
     dispatcher(actions.setPurchaseOrder(newPurchaseOrder));
   };
 
@@ -544,7 +538,6 @@ const AddPurchaseOrder = memo(() => {
     ) {
       message.error("Invalid Purchase Order!");
     } else {
-      console.log('purchaseOrder: ', purchaseOrder);
       dispatcher(actions.addPurchaseOrder(purchaseOrder));
     }
   };

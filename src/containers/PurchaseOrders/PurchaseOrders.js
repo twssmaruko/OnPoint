@@ -25,6 +25,8 @@ const PurchaseOrderAddModal = lazy(() =>
 const PurchaseOrders = () => {
   const [showAddForm, setShowAddForm] = useState(false);
   const [showTable, setShowTable] = useState(true);
+  const [showAddGasForm, setShowAddGasForm] = useState(false);
+  const [showServiceForm, setShowServiceForm] = useState(false);
 
   const setShowPurchaseOrdersRender = useCallback(() => {
     setShowTable(false);
@@ -33,6 +35,14 @@ const PurchaseOrders = () => {
   const setAddPurchaseOrderRender = useCallback(() => {
     setShowAddForm(false);
   }, []);
+
+  const setAddPurchaseOrderGasRender = useCallback(() => {
+    setShowAddGasForm(false);
+  })
+
+  const setAddServiceOrderRender = useCallback(() => {
+    setShowServiceForm(false);
+  })
 
   const dispatcher = useDispatch();
   useEffect(() => {
@@ -90,6 +100,8 @@ const PurchaseOrders = () => {
       <Header
         onClickShowPurchaseOrders={setShowPurchaseOrdersRender}
         onClickAddProp={setAddPurchaseOrderRender}
+        onClickAddGasProp={setAddPurchaseOrderGasRender}
+        onClickAddServiceProp={setAddServiceOrderRender}
       />
       <Transition
         in={showAddForm}

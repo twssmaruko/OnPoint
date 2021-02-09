@@ -658,12 +658,22 @@ export const deletePurchaseOrder = (data) => async(dispatch) => {
 export const fetchWorksheet = () => async (dispatch) => {
   
   try{
-
+    dispatch(setLoading(true));
     const result = await axios.get('/purchaseorders.json');
     console.log('result: ', result.data);
+    const fetchedPurchaseOrders = [];
+    for (const key in result.data) {
+      fetchedPurchaseOrders.push({
+        ...result.data[key],
+        id: key
+      })
+    }
+
+    dispatch(setLoading(false));
 
   } catch (error) {
-    message.error('failed to fetch worksheets!');
+    message.error('failed to fetch worksheet!');
     console.error(error);
+    dispatch(setLoading(false));
   }
 }

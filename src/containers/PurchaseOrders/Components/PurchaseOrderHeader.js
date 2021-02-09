@@ -1,22 +1,20 @@
-import React, {memo, useState} from 'react'
-import {Row, Button} from 'antd'
-import './PurchaseOrder.css'
+import React, { memo, useState } from "react";
+import { Row, Button, Form } from "antd";
+import "./PurchaseOrder.css";
 // import {useDispatch} from 'react-redux';
 
-
 const Header = (props) => {
-
   //   const dispatcher = useDispatch();
   // const [disabledAdd, setDisabledAdd] = useState(true)
   // const [disabledTable, setDisabledTable] = useState(false)
   const [disableButton, setDisableButtons] = useState({
     disableAdd: true,
-    disableTable: false
-  })
+    disableTable: false,
+  });
 
   //console.log("wew")
 
-  const {onClickShowPurchaseOrders, onClickAddProp} = props;
+  const { onClickShowPurchaseOrders, onClickAddProp } = props;
 
   const runAddPurchaseOrder = () => {
     onClickAddProp();
@@ -25,65 +23,90 @@ const Header = (props) => {
     setDisableButtons({
       ...disableButton,
       disableAdd: true,
-      disableTable: false
-    })
+      disableTable: false,
+    });
 
     // setDisabled(true)
-  }
+  };
 
   const runShowPurchaseORder = () => {
     onClickShowPurchaseOrders();
     setDisableButtons({
       ...disableButton,
       disableAdd: false,
-      disableTable: true
-    })
+      disableTable: true,
+    });
     // setDisabledAdd(false);
     // setDisabledTable(true);
 
     // setDisabled(true)
-  }
+  };
 
   return (
-    <Row style={{
-      display: 'flex',
-      flexDirection: 'column',
-      marginLeft: '20%',
-      marginRight: '25%',
-      marginTop: 20
-    }}
+    <Row
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        marginLeft: "20%",
+        marginRight: "25%",
+        marginTop: 20,
+      }}
     >
       <Row>
-        <h1 style={{color: ' #FF111B',
-          fontWeight: 'bold'}}>PURCHASE ORDERS</h1>
+        <h1 style={{ color: " #FF111B", fontWeight: "bold" }}>
+          PURCHASE ORDERS
+        </h1>
       </Row>
-      <div style={{borderTop: '1px solid black'}} />
-      <Row style={{marginLeft: -15}}>
+      <div style={{ borderTop: "1px solid black" }} />
+      <Row style={{ marginLeft: -15 }}>
         <div className="ant-btn-div">
           <Button
             className="ant-btn-menu"
+            name="button1"
             type="link"
-            style={{fontWeight: 'bold',
-              fontSize: 26}}
+            style={{ fontWeight: "bold", fontSize: 16 }}
             onClick={runAddPurchaseOrder}
-            disabled={disableButton.disableAdd}>
-                Show Purchase Orders
+            disabled={disableButton.disableAdd}
+          >
+            Show Purchase Orders
           </Button>
         </div>
         <div className="ant-btn-div">
-          <Button style={{marginLeft: 1,
-            fontWeight: 'bold',
-            fontSize: 26}}
-          className="ant-btn-menu"
-          type="link" onClick={runShowPurchaseORder}
-          disabled={disableButton.disableTable}>
-                Add Purchase Order
+          <Button
+            style={{ marginLeft: 1, fontWeight: "bold", fontSize: 16 }}
+            className="ant-btn-menu"
+            type="link"
+            onClick={runShowPurchaseORder}
+            disabled={disableButton.disableTable}
+          >
+            Add Purchase Order
+          </Button>
+        </div>
+        <div className="ant-btn-div">
+          <Button
+            style={{ marginLeft: 1, fontWeight: "bold", fontSize: 16 }}
+            className="ant-btn-menu"
+            type="link"
+            onClick={runShowPurchaseORder}
+            disabled={disableButton.disableTable}
+          >
+            Add Purchase Order Gas
+          </Button>
+        </div>
+        <div className="ant-btn-div">
+          <Button
+            style={{ marginLeft: 1, fontWeight: "bold", fontSize: 16 }}
+            className="ant-btn-menu"
+            type="link"
+            onClick={runShowPurchaseORder}
+            disabled={disableButton.disableTable}
+          >
+            Add Service Order
           </Button>
         </div>
       </Row>
     </Row>
-
-  )
-}
+  );
+};
 
 export default memo(Header, (prevProp, nextProp) => prevProp === nextProp);
