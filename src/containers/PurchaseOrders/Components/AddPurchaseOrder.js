@@ -102,6 +102,8 @@ const AddPurchaseOrder = memo(() => {
     shallowEqual
   );
 
+  const [totalPriceState, setTotalPriceState] = useState(purchaseOrder.totalPrice)
+
   useEffect(() => {
     dispatcher(actions.fetchPurchaseOrderId());
     dispatcher(actions.getProjects());
@@ -226,6 +228,7 @@ const AddPurchaseOrder = memo(() => {
     projectCategories,
     totalPrice,
     orderState,
+    totalPriceState,
     purchaseRequest,
     purchaseOrder,
     vendorName,
@@ -282,10 +285,20 @@ const AddPurchaseOrder = memo(() => {
       ...purchaseOrder,
     };
     newPurchaseOrder.orders.splice(index, 1);
+    let newTotalPrice = 0;
+    for(const key in newPurchaseOrder.orders) {
+      newTotalPrice += newPurchaseOrder.orders[key].totalPrice
+      console.log(newPurchaseOrder.orders[key].totalPrice);
+    }
+    console.log('newTotalPrice: ',newTotalPrice);
+    const newerPurchaseOrder = {
+      ...purchaseOrder,
+      totalPrice: newTotalPrice
+    }
     setOrderState(newPurchaseRequest.orders);
     setPurchaseRequestData(newPurchaseRequest);
-    setPurchaseOrderData(newPurchaseOrder);
-    dispatcher(actions.setPurchaseOrder(newPurchaseOrder));
+    setPurchaseOrderData(newerPurchaseOrder);
+    dispatcher(actions.setPurchaseOrder(newerPurchaseOrder));
     //  ordersToDisplay2(newPurchaseRequest);
   };
 

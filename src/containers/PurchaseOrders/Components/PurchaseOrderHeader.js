@@ -88,7 +88,7 @@ const Header = (props) => {
             className="ant-btn-menu"
             type="link"
             onClick={runShowPurchaseORder}
-            disabled={disableButton.disableTable}
+            disabled={true}
           >
             Add Purchase Order Gas
           </Button>
@@ -99,7 +99,7 @@ const Header = (props) => {
             className="ant-btn-menu"
             type="link"
             onClick={runShowPurchaseORder}
-            disabled={disableButton.disableTable}
+            disabled={true}
           >
             Add Service Order
           </Button>

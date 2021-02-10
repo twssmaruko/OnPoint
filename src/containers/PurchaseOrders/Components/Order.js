@@ -28,8 +28,7 @@ const Order = (props) => {
   const dispatcher = useDispatch();
 
   useEffect(() => {
-    console.log('orderModule: ', order);
-    console.log('orderPrice: ', order.unitPrice);
+    
   }, [order, orderState, totalPrice, setOrderState])
 
   const categoriesToDisplay = () => {

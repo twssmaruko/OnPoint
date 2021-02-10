@@ -78,7 +78,12 @@ const PurchaseRequestForm = () => {
       requestedBy: requestedBy,
     };
 
-    dispatcher(actions.addPurchaseRequest(prData));
+    if (purchaseRequestOrders.length < 1 || purchaseRequestNumber === '' || requestedBy === '') {
+      message.error('Please fill up all necessary fields!');
+    } else {
+      dispatcher(actions.addPurchaseRequest(prData));
+    }
+
   };
   // const debounceFetchProduct = _.debounce(fetchProduct, 1000);
   // const searchOptionList = () => productsList.map((product) =>
@@ -304,7 +309,7 @@ const PurchaseRequestForm = () => {
                 PR Number:
             </Col>
               <Col style={{ borderBottomStyle: 'solid', borderWidth: 1 }}>
-                <Input bordered={false} onChange={(e) => onPRNumberChanged(e.target.value)}/>
+                <Input bordered={false} onChange={(e) => onPRNumberChanged(e.target.value)} />
               </Col>
             </Row>
           </Col>
