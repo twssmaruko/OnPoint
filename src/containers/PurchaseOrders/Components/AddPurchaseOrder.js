@@ -154,11 +154,24 @@ const AddPurchaseOrder = memo(() => {
           newCounterFlag += 1;
         }
       }
-      const ordersDisplay = purchaseRequestData.orders.map((order, index) => {
+      const newerPurchaseRequestOrders = [];
+      for(const key in purchaseRequestData.orders) {
+        if (purchaseRequestData.orders[key].quantityLeft > 0) {
+          newerPurchaseRequestOrders.push({
+            ...purchaseRequestData.orders[key]
+          })
+        }
+      }
+      const newerPurchaseRequestData = {
+        ...purchaseRequestData,
+        orders: newerPurchaseRequestOrders
+      }
+      console.log('newerPurchaseRequest: ', newerPurchaseRequestData);
+      const ordersDisplay = newerPurchaseRequestData.orders.map((order, index) => {
         const emptyOrders = [];
         order.totalPrice = order.quantityLeft * order.unitPrice
         setDisplayedOrders(emptyOrders);
-        if (purchaseRequestData.orders[index].quantityLeft > 0) {
+        if (newerPurchaseRequestData.orders[index].quantityLeft > 0) {
           if (orderCounter === newCounterFlag) {
             return (
               <Row key={"div" + index}>

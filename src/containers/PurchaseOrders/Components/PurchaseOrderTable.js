@@ -78,6 +78,7 @@ const PurchaseOrderTable = memo(() => {
         }} /></div>
   const poNumberDisplay = (data) => `${data.purchaseOrderNo}`;
   const projectDisplay = (data) => `${data.project}`;
+  const prDisplay = (data) => `${data.purchaseRequestNo}`;
 
   const onDeleteConfirmed = () => {
     dispatcher(actions.deletePurchaseOrder(deleteId));
@@ -138,6 +139,12 @@ const PurchaseOrderTable = memo(() => {
       key: 'status',
       width: 250,
       render: poStatusDisplay
+    },
+    {
+      title: 'PR',
+      key: 'purchaseRequestNo',
+      width: 250,
+      render: prDisplay
     },
     {
       title: 'Requested On',

@@ -4,18 +4,13 @@ import {
   Form,
   Input,
   // Select,
-  Button,
   Row,
   Col,
-  List,
   Spin,
   message,
-  InputNumber,
-  AutoComplete,
   //message
 } from "antd";
 import {
-  DeleteFilled,
   PlusCircleOutlined,
   MinusCircleOutlined
 } from "@ant-design/icons";
@@ -27,7 +22,6 @@ import _ from 'lodash';
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import * as actions from "../../store/purchaserequest/actions/Actions";
 import * as uiActions from "../../store/ui/actions/Actions";
-import OnPointButton from "../../components/button/OnpointButton";
 import ReactDataSheet from "react-datasheet";
 import Logo from '../../components/logo/Logo';
 import "react-datasheet/lib/react-datasheet.css";
@@ -131,18 +125,6 @@ const PurchaseRequestForm = () => {
     wrapperCol: { span: 16 },
   };
 
-  const onDeleteItem = (index) => {
-    const newOrdersList = ordersList;
-    newOrdersList.splice(index, 1);
-    setListItems(
-      newOrdersList.map((data) => (
-        <h3 key={data.id}>
-          {`${data.quantity} ${data.unit} of ${data.product} `}
-        </h3>
-      ))
-    );
-    setOrdersList(newOrdersList);
-  };
 
   const handleCancel = () => {
     dispatcher(uiActions.setOpenModal1(false));
@@ -221,13 +203,10 @@ const PurchaseRequestForm = () => {
   }
 
   const onCellsChanged = (changes) => {
-    console.log('changes: ', changes);
     let newGrid = gridState;
     changes.forEach(({ cell, row, col, value }) => {
       newGrid[row][col] = { ...newGrid[row][col], value }
     })
-    console.log('newGrid: ', newGrid)
-    console.log('newGridLength: ', newGrid.length - 1);
     const newPurchaseRequestOrders = [];
     for (let i = 0; i < newGrid.length - 1; i++) {
       newPurchaseRequestOrders.push({
@@ -237,11 +216,11 @@ const PurchaseRequestForm = () => {
         quantity: parseFloat(newGrid[i + 1][3].value.split(',').join('')),
         quantityLeft: parseFloat(newGrid[i + 1][3].value.split(',').join('')),
         unit: newGrid[i + 1][4].value,
-        unitPrice: parseFloat(newGrid[i + 1][5].value.split(',').join(''))
+        unitPrice: parseFloat(newGrid[i + 1][5].value.split(',').join('')),
+        purchaseOrderNo: 'none',
       })
     }
     setPurchaseRequestOrders(newPurchaseRequestOrders);
-    console.log(newPurchaseRequestOrders);
     setGridState(newGrid);
   }
 

@@ -489,7 +489,8 @@ export const addPurchaseOrder = (purchaseOrderData) => async (dispatch) => {
       const newQuantityLeft = selectedPurchaseRequest.orders[key].quantityLeft - orderFound.quantity
       newPurchaseRequestOrders.push({
         ...selectedPurchaseRequest.orders[key],
-        quantityLeft: newQuantityLeft
+        quantityLeft: newQuantityLeft,
+        purchaseOrderNo: purchaseOrderData.purchaseOrderNo
       })
     }
   }
@@ -519,7 +520,7 @@ export const addPurchaseOrder = (purchaseOrderData) => async (dispatch) => {
   for (const key in purchaseOrderData.orders) {
     if (purchaseOrderData.orders[key].quantity !== 0) {
       updatedPurchaseOrderOrders.push({
-        ...purchaseOrderData.orders[key]
+        ...purchaseOrderData.orders[key],
       })
     }
   }
