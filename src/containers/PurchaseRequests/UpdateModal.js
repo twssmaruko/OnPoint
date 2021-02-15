@@ -9,12 +9,13 @@ import {
   Input,
   // Spin,
 } from "antd";
+import { PlusCircleOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import { AlertTwoTone } from "@ant-design/icons";
 // import _ from 'lodash';
 import * as uiActions from "../../store/ui/actions/Actions";
 import * as actions from "../../store/purchaserequest/actions/Actions";
 import ReactDataSheet from "react-datasheet";
-import Logo from '../../components/logo/Logo';
+import Logo from "../../components/logo/Logo";
 
 const Updatemodal = (props) => {
   const dispatcher = useDispatch();
@@ -29,29 +30,39 @@ const Updatemodal = (props) => {
     // purchaseRequestData: purchaseRequests.purchaseRequestData,
     openAnotherModal: ui.openModal2,
   }));
-  const [gridState, setGridState] = useState([
-    [
+  const [gridState, setGridState] = useState(() => {
+    const newGrid = [[
       { readOnly: true, value: "", width: 50 },
       { value: "ITEM", readOnly: true, width: 250 },
       { value: "DESCRIPTION", readOnly: true, width: 500 },
       { value: "QTY", readOnly: true, width: 100 },
+      { value: "ORDERED", readOnly: true, width: 100},
       { value: "UNIT", readOnly: true, width: 150 },
       { value: "UNIT PRICE", readOnly: true, width: 150 },
+    ]];
 
-    ],
-    [
-      { readOnly: true, value: 1 },
-      { value: "", textAlign: 'left' },
-      { value: "" },
-      { value: "" },
-      { value: "" },
-      { value: "" },
-    ],
+    for(const key in purchaseRequestData.orders) {
+      const quantityOrdered = purchaseRequestData.orders[key].quantity - purchaseRequestData.orders[key].quantityLeft
+      newGrid.push([
+        {readOnly: true, value: "", width: 50},
+        { value: purchaseRequestData.orders[key].itemType},
+        {value: purchaseRequestData.orders[key].product},
+        {value: purchaseRequestData.orders[key].quantity},
+        {value: quantityOrdered, readOnly: true},
+        {value: purchaseRequestData.orders[key].unit},
+        {value: purchaseRequestData.orders[key].unitPrice}
+      ])
+    }
 
-  ]);
+
+    return newGrid
+  });
+
+  const [orderNumber, setOrderNumber] = useState(1);
+  const [purchaseRequestOrders, setPurchaseRequestOrders] = useState([]);
 
   useEffect(() => {
-    // console.log('purchaseRequestData: ', purchaseRequestData);
+    console.log("purchaseRequestData: ", purchaseRequestData);
   }, [purchaseRequestData]);
 
   const [borderVisible, setBorderVisible] = useState(false);
@@ -134,6 +145,53 @@ const Updatemodal = (props) => {
     dispatcher(uiActions.setOpenModal2(false));
   };
 
+  const onCellsChanged = (changes) => {
+    let newGrid = gridState;
+    changes.forEach(({ cell, row, col, value }) => {
+      newGrid[row][col] = { ...newGrid[row][col], value };
+    });
+    const newPurchaseRequestOrders = [];
+    for (let i = 0; i < newGrid.length - 1; i++) {
+      newPurchaseRequestOrders.push({
+        id: i,
+        itemType: newGrid[i + 1][1].value,
+        product: newGrid[i + 1][2].value,
+        quantity: parseFloat(newGrid[i + 1][3].value.split(",").join("")),
+        quantityLeft: parseFloat(newGrid[i + 1][3].value.split(",").join("")),
+        unit: newGrid[i + 1][4].value,
+        unitPrice: parseFloat(newGrid[i + 1][5].value.split(",").join("")),
+        purchaseOrderNo: "none",
+      });
+    }
+    setPurchaseRequestOrders(newPurchaseRequestOrders);
+    setGridState(newGrid);
+  };
+
+  const addPurchaseRequestOrder = () => {
+    const newGrid = gridState;
+    const newOrderNumber = orderNumber + 1;
+    newGrid.push([
+      { readOnly: true, value: newOrderNumber },
+      { value: "" },
+      { value: "" },
+      { value: "" },
+      { value: "" },
+      { value: "" },
+    ]);
+    setOrderNumber(newOrderNumber);
+    setGridState(newGrid);
+  };
+
+  const removePurchaseRequestOrder = () => {
+    if (gridState.length <= 2) {
+      message.error("Cannot remove more!");
+    } else {
+      gridState.splice(gridState.length - 1, 1);
+      const newOrderNumber = orderNumber - 1;
+      setOrderNumber(newOrderNumber);
+    }
+  };
+
   return (
     <div>
       <Modal
@@ -201,18 +259,47 @@ const Updatemodal = (props) => {
                 PR Number:
               </Col>
               <Col style={{ borderBottomStyle: "solid", borderWidth: 1 }}>
-                {<Input
-                  style={{color: 'black'}}
-                  disabled={true}
-                  bordered={false}
-                  defaultValue={purchaseRequestData.purchaseRequestNo}
-                />}
+                {
+                  <Input
+                    style={{ color: "black" }}
+                    disabled={true}
+                    bordered={false}
+                    defaultValue={purchaseRequestData.purchaseRequestNo}
+                  />
+                }
               </Col>
             </Row>
           </Col>
           <Col span={16} />
         </Row>
 
+        <Row style={{ marginBottom: 25 }}>
+          <Col span={20}>
+            <Row>
+              <Col span={1} />
+              <Col span={1} style={{ marginRight: 0 }}>
+                <PlusCircleOutlined
+                  style={{ color: "green" }}
+                  onClick={() => addPurchaseRequestOrder()}
+                />
+              </Col>
+              <Col span={18} style={{ marginRight: 20 }}>
+                <ReactDataSheet
+                  data={gridState}
+                  valueRenderer={(cell) => cell.value}
+                  onCellsChanged={(changes) => onCellsChanged(changes)}
+                />
+              </Col>
+              <Col span={1}>
+                <MinusCircleOutlined
+                  style={{ color: "red" }}
+                  onClick={() => removePurchaseRequestOrder()}
+                />
+              </Col>
+              <Col span={1} />
+            </Row>
+          </Col>
+        </Row>
       </Modal>
     </div>
   );

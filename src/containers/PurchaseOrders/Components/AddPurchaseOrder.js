@@ -102,7 +102,9 @@ const AddPurchaseOrder = memo(() => {
     shallowEqual
   );
 
-  const [totalPriceState, setTotalPriceState] = useState(purchaseOrder.totalPrice)
+  const [totalPriceState, setTotalPriceState] = useState(
+    purchaseOrder.totalPrice
+  );
 
   useEffect(() => {
     dispatcher(actions.fetchPurchaseOrderId());
@@ -155,30 +157,60 @@ const AddPurchaseOrder = memo(() => {
         }
       }
       const newerPurchaseRequestOrders = [];
-      for(const key in purchaseRequestData.orders) {
+      for (const key in purchaseRequestData.orders) {
         if (purchaseRequestData.orders[key].quantityLeft > 0) {
           newerPurchaseRequestOrders.push({
-            ...purchaseRequestData.orders[key]
-          })
+            ...purchaseRequestData.orders[key],
+          });
         }
       }
       const newerPurchaseRequestData = {
         ...purchaseRequestData,
-        orders: newerPurchaseRequestOrders
-      }
-      console.log('newerPurchaseRequest: ', newerPurchaseRequestData);
-      const ordersDisplay = newerPurchaseRequestData.orders.map((order, index) => {
-        const emptyOrders = [];
-        order.totalPrice = order.quantityLeft * order.unitPrice
-        setDisplayedOrders(emptyOrders);
-        if (newerPurchaseRequestData.orders[index].quantityLeft > 0) {
-          if (orderCounter === newCounterFlag) {
+        orders: newerPurchaseRequestOrders,
+      };
+      console.log("newerPurchaseRequest: ", newerPurchaseRequestData);
+      const ordersDisplay = newerPurchaseRequestData.orders.map(
+        (order, index) => {
+          const emptyOrders = [];
+          order.totalPrice = order.quantityLeft * order.unitPrice;
+          setDisplayedOrders(emptyOrders);
+          if (newerPurchaseRequestData.orders[index].quantityLeft > 0) {
+            if (orderCounter === newCounterFlag) {
+              return (
+                <Row key={"div" + index}>
+                  <Col span={23}>
+                    <Order
+                      style={{ marginRight: 0 }}
+                      key={"order" + index + ordersKey}
+                      order={order}
+                      index={index}
+                      categories={projectCategories}
+                    />
+                  </Col>
+                  <Col span={1}>
+                    <Button
+                      key={"btn" + index}
+                      onClick={() => onDeleteClicked(index)}
+                      style={{ borderStyle: "none", marginLeft: 0 }}
+                    >
+                      <MinusCircleOutlined
+                        key={"circle" + index}
+                        style={{ color: "red" }}
+                      />
+                    </Button>
+                  </Col>
+                </Row>
+              );
+            }
+
+            const newKey = uuid();
+            setOrdersKey(newKey);
             return (
               <Row key={"div" + index}>
                 <Col span={23}>
                   <Order
                     style={{ marginRight: 0 }}
-                    key={"order" + index + ordersKey}
+                    key={"orderNew" + index + newKey}
                     order={order}
                     index={index}
                     categories={projectCategories}
@@ -199,36 +231,8 @@ const AddPurchaseOrder = memo(() => {
               </Row>
             );
           }
-
-          const newKey = uuid();
-          setOrdersKey(newKey);
-          return (
-            <Row key={"div" + index}>
-              <Col span={23}>
-                <Order
-                  style={{ marginRight: 0 }}
-                  key={"orderNew" + index + newKey}
-                  order={order}
-                  index={index}
-                  categories={projectCategories}
-                />
-              </Col>
-              <Col span={1}>
-                <Button
-                  key={"btn" + index}
-                  onClick={() => onDeleteClicked(index)}
-                  style={{ borderStyle: "none", marginLeft: 0 }}
-                >
-                  <MinusCircleOutlined
-                    key={"circle" + index}
-                    style={{ color: "red" }}
-                  />
-                </Button>
-              </Col>
-            </Row>
-          );
         }
-      });
+      );
       setOrderCounter(newCounterFlag);
       setDisplayedOrders(ordersDisplay);
     }
@@ -268,9 +272,13 @@ const AddPurchaseOrder = memo(() => {
         unit: selectedPurchaseRequest.orders[key].unit,
         itemType: selectedPurchaseRequest.orders[key].itemType,
         unitPrice: selectedPurchaseRequest.orders[key].unitPrice,
-        totalPrice: selectedPurchaseRequest.orders[key].quantityLeft * selectedPurchaseRequest.orders[key].unitPrice,
+        totalPrice:
+          selectedPurchaseRequest.orders[key].quantityLeft *
+          selectedPurchaseRequest.orders[key].unitPrice,
       });
-      newTotalAmount += selectedPurchaseRequest.orders[key].quantityLeft * selectedPurchaseRequest.orders[key].unitPrice
+      newTotalAmount +=
+        selectedPurchaseRequest.orders[key].quantityLeft *
+        selectedPurchaseRequest.orders[key].unitPrice;
       counterFlag += 1;
     }
     const newKey = uuid();
@@ -299,15 +307,15 @@ const AddPurchaseOrder = memo(() => {
     };
     newPurchaseOrder.orders.splice(index, 1);
     let newTotalPrice = 0;
-    for(const key in newPurchaseOrder.orders) {
-      newTotalPrice += newPurchaseOrder.orders[key].totalPrice
+    for (const key in newPurchaseOrder.orders) {
+      newTotalPrice += newPurchaseOrder.orders[key].totalPrice;
       console.log(newPurchaseOrder.orders[key].totalPrice);
     }
-    console.log('newTotalPrice: ',newTotalPrice);
+    console.log("newTotalPrice: ", newTotalPrice);
     const newerPurchaseOrder = {
       ...purchaseOrder,
-      totalPrice: newTotalPrice
-    }
+      totalPrice: newTotalPrice,
+    };
     setOrderState(newPurchaseRequest.orders);
     setPurchaseRequestData(newPurchaseRequest);
     setPurchaseOrderData(newerPurchaseOrder);
@@ -426,7 +434,7 @@ const AddPurchaseOrder = memo(() => {
     };
     setPurchaseOrderYear(purchaseOrderYear);
     const newPurchaseOrderId = purchaseOrderYear;
-    setPurchaseOrderId([purchaseOrderYear, purchaseOrderId[1]])
+    setPurchaseOrderId([purchaseOrderYear, purchaseOrderId[1]]);
     dispatcher(actions.setPurchaseOrder(newPurchaseOrder));
   };
 
@@ -441,7 +449,7 @@ const AddPurchaseOrder = memo(() => {
     };
     setPurchaseOrderNewNumber(purchaseOrderNumber);
     const newPurchaseOrderId = purchaseOrderNumber;
-    setPurchaseOrderId([purchaseOrderId[0], purchaseOrderNumber])
+    setPurchaseOrderId([purchaseOrderId[0], purchaseOrderNumber]);
     dispatcher(actions.setPurchaseOrder(newPurchaseOrder));
   };
 
@@ -690,8 +698,8 @@ const AddPurchaseOrder = memo(() => {
         <View style={{ flexDirection: "row" }}>
           <View style={{ flex: flexProps[0] }}>
             <View>
-              <Text style={{ fontFamily: "ArialBold", fontSize: 12 }}>
-                ON POINT CONSTRUCTION
+              <Text style={{ fontFamily: "ArialBold", fontSize: 8 }}>
+                ON POINT CONSTRUCTION AND DEVELOPMENT CORPORATION
               </Text>
             </View>
             <View>
@@ -704,7 +712,9 @@ const AddPurchaseOrder = memo(() => {
               <Text style={{ fontSize: 10 }}>(032) 266 3356</Text>
             </View>
             <View>
-              <Text style={{ fontSize: 10 }}>onpointconstruction.ph@gmail.com</Text>
+              <Text style={{ fontSize: 10 }}>
+                onpointconstruction.ph@gmail.com
+              </Text>
             </View>
           </View>
 
@@ -759,7 +769,7 @@ const AddPurchaseOrder = memo(() => {
               style={{
                 flexDirection: "row",
                 marginTop: 10,
-                marginBottom: 30,
+                marginBottom: 20,
                 marginLeft: 5,
               }}
             >
@@ -876,29 +886,31 @@ const AddPurchaseOrder = memo(() => {
               flexDirection: "row",
             }}
           >
-            <View style={{ flex: flexProps3[0] }}></View>
-            <View style={{ flex: flexProps3[1] }}>
+            <View style={{ flex: 1 }}></View>
+            <View style={{ flex: 1 }}>
+              <Text>***NOTHING FOLLOWS***</Text>
+            </View>
+            <View style={{ flex: 1 }}>
               <Text></Text>
             </View>
-            <View
-              style={{ flex: flexProps3[2], textAlign: "left", marginLeft: 20 }}
-            >
-              <Text></Text>
-            </View>
-            <View style={{ flex: flexProps3[3] }}>
-              <Text></Text>
-            </View>
-            <View style={{ flex: flexProps3[4] }}>
-              <Text></Text>
-            </View>
-            <View style={{ flex: flexProps3[5] }}>
-              <Text></Text>
-            </View>
-            <View style={{ flex: flexProps3[6] }}>
-              <Text>---</Text>
-            </View>
-            <View style={{ flex: flexProps3[7] }}></View>
           </View>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            fontFamily: "Arial",
+            fontSize: 10,
+            marginTop: 15,
+            marginBottom: 15,
+          }}
+        >
+          <View style={{ flex: 1 }}>
+            <Text style={{ fontFamily: "ArialBold" }}>Notes: </Text>
+          </View>
+          <View style={{ flex: 10 }}>
+            <Text>{purchaseOrder.notes}</Text>
+          </View>
+          <View style={{ flex: 1 }} />
         </View>
         <View>{ordersDisplay3}</View>
 
@@ -932,12 +944,6 @@ const AddPurchaseOrder = memo(() => {
           </View>
         </View>
 
-        <View style={{ flexDirection: 'row', fontFamily: "Arial", fontSize: 10, marginTop: 15, marginBottom: 15 }}>
-          <View>
-            <Text>Notes: {purchaseOrder.notes}</Text>
-          </View>
-        </View>
-
         {/* <View style={{flexDirection: 'row', fontFamily: "Arial", fontSize: 10, marginTop: 15, marginBottom: 15}}>
           <View>
             <Text>REMARKS:</Text>
@@ -955,8 +961,6 @@ const AddPurchaseOrder = memo(() => {
             style={{ borderStyle: "solid", borderTopWidth: 1, marginTop: 15 }}
           ></View>
         </View>
-
-
 
         <View>
           <View
@@ -1147,24 +1151,18 @@ const AddPurchaseOrder = memo(() => {
           </View>
         </View> */}
         <View
-        style={{
-          flexDirection: "row",
-          fontFamily: "Arial",
-          fontSize: "10",
-          marginTop: 10
-        }}>
-          <View style={{flex: 1}}>
-
+          style={{
+            flexDirection: "row",
+            fontFamily: "ArialBold",
+            fontSize: "10",
+            marginTop: 10,
+          }}
+        >
+          <View style={{ flex: 1 }}></View>
+          <View style={{ flex: 1, textAlign: "center" }}>
+            <Text>Warehouse Copy</Text>
           </View>
-          <View style={{flex: 1,
-          textAlign: 'center'}}>
-            <Text>
-              Warehouse Copy
-            </Text>
-          </View>
-          <View style={{flex: 1}}>
-
-          </View>
+          <View style={{ flex: 1 }}></View>
         </View>
       </Page>
       <Page size="Folio" style={styles.page}>
@@ -1213,8 +1211,8 @@ const AddPurchaseOrder = memo(() => {
         <View style={{ flexDirection: "row" }}>
           <View style={{ flex: flexProps[0] }}>
             <View>
-              <Text style={{ fontFamily: "ArialBold", fontSize: 12 }}>
-                ON POINT CONSTRUCTION
+              <Text style={{ fontFamily: "ArialBold", fontSize: 8 }}>
+                ON POINT CONSTRUCTION AND DEVELOPMENT CORPORATION
               </Text>
             </View>
             <View>
@@ -1227,7 +1225,9 @@ const AddPurchaseOrder = memo(() => {
               <Text style={{ fontSize: 10 }}>(032) 266 3356</Text>
             </View>
             <View>
-              <Text style={{ fontSize: 10 }}>onpointconstruction.ph@gmail.com</Text>
+              <Text style={{ fontSize: 10 }}>
+                onpointconstruction.ph@gmail.com
+              </Text>
             </View>
           </View>
 
@@ -1282,7 +1282,7 @@ const AddPurchaseOrder = memo(() => {
               style={{
                 flexDirection: "row",
                 marginTop: 10,
-                marginBottom: 30,
+                marginBottom: 20,
                 marginLeft: 5,
               }}
             >
@@ -1399,29 +1399,31 @@ const AddPurchaseOrder = memo(() => {
               flexDirection: "row",
             }}
           >
-            <View style={{ flex: flexProps3[0] }}></View>
-            <View style={{ flex: flexProps3[1] }}>
+            <View style={{ flex: 1 }}></View>
+            <View style={{ flex: 1 }}>
+              <Text>***NOTHING FOLLOWS***</Text>
+            </View>
+            <View style={{ flex: 1 }}>
               <Text></Text>
             </View>
-            <View
-              style={{ flex: flexProps3[2], textAlign: "left", marginLeft: 20 }}
-            >
-              <Text></Text>
-            </View>
-            <View style={{ flex: flexProps3[3] }}>
-              <Text></Text>
-            </View>
-            <View style={{ flex: flexProps3[4] }}>
-              <Text></Text>
-            </View>
-            <View style={{ flex: flexProps3[5] }}>
-              <Text></Text>
-            </View>
-            <View style={{ flex: flexProps3[6] }}>
-              <Text>---</Text>
-            </View>
-            <View style={{ flex: flexProps3[7] }}></View>
           </View>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            fontFamily: "Arial",
+            fontSize: 10,
+            marginTop: 15,
+            marginBottom: 15,
+          }}
+        >
+          <View style={{ flex: 1 }}>
+            <Text style={{ fontFamily: "ArialBold" }}>Notes: </Text>
+          </View>
+          <View style={{ flex: 10 }}>
+            <Text>{purchaseOrder.notes}</Text>
+          </View>
+          <View style={{ flex: 1 }} />
         </View>
         <View>{ordersDisplay3}</View>
 
@@ -1455,12 +1457,6 @@ const AddPurchaseOrder = memo(() => {
           </View>
         </View>
 
-        <View style={{ flexDirection: 'row', fontFamily: "Arial", fontSize: 10, marginTop: 15, marginBottom: 15 }}>
-          <View>
-            <Text>Notes: {purchaseOrder.notes}</Text>
-          </View>
-        </View>
-
         {/* <View style={{flexDirection: 'row', fontFamily: "Arial", fontSize: 10, marginTop: 15, marginBottom: 15}}>
           <View>
             <Text>REMARKS:</Text>
@@ -1478,8 +1474,6 @@ const AddPurchaseOrder = memo(() => {
             style={{ borderStyle: "solid", borderTopWidth: 1, marginTop: 15 }}
           ></View>
         </View>
-
-
 
         <View>
           <View
@@ -1670,24 +1664,18 @@ const AddPurchaseOrder = memo(() => {
           </View>
         </View> */}
         <View
-        style={{
-          flexDirection: "row",
-          fontFamily: "Arial",
-          fontSize: "10",
-          marginTop: 10
-        }}>
-          <View style={{flex: 1}}>
-
+          style={{
+            flexDirection: "row",
+            fontFamily: "ArialBold",
+            fontSize: "10",
+            marginTop: 10,
+          }}
+        >
+          <View style={{ flex: 1 }}></View>
+          <View style={{ flex: 1, textAlign: "center" }}>
+            <Text>Accounting Copy</Text>
           </View>
-          <View style={{flex: 1,
-          textAlign: 'center'}}>
-            <Text>
-              Accounting Copy
-            </Text>
-          </View>
-          <View style={{flex: 1}}>
-
-          </View>
+          <View style={{ flex: 1 }}></View>
         </View>
       </Page>
       <Page size="Folio" style={styles.page}>
@@ -1736,8 +1724,8 @@ const AddPurchaseOrder = memo(() => {
         <View style={{ flexDirection: "row" }}>
           <View style={{ flex: flexProps[0] }}>
             <View>
-              <Text style={{ fontFamily: "ArialBold", fontSize: 12 }}>
-                ON POINT CONSTRUCTION
+              <Text style={{ fontFamily: "ArialBold", fontSize: 8 }}>
+                ON POINT CONSTRUCTION AND DEVELOPMENT CORPORATION
               </Text>
             </View>
             <View>
@@ -1750,7 +1738,9 @@ const AddPurchaseOrder = memo(() => {
               <Text style={{ fontSize: 10 }}>(032) 266 3356</Text>
             </View>
             <View>
-              <Text style={{ fontSize: 10 }}>onpointconstruction.ph@gmail.com</Text>
+              <Text style={{ fontSize: 10 }}>
+                onpointconstruction.ph@gmail.com
+              </Text>
             </View>
           </View>
 
@@ -1805,7 +1795,7 @@ const AddPurchaseOrder = memo(() => {
               style={{
                 flexDirection: "row",
                 marginTop: 10,
-                marginBottom: 30,
+                marginBottom: 20,
                 marginLeft: 5,
               }}
             >
@@ -1922,29 +1912,31 @@ const AddPurchaseOrder = memo(() => {
               flexDirection: "row",
             }}
           >
-            <View style={{ flex: flexProps3[0] }}></View>
-            <View style={{ flex: flexProps3[1] }}>
+            <View style={{ flex: 1 }}></View>
+            <View style={{ flex: 1 }}>
+              <Text>***NOTHING FOLLOWS***</Text>
+            </View>
+            <View style={{ flex: 1 }}>
               <Text></Text>
             </View>
-            <View
-              style={{ flex: flexProps3[2], textAlign: "left", marginLeft: 20 }}
-            >
-              <Text></Text>
-            </View>
-            <View style={{ flex: flexProps3[3] }}>
-              <Text></Text>
-            </View>
-            <View style={{ flex: flexProps3[4] }}>
-              <Text></Text>
-            </View>
-            <View style={{ flex: flexProps3[5] }}>
-              <Text></Text>
-            </View>
-            <View style={{ flex: flexProps3[6] }}>
-              <Text>---</Text>
-            </View>
-            <View style={{ flex: flexProps3[7] }}></View>
           </View>
+        </View>
+        <View
+          style={{
+            flexDirection: "row",
+            fontFamily: "Arial",
+            fontSize: 10,
+            marginTop: 15,
+            marginBottom: 15,
+          }}
+        >
+          <View style={{ flex: 1 }}>
+            <Text style={{ fontFamily: "ArialBold" }}>Notes: </Text>
+          </View>
+          <View style={{ flex: 10 }}>
+            <Text>{purchaseOrder.notes}</Text>
+          </View>
+          <View style={{ flex: 1 }} />
         </View>
         <View>{ordersDisplay3}</View>
 
@@ -1978,12 +1970,6 @@ const AddPurchaseOrder = memo(() => {
           </View>
         </View>
 
-        <View style={{ flexDirection: 'row', fontFamily: "Arial", fontSize: 10, marginTop: 15, marginBottom: 15 }}>
-          <View>
-            <Text>Notes: {purchaseOrder.notes}</Text>
-          </View>
-        </View>
-
         {/* <View style={{flexDirection: 'row', fontFamily: "Arial", fontSize: 10, marginTop: 15, marginBottom: 15}}>
           <View>
             <Text>REMARKS:</Text>
@@ -2001,8 +1987,6 @@ const AddPurchaseOrder = memo(() => {
             style={{ borderStyle: "solid", borderTopWidth: 1, marginTop: 15 }}
           ></View>
         </View>
-
-
 
         <View>
           <View
@@ -2193,24 +2177,18 @@ const AddPurchaseOrder = memo(() => {
           </View>
         </View> */}
         <View
-        style={{
-          flexDirection: "row",
-          fontFamily: "Arial",
-          fontSize: "10",
-          marginTop: 10
-        }}>
-          <View style={{flex: 1}}>
-
+          style={{
+            flexDirection: "row",
+            fontFamily: "ArialBold",
+            fontSize: "10",
+            marginTop: 10,
+          }}
+        >
+          <View style={{ flex: 1 }}></View>
+          <View style={{ flex: 1, textAlign: "center" }}>
+            <Text>Supplier's Copy</Text>
           </View>
-          <View style={{flex: 1,
-          textAlign: 'center'}}>
-            <Text>
-              Supplier's Copy
-            </Text>
-          </View>
-          <View style={{flex: 1}}>
-
-          </View>
+          <View style={{ flex: 1 }}></View>
         </View>
       </Page>
     </Document>
@@ -2270,7 +2248,7 @@ const AddPurchaseOrder = memo(() => {
   ));
 
   const newOrdersDisplay = [];
-  for (let i = 0; i <= 24 - newPurchaseOrderOrders.length; i += 1) {
+  for (let i = 0; i <= 26 - newPurchaseOrderOrders.length; i += 1) {
     newOrdersDisplay.push({ key: i });
   }
 
@@ -3218,8 +3196,8 @@ const AddPurchaseOrder = memo(() => {
                                   value <= quantityLeft || value === undefined
                                     ? Promise.resolve()
                                     : Promise.reject(
-                                      `Should not exceed ${quantityLeft}`
-                                    ),
+                                        `Should not exceed ${quantityLeft}`
+                                      ),
                               },
                             ]}
                           >
@@ -3230,7 +3208,7 @@ const AddPurchaseOrder = memo(() => {
                                 border: "1px solid black",
                               }}
                               allowClear
-                            // placeholder={}
+                              // placeholder={}
                             />
                           </Form.Item>
                         </div>
