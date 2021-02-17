@@ -8,7 +8,7 @@ import {
   Checkbox,
   Modal
 } from 'antd';
-import { CheckCircleFilled, EditTwoTone, ExclamationCircleOutlined, DeleteFilled } from '@ant-design/icons';
+import { CheckCircleFilled, EditTwoTone, ExclamationCircleOutlined, DeleteFilled, StopOutlined } from '@ant-design/icons';
 import TableButton from '../../../components/button/OnpointButton';
 import PurchaseOrderDetails from './PurchaseOrderDetails';
 import * as uiActions from '../../../store/ui/actions/Actions';
@@ -50,6 +50,8 @@ const PurchaseOrderTable = memo(() => {
   const [, setCurrentPurchaseOrder] = useState({});
   const [seeAll, setSeeAll] = useState(false);
   const [deleteId, setDeleteId] = useState(0);
+  const [cancelId, setCancelId] = useState(0);
+  const [displayCancelModal, setDisplayCancelModal] = useState(false);
   const [displayDeleteModal, setDisplayDeleteModal] = useState(false);
   const [purchaseOrderDetailsModal, setPurchaseOrderDetailsModal] = useState(null);
   const editButton = (item) =>
@@ -85,6 +87,11 @@ const PurchaseOrderTable = memo(() => {
     setDisplayDeleteModal(false);
   }
 
+  const onCancelConfirmed = () => {
+    //dispatcher(actions.deletePurchaseOrder(deleteId));
+    setDisplayCancelModal(false);
+  }
+
   const deleteModal = <Modal visible={displayDeleteModal}
   onCancel={() => {
     setDisplayDeleteModal(false)
@@ -93,11 +100,24 @@ const PurchaseOrderTable = memo(() => {
   Are you sure you want to delete this Purchase Request?
   </Modal>;
 
+const cancelModal = <Modal visible={displayCancelModal}
+onCancel={() => {
+  setDisplayCancelModal(false)
+}}
+onOk={(e) => onCancelConfirmed(e)}> 
+Are you sure you want to cancel this Purchase Request?
+</Modal>;
+
 
 
   const deleteItem = (data) => {
     setDeleteId(data);
     setDisplayDeleteModal(true);
+  };
+
+  const cancelItem = (data) => {
+    setCancelId(data);
+    setDisplayCancelModal(true);
   };
 
   const deleteButton = (item) => (
@@ -107,6 +127,17 @@ const PurchaseOrderTable = memo(() => {
         type="danger"
         icon={<DeleteFilled />}
         onClick={deleteItem}
+      />
+    </div>
+  );
+
+  const cancelButton = (item) => (
+    <div>
+      <TableButton
+        value={item}
+        type="danger"
+        icon={<StopOutlined />}
+        onClick={cancelItem}
       />
     </div>
   );
@@ -152,6 +183,12 @@ const PurchaseOrderTable = memo(() => {
       key: 'dateCreated',
       width: 250,
       render: (createdAt) => moment(createdAt).format('MMMM Do YYYY, h:mm:ss A')
+    },
+    {
+      title: 'Cancel',
+      render: cancelButton,
+      key: 'cancel',
+      width: '1%'
     },
     {
       title: "Delete",
@@ -289,6 +326,7 @@ const PurchaseOrderTable = memo(() => {
       </Row>
       {purchaseOrderDetailsModal}
       {deleteModal}
+      {cancelModal}
     </div>
   )
 

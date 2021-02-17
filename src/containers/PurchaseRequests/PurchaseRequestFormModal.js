@@ -243,7 +243,6 @@ const PurchaseRequestForm = () => {
       afterClose={afterModalClose}
     >
       <Spin spinning={modalSpin}>
-
         <Row>
           <Col span={8}>
             <Logo />
@@ -328,7 +327,6 @@ const PurchaseRequestForm = () => {
             />
           </Col>
         </Row>
-
       </Spin>
     </Modal>
   );

@@ -15,6 +15,7 @@ import { AlertTwoTone } from "@ant-design/icons";
 import * as uiActions from "../../store/ui/actions/Actions";
 import * as actions from "../../store/purchaserequest/actions/Actions";
 import ReactDataSheet from "react-datasheet";
+import "react-datasheet/lib/react-datasheet.css";
 import Logo from "../../components/logo/Logo";
 
 const Updatemodal = (props) => {
@@ -36,21 +37,21 @@ const Updatemodal = (props) => {
       { value: "ITEM", readOnly: true, width: 250 },
       { value: "DESCRIPTION", readOnly: true, width: 500 },
       { value: "QTY", readOnly: true, width: 100 },
-      { value: "ORDERED", readOnly: true, width: 100},
+      { value: "ORDERED", readOnly: true, width: 100 },
       { value: "UNIT", readOnly: true, width: 150 },
       { value: "UNIT PRICE", readOnly: true, width: 150 },
     ]];
 
-    for(const key in purchaseRequestData.orders) {
+    for (const key in purchaseRequestData.orders) {
       const quantityOrdered = purchaseRequestData.orders[key].quantity - purchaseRequestData.orders[key].quantityLeft
       newGrid.push([
-        {readOnly: true, value: "", width: 50},
-        { value: purchaseRequestData.orders[key].itemType},
-        {value: purchaseRequestData.orders[key].product},
-        {value: purchaseRequestData.orders[key].quantity},
-        {value: quantityOrdered, readOnly: true},
-        {value: purchaseRequestData.orders[key].unit},
-        {value: purchaseRequestData.orders[key].unitPrice}
+        { readOnly: true, value: "", width: 50 },
+        { value: purchaseRequestData.orders[key].itemType },
+        { value: purchaseRequestData.orders[key].product, textAlign: 'center' },
+        { value: purchaseRequestData.orders[key].quantity },
+        { value: quantityOrdered, readOnly: true },
+        { value: purchaseRequestData.orders[key].unit },
+        { value: purchaseRequestData.orders[key].unitPrice }
       ])
     }
 
@@ -193,115 +194,113 @@ const Updatemodal = (props) => {
   };
 
   return (
-    <div>
-      <Modal
-        maskClosable={false}
-        title={`PR ${purchaseRequestData.purchaseRequestNo}`}
-        visible={openAnotherModal}
-        width={1200}
-        onOk={handleUpdateOk}
-        onCancel={handleUpdateCancel}
-        okText="Update Purchase Request"
-        destroyOnClose
-        afterClose={afterModalClose}
-      >
-        <Row>
-          <Col span={8}>
-            <Logo />
-          </Col>
-          <Col span={8} />
-          <Col
-            span={8}
-            style={{ fontFamily: "Arial", color: "black", fontSize: 12 }}
-          >
-            <Row>
-              <Col>On Point Construction</Col>
-            </Row>
-            <Row>
-              <Col>28-A Sanson Road, Lahug, Cebu City</Col>
-            </Row>
-            <Row>
-              <Col>Telephone No.: (032) 266-3356</Col>
-            </Row>
-            <Row>
-              <Col>Email: onpointconstruction.ph@gmail.com</Col>
-            </Row>
-          </Col>
-        </Row>
+    <Modal
+      maskClosable={false}
+      title={`PR ${purchaseRequestData.purchaseRequestNo}`}
+      visible={openAnotherModal}
+      width={1200}
+      onOk={handleUpdateOk}
+      onCancel={handleUpdateCancel}
+      okText="Update Purchase Request"
+      destroyOnClose
+      afterClose={afterModalClose}
+    >
+      <Row>
+        <Col span={8}>
+          <Logo />
+        </Col>
+        <Col span={8} />
+        <Col
+          span={8}
+          style={{ fontFamily: "Arial", color: "black", fontSize: 12 }}
+        >
+          <Row>
+            <Col>On Point Construction</Col>
+          </Row>
+          <Row>
+            <Col>28-A Sanson Road, Lahug, Cebu City</Col>
+          </Row>
+          <Row>
+            <Col>Telephone No.: (032) 266-3356</Col>
+          </Row>
+          <Row>
+            <Col>Email: onpointconstruction.ph@gmail.com</Col>
+          </Row>
+        </Col>
+      </Row>
 
-        <Row style={{ marginTop: 20, marginBottom: 25 }}>
-          <Col span={8} />
-          <Col
-            span={8}
-            style={{
-              textAlign: "center",
-              fontFamily: "Arial",
-              fontWeight: "bold",
-              color: "black",
-              fontSize: 16,
-            }}
-          >
-            PURCHASE REQUEST
+      <Row style={{ marginTop: 20, marginBottom: 25 }}>
+        <Col span={8} />
+        <Col
+          span={8}
+          style={{
+            textAlign: "center",
+            fontFamily: "Arial",
+            fontWeight: "bold",
+            color: "black",
+            fontSize: 16,
+          }}
+        >
+          PURCHASE REQUEST
           </Col>
-          <Col span={8} />
-        </Row>
+        <Col span={8} />
+      </Row>
 
-        <Row style={{ marginTop: 10, marginBottom: 25 }}>
-          <Col span={8}>
-            <Row>
-              <Col
-                style={{
-                  marginRight: 10,
-                  fontFamily: "Arial",
-                  fontWeight: "bold",
-                }}
-              >
-                PR Number:
+      <Row style={{ marginTop: 10, marginBottom: 25 }}>
+        <Col span={8}>
+          <Row>
+            <Col
+              style={{
+                marginRight: 10,
+                fontFamily: "Arial",
+                fontWeight: "bold",
+              }}
+            >
+              PR Number:
               </Col>
-              <Col style={{ borderBottomStyle: "solid", borderWidth: 1 }}>
-                {
-                  <Input
-                    style={{ color: "black" }}
-                    disabled={true}
-                    bordered={false}
-                    defaultValue={purchaseRequestData.purchaseRequestNo}
-                  />
-                }
-              </Col>
-            </Row>
-          </Col>
-          <Col span={16} />
-        </Row>
+            <Col style={{ borderBottomStyle: "solid", borderWidth: 1 }}>
+              {
+                <Input
+                  style={{ color: "black" }}
+                  disabled={true}
+                  bordered={false}
+                  defaultValue={purchaseRequestData.purchaseRequestNo}
+                />
+              }
+            </Col>
+          </Row>
+        </Col>
+        <Col span={16} />
+      </Row>
 
-        <Row style={{ marginBottom: 25 }}>
-          <Col span={20}>
-            <Row>
-              <Col span={1} />
-              <Col span={1} style={{ marginRight: 0 }}>
-                <PlusCircleOutlined
-                  style={{ color: "green" }}
-                  onClick={() => addPurchaseRequestOrder()}
-                />
-              </Col>
-              <Col span={18} style={{ marginRight: 20 }}>
-                <ReactDataSheet
-                  data={gridState}
-                  valueRenderer={(cell) => cell.value}
-                  onCellsChanged={(changes) => onCellsChanged(changes)}
-                />
-              </Col>
-              <Col span={1}>
-                <MinusCircleOutlined
-                  style={{ color: "red" }}
-                  onClick={() => removePurchaseRequestOrder()}
-                />
-              </Col>
-              <Col span={1} />
-            </Row>
-          </Col>
-        </Row>
-      </Modal>
-    </div>
+      <Row style={{ marginBottom: 25 }}>
+        <Col span={20}>
+          <Row>
+            <Col span={1} />
+            <Col span={1} style={{ marginRight: 0 }}>
+              <PlusCircleOutlined
+                style={{ color: "green" }}
+                onClick={() => addPurchaseRequestOrder()}
+              />
+            </Col>
+            <Col span={18} style={{ marginRight: 20 }}>
+              <ReactDataSheet
+                data={gridState}
+                valueRenderer={(cell) => cell.value}
+                onCellsChanged={(changes) => onCellsChanged(changes)}
+              />
+            </Col>
+            <Col span={1}>
+              <MinusCircleOutlined
+                style={{ color: "red" }}
+                onClick={() => removePurchaseRequestOrder()}
+              />
+            </Col>
+            <Col span={1} />
+          </Row>
+        </Col>
+      </Row>
+    </Modal>
   );
 };
 

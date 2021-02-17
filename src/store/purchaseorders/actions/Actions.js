@@ -661,13 +661,17 @@ export const fetchWorksheet = () => async (dispatch) => {
   try{
     dispatch(setLoading(true));
     const result = await axios.get('/purchaseorders.json');
-    console.log('result: ', result.data);
     const fetchedPurchaseOrders = [];
     for (const key in result.data) {
       fetchedPurchaseOrders.push({
         ...result.data[key],
         id: key
       })
+    }
+    console.log('fetched Orders: ', fetchedPurchaseOrders);
+
+    for(const key in fetchedPurchaseOrders) {
+
     }
 
     dispatch(setLoading(false));
