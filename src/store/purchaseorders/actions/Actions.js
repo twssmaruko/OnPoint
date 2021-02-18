@@ -662,19 +662,43 @@ export const fetchWorksheet = () => async (dispatch) => {
     dispatch(setLoading(true));
     const result = await axios.get('/purchaseorders.json');
     const fetchedPurchaseOrders = [];
+    const worksheetData = [];
     for (const key in result.data) {
-      fetchedPurchaseOrders.push({
-        ...result.data[key],
-        id: key
-      })
+      // fetchedPurchaseOrders.push({
+      //   ...result.data[key],
+      //   id: key
+      // })
+      const purchaseOrderNo = result.data[key].purchaseOrderId.toString();
+      const purchaseRequestNo = result.data[key].purchaseRequestNo;
+      const project = result.data[key].project;
+      const vendor = result.data[key].vendor;
+      const orders = result.data[key].orders;
+      const year = result.data[key].dateCreated.slice(0,4);
+      const month = result.data[key].dateCreated.slice(5,7);
+      const day = result.data[key].dateCreated.slice(8,10)
+      for (const i in orders) {
+        worksheetData.push({
+          purchaseOrderNo: purchaseOrderNo,
+          purchaseRequestNo: purchaseRequestNo,
+          project: project,
+          vendor: vendor,
+          category: orders[i].category,
+          itemType: orders[i].itemType,
+          product: orders[i].product,
+          quantity: orders[i].quantity,
+          unit: orders[i].unit,
+          unitPrice: orders[i].unitPrice,
+          totalPrice: orders[i].totalPrice,
+          year: year,
+          month: month,
+          day: day
+
+        })
+      }
     }
-    console.log('fetched Orders: ', fetchedPurchaseOrders);
-
-    for(const key in fetchedPurchaseOrders) {
-
-    }
-
+    dispatch(fetchWorksheetToStore(worksheetData));
     dispatch(setLoading(false));
+    message.success('worksheet loaded');
 
   } catch (error) {
     message.error('failed to fetch worksheet!');

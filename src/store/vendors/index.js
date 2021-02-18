@@ -1,4 +1,5 @@
 export {
   newVendor,
-  fetchVendors
+  fetchVendors,
+  deleteVendor
 } from './actions/actions';

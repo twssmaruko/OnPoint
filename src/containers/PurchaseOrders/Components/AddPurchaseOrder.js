@@ -83,6 +83,7 @@ const AddPurchaseOrder = memo(() => {
     purchaseOrder,
     totalPrice,
     vendor,
+    worksheet,
     //purchaseRequestProducts,
     projectsList,
   } = useSelector(

@@ -8,12 +8,15 @@ import {
   // Input,
   Modal
 } from 'antd';
-import {SearchOutlined} from '@ant-design/icons';
+import {SearchOutlined, DeleteFilled} from '@ant-design/icons';
 import VendorList from './VendorList';
 import * as actions from '../../store/vendors/index';
+import TableButton from "../../components/button/OnpointButton";
 
 const Vendors = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [deleteId, setDeleteId] = useState(0);
+  const [viewDeleteModal, setViewDeleteModal] = useState(false);
   const dispatcher = useDispatch();
   const formRef = useRef(null);
 
@@ -24,6 +27,35 @@ const Vendors = () => {
   const {vndr} = useSelector(({vendor}) => ({
     vndr: vendor.vendors
   }));
+
+  const deleteItem = (data) => {
+    setDeleteId(data.id);
+    setViewDeleteModal(true);
+  };
+
+  const onDeleteConfirmed = () => {
+    dispatcher(actions.deleteVendor(deleteId));
+    setViewDeleteModal(false);
+  }
+
+  const deleteModal = <Modal visible={viewDeleteModal}
+  onCancel={() => {
+    setViewDeleteModal(false)
+  }}
+  onOk={(e) => onDeleteConfirmed(e)}> 
+  Are you sure you want to delete this Vendor?
+  </Modal>;
+
+  const deleteButton = (item) => (
+    <div>
+      <TableButton
+        value={item}
+        type="danger"
+        icon={<DeleteFilled />}
+        onClick={deleteItem}
+      />
+    </div>
+  );
 
   const title =
     <div style={{marginTop: 15}}>
@@ -63,7 +95,13 @@ const Vendors = () => {
       dataIndex: 'terms',
       key: 'terms',
       width: 250
-    }
+    },
+    {
+      title: "Delete",
+      render: deleteButton,
+      key: "delete",
+      width: "1%",
+    },
   ];
 
   const setModal = () => {
@@ -125,6 +163,7 @@ const Vendors = () => {
       >
         <VendorList reference={formRef} onSubmit={onSubmit} />
       </Modal>
+      {deleteModal}
     </>
   );
 };

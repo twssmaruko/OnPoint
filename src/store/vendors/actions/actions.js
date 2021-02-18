@@ -8,6 +8,7 @@
 
 import * as actionTypes from '../actionTypes';
 import axios from '../../../axios-orders';
+import {message} from 'antd';
 
 export const fetchVendorsStart = () => ({
   type: actionTypes.FETCH_VENDORS_START
@@ -69,6 +70,23 @@ export const newVendorFail = (error) => ({
   type: actionTypes.NEW_VENDOR_FAIL,
   error
 });
+
+export const deleteVendor = (vendorId) => async (dispatch) => {
+  const newURL = 'vendors/'+ vendorId + '.json';
+
+    try{
+      
+      await axios.delete(newURL);
+      dispatch(fetchVendors());
+      message.success('Vendor removed');
+
+
+    }catch(error) {
+      message.error('unable to delete Vendor');
+      console.error(error);
+    }
+
+}
 
 export const newVendor = (vendorData) => {
   // Marco Code
