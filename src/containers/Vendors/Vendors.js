@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useDispatch, useSelector, shallowEqual} from 'react-redux';
 import {
   Row, Col,
   Button,
@@ -26,7 +26,7 @@ const Vendors = () => {
 
   const {vndr} = useSelector(({vendor}) => ({
     vndr: vendor.vendors
-  }));
+  }), shallowEqual);
 
   const deleteItem = (data) => {
     setDeleteId(data.id);
@@ -76,7 +76,11 @@ const Vendors = () => {
       title,
       dataIndex: 'vendorName',
       key: 'vendorName',
-      width: 250
+      width: 250,
+      sorter: {
+        compare: (a,b) => a.vendorName.localeCompare(b.vendorName)
+      },
+      defaultSortOrder: 'ascend',
     },
     {
       title: 'Tel-No',
@@ -142,7 +146,6 @@ const Vendors = () => {
             <Col span={24}>
               <Table
                 columns={columns}
-                // eslint-disable-next-line react/destructuring-assignment
                 dataSource={vndr}
                 size="large"
                 rowKey="id"
