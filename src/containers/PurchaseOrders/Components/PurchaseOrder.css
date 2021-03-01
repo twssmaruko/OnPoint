@@ -36,6 +36,68 @@
     background: #fff;
     border-color: #fff;
 }
+
+.vj-box {
+    color: black;
+    border-style: solid;
+    border-width: thin;
+}
+.vj-header {
+    background-color: #e7e6e6;
+    text-align: center;
+    border-bottom-style: solid;
+    border-width: thin;
+}
+
+.vj-text {
+    margin-left: 10px;
+}
+
+.bold-text {
+    font-family: Arial;
+    font-weight: bold;
+}
+
+.mid-text {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.item-box {
+    border-style: solid;
+    border-width: thin;
+}
+.border-bottom {
+    border-bottom-style: solid;
+    border-width: thin;
+}
+.border-right {
+    border-right-style: solid;
+    border-width: thin;
+    text-align: center;
+}
+
+.input-text-align {
+    text-align: center;
+}
+
+.purchase-order-text {
+    text-align: center;
+    font-size: 18px;
+    font-family: Arial;
+    font-weight: bold;
+    background-color: #808080;
+    border-style: solid;
+    border-width: thin;
+    border-bottom-style: none;
+}
+.white-text {
+    color: white;
+}
+.black-text {
+    color: black;
+}
 /* 
 .ant-btn-div :hover   {
     color: #13407F;

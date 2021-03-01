@@ -3,6 +3,7 @@ import * as actions from '../ActionTypes';
 const initialState = {
   openModal1: false,
   openModal2: false,
+  openModal3: false,
   showSpin1: false,
   showSpin2: false,
   showSpin3: false
@@ -19,6 +20,11 @@ const ui = (state = initialState, action) => {
     return {
       ...state,
       openModal2: action.data
+    };
+    case actions.SET_OPENMODAL3:
+    return {
+      ...state,
+      openModal3: action.data
     };
   case actions.SET_SHOWSPIN1:
     return {

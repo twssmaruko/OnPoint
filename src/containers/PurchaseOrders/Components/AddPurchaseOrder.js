@@ -175,43 +175,13 @@ const AddPurchaseOrder = memo(() => {
           const emptyOrders = [];
           order.totalPrice = order.quantityLeft * order.unitPrice;
           setDisplayedOrders(emptyOrders);
-          if (newerPurchaseRequestData.orders[index].quantityLeft > 0) {
-            if (orderCounter === newCounterFlag) {
-              return (
-                <Row key={"div" + index}>
-                  <Col span={23}>
-                    <Order
-                      style={{ marginRight: 0 }}
-                      key={"order" + index + ordersKey}
-                      order={order}
-                      index={index}
-                      categories={projectCategories}
-                    />
-                  </Col>
-                  <Col span={1}>
-                    <Button
-                      key={"btn" + index}
-                      onClick={() => onDeleteClicked(index)}
-                      style={{ borderStyle: "none", marginLeft: 0 }}
-                    >
-                      <MinusCircleOutlined
-                        key={"circle" + index}
-                        style={{ color: "red" }}
-                      />
-                    </Button>
-                  </Col>
-                </Row>
-              );
-            }
-
-            const newKey = uuid();
-            setOrdersKey(newKey);
+          if (orderCounter === newCounterFlag) {
             return (
               <Row key={"div" + index}>
                 <Col span={23}>
                   <Order
                     style={{ marginRight: 0 }}
-                    key={"orderNew" + index + newKey}
+                    key={"order" + index + ordersKey}
                     order={order}
                     index={index}
                     categories={projectCategories}
@@ -220,7 +190,7 @@ const AddPurchaseOrder = memo(() => {
                 <Col span={1}>
                   <Button
                     key={"btn" + index}
-                    onClick={() => onDeleteClicked(index)}
+                    onClick={() => onDeleteClicked(index, newerPurchaseRequestData)}
                     style={{ borderStyle: "none", marginLeft: 0 }}
                   >
                     <MinusCircleOutlined
@@ -232,6 +202,34 @@ const AddPurchaseOrder = memo(() => {
               </Row>
             );
           }
+
+          const newKey = uuid();
+          setOrdersKey(newKey);
+          return (
+            <Row key={"div" + index}>
+              <Col span={23}>
+                <Order
+                  style={{ marginRight: 0 }}
+                  key={"orderNew" + index + newKey}
+                  order={order}
+                  index={index}
+                  categories={projectCategories}
+                />
+              </Col>
+              <Col span={1}>
+                <Button
+                  key={"btn" + index}
+                  onClick={() => onDeleteClicked(index, newerPurchaseRequestData)}
+                  style={{ borderStyle: "none", marginLeft: 0 }}
+                >
+                  <MinusCircleOutlined
+                    key={"circle" + index}
+                    style={{ color: "red" }}
+                  />
+                </Button>
+              </Col>
+            </Row>
+          );
         }
       );
       setOrderCounter(newCounterFlag);
@@ -266,21 +264,24 @@ const AddPurchaseOrder = memo(() => {
     const initTotalPrice = [];
     let newTotalAmount = 0;
     for (const key in selectedPurchaseRequest.orders) {
-      initTotalPrice.push({
-        ...initTotalPrice[key],
-        product: selectedPurchaseRequest.orders[key].product,
-        quantity: selectedPurchaseRequest.orders[key].quantityLeft,
-        unit: selectedPurchaseRequest.orders[key].unit,
-        itemType: selectedPurchaseRequest.orders[key].itemType,
-        unitPrice: selectedPurchaseRequest.orders[key].unitPrice,
-        totalPrice:
+      if (selectedPurchaseRequest.orders[key].quantityLeft > 0) {
+        initTotalPrice.push({
+          ...initTotalPrice[key],
+          product: selectedPurchaseRequest.orders[key].product,
+          quantity: selectedPurchaseRequest.orders[key].quantityLeft,
+          unit: selectedPurchaseRequest.orders[key].unit,
+          orderId: selectedPurchaseRequest.orders[key].orderId,
+          itemType: selectedPurchaseRequest.orders[key].itemType,
+          unitPrice: selectedPurchaseRequest.orders[key].unitPrice,
+          totalPrice:
+            selectedPurchaseRequest.orders[key].quantityLeft *
+            selectedPurchaseRequest.orders[key].unitPrice,
+        });
+        newTotalAmount +=
           selectedPurchaseRequest.orders[key].quantityLeft *
-          selectedPurchaseRequest.orders[key].unitPrice,
-      });
-      newTotalAmount +=
-        selectedPurchaseRequest.orders[key].quantityLeft *
-        selectedPurchaseRequest.orders[key].unitPrice;
-      counterFlag += 1;
+          selectedPurchaseRequest.orders[key].unitPrice;
+        counterFlag += 1;
+      }
     }
     const newKey = uuid();
     setOrdersKey(newKey);
@@ -297,11 +298,12 @@ const AddPurchaseOrder = memo(() => {
     };
     setOrderState(newPurchaseOrderData.orders);
     setPurchaseOrderData(newPurchaseOrderData);
+    console.log('newPurchaseOrderData: ', newPurchaseOrderData);
     dispatcher(actions.setPurchaseOrder(newPurchaseOrderData));
   };
 
-  const onDeleteClicked = (index) => {
-    const newPurchaseRequest = { ...purchaseRequestData };
+  const onDeleteClicked = (index, newerPurchaseRequest) => {
+    const newPurchaseRequest = { ...newerPurchaseRequest };
     newPurchaseRequest.orders.splice(index, 1);
     const newPurchaseOrder = {
       ...purchaseOrder,
@@ -312,11 +314,11 @@ const AddPurchaseOrder = memo(() => {
       newTotalPrice += newPurchaseOrder.orders[key].totalPrice;
       console.log(newPurchaseOrder.orders[key].totalPrice);
     }
-    console.log("newTotalPrice: ", newTotalPrice);
     const newerPurchaseOrder = {
       ...purchaseOrder,
       totalPrice: newTotalPrice,
     };
+    console.log('newPurchaseOrder: ', newerPurchaseOrder);
     setOrderState(newPurchaseRequest.orders);
     setPurchaseRequestData(newPurchaseRequest);
     setPurchaseOrderData(newerPurchaseOrder);
@@ -3197,8 +3199,8 @@ const AddPurchaseOrder = memo(() => {
                                   value <= quantityLeft || value === undefined
                                     ? Promise.resolve()
                                     : Promise.reject(
-                                        `Should not exceed ${quantityLeft}`
-                                      ),
+                                      `Should not exceed ${quantityLeft}`
+                                    ),
                               },
                             ]}
                           >
@@ -3209,7 +3211,7 @@ const AddPurchaseOrder = memo(() => {
                                 border: "1px solid black",
                               }}
                               allowClear
-                              // placeholder={}
+                            // placeholder={}
                             />
                           </Form.Item>
                         </div>

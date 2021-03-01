@@ -9,9 +9,8 @@ const Order = (props) => {
   const borderStyle = 'none'
   
 
-  const { totalPrice, purchaseOrder } = useSelector(({ purchaseOrder }) => ({
+  const { totalPrice } = useSelector(({ purchaseOrder }) => ({
     totalPrice: purchaseOrder.totalPrice,
-    purchaseOrder: purchaseOrder.purchaseOrder
   }))
 
   const [orderState, setOrderState] = useState({

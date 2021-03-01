@@ -1,4 +1,4 @@
-import React, { useState, memo, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Table, Row, Col } from "antd";
 import {
   useSelector,

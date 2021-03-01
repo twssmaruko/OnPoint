@@ -211,6 +211,7 @@ const PurchaseRequestForm = () => {
     for (let i = 0; i < newGrid.length - 1; i++) {
       newPurchaseRequestOrders.push({
         id: i,
+        orderId: 'order-' + i,
         itemType: newGrid[i + 1][1].value,
         product: newGrid[i + 1][2].value,
         quantity: parseFloat(newGrid[i + 1][3].value.split(',').join('')),

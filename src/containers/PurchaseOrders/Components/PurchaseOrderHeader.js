@@ -55,7 +55,7 @@ const Header = (props) => {
   };
 
   const onPurchaseOrderGas = () => {
-    dispatcher(uiActions.setOpenModal1(true));
+    dispatcher(uiActions.setOpenModal3(true));
   }
 
   const purchaseOrderGas = <PurchaseOrderGas modalVisible={openModal}/>

@@ -479,7 +479,7 @@ export const addPurchaseOrder = (purchaseOrderData) => async (dispatch) => {
   const newPurchaseRequestOrders = [];
   for (const key in selectedPurchaseRequest.orders) {
     const orderFound = purchaseOrderData.orders.find((element) =>
-      element.product === selectedPurchaseRequest.orders[key].product);
+      element.orderId === selectedPurchaseRequest.orders[key].orderId);
     if (orderFound === undefined) {
       newPurchaseRequestOrders.push({
         ...selectedPurchaseRequest.orders[key]
