@@ -98,6 +98,35 @@
 .black-text {
     color: black;
 }
+
+.select-style {
+    width: 200px;
+    height: 14px;
+}
+
+.margin-top {
+    margin-top: 10px;
+}
+
+.signature {
+    text-align: center;
+}
+
+.name {
+    border-style: solid;
+    border-width: 0px;
+    border-top-width: 1px;
+}
+
+.authorized-by {
+    border-style: solid;
+    border-width: 0px;
+    border-top-width: 1px;
+    text-align: center;
+}
+.name-select {
+    text-align: right;
+}
 /* 
 .ant-btn-div :hover   {
     color: #13407F;

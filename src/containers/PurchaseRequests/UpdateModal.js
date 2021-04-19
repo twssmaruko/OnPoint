@@ -58,13 +58,39 @@ const Updatemodal = (props) => {
 
     return newGrid
   });
-
   const [orderNumber, setOrderNumber] = useState(1);
   const [purchaseRequestOrders, setPurchaseRequestOrders] = useState([]);
 
   useEffect(() => {
     console.log("purchaseRequestData: ", purchaseRequestData);
-  }, [purchaseRequestData]);
+    setGridState(() => {
+      const newGrid = [[
+        { readOnly: true, value: "", width: 50 },
+        { value: "ITEM", readOnly: true, width: 250 },
+        { value: "DESCRIPTION", readOnly: true, width: 500 },
+        { value: "QTY", readOnly: true, width: 100 },
+        { value: "ORDERED", readOnly: true, width: 100 },
+        { value: "UNIT", readOnly: true, width: 150 },
+        { value: "UNIT PRICE", readOnly: true, width: 150 },
+      ]];
+  
+      for (const key in purchaseRequestData.orders) {
+        const quantityOrdered = purchaseRequestData.orders[key].quantity - purchaseRequestData.orders[key].quantityLeft
+        newGrid.push([
+          { readOnly: true, value: "", width: 50 },
+          { value: purchaseRequestData.orders[key].itemType },
+          { value: purchaseRequestData.orders[key].product, textAlign: 'center' },
+          { value: purchaseRequestData.orders[key].quantity },
+          { value: quantityOrdered, readOnly: true },
+          { value: purchaseRequestData.orders[key].unit },
+          { value: purchaseRequestData.orders[key].unitPrice }
+        ])
+      }
+  
+  
+      return newGrid
+    });
+  }, [purchaseRequestData, setGridState]);
 
   const [borderVisible, setBorderVisible] = useState(false);
   const [updateParams, setUpdateParams] = useState({});
@@ -287,7 +313,7 @@ const Updatemodal = (props) => {
               <ReactDataSheet
                 data={gridState}
                 valueRenderer={(cell) => cell.value}
-                onCellsChanged={(changes) => onCellsChanged(changes)}
+               // onCellsChanged={(changes) => onCellsChanged(changes)}
               />
             </Col>
             <Col span={1}>

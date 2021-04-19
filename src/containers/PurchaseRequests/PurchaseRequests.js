@@ -22,6 +22,7 @@ import {
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import PurchaseRequestNumberModal from "./PurchaseRequestNumberModal";
+import PurchaseRequestGasModal from './PurchaseRequestGasModal';
 import moment from "moment";
 //import _ from 'lodash';
 
@@ -71,7 +72,9 @@ const PurchaseRequests = () => {
 
   const onDetailsClick = (item) => {
     // setPurchaseRequestValue(item);
-    setDisplayUpdateModal(<UpdateModal purchaseRequestData={item} />);
+    const newUpdateModal = <UpdateModal purchaseRequestData={item} />;
+    
+    setDisplayUpdateModal(newUpdateModal);
     dispatcher(uiActions.setOpenModal2(true));
     // dispatcher(actions.initiateUpdateModal(item.id));
   };
@@ -266,7 +269,7 @@ const PurchaseRequests = () => {
           </h1>
         </Row>
         <Row style={{ marginLeft: 0 }}>
-          <Col span={5} style={{ textAlign: "left" }}>
+          <Col span={7} style={{ textAlign: "left" }}>
             <div className="ant-btn-div">
               <Button
                 type="link"
@@ -279,7 +282,20 @@ const PurchaseRequests = () => {
               </Button>
             </div>
           </Col>
-          <Col span={18} style={{ marginTop: 10 }}>
+          <Col span={8} style={{ textAlign: "left" }}>
+            <div className="ant-btn-div">
+              <Button
+                type="link"
+                style={{ fontWeight: "bold", fontSize: 26, color: "#13407F" }}
+                className="ant-btn-menu"
+                onClick={() => {setDisplayAddModal(<PurchaseRequestGasModal />)
+                  dispatcher(uiActions.setOpenModal1(true));}}
+              >
+                New Purchase Request Gas
+              </Button>
+            </div>
+          </Col>
+          <Col span={3} style={{ marginTop: 10 }}>
             <Checkbox
               style={{ fontWeight: "bold", fontSize: 18 }}
               onChange={onChecked}

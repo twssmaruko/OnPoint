@@ -1,5 +1,5 @@
-import {message} from 'antd';
-import {API, graphqlOperation} from 'aws-amplify';
+import { message } from 'antd';
+import { API, graphqlOperation } from 'aws-amplify';
 import moment from 'moment';
 import _ from 'lodash';
 import axios from '../../../axios-orders';
@@ -107,13 +107,18 @@ const updatePurchaseRequestIdInStore = (purchaseRequestId) => ({
   purchaseRequestId
 })
 
+const fetchPurchaseRequestsGasToStore = (data) => ({
+  type: actionTypes.FETCH_PURCHASEREQUESTS_GAS,
+  data
+})
+
 const deletePurchaseRequestInStore = (id, data) => ({
   type: actionTypes.DELETE_PURCHASEREQUEST,
   id,
   data
 })
 
-export const getProducts = () =>  {
+export const getProducts = () => {
   return dispatch => {
     dispatch(setShowSpin1(true));
     axios.get('/products.json')
@@ -159,7 +164,7 @@ export const getProducts = () =>  {
 export const invokeUpdatePurchaseRequest = (data) => async (dispatch) => {
   try {
     dispatch(setShowSpin1(true));
-    await API.graphql(graphqlOperation(updatePurchaseRequest, {input: data}));
+    await API.graphql(graphqlOperation(updatePurchaseRequest, { input: data }));
     dispatch(setShowSpin1(false));
     dispatch(setOpenModal2(false));
     message.success('Updated Successfully!');
@@ -193,7 +198,7 @@ export const getMonthlyPurchaseRequests = () => async (dispatch) => {
       monthYear: moment(new Date()).format('MM-YYYY'),
       sortDirection: 'DESC'
     }));
-    const {items} = queryData.data.purchaseRequestMonthCreatedAt;
+    const { items } = queryData.data.purchaseRequestMonthCreatedAt;
     if (items.length) {
       dispatch(setPurchaseRequestCount(items[0].count));
       dispatch(setPurchaseRequests(items));
@@ -283,27 +288,27 @@ export const getPurchaseRequests = (params) => async (dispatch) => {
       }),
       graphqlOperation(purchaseRequestStatusIsApprovedCreatedAt, {
         status: params.status,
-        isApprovedCreatedAt: {beginsWith: {isApproved: params.isApproved}},
+        isApprovedCreatedAt: { beginsWith: { isApproved: params.isApproved } },
         sortDirection: 'DESC'
       }),
       graphqlOperation(purchaseRequestStatusMonthYearCreatedAt, {
         status: params.status,
-        monthYearCreatedAt: {beginsWith: {monthYear: params.monthYear}},
+        monthYearCreatedAt: { beginsWith: { monthYear: params.monthYear } },
         sortDirection: 'DESC'
       }),
       graphqlOperation(purchaseRequestIsApprovedMonthYearCreatedAt, {
         isApproved: params.isApproved,
-        monthYearCreatedAt: {beginsWith: {monthYear: params.monthYear}},
+        monthYearCreatedAt: { beginsWith: { monthYear: params.monthYear } },
         sortDirection: 'DESC'
       }),
       graphqlOperation(purchaseRequestStatusDayMonthYearCreatedAt, {
         status: params.status,
-        dayMonthYearCreatedAt: {beginsWith: {dayMonthYear: params.dayMonthYear}},
+        dayMonthYearCreatedAt: { beginsWith: { dayMonthYear: params.dayMonthYear } },
         sortDirection: 'DESC'
       }),
       graphqlOperation(purchaseRequestIsApprovedDayMonthYearcreatedAt, {
         isApproved: params.isApproved,
-        dayMonthYearCreatedAt: {beginsWith: {dayMonthYear: params.dayMonthYear}},
+        dayMonthYearCreatedAt: { beginsWith: { dayMonthYear: params.dayMonthYear } },
         sortDirection: 'DESC'
       }),
       graphqlOperation(purchaseRequestStatusIsApprovedMonthYear, {
@@ -374,7 +379,7 @@ export const addPurchaseRequest = (purchaseRequestData) => (dispatch, getState) 
   const count = purchaseRequestData.purchaseRequestNo
   //console.log('count: ', count);
   const purchaseRequestNo = count;
- 
+
   axios.post('/purchaserequests.json', purchaseRequestData)
     .then((response) => {
       dispatch(setShowSpin2(false));
@@ -473,7 +478,7 @@ export const initSubscriptions = () => (dispatch, getState) => {
     const queryCreateData = API.graphql(graphqlOperation(onCreatePurchaseRequest)).subscribe({
       next: (purchaseRequestData) => {
         dispatch(setShowSpin3(true));
-        const {purchaseRequests} = getState().purchaseRequests;
+        const { purchaseRequests } = getState().purchaseRequests;
         const addedData = purchaseRequestData.value.data.onCreatePurchaseRequest;
         const newPurchaseRequests = [addedData].concat(purchaseRequests);
         dispatch(setPurchaseRequestCount(addedData.count));
@@ -484,7 +489,7 @@ export const initSubscriptions = () => (dispatch, getState) => {
     const queryUpdateData = API.graphql(graphqlOperation(onUpdatePurchaseRequest)).subscribe({
       next: (purchaseRequestData) => {
         dispatch(setShowSpin3(true));
-        const {purchaseRequests} = getState().purchaseRequests;
+        const { purchaseRequests } = getState().purchaseRequests;
         const updatedData = purchaseRequestData.value.data.onUpdatePurchaseRequest;
         const newPurchaseRequests = purchaseRequests.map((product) => {
           if (product.id === updatedData.id) {
@@ -507,7 +512,7 @@ export const initSubscriptions = () => (dispatch, getState) => {
 
 export const unsubscribe = () => (dispatch, getState) => {
   try {
-    const {subscriptions} = getState().products;
+    const { subscriptions } = getState().products;
     subscriptions.forEach((listener) => {
       listener.unsubscribe();
     });
@@ -518,21 +523,41 @@ export const unsubscribe = () => (dispatch, getState) => {
   }
 };
 
-export const deletePurchaseRequest = (data) => async(dispatch) => {
-    const newURL = 'purchaserequests/'+ data.id + '.json';
+export const deletePurchaseRequest = (data) => async (dispatch) => {
+  const newURL = 'purchaserequests/' + data.id + '.json';
 
-    try{
-      
-      const fetchedPurchaseRequest = data
-      await axios.delete(newURL);
-      dispatch(deletePurchaseRequestInStore(data.id, fetchedPurchaseRequest))
-      dispatch(fetchPurchaseRequests());
-      message.success('purchase request removed');
+  try {
+
+    const fetchedPurchaseRequest = data
+    await axios.delete(newURL);
+    dispatch(deletePurchaseRequestInStore(data.id, fetchedPurchaseRequest))
+    dispatch(fetchPurchaseRequests());
+    message.success('purchase request removed');
 
 
-    }catch(error) {
-      message.error('unable to delete purchase request');
-      console.error(error);
+  } catch (error) {
+    message.error('unable to delete purchase request');
+    console.error(error);
+  }
+
+}
+
+export const fetchPurchaseRequestsGas = (data) => async (dispatch) => {
+  const fetchedPurchaseRequests = [];
+  try {
+    const results = await axios.get('/purchaserequests.json');
+    for(const key in results.data) {
+      if(results.data[key].prType == 'Fuel') {
+        fetchedPurchaseRequests.push({
+          ...results.data[key],
+          id: key
+        })
+      }
     }
-  
+  console.log('fetchedPurchaseRequests: ', fetchedPurchaseRequests);
+  dispatch(fetchPurchaseRequestsGasToStore(fetchedPurchaseRequests));
+  } catch (error) {
+    message.error('unable to fetch purchase requests!');
+    console.error(error);
+  }
 }

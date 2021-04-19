@@ -63,7 +63,7 @@ const VendorList = (props) => {
             label="Location"
             name="location"
             rules={[
-              {required: true,
+              {required: false,
                 message: 'Please input vendor address!'}
             ]}
           >
@@ -73,7 +73,7 @@ const VendorList = (props) => {
             label="Telephone Number"
             name="telNo"
             rules={[
-              {required: true,
+              {required: false,
                 message: 'Please input vendor number!'}
             ]}
           >
@@ -83,7 +83,7 @@ const VendorList = (props) => {
             label="Terms"
             name="terms"
             rules={[
-              {required: true,
+              {required: false,
                 message: 'Please input vendor terms!'}
             ]}
           >

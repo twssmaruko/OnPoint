@@ -7,6 +7,7 @@ const initialState = {
   purchaseRequestsPending: [],
   purchaseRequestCount: 0,
   purchaseRequestIds: 0,
+  purchaseRequestsGas: [],
   purchaseRequestData: {orders: {items: []}},
   subscriptions: [],
   loading: false
@@ -109,6 +110,8 @@ const updatePurchaseRequestNumber = (state, action) =>
     })
   }
 
+  const fetchPurchaseRequestsGas = (state, action) => updateObject(state, {purchaseRequestsGas: action.data})
+
 
 
 const purchaseRequestReducer = (state = initialState, action) => {
@@ -130,6 +133,7 @@ const purchaseRequestReducer = (state = initialState, action) => {
   case actions.UPDATE_PURCHASEREQUEST_FAIL: return updatePurchaseRequestFail(state)
   case actions.UPDATE_PURCHASEREQUEST_NUMBER: return updatePurchaseRequestNumber(state, action)
   case actions.DELETE_PURCHASEREQUEST: return deletePurchaseRequest(state, action)
+  case actions.FETCH_PURCHASEREQUESTS_GAS: return fetchPurchaseRequestsGas(state, action);
   case actions.UPDATE_PURCHASEREQUESTID_IN_STORE:
     return updatePurchaseRequestIdInStore(state, action)
   default:

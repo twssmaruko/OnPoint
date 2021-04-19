@@ -8,11 +8,14 @@ import {
   Checkbox,
   Modal
 } from 'antd';
+import Tabs from 'react-bootstrap/Tabs'
+import Tab from 'react-bootstrap/Tab'
 import { CheckCircleFilled, EditTwoTone, ExclamationCircleOutlined, DeleteFilled, StopOutlined } from '@ant-design/icons';
 import TableButton from '../../../components/button/OnpointButton';
 import PurchaseOrderDetails from './PurchaseOrderDetails';
 import * as uiActions from '../../../store/ui/actions/Actions';
 import * as actions from '../../../store/purchaseorders/actions/Actions';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 import {
   useSelector, shallowEqual, useDispatch
@@ -46,7 +49,6 @@ const PurchaseOrderTable = memo(() => {
 
 
   // console.log("hey")
-
   const [, setCurrentPurchaseOrder] = useState({});
   const [seeAll, setSeeAll] = useState(false);
   const [deleteId, setDeleteId] = useState(0);
@@ -54,6 +56,7 @@ const PurchaseOrderTable = memo(() => {
   const [displayCancelModal, setDisplayCancelModal] = useState(false);
   const [displayDeleteModal, setDisplayDeleteModal] = useState(false);
   const [purchaseOrderDetailsModal, setPurchaseOrderDetailsModal] = useState(null);
+  const [tableKey, setTableKey] = useState('purchaseOrder');
   const editButton = (item) =>
     <div>
       <TableButton
@@ -75,9 +78,9 @@ const PurchaseOrderTable = memo(() => {
       color: 'orange'
     }} /></div> : <div> RECEIVED
       <CheckCircleFilled style={{
-          marginLeft: 20,
-          color: 'green'
-        }} /></div>
+        marginLeft: 20,
+        color: 'green'
+      }} /></div>
   const poNumberDisplay = (data) => `${data.purchaseOrderNo}`;
   const projectDisplay = (data) => `${data.project}`;
   const prDisplay = (data) => `${data.purchaseRequestNo}`;
@@ -93,19 +96,19 @@ const PurchaseOrderTable = memo(() => {
   }
 
   const deleteModal = <Modal visible={displayDeleteModal}
-  onCancel={() => {
-    setDisplayDeleteModal(false)
-  }}
-  onOk={(e) => onDeleteConfirmed(e)}> 
-  Are you sure you want to delete this Purchase Request?
+    onCancel={() => {
+      setDisplayDeleteModal(false)
+    }}
+    onOk={(e) => onDeleteConfirmed(e)}>
+    Are you sure you want to delete this Purchase Request?
   </Modal>;
 
-const cancelModal = <Modal visible={displayCancelModal}
-onCancel={() => {
-  setDisplayCancelModal(false)
-}}
-onOk={(e) => onCancelConfirmed(e)}> 
-Are you sure you want to cancel this Purchase Request?
+  const cancelModal = <Modal visible={displayCancelModal}
+    onCancel={() => {
+      setDisplayCancelModal(false)
+    }}
+    onOk={(e) => onCancelConfirmed(e)}>
+    Are you sure you want to cancel this Purchase Request?
 </Modal>;
 
 
@@ -312,15 +315,33 @@ Are you sure you want to cancel this Purchase Request?
       <Row>
         <div style={{ border: '1px solid black' }}>
           <Spin spinning={tableSpin}>
-            <Table
-              columns={columns}
-              dataSource={checkDisplay()}
-              size="small"
-              rowKey="id"
-              pagination={{
-                pageSize: 10
-              }}
-            />
+            <Tabs
+              id="tabs-purchaseOrders"
+              activeKey={tableKey}
+              onSelect={(e) => setTableKey(e)}>
+              <Tab eventKey="purchaseOrder" title="Purchase Orders">
+                <Table
+                  columns={columns}
+                  dataSource={checkDisplay()}
+                  size="small"
+                  rowKey="id"
+                  pagination={{
+                    pageSize: 10
+                  }}
+                />
+              </Tab>
+              <Tab eventKey="purchaseOrderGas" title="Gas">
+                <Table
+                  columns={columns}
+                  dataSource={checkDisplay()}
+                  size="small"
+                  rowKey="id"
+                  pagination={{
+                    pageSize: 10
+                  }}
+                />
+              </Tab>
+            </Tabs>
           </Spin>
         </div>
       </Row>
