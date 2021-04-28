@@ -91,7 +91,7 @@ const PurchaseRequests = () => {
     dispatcher(uiActions.setOpenModal1(true));
   };
 
-  const [seeAll, setSeeAll] = useState(false);
+  const [seeAll, setSeeAll] = useState(true);
 
   const purchaseRequestNumberModal = (
     <Modal
@@ -297,6 +297,7 @@ const PurchaseRequests = () => {
           </Col>
           <Col span={3} style={{ marginTop: 10 }}>
             <Checkbox
+              defaultChecked={true}
               style={{ fontWeight: "bold", fontSize: 18 }}
               onChange={onChecked}
             >

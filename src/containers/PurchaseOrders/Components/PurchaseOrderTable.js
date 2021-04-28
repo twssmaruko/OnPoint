@@ -10,7 +10,7 @@ import {
 } from 'antd';
 import Tabs from 'react-bootstrap/Tabs'
 import Tab from 'react-bootstrap/Tab'
-import { CheckCircleFilled, EditTwoTone, ExclamationCircleOutlined, DeleteFilled, StopOutlined } from '@ant-design/icons';
+import { CheckCircleFilled, EditTwoTone, ExclamationCircleOutlined, DeleteFilled, StopOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import TableButton from '../../../components/button/OnpointButton';
 import PurchaseOrderDetails from './PurchaseOrderDetails';
 import * as uiActions from '../../../store/ui/actions/Actions';
@@ -72,15 +72,28 @@ const PurchaseOrderTable = memo(() => {
   //     color: 'green'}} />
   //     : <CloseCircleFilled style={{marginLeft: 20,
   //       color: 'red'}} />;
-  const poStatusDisplay = (status) =>
-    status === 'pending' ? <div>PENDING<ExclamationCircleOutlined style={{
-      marginLeft: 20,
-      color: 'orange'
-    }} /></div> : <div> RECEIVED
-      <CheckCircleFilled style={{
+  const poStatusDisplay = (status) => {
+    if (status === 'pending') {
+      return <div>PENDING<ExclamationCircleOutlined style={{
         marginLeft: 20,
-        color: 'green'
+        color: 'orange'
       }} /></div>
+    }
+
+    else if (status === 'received') {
+      return <div> RECEIVED
+      <CheckCircleFilled style={{
+          marginLeft: 20,
+          color: 'green'
+        }} /></div>
+    } else {
+      return <div>CANCELLED<CloseCircleOutlined style={{
+        marginLeft: 20,
+        color: 'red'
+      }} /></div>
+    }
+  }
+
   const poNumberDisplay = (data) => `${data.purchaseOrderNo}`;
   const projectDisplay = (data) => `${data.project}`;
   const prDisplay = (data) => `${data.purchaseRequestNo}`;
@@ -92,6 +105,7 @@ const PurchaseOrderTable = memo(() => {
 
   const onCancelConfirmed = () => {
     //dispatcher(actions.deletePurchaseOrder(deleteId));
+    dispatcher(actions.cancelPurchaseOrder(cancelId));
     setDisplayCancelModal(false);
   }
 
@@ -107,8 +121,8 @@ const PurchaseOrderTable = memo(() => {
     onCancel={() => {
       setDisplayCancelModal(false)
     }}
-    onOk={(e) => onCancelConfirmed(e)}>
-    Are you sure you want to cancel this Purchase Request?
+    onOk={() => onCancelConfirmed()}>
+    Are you sure you want to cancel this Purchase Order?
 </Modal>;
 
 
@@ -119,7 +133,7 @@ const PurchaseOrderTable = memo(() => {
   };
 
   const cancelItem = (data) => {
-    setCancelId(data);
+    setCancelId(data.id);
     setDisplayCancelModal(true);
   };
 

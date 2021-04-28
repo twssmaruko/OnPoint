@@ -374,7 +374,7 @@ export const fetchPurchaseOrders = () => async (dispatch) => {
     }
     const pendingPurchaseOrders = [];
     for (const key in result.data) {
-      if (result.data[key].status === 'pending') {
+      if (result.data[key].status === 'pending' || result.data[key].status === 'cancelled') {
         pendingPurchaseOrders.push({
           ...result.data[key],
           id: key
@@ -474,7 +474,7 @@ export const addPurchaseOrder = (purchaseOrderData) => async (dispatch) => {
     })
   }
   const selectedPurchaseRequest = purchaseRequests.find((element) =>
-    element.purchaseRequestNo === purchaseOrderData.purchaseRequestNo);
+    element.id === purchaseOrderData.purchaseRequestId);
 
   const newPurchaseRequestOrders = [];
   for (const key in selectedPurchaseRequest.orders) {
@@ -704,5 +704,21 @@ export const fetchWorksheet = () => async (dispatch) => {
     message.error('failed to fetch worksheet!');
     console.error(error);
     dispatch(setLoading(false));
+  }
+}
+
+export const cancelPurchaseOrder = (data) => async (dispatch) => {
+  try {
+    const result = await axios.get('/purchaseorders/' + data + '.json');
+    const newPurchaseOrder = {
+      ...result.data,
+      status: 'cancelled'
+    }
+    await axios.put('/purchaseorders/' + data + '/.json', newPurchaseOrder);
+    message.success('Purchase Order cancelled');
+    window.location.reload(false);
+  } catch(error) {
+    message.error('Could not cancel purchase order!');
+    console.error(error);
   }
 }

@@ -293,6 +293,7 @@ const AddPurchaseOrder = memo(() => {
       purchaseRequestNo: selectedPurchaseRequest.purchaseRequestNo,
       purchaseOrderNo: purchaseOrder.purchaseOrderNo,
       requestedBy: selectedPurchaseRequest.requestedBy,
+      purchaseRequestId: selectedPurchaseRequest.id,
       totalPrice: newTotalAmount,
       orders: initTotalPrice,
     };
