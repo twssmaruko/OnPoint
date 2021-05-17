@@ -81,7 +81,7 @@ const Productsform = (props) => {
                 onFinish={onSubmit}
               >
                 <Row>
-                  <Col span={12}>
+                  <Col span={10}>
                     <Form.Item
                       label="Product Name"
                       name="name"
@@ -93,7 +93,19 @@ const Productsform = (props) => {
                       <Input style={{width: 200}} />
                     </Form.Item>
                   </Col>
-                  <Col span={12}>
+                  <Col span={6}>
+                    <Form.Item
+                      label="Type"
+                      name="type"
+                      rules={[
+                        {required: true,
+                          message: 'Please input Product Type'}
+                      ]}
+                    >
+                      <Input style={{width: 100}} />
+                    </Form.Item>
+                  </Col>
+                  <Col span={8}>
                     <Form.Item
                       label="Description"
                       name="description"

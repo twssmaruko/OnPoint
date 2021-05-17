@@ -22,7 +22,6 @@ const VendorList = (props) => {
   const {reference, onSubmit, initName} = props;
 
   useEffect(() => {
-
   }, [initName])
 
   return (
@@ -50,7 +49,7 @@ const VendorList = (props) => {
         >
           <Form.Item
             label="Name"
-            name="vendorName"
+            name="name"
             initialValue= {initName}
             rules={[
               {required: true,
@@ -71,7 +70,7 @@ const VendorList = (props) => {
           </Form.Item>
           <Form.Item
             label="Telephone Number"
-            name="telNo"
+            name="tel_no"
             rules={[
               {required: false,
                 message: 'Please input vendor number!'}

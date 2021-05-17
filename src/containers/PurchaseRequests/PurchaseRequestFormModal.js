@@ -62,14 +62,13 @@ const PurchaseRequestForm = () => {
     //     current) => accumulator + current.price * current.quantity, 0);
     const prData = {
       status: "PENDING",
-      purchaseRequestNo: parseFloat(purchaseRequestNumber),
-      isApproved: "APPROVED",
-      year: dateNow.getFullYear(),
+      purchase_request_number: parseFloat(purchaseRequestNumber),
+      is_approved: true,
       //dayMonthYear: moment(dateNow).format('DD-MM-YYYY'),
-      dayMonthYear: moment(dateNow, "DD-MM-YYYY"),
+      date_created: moment(dateNow, "DD-MM-YYYY"),
       // totalPrice,
       orders: purchaseRequestOrders,
-      requestedBy: requestedBy,
+      requested_by: requestedBy,
     };
 
     if (purchaseRequestOrders.length < 1 || purchaseRequestNumber === '' || requestedBy === '') {
@@ -210,15 +209,12 @@ const PurchaseRequestForm = () => {
     const newPurchaseRequestOrders = [];
     for (let i = 0; i < newGrid.length - 1; i++) {
       newPurchaseRequestOrders.push({
-        id: i,
-        orderId: 'order-' + i,
-        itemType: newGrid[i + 1][1].value,
+        item_type: newGrid[i + 1][1].value,
         product: newGrid[i + 1][2].value,
         quantity: parseFloat(newGrid[i + 1][3].value.split(',').join('')),
-        quantityLeft: parseFloat(newGrid[i + 1][3].value.split(',').join('')),
+        quantity_left: parseFloat(newGrid[i + 1][3].value.split(',').join('')),
         unit: newGrid[i + 1][4].value,
-        unitPrice: parseFloat(newGrid[i + 1][5].value.split(',').join('')),
-        purchaseOrderNo: 'none',
+        unit_price: parseFloat(newGrid[i + 1][5].value.split(',').join('')),
       })
     }
     setPurchaseRequestOrders(newPurchaseRequestOrders);

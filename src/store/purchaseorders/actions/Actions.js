@@ -6,7 +6,9 @@ import { v4 as uuidv4 } from 'uuid';
 import moment from 'moment';
 import * as actionTypes from '../ActionTypes';
 import axios from '../../../axios-orders';
+import OPC from '../../../api/OPC';
 import { RestOutlined } from '@ant-design/icons';
+import { onCreatePurchaseRequest } from '../../../graphql/subscriptions';
 
 export const setPurchaseRequests = (data) => ({
   type: actionTypes.SET_PURCHASEREQUESTSINPURCHASEORDER,
@@ -364,32 +366,40 @@ export const fetchPurchaseOrders = () => async (dispatch) => {
   dispatch(setShowSpin2(true));
   dispatch(setLoading(true));
   try {
-    const result = await axios.get('/purchaseorders.json');
-    const fetchedPurchaseOrders = [];
-    for (const key in result.data) {
-      fetchedPurchaseOrders.push({
-        ...result.data[key],
-        id: key
-      })
-    }
-    const pendingPurchaseOrders = [];
-    for (const key in result.data) {
-      if (result.data[key].status === 'pending' || result.data[key].status === 'cancelled') {
-        pendingPurchaseOrders.push({
-          ...result.data[key],
-          id: key
-        })
-      }
-    }
-    dispatch(fetchPurchaseOrdersToStore(fetchedPurchaseOrders, pendingPurchaseOrders));
+    const fetchedPurchaseOrders = await OPC.get('/purchase_orders');
     dispatch(setShowSpin2(false));
+  } catch (err) {
+    console.error(err.message);
     dispatch(setLoading(false));
-  } catch (error) {
-    message.error('failed to retrieve purchase orders');
-    console.error(error);
-    dispatch(setLoading(false));
-    dispatch(setShowSpin2(false));
+    dispatch(setShowSpin2(true));
   }
+  // try {
+  //   const result = await axios.get('/purchaseorders.json');
+  //   const fetchedPurchaseOrders = [];
+  //   for (const key in result.data) {
+  //     fetchedPurchaseOrders.push({
+  //       ...result.data[key],
+  //       id: key
+  //     })
+  //   }
+  //   const pendingPurchaseOrders = [];
+  //   for (const key in result.data) {
+  //     if (result.data[key].status === 'pending' || result.data[key].status === 'cancelled') {
+  //       pendingPurchaseOrders.push({
+  //         ...result.data[key],
+  //         id: key
+  //       })
+  //     }
+  //   }
+  //   dispatch(fetchPurchaseOrdersToStore(fetchedPurchaseOrders, pendingPurchaseOrders));
+  //   dispatch(setShowSpin2(false));
+  //   dispatch(setLoading(false));
+  // } catch (error) {
+  //   message.error('failed to retrieve purchase orders');
+  //   console.error(error);
+  //   dispatch(setLoading(false));
+  //   dispatch(setShowSpin2(false));
+  // }
 }
 export const getProjects = () => {
   return dispatch => {

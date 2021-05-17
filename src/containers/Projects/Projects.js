@@ -70,13 +70,13 @@ const Projects = () => {
     },
     {
       title,
-      dataIndex: 'projectName',
+      dataIndex: 'project_name',
       key: 'projectName',
       width: 250
     },
     {
       title: 'Project Code',
-      dataIndex: 'projectCode',
+      dataIndex: 'project_code',
       key: 'projectCode',
       width: 250
     }
@@ -149,7 +149,7 @@ const Projects = () => {
                 columns={columns}
                 dataSource={prjct.projects}
                 size="large"
-                rowKey="id"
+                rowKey="project_id"
               />
             </Col>
           </Row>

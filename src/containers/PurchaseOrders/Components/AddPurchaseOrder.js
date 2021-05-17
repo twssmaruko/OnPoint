@@ -27,6 +27,7 @@ import {
 } from "@react-pdf/renderer";
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import * as actions from "../../../store/purchaseorders/actions/Actions";
+import * as vendorActions from '../../../store/vendors/actions/actions';
 import Logo from "./../../../components/logo/Logo";
 import moment from "moment";
 import Order from "./Order";
@@ -87,7 +88,7 @@ const AddPurchaseOrder = memo(() => {
     //purchaseRequestProducts,
     projectsList,
   } = useSelector(
-    ({ purchaseOrder }) => ({
+    ({ purchaseOrder, vendor }) => ({
       selectedVendor: purchaseOrder.vendor,
       loadingState: purchaseOrder.loading,
       purchaseOrderNo: purchaseOrder.purchaseOrderId,
@@ -97,7 +98,7 @@ const AddPurchaseOrder = memo(() => {
       vendor: purchaseOrder.vendor,
       purchaseRequestList: purchaseOrder.purchaseRequests,
       //purchaseRequestProducts: purchaseOrder.purchaseRequest,
-      vendorsList: purchaseOrder.vendors,
+      vendorsList: vendor.vendors,
       projectsList: purchaseOrder.projects,
     }),
     shallowEqual
@@ -110,7 +111,7 @@ const AddPurchaseOrder = memo(() => {
   useEffect(() => {
     dispatcher(actions.fetchPurchaseOrderId());
     dispatcher(actions.getProjects());
-    dispatcher(actions.getVendors());
+    dispatcher(vendorActions.fetchVendors());
     dispatcher(actions.getPurchaseRequests());
   }, [dispatcher]);
 
@@ -386,7 +387,7 @@ const AddPurchaseOrder = memo(() => {
   };
 
   const onVendorBlur = (data) => {
-    const test = vendorsList.find((element) => element.vendorName === data);
+    const test = vendorsList.find((element) => element.name === data);
     if (test === undefined) {
       setVendorName(data);
       setNewVendorModal(true);
@@ -410,7 +411,7 @@ const AddPurchaseOrder = memo(() => {
     formRef.current.submit();
     dispatcher(actions.getVendors());
     vendorsList.map((vendors) => {
-      const newVendor = String(vendors.vendorName);
+      const newVendor = String(vendors.name);
       vendorOptions.push({
         value: newVendor,
       });
@@ -473,7 +474,7 @@ const AddPurchaseOrder = memo(() => {
   const vendorOptions = [];
 
   vendorsList.map((vendors) => {
-    const newVendor = String(vendors.vendorName);
+    const newVendor = String(vendors.name);
     vendorOptions.push({
       value: newVendor,
     });

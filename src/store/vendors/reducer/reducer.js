@@ -26,7 +26,7 @@ const fetchVendorsFail = (state, action) => updateObject(state, {
 const newVendorStart = (state, action) => updateObject(state, {loading: false});
 
 const newVendorSuccess = (state, action) => {
-  const newVendor = updateObject(action.vendorData, {id: action.vendorId});
+  const newVendor = action.data;
   return updateObject(state, {
     loading: false,
     vendors: state.vendors.concat(newVendor)

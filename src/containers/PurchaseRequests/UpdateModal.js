@@ -43,15 +43,16 @@ const Updatemodal = (props) => {
     ]];
 
     for (const key in purchaseRequestData.orders) {
-      const quantityOrdered = purchaseRequestData.orders[key].quantity - purchaseRequestData.orders[key].quantityLeft
+      const quantityOrdered = purchaseRequestData.orders[key].quantity - purchaseRequestData.orders[key].quantity_left
+      const unitPrice = parseFloat(purchaseRequestData.orders[key].unit_price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
       newGrid.push([
         { readOnly: true, value: "", width: 50 },
-        { value: purchaseRequestData.orders[key].itemType },
+        { value: purchaseRequestData.orders[key].item_type },
         { value: purchaseRequestData.orders[key].product, textAlign: 'center' },
         { value: purchaseRequestData.orders[key].quantity },
         { value: quantityOrdered, readOnly: true },
         { value: purchaseRequestData.orders[key].unit },
-        { value: purchaseRequestData.orders[key].unitPrice }
+        { value: unitPrice }
       ])
     }
 
@@ -75,15 +76,16 @@ const Updatemodal = (props) => {
       ]];
   
       for (const key in purchaseRequestData.orders) {
-        const quantityOrdered = purchaseRequestData.orders[key].quantity - purchaseRequestData.orders[key].quantityLeft
+        const quantityOrdered = purchaseRequestData.orders[key].quantity - purchaseRequestData.orders[key].quantity_left;
+        const unitPrice = parseFloat(purchaseRequestData.orders[key].unit_price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')
         newGrid.push([
           { readOnly: true, value: "", width: 50 },
-          { value: purchaseRequestData.orders[key].itemType },
+          { value: purchaseRequestData.orders[key].item_type },
           { value: purchaseRequestData.orders[key].product, textAlign: 'center' },
           { value: purchaseRequestData.orders[key].quantity },
           { value: quantityOrdered, readOnly: true },
           { value: purchaseRequestData.orders[key].unit },
-          { value: purchaseRequestData.orders[key].unitPrice }
+          { value: unitPrice }
         ])
       }
   

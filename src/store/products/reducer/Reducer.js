@@ -16,7 +16,7 @@ const addProductStart = (state) => updateObject(state, {loading: true})
 const addProductFail = (state) => updateObject(state, {loading: false})
 
 const addProductSuccess = (state, action) => {
-  const newProduct = updateObject(action.productData, {id: action.productId});
+  const newProduct = action.data;
   return updateObject(state, {
     loading: false,
     products: state.products.concat(newProduct)

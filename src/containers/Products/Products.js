@@ -117,7 +117,7 @@ const Products = () => {
                   size="small"
                   columns={columns}
                   dataSource={productsList}
-                  rowKey="name"
+                  rowKey="product_id"
                   style={{
                     border: '1px solid black'
                   }}

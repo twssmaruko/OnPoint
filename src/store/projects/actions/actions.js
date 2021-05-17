@@ -2,6 +2,7 @@ import * as actionTypes from '../actionTypes';
 import axios from '../../../axios-orders';
 import {setShowSpin2} from '../../ui/actions/Actions';
 import {message} from 'antd';
+import OPC from '../../../api/OPC';
 
 export const applyBudgetCostToStore = (data) => ({
   type: actionTypes.ADD_BUDGETCOST,
@@ -257,20 +258,31 @@ const fetchProjectsFail = (error) => ({
 
 export const fetchProjects = () => async (dispatch) => {
   dispatch(fetchProjectsStart());
-  await axios.get('/projects.json')
-    .then((res) => {
-      const fetchedProjects = [];
-      for (const key in res.data) {
-        fetchedProjects.push({
-          ...res.data[key],
-          id: key
-        });
-      }
-      dispatch(fetchProjectsSuccess(fetchedProjects));
-    })
-    .catch((err) => {
-      dispatch(fetchProjectsFail(err))
-    })
+  const fetchedProjects = [];
+  try {
+    const response = await OPC.get('/projects');
+    const projectId = await OPC.get('/projects/project_id');
+    const budgetCostId = await OPC.get('/projects/budgets/costs/budget_cost_id');
+    dispatch(fetchProjectsSuccess(response.data))
+  } catch (err) {
+    dispatch(fetchProjectsFail());
+    message.error('Unable to get projects!');
+    console.error(err.message);
+  }
+  // await axios.get('/projects.json')
+  //   .then((res) => {
+  //     const fetchedProjects = [];
+  //     for (const key in res.data) {
+  //       fetchedProjects.push({
+  //         ...res.data[key],
+  //         id: key
+  //       });
+  //     }
+  //     dispatch(fetchProjectsSuccess(fetchedProjects));
+  //   })
+  //   .catch((err) => {
+  //     dispatch(fetchProjectsFail(err))
+  //   })
 }
 const createProjectStart = () => ({
   type: actionTypes.CREATE_PROJECT_START
@@ -294,15 +306,94 @@ const fetchSelectedProjectToStore = (data) => ({
 
 export const createProject = (projectData) => async (dispatch) => {
   dispatch(createProjectStart());
-  await axios.post('/projects.json', projectData)
-    .then((response) => {
-    // eslint-disable-next-line no-console
-      console.log(response.data);
-      dispatch(createProjectSuccess(response.data.name, projectData));
-    })
-    .catch((error) => {
-      dispatch(createProjectFail(error));
-    });
+  dispatch(setShowSpin2(true));
+  console.log('projectData: ', projectData);
+  const project = {
+    client_name: projectData.clientName,
+    project_location: projectData.location,
+    project_name: projectData.projectName,
+    project_code: projectData.projectCode,
+    project_status: 'ACTIVE'
+  }
+
+  try {
+    const projectCreated = await OPC.post('/projects', project);
+    const projectId = await OPC.get('/projects/project_id');
+    const projectBudget = {
+      project_id: projectId.data.max,
+      contract_price: projectData.budget.contractPrice,
+      profit: projectData.budget.profit,
+      profit_margin: projectData.budget.profitMargin,
+      budget_price: projectData.budget.budgetPrice
+  
+    }
+    const budgetCreated = await OPC.post('/projects/budgets', projectBudget);
+    const budgetId = await OPC.get('/projects/budgets/budget_id');
+    console.log('budget_id: ', budgetId.data.max);
+    for(const key in projectData.budget.budgetCost) {
+    
+      const newBudgetCost = {
+        project_budget_id: budgetId.data.max,
+        budget_name: projectData.budget.budgetCost[key].name,
+        item_code: projectData.budget.budgetCost[key].itemCode,
+        total_cost: projectData.budget.budgetCost[key].totalCost,
+        amount_spent: 0
+      }
+      console.log('budgetCost: ', newBudgetCost);
+      const newBudgetCostCreated = await OPC.post('/projects/budgets/costs', newBudgetCost);
+      const budgetCostId = await OPC.get('/projects/budgets/costs/budget_cost_id');
+      console.log('budget_cost_id: ', budgetCostId.data[0].max);
+
+      for(const costKey in projectData.budget.budgetCost[key].subCategories) {
+        console.log('budget_cost_id_2: ', budgetCostId.data[0].max);
+        const newBudgetSubcategory = { 
+          budget_cost_id: budgetCostId.data[0].max,
+          budget_subcategory_name: projectData.budget.budgetCost[key].subCategories[costKey].name,
+          total_cost: projectData.budget.budgetCost[key].subCategories[costKey].totalCost,
+          item_code: projectData.budget.budgetCost[key].subCategories[costKey].itemCode,
+          amount_spent: 0
+        }
+        console.log('newBudgetSubcategory: ', newBudgetSubcategory);                          
+        const budgetSubcategoryCreated = await OPC.post('/projects/budgets/costs/subcategories', newBudgetSubcategory);
+        const subCategoryId = await OPC.get('/projects/budgets/costs/subcategories/budget_subcategory_id');
+        console.log('subcategoryId: ', subCategoryId.data[0].max);
+
+        for(const subKey in projectData.budget.budgetCost[key].subCategories[costKey].subCategoryItem) {
+
+          const newSubcategoryItem = {
+            budget_subcategory_id: subCategoryId.data[0].max,
+            subcategory_item_no: projectData.budget.budgetCost[key].subCategories[costKey].subCategoryItem[subKey].itemCode,
+            subcategory_item_name: projectData.budget.budgetCost[key].subCategories[costKey].subCategoryItem[subKey].name,
+            subcategory_item_cost: projectData.budget.budgetCost[key].subCategories[costKey].subCategoryItem[subKey].cost,
+            subcategory_category: projectData.budget.budgetCost[key].subCategories[costKey].subCategoryItem[subKey].category,
+            amount_spent: 0,
+          }
+          console.log('newSubcategoryItem: ', newSubcategoryItem);
+          const subCategoryItemCreated = await OPC.post('/projects/budgets/costs/subcategories/items', newSubcategoryItem);
+
+        }
+      }
+    }
+
+    message.success('Project created!');
+    dispatch(setShowSpin2(false));
+    dispatch(fetchProjects());
+
+  } catch (err) {
+    dispatch(setShowSpin2(false));
+    message.error('Error: Unable to create project');
+    console.error(err.message)
+    dispatch(createProjectFail());
+  }
+  // await axios.post('/projects.json', projectData)
+  //   .then((response) => {
+  //   // eslint-disable-next-line no-console
+  //     console.log(response.data);
+  //     dispatch(createProjectSuccess(response.data.name, projectData));
+  //   })
+  //   .catch((error) => {
+  //     dispatch(createProjectFail(error));
+  //   });
 }
 
 export const setProjectId = (projectId) => async (dispatch) => {

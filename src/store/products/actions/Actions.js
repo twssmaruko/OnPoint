@@ -1,5 +1,5 @@
-import {message} from 'antd';
-import {API, graphqlOperation} from 'aws-amplify';
+import { message } from 'antd';
+import { API, graphqlOperation } from 'aws-amplify';
 import * as actionTypes from '../ActionTypes';
 import axios from '../../../axios-orders';
 // import {
@@ -12,13 +12,16 @@ import {
   onUpdateProduct,
   onDeleteProduct
 } from '../../../graphql/subscriptions';
-import {listProducts} from '../../../graphql/queries';
+import { listProducts } from '../../../graphql/queries';
 import {
   setOpenModal1,
   setShowSpin1,
   setShowSpin2,
   setShowSpin3
 } from '../../ui/actions/Actions';
+
+
+
 
 export const setProducts = (data) => ({
   type: actionTypes.SET_PRODUCTS,
@@ -34,10 +37,9 @@ const addProductStart = () => ({
   type: actionTypes.ADD_PRODUCT_START
 })
 
-const addProductSuccess = (id, productData) => ({
+const addProductSuccess = (data) => ({
   type: actionTypes.ADD_PRODUCT_SUCCESS,
-  productId: id,
-  productData
+  data
 })
 
 const addProductFail = (error) => ({
@@ -88,31 +90,44 @@ const editProductSuccess = (id, productData) => ({
   productData
 })
 
-export const fetchProducts = () => {
-  return dispatch => {
-    dispatch(setShowSpin2(true));
-    dispatch(fetchProductsStart());
-    axios.get('/products.json')
-      .then((response) => {
-        const fetchedProducts = [];
-        for (const key in response.data) {
-          fetchedProducts.push({
-            ...response.data[key],
-            id: key
-          });
-        }
-        dispatch(fetchProductsSuccess(fetchedProducts));
-        dispatch(setShowSpin2(false));
-      })
-      .catch((error) => {
-        dispatch(fetchProductsFail(error));
-        dispatch(setShowSpin2(false));
-      })
+export const fetchProducts = () => async (dispatch) => {
+ 
+  try {
+  //  const body = {product};
+    const response = await fetch('http://localhost:5000/products');
+    const jsonData = await response.json();
+    console.log(jsonData);
+    
+    dispatch(fetchProductsSuccess(jsonData));
+    
+  } catch (err) {
+    console.error(err.message);
   }
+  // return dispatch => {
+  //   dispatch(setShowSpin2(true));
+  //   dispatch(fetchProductsStart());
+  //   axios.get('/products.json')
+  //     .then((response) => {
+  //       const fetchedProducts = [];
+  //       for (const key in response.data) {
+  //         fetchedProducts.push({
+  //           ...response.data[key],
+  //           id: key
+  //         });
+  //       }
+  //       dispatch(fetchProductsSuccess(fetchedProducts));
+  //       dispatch(setShowSpin2(false));
+  //     })
+  //     .catch((error) => {
+  //       dispatch(fetchProductsFail(error));
+  //       dispatch(setShowSpin2(false));
+  //     })
+  // }
 
 }
 
 export const getProducts = () => async (dispatch) => {
+
   try {
     dispatch(setShowSpin2(true));
     const queryData = await API.graphql(graphqlOperation(listProducts));
@@ -124,22 +139,46 @@ export const getProducts = () => async (dispatch) => {
     dispatch(setShowSpin2(false));
     message.error('Error getting products');
   }
-};
+}
 
-export const addProduct = (productData) => {
-  return dispatch => {
+// export const addProduct = (productData) => {
+//   return dispatch => {
+//     dispatch(setShowSpin1(true));
+//     dispatch(addProductStart());
+//     axios.post('/products.json', productData)
+//       .then((response) => {
+//         dispatch(addProductSuccess(response.data.name, productData));
+//         dispatch(setOpenModal1(false));
+//         dispatch(setShowSpin1(false));
+//       })
+//       .catch((error) => {
+//         dispatch(addProductFail(error));
+//         dispatch(setShowSpin1(false));
+//       });
+//   }
+
+  export const addProduct = (productData) => async (dispatch) => {
     dispatch(setShowSpin1(true));
     dispatch(addProductStart());
-    axios.post('/products.json', productData)
-      .then((response) => {
-        dispatch(addProductSuccess(response.data.name, productData));
-        dispatch(setOpenModal1(false));
-        dispatch(setShowSpin1(false));
-      })
-      .catch((error) => {
-        dispatch(addProductFail(error));
-        dispatch(setShowSpin1(false));
-      });
+    try {
+        const body = productData;
+        const response = await fetch('http://localhost:5000/products', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(body)
+        });
+      console.log(response);
+      //dispatch(addProductSuccess())
+      message.success('Product created!');
+      dispatch(setShowSpin1(false));
+      dispatch(setOpenModal1(false));
+      dispatch(addProductSuccess(body));
+      
+
+    } catch (err) {
+      console.error(err.message)
+      dispatch(setShowSpin1(false));
+    }
   }
 
 
@@ -155,7 +194,7 @@ export const addProduct = (productData) => {
   //   message.error('Adding product failed!');
   //   dispatch(setShowSpin1(false));
   // }
-};
+
 
 export const editProduct = (productData) => {
   return dispatch => {
@@ -201,7 +240,7 @@ export const removeProduct = (productData) => {
   return dispatch => {
     dispatch(setShowSpin3(true));
     dispatch(removeProductStart());
-    const newURL = 'products/'+ productData.id + '.json';
+    const newURL = 'products/' + productData.id + '.json';
     axios.delete(newURL)
       .then(() => {
         dispatch(removeProductSuccess(productData.id, productData));
@@ -239,7 +278,7 @@ export const initSubscriptions = () => (dispatch, getState) => {
       graphqlOperation(onCreateProduct)
     ).subscribe({
       next: (productData) => {
-        const {products} = getState().products;
+        const { products } = getState().products;
         const addedData = productData.value.data.onCreateProduct;
         const newProducts = [addedData].concat(products);
         dispatch(setProducts(newProducts));
@@ -249,7 +288,7 @@ export const initSubscriptions = () => (dispatch, getState) => {
       graphqlOperation(onUpdateProduct)
     ).subscribe({
       next: (productData) => {
-        const {products} = getState().products;
+        const { products } = getState().products;
         const updatedData = productData.value.data.onUpdateProduct;
         const newProducts = products.map((product) => {
           if (product.id === updatedData.id) {
@@ -264,7 +303,7 @@ export const initSubscriptions = () => (dispatch, getState) => {
       graphqlOperation(onDeleteProduct)
     ).subscribe({
       next: (productData) => {
-        const {products} = getState().products;
+        const { products } = getState().products;
         const deletedData = productData.value.data.onDeleteProduct;
         const newProducts = products.filter((product) => deletedData.id !== product.id);
         dispatch(setProducts(newProducts));
@@ -280,7 +319,7 @@ export const initSubscriptions = () => (dispatch, getState) => {
 
 export const unsubscribe = () => (dispatch, getState) => {
   try {
-    const {subscriptions} = getState().products;
+    const { subscriptions } = getState().products;
     subscriptions.forEach((listener) => {
       listener.unsubscribe();
     });

@@ -125,8 +125,8 @@ const PurchaseRequests = () => {
       />
     </div>
   );
-  const approvedDisplay = (isApproved) =>
-    isApproved === "APPROVED" ? (
+  const approvedDisplay = (is_approved) =>
+    is_approved === true ? (
       <CheckCircleFilled style={{ marginLeft: 20, color: "green" }} />
     ) : (
       <CloseCircleFilled style={{ marginLeft: 20, color: "red" }} />
@@ -146,7 +146,7 @@ const PurchaseRequests = () => {
         <CheckCircleFilled style={{ marginLeft: 20, color: "green" }} />
       </div>
     );
-  const prNumberDisplay = (data) => `PR ${data.purchaseRequestNo}`;
+  const prNumberDisplay = (data) => `PR ${data.purchase_request_number}`;
 
   const onDeleteConfirmed = () => {
     dispatcher(actions.deletePurchaseRequest(deleteId));
@@ -188,10 +188,10 @@ const PurchaseRequests = () => {
     },
     {
       title: "PR Number",
-      key: "PurchaseRequestNo",
+      key: "purchase_request_number",
       width: 250,
       defaultSortOrder: "ascend",
-      sorter: (a, b) => (a.purchaseRequestIds > b.purchaseRequestIds ? 1 : -1),
+      sorter: (a, b) => (a.purchase_request_number > b.purchase_request_number ? 1 : -1),
       render: prNumberDisplay,
     },
     {
@@ -217,21 +217,22 @@ const PurchaseRequests = () => {
     },
     {
       title: "Approved",
-      dataIndex: "isApproved",
+      dataIndex: "is_approved",
       key: "isApproved",
       width: 200,
-      sorter: (a, b) => b.isApproved.length - a.isApproved.length,
+      sorter: (a, b) => b.is_approved.length - a.is_approved.length,
       render: approvedDisplay,
     },
     {
       title: "Requested On",
-      dataIndex: "dayMonthYear",
+      dataIndex: "date_created",
       key: "dayMonthYear",
       width: 250,
       // defaultSortOrder: 'ascend',
       // sorter: (a,b) => b.isApproved.length - a.dayMonthYear.length,
       render: (createdAt) =>
-        moment(createdAt).format("MMMM Do YYYY, h:mm:ss A"),
+        moment(createdAt).format("MMMM Do YYYY"),
+        //moment(createdAt).format("MMMM Do YYYY, h:mm:ss A"),
     },
     {
       title: "Delete",
@@ -250,7 +251,7 @@ const PurchaseRequests = () => {
     if (!seeAll) {
       return pendingPurchaseRequests;
     }
-    return purchaseRequestsList;
+    return purchaseRequestsList ;
   };
 
   return (
@@ -320,7 +321,7 @@ const PurchaseRequests = () => {
               columns={columns}
               dataSource={checkDisplay()}
               size="small"
-              rowKey="id"
+              rowKey="purchase_request_id"
               pagination={{
                 pageSize: 10,
               }}

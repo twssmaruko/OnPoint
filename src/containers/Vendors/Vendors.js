@@ -8,34 +8,45 @@ import {
   // Input,
   Modal
 } from 'antd';
-import {SearchOutlined, DeleteFilled} from '@ant-design/icons';
+import {SearchOutlined, DeleteFilled, EditTwoTone} from '@ant-design/icons';
 import VendorList from './VendorList';
 import * as actions from '../../store/vendors/index';
 import TableButton from "../../components/button/OnpointButton";
+import EditVendor from './EditVendor';
+import * as uiActions from '../../store/ui/actions/Actions';
 
 const Vendors = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [deleteId, setDeleteId] = useState(0);
   const [viewDeleteModal, setViewDeleteModal] = useState(false);
+  const [viewEditModal, setViewEditModal] = useState(false);
+  const [actionCommand, setActionCommand] = useState('add');
+  const [editValues, setEditValues] = useState('');
   const dispatcher = useDispatch();
   const formRef = useRef(null);
 
   useEffect(() => {
     dispatcher(actions.fetchVendors());
-  }, [dispatcher]);
+  }, [dispatcher, editValues]);
 
   const {vndr} = useSelector(({vendor}) => ({
     vndr: vendor.vendors
   }), shallowEqual);
 
   const deleteItem = (data) => {
-    setDeleteId(data.id);
+    setDeleteId(data.vendor_id);
     setViewDeleteModal(true);
   };
 
   const onDeleteConfirmed = () => {
     dispatcher(actions.deleteVendor(deleteId));
     setViewDeleteModal(false);
+  }
+
+  const onEditConfirmed = () => {
+    dispatcher(uiActions.setOpenModal1)
+    setActionCommand('edit');
+    setViewEditModal(false);
   }
 
   const deleteModal = <Modal visible={viewDeleteModal}
@@ -45,6 +56,14 @@ const Vendors = () => {
   onOk={(e) => onDeleteConfirmed(e)}> 
   Are you sure you want to delete this Vendor?
   </Modal>;
+
+  const editModal = <Modal visible ={viewEditModal}
+  onCancel={() => {
+    setViewEditModal(false)
+  }}
+  onOk={onEditConfirmed}>
+    <EditVendor editValues = {editValues}/>
+  </Modal>
 
   const deleteButton = (item) => (
     <div>
@@ -56,6 +75,21 @@ const Vendors = () => {
       />
     </div>
   );
+
+  const editButton = (item) => (
+  <div>
+    <TableButton value = {item}
+    type="primary"
+    icon={<EditTwoTone key={"edit-" + item}/>}
+    onClick ={(e) => setEditModal(e)}/>
+  </div>
+  );
+
+  const setEditModal = (item) => {
+    setEditValues(item);
+    dispatcher(uiActions.setOpenModal1(true));
+    setViewEditModal(true);
+  }
 
   const title =
     <div style={{marginTop: 15}}>
@@ -73,18 +107,25 @@ const Vendors = () => {
     </div>;
   const columns = [
     {
+      title: 'Edit',
+      key: 'edit',
+      render: editButton,
+      fixed: 'left',
+      width: '1%'
+    },
+    {
       title,
-      dataIndex: 'vendorName',
-      key: 'vendorName',
+      dataIndex: 'name',
+      key: 'name',
       width: 250,
       sorter: {
-        compare: (a,b) => a.vendorName.localeCompare(b.vendorName)
+        compare: (a,b) => a.name.localeCompare(b.name)
       },
       defaultSortOrder: 'ascend',
     },
     {
       title: 'Tel-No',
-      dataIndex: 'telNo',
+      dataIndex: 'tel_no',
       key: 'telNo',
       width: 250
     },
@@ -148,7 +189,7 @@ const Vendors = () => {
                 columns={columns}
                 dataSource={vndr}
                 size="large"
-                rowKey="id"
+                rowKey="vendor_id"
               />
             </Col>
           </Row>
@@ -167,6 +208,7 @@ const Vendors = () => {
         <VendorList reference={formRef} onSubmit={onSubmit} />
       </Modal>
       {deleteModal}
+      <EditVendor editValues={editValues} />
     </>
   );
 };
