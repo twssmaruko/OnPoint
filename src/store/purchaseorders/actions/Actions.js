@@ -425,31 +425,41 @@ export const getProjects = () => {
       })
   }
 }
-export const getPurchaseRequests = () => {
-  return dispatch => {
-    dispatch(setLoading(true));
-    dispatch(setShowSpin1(true));
-    axios.get('/purchaserequests.json')
-      .then((response) => {
-        const fetchedPurchaseRequests = [];
-        for (const key in response.data) {
-          if (response.data[key].isApproved === "APPROVED" && response.data[key].status !== 'ORDERED') {
-            fetchedPurchaseRequests.push({
-              ...response.data[key],
-              id: key
-            })
-          }
-        }
-        dispatch(setShowSpin1(false));
-        dispatch(setLoading(false));
-        dispatch(setPurchaseRequests(fetchedPurchaseRequests))
-      })
-      .catch((error) => {
-        dispatch(setLoading(false));
-        message.error('Could not obtain purchase requests');
-        console.error(error);
-      })
+export const getPurchaseRequests = () => async(dispatch) => {
+  dispatch(setShowSpin1(true));
+  try {
+    const response = await OPC.get('/purchase_requests');
+    console.log('purchase_requests: ', response.data);
+    dispatch(setPurchaseRequests(response.data))
+    dispatch(setShowSpin1(false));
+  } catch (err) {
+    console.error(err.message);
+    dispatch(setShowSpin1(false));
   }
+  // return dispatch => {
+  //   dispatch(setLoading(true));
+  //   dispatch(setShowSpin1(true));
+  //   axios.get('/purchaserequests.json')
+  //     .then((response) => {
+  //       const fetchedPurchaseRequests = [];
+  //       for (const key in response.data) {
+  //         if (response.data[key].isApproved === "APPROVED" && response.data[key].status !== 'ORDERED') {
+  //           fetchedPurchaseRequests.push({
+  //             ...response.data[key],
+  //             id: key
+  //           })
+  //         }
+  //       }
+  //       dispatch(setShowSpin1(false));
+  //       dispatch(setLoading(false));
+  //       dispatch(setPurchaseRequests(fetchedPurchaseRequests))
+  //     })
+  //     .catch((error) => {
+  //       dispatch(setLoading(false));
+  //       message.error('Could not obtain purchase requests');
+  //       console.error(error);
+  //     })
+  // }
 };
 
 export const fetchPurchaseOrderId = () => async (dispatch) => {

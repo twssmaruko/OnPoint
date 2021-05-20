@@ -96,6 +96,7 @@ const Products = () => {
     setEditValues({});
     setOperation('add');
     dispatcher(uiActions.setOpenModal1(true));
+    
   };
 
   return (

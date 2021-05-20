@@ -259,7 +259,7 @@ const AddPurchaseOrder = memo(() => {
     dispatcher(actions.getPurchaseRequests());
     const thisPurchaseRequestList = [...purchaseRequestList];
     const selectedPurchaseRequest = thisPurchaseRequestList.find(
-      (element) => element.id === data
+      (element) => element.purchase_request_id === data
     );
     dispatcher(actions.setPurchaseRequestData(data));
     const initTotalPrice = [];
@@ -466,8 +466,8 @@ const AddPurchaseOrder = memo(() => {
 
   const searchPurchaseRequestList = () =>
     purchaseRequestList.map((purchaseRequest) => (
-      <Option key={purchaseRequest.id} value={purchaseRequest.id}>
-        {purchaseRequest.purchaseRequestNo}
+      <Option key={purchaseRequest.purchase_request_id} value={purchaseRequest.purchase_request_id}>
+        {purchaseRequest.purchase_request_number}
       </Option>
     ));
 
