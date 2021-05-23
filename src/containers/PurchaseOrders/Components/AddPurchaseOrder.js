@@ -256,52 +256,53 @@ const AddPurchaseOrder = memo(() => {
   const onSelectClick = (data) => {
     const today = new Date();
     let counterFlag = 0;
-    dispatcher(actions.getPurchaseRequests());
-    const thisPurchaseRequestList = [...purchaseRequestList];
-    const selectedPurchaseRequest = thisPurchaseRequestList.find(
-      (element) => element.purchase_request_id === data
-    );
-    dispatcher(actions.setPurchaseRequestData(data));
-    const initTotalPrice = [];
-    let newTotalAmount = 0;
-    for (const key in selectedPurchaseRequest.orders) {
-      if (selectedPurchaseRequest.orders[key].quantityLeft > 0) {
-        initTotalPrice.push({
-          ...initTotalPrice[key],
-          product: selectedPurchaseRequest.orders[key].product,
-          quantity: selectedPurchaseRequest.orders[key].quantityLeft,
-          unit: selectedPurchaseRequest.orders[key].unit,
-          orderId: selectedPurchaseRequest.orders[key].orderId,
-          itemType: selectedPurchaseRequest.orders[key].itemType,
-          unitPrice: selectedPurchaseRequest.orders[key].unitPrice,
-          totalPrice:
-            selectedPurchaseRequest.orders[key].quantityLeft *
-            selectedPurchaseRequest.orders[key].unitPrice,
-        });
-        newTotalAmount +=
-          selectedPurchaseRequest.orders[key].quantityLeft *
-          selectedPurchaseRequest.orders[key].unitPrice;
-        counterFlag += 1;
-      }
-    }
-    const newKey = uuid();
-    setOrdersKey(newKey);
-    setOrderCounter(counterFlag);
-    dispatcher(actions.initOrders(initTotalPrice));
-    setPurchaseRequestData(selectedPurchaseRequest);
-    const newPurchaseOrderData = {
-      ...purchaseOrder,
-      purchaseRequestNo: selectedPurchaseRequest.purchaseRequestNo,
-      purchaseOrderNo: purchaseOrder.purchaseOrderNo,
-      requestedBy: selectedPurchaseRequest.requestedBy,
-      purchaseRequestId: selectedPurchaseRequest.id,
-      totalPrice: newTotalAmount,
-      orders: initTotalPrice,
-    };
-    setOrderState(newPurchaseOrderData.orders);
-    setPurchaseOrderData(newPurchaseOrderData);
-    console.log('newPurchaseOrderData: ', newPurchaseOrderData);
-    dispatcher(actions.setPurchaseOrder(newPurchaseOrderData));
+    console.log('data: ', data);
+    // dispatcher(actions.getPurchaseRequests());
+    // const thisPurchaseRequestList = [...purchaseRequestList];
+    // const selectedPurchaseRequest = thisPurchaseRequestList.find(
+    //   (element) => element.purchase_request_id === data
+    // );
+    // dispatcher(actions.setPurchaseRequestData(data));
+    // const initTotalPrice = [];
+    // let newTotalAmount = 0;
+    // for (const key in selectedPurchaseRequest.orders) {
+    //   if (selectedPurchaseRequest.orders[key].quantityLeft > 0) {
+    //     initTotalPrice.push({
+    //       ...initTotalPrice[key],
+    //       product: selectedPurchaseRequest.orders[key].product,
+    //       quantity: selectedPurchaseRequest.orders[key].quantityLeft,
+    //       unit: selectedPurchaseRequest.orders[key].unit,
+    //       orderId: selectedPurchaseRequest.orders[key].orderId,
+    //       itemType: selectedPurchaseRequest.orders[key].itemType,
+    //       unitPrice: selectedPurchaseRequest.orders[key].unitPrice,
+    //       totalPrice:
+    //         selectedPurchaseRequest.orders[key].quantityLeft *
+    //         selectedPurchaseRequest.orders[key].unitPrice,
+    //     });
+    //     newTotalAmount +=
+    //       selectedPurchaseRequest.orders[key].quantityLeft *
+    //       selectedPurchaseRequest.orders[key].unitPrice;
+    //     counterFlag += 1;
+    //   }
+    // }
+    // const newKey = uuid();
+    // setOrdersKey(newKey);
+    // setOrderCounter(counterFlag);
+    // dispatcher(actions.initOrders(initTotalPrice));
+    // setPurchaseRequestData(selectedPurchaseRequest);
+    // const newPurchaseOrderData = {
+    //   ...purchaseOrder,
+    //   purchaseRequestNo: selectedPurchaseRequest.purchaseRequestNo,
+    //   purchaseOrderNo: purchaseOrder.purchaseOrderNo,
+    //   requestedBy: selectedPurchaseRequest.requestedBy,
+    //   purchaseRequestId: selectedPurchaseRequest.id,
+    //   totalPrice: newTotalAmount,
+    //   orders: initTotalPrice,
+    // };
+    // setOrderState(newPurchaseOrderData.orders);
+    // setPurchaseOrderData(newPurchaseOrderData);
+    // console.log('newPurchaseOrderData: ', newPurchaseOrderData);
+    // dispatcher(actions.setPurchaseOrder(newPurchaseOrderData));
   };
 
   const onDeleteClicked = (index, newerPurchaseRequest) => {
@@ -334,38 +335,18 @@ const AddPurchaseOrder = memo(() => {
       return;
     }
     const projectSelected = projectsList.find(
-      (data) => data.id === selectedProject
+      (data) => data.project_id === selectedProject
     );
     setSelectedProject(projectSelected);
     const categories = [];
 
-    for (const budgetCost in projectSelected.budget.budgetCost) {
-      for (const subCategories in projectSelected.budget.budgetCost[budgetCost]
-        .subCategories) {
-        for (const subCategoryItems in projectSelected.budget.budgetCost[
-          budgetCost
-        ].subCategories[subCategories].subCategoryItem) {
-          const newCategories =
-            projectSelected.budget.budgetCost[budgetCost].itemCode +
-            "." +
-            projectSelected.budget.budgetCost[budgetCost].subCategories[
-              subCategories
-            ].itemCode +
-            "." +
-            projectSelected.budget.budgetCost[budgetCost].subCategories[
-              subCategories
-            ].subCategoryItem[subCategoryItems].itemCode;
-          categories.push(newCategories);
-        }
-      }
-    }
     setPurchaseOrderData({
       ...purchaseOrderData,
-      project: projectSelected.projectCode,
+      project: projectSelected.project_code
     });
     const newPurchaseOrderData = {
       ...purchaseOrder,
-      project: projectSelected.projectCode,
+      project: projectSelected.project_code
     };
     dispatcher(actions.setPurchaseOrder(newPurchaseOrderData));
     setProjectCategories(categories);
@@ -383,7 +364,6 @@ const AddPurchaseOrder = memo(() => {
       vendor: newVendor,
     });
     dispatcher(actions.setPurchaseOrder(newPurchaseOrderData));
-    dispatcher(actions.setVendor(data));
   };
 
   const onVendorBlur = (data) => {
@@ -482,8 +462,8 @@ const AddPurchaseOrder = memo(() => {
 
   const searchProjectsList = () =>
     projectsList.map((project) => (
-      <Option key={project.id} value={project.id}>
-        {project.projectCode}
+      <Option key={project.project_id} value={project.project_id}>
+        {project.project_code}
       </Option>
     ));
 

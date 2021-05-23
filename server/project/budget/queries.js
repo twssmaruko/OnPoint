@@ -1,4 +1,4 @@
-const pool = require('../../db');
+const pool = require( '../../db');
 const { getBudgetCosts } = require('./budget_cost/queries');
 
 const getBudgets = async (req, res) => {

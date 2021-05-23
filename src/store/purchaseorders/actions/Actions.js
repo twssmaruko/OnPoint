@@ -179,15 +179,14 @@ export const fetchProjectForPurchaseOrder = (projectCodeData) => async (dispatch
   const fetchedProjects = [];
   dispatch(setLoading(true));
   try {
-    const result = await axios.get('/projects.json')
+    const result = await OPC.get('/projects')
     for (const key in result.data) {
       fetchedProjects.push({
-        ...result.data[key],
-        id: key
+        ...result.data[key]
       })
     }
     const projectSelected = fetchedProjects
-      .find(project => project.projectCode === projectCodeData);
+      .find(project => project.project_code === projectCodeData);
     dispatch(setProjectInStore(projectSelected));
     dispatch(setLoading(false));
   } catch (error) {
@@ -401,31 +400,47 @@ export const fetchPurchaseOrders = () => async (dispatch) => {
   //   dispatch(setShowSpin2(false));
   // }
 }
-export const getProjects = () => {
-  return dispatch => {
-    dispatch(setLoading(true));
+export const getProjects = () => async (dispatch) => {
+  try {
     dispatch(setShowSpin2(true));
-    axios.get('/projects.json')
-      .then((response) => {
-        const fetchedProjects = [];
-        for (const key in response.data) {
-          fetchedProjects.push({
-            ...response.data[key],
-            id: key
-          })
-        }
-        dispatch(setProjectsInStore(fetchedProjects));
-        dispatch(setShowSpin2(false));
-        dispatch(setLoading(false));
+    const response = await OPC.get('/projects');
+    const fetchedProjects = [];
+    for (const key in response.data) {
+      fetchedProjects.push({
+        ...response.data[key]
       })
-      .catch((error) => {
-        dispatch(setLoading(false));
-        message.error('unable to fetch projects');
-        console.error(error);
-      })
+    }
+    dispatch(setProjectsInStore(fetchedProjects));
+    dispatch(setShowSpin2(false));
+  } catch (err) {
+    dispatch(setShowSpin2(false))
+    message.error('unable to fetch projects');
+    console.error(err.message);
   }
+  // return dispatch => {
+  //   dispatch(setLoading(true));
+  //   dispatch(setShowSpin2(true));
+  //   axios.get('/projects.json')
+  //     .then((response) => {
+  //       const fetchedProjects = [];
+  //       for (const key in response.data) {
+  //         fetchedProjects.push({
+  //           ...response.data[key],
+  //           id: key
+  //         })
+  //       }
+  //       dispatch(setProjectsInStore(fetchedProjects));
+  //       dispatch(setShowSpin2(false));
+  //       dispatch(setLoading(false));
+  //     })
+  //     .catch((error) => {
+  //       dispatch(setLoading(false));
+  //       message.error('unable to fetch projects');
+  //       console.error(error);
+  //     })
+  // }
 }
-export const getPurchaseRequests = () => async(dispatch) => {
+export const getPurchaseRequests = () => async (dispatch) => {
   dispatch(setShowSpin1(true));
   try {
     const response = await OPC.get('/purchase_requests');
@@ -657,11 +672,11 @@ export const getPurchaseRequestData = (data) => async (dispatch) => {
 
 };
 
-export const deletePurchaseOrder = (data) => async(dispatch) => {
-  const newURL = 'purchaseorders/'+ data.id + '.json';
+export const deletePurchaseOrder = (data) => async (dispatch) => {
+  const newURL = 'purchaseorders/' + data.id + '.json';
 
-  try{
-    
+  try {
+
     const fetchedPurchaseOrder = data
     await axios.delete(newURL);
     dispatch(deletePurchaseOrderInStore(data.id, fetchedPurchaseOrder))
@@ -669,7 +684,7 @@ export const deletePurchaseOrder = (data) => async(dispatch) => {
     message.success('purchase order removed');
 
 
-  }catch(error) {
+  } catch (error) {
     message.error('unable to delete purchase order');
     console.error(error);
   }
@@ -677,8 +692,8 @@ export const deletePurchaseOrder = (data) => async(dispatch) => {
 }
 
 export const fetchWorksheet = () => async (dispatch) => {
-  
-  try{
+
+  try {
     dispatch(setLoading(true));
     const result = await axios.get('/purchaseorders.json');
     const fetchedPurchaseOrders = [];
@@ -693,9 +708,9 @@ export const fetchWorksheet = () => async (dispatch) => {
       const project = result.data[key].project;
       const vendor = result.data[key].vendor;
       const orders = result.data[key].orders;
-      const year = result.data[key].dateCreated.slice(0,4);
-      const month = result.data[key].dateCreated.slice(5,7);
-      const day = result.data[key].dateCreated.slice(8,10)
+      const year = result.data[key].dateCreated.slice(0, 4);
+      const month = result.data[key].dateCreated.slice(5, 7);
+      const day = result.data[key].dateCreated.slice(8, 10)
       for (const i in orders) {
         worksheetData.push({
           purchaseOrderNo: purchaseOrderNo,
@@ -737,7 +752,7 @@ export const cancelPurchaseOrder = (data) => async (dispatch) => {
     await axios.put('/purchaseorders/' + data + '/.json', newPurchaseOrder);
     message.success('Purchase Order cancelled');
     window.location.reload(false);
-  } catch(error) {
+  } catch (error) {
     message.error('Could not cancel purchase order!');
     console.error(error);
   }

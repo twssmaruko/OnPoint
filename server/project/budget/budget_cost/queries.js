@@ -1,5 +1,6 @@
 const pool = require('../../../db');
-const {getBudgetSubcategories} = require('../budget_subcategory/queries');
+const {getBudgetSubcategories} =  require('../budget_subcategory/queries');
+
 
 const getBudgetCosts = async (req, res) => {
     try {
