@@ -115,6 +115,7 @@ const AddPurchaseOrder = memo(() => {
     dispatcher(actions.getPurchaseRequests());
   }, [dispatcher]);
 
+  const currentYear = moment(new Date()).format("YYYY");
   const [purchaseOrderData, setPurchaseOrderData] = useState({
     requestedBy: "Engr. Jojo Salamanes",
     project: "",
@@ -136,7 +137,7 @@ const AddPurchaseOrder = memo(() => {
     totalPrice: 0,
   });
 
-  const [purchaseOrderYear, setPurchaseOrderYear] = useState(0);
+  const [purchaseOrderYear, setPurchaseOrderYear] = useState(currentYear);
   const [purchaseOrderNewNumber, setPurchaseOrderNewNumber] = useState(0);
   const handleCancel = () => {
     setTransferParams({
@@ -352,17 +353,18 @@ const AddPurchaseOrder = memo(() => {
     setProjectCategories(categories);
   };
 
-  const onVendorSelect = (data) => {
-    const newVendor = data;
-
+  const onVendorSelect = (data, object) => {
+    const newVendor = object;
     const newPurchaseOrderData = {
       ...purchaseOrder,
-      vendor: newVendor,
+      vendor: newVendor.id,
     };
     setPurchaseOrderData({
       ...purchaseOrderData,
-      vendor: newVendor,
+      vendor: newVendor.id,
     });
+    dispatcher(actions.setVendor(newVendor.id));
+    console.log('purchaseOrderData: ', newPurchaseOrderData);
     dispatcher(actions.setPurchaseOrder(newPurchaseOrderData));
   };
 
@@ -391,9 +393,10 @@ const AddPurchaseOrder = memo(() => {
     formRef.current.submit();
     dispatcher(actions.getVendors());
     vendorsList.map((vendors) => {
-      const newVendor = String(vendors.name);
+      const newVendor = vendors;
       vendorOptions.push({
-        value: newVendor,
+        value: newVendor.name,
+        id: newVendor.vendor_id
       });
     });
   };
@@ -454,9 +457,10 @@ const AddPurchaseOrder = memo(() => {
   const vendorOptions = [];
 
   vendorsList.map((vendors) => {
-    const newVendor = String(vendors.name);
+    const newVendor = vendors;
     vendorOptions.push({
-      value: newVendor,
+      value: newVendor.name,
+      id: newVendor.vendor_id
     });
   });
 
@@ -567,6 +571,7 @@ const AddPurchaseOrder = memo(() => {
   };
 
   const proceedClick = () => {
+    console.log('purhcaseOrder: ', purchaseOrder);
     const newDocument = (
       <MyDocument purchaseOrder={purchaseOrder} vendor={vendor} />
     );
@@ -2382,6 +2387,7 @@ const AddPurchaseOrder = memo(() => {
                           <Col span={5}>
                             <Input
                               style={{ textAlign: "left" }}
+                              defaultValue={currentYear}
                               onChange={(e) => onPONumberInput1(e.target.value)}
                             />
                           </Col>
@@ -2596,7 +2602,7 @@ const AddPurchaseOrder = memo(() => {
                             color: "black",
                           }}
                           onBlur={(e) => onVendorBlur(e.target.value)}
-                          onSelect={(e) => onVendorSelect(e)}
+                          onSelect={(e, object) => onVendorSelect(e, object)}
                           options={vendorOptions}
                           filterOption={(inputValue, option) =>
                             option.value
@@ -2645,7 +2651,7 @@ const AddPurchaseOrder = memo(() => {
                           marginLeft: 5,
                         }}
                       >
-                        {selectedVendor.telNo}
+                        {selectedVendor.tel_no}
                       </Col>
                     </Row>
                     <Row style={{ marginBottom: 30 }}>

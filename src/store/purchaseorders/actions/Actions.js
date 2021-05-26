@@ -195,19 +195,12 @@ export const fetchProjectForPurchaseOrder = (projectCodeData) => async (dispatch
   }
 }
 
-export const setVendor = (vendorName) => async (dispatch) => {
+export const setVendor = (vendorId) => async (dispatch) => {
   try {
     dispatch(setLoading(true));
-    const fetchedVendors = [];
-    const result = await axios.get('/vendors.json');
-    for (const key in result.data) {
-      fetchedVendors.push({
-        ...result.data[key],
-        id: key
-      })
-    }
-    const newVendor = fetchedVendors.find((vendor) => vendor.vendorName === vendorName);
-    dispatch(setVendorInStore(newVendor));
+    const result = await OPC.get('/vendors/' + vendorId);
+    const fetchedVendor = result.data
+    dispatch(setVendorInStore(fetchedVendor));
     dispatch(setLoading(false));
   } catch (error) {
     message.error(error)
