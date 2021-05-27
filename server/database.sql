@@ -66,36 +66,49 @@ CREATE TABLE project_budget (
 CREATE TABLE budget_cost (
     budget_cost_id BIGSERIAL PRIMARY KEY NOT NULL,
     project_budget_id BIGSERIAL,
+    project_id BIGSERIAL,
     budget_name VARCHAR (255),
     total_cost FLOAT,
     amount_spent FLOAT,
     item_code VARCHAR(10),
     CONSTRAINT fk_project_budget
         FOREIGN KEY(project_budget_id)
-            REFERENCES project_budget(project_budget_id)
+            REFERENCES project_budget(project_budget_id),
+    CONSTRAINT fk_project
+        FOREIGN KEY(project_id)
+            REFERENCES project(project_id)
 
 );
 
 CREATE TABLE budget_subcategory (
     budget_subcategory_id BIGSERIAL PRIMARY KEY NOT NULL,
     budget_cost_id BIGSERIAL,
+    project_id BIGSERIAL,
     budget_subcategory_name VARCHAR (255),
     total_cost FLOAT,
     amount_spent FLOAT,
     item_code VARCHAR (10),
     CONSTRAINT fk_budget_cost
         FOREIGN KEY(budget_cost_id)
-            REFERENCES budget_cost(budget_cost_id)
+            REFERENCES budget_cost(budget_cost_id),
+    CONSTRAINT fk_project
+        FOREIGN KEY(project_id)
+            REFERENCES project(project_id)
 
 );
 
 CREATE TABLE subcategory_item (
     subcategory_item_id BIGSERIAL PRIMARY KEY NOT NULL,
+    project_id BIGSERIAL,
     budget_subcategory_id BIGSERIAL,
     subcategory_item_no INT,
     amount_spent FLOAT,
     subcategory_item_name VARCHAR(255),
     subcategory_item_cost FLOAT,
+    subcategory_category VARCHAR(20),
+    CONSTRAINT fk_project
+        FOREIGN KEY(project_id)
+            REFERENCES project(project_id),
     CONSTRAINT fk_budget_subcategory
         FOREIGN KEY(budget_subcategory_id)
             REFERENCES budget_subcategory(budget_subcategory_id)
@@ -134,6 +147,7 @@ CREATE TABLE purchase_order_order (
     item_type VARCHAR(50),
     product VARCHAR(255),
     quantity INT,
+    quantity_received INT,
     unit VARCHAR(20),
     category VARCHAR(20),
     unit_price FLOAT,

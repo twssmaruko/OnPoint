@@ -3,6 +3,7 @@ import {updateObject} from '../../utility';
 
 const initialState = {
   vendors: [],
+  vendor: {},
   // eslint-disable-next-line comma-dangle
   loading: false
 };
@@ -24,6 +25,7 @@ const fetchVendorsFail = (state, action) => updateObject(state, {
 
 // eslint-disable-next-line no-unused-vars
 const newVendorStart = (state, action) => updateObject(state, {loading: false});
+const fetchVendor = (state, action) => updateObject(state, {vendor: action.data});
 
 const newVendorSuccess = (state, action) => {
   const newVendor = action.data;
@@ -41,6 +43,7 @@ const reducer = (state = initialState, action) => {
   case actionTypes.FETCH_VENDORS_START: return fetchVendorsStart(state, action);
   case actionTypes.FETCH_VENDORS_SUCCESS: return fetchVendorsSuccess(state, action);
   case actionTypes.FETCH_VENDORS_FAIL: return fetchVendorsFail(state, action);
+  case actionTypes.FETCH_VENDOR: return fetchVendor(state, action);
   case actionTypes.NEW_VENDOR_START: return newVendorStart(state, action);
   case actionTypes.NEW_VENDOR_SUCCESS: return newVendorSuccess(state, action);
   case actionTypes.NEW_VENDOR_FAIL: return newVendorFail(state, action);

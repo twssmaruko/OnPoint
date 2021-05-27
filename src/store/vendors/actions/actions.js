@@ -26,6 +26,11 @@ export const fetchVendorsFail = (error) => ({
   error
 });
 
+const fetchVendorToStore = (data) => ({
+  type: actionTypes.FETCH_VENDOR,
+  data
+})
+
 export const fetchVendors = () => async(dispatch) => {
   try {
     //const body = {vendors};
@@ -139,5 +144,15 @@ export const editVendor = (vendorData, id) => async(dispatch) => {
     dispatch(setShowSpin1(false));
     console.error(err.message);
     
+  }
+}
+
+export const fetchVendor = (vendorId) => async (dispatch) => {
+  dispatch(setShowSpin1(true))
+  try {
+    const response = await OPC.get('/vendors/' + vendorId);
+    dispatch(fetchVendorToStore(response.data[0]));
+  } catch (err) {
+    console.error(err.message);
   }
 }

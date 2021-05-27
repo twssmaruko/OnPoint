@@ -32,9 +32,9 @@ const getBudgetCost = async (req, res) => {
 const createBudgetCost = async (req, res) => {
     try {
 
-        const { project_budget_id, budget_name, total_cost, item_code, amount_spent } = req.body;
-        const createdBudget = await pool.query('INSERT INTO budget_cost (project_budget_id, budget_name, total_cost, item_code, amount_spent) VALUES ($1, $2, $3, $4, $5)',
-            [project_budget_id, budget_name, total_cost, item_code, amount_spent]);
+        const { project_id, project_budget_id, budget_name, total_cost, item_code, amount_spent } = req.body;
+        const createdBudget = await pool.query('INSERT INTO budget_cost (project_id, project_budget_id, budget_name, total_cost, item_code, amount_spent) VALUES ($1, $2, $3, $4, $5, $6)',
+            [project_id, project_budget_id, budget_name, total_cost, item_code, amount_spent]);
         res.json(createdBudget.rows);
 
     } catch (err) {

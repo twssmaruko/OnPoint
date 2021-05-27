@@ -29,8 +29,8 @@ const getBudgetSubcategory = async (req, res) => {
 
 const createBudgetSubcategory = async (req, res) => {
     try {
-        const {budget_cost_id, budget_subcategory_name, total_cost, item_code, amount_spent} = req.body;
-        const createdBudgetSubcategory = await pool.query('INSERT INTO budget_subcategory (budget_cost_id, budget_subcategory_name, total_cost, item_code, amount_spent) VALUES ($1, $2, $3, $4, $5)', [budget_cost_id, budget_subcategory_name, total_cost, item_code, amount_spent]);
+        const {budget_cost_id, budget_subcategory_name, total_cost, item_code, amount_spent, project_id} = req.body;
+        const createdBudgetSubcategory = await pool.query('INSERT INTO budget_subcategory (project_id, budget_cost_id, budget_subcategory_name, total_cost, item_code, amount_spent) VALUES ($1, $2, $3, $4, $5, $6)', [project_id, budget_cost_id, budget_subcategory_name, total_cost, item_code, amount_spent]);
 
         res.json(createdBudgetSubcategory.rows);
     } catch (err) {

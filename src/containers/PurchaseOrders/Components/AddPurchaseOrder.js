@@ -343,11 +343,11 @@ const AddPurchaseOrder = memo(() => {
 
     setPurchaseOrderData({
       ...purchaseOrderData,
-      project: projectSelected.project_code
+      project: projectSelected.project_id
     });
     const newPurchaseOrderData = {
       ...purchaseOrder,
-      project: projectSelected.project_code
+      project: projectSelected.project_id
     };
     dispatcher(actions.setPurchaseOrder(newPurchaseOrderData));
     setProjectCategories(categories);

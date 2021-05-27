@@ -319,8 +319,9 @@ export const createProject = (projectData) => async (dispatch) => {
   try {
     const projectCreated = await OPC.post('/projects', project);
     const projectId = await OPC.get('/projects/project_id');
+    const newProjectId = projectId.data.max;
     const projectBudget = {
-      project_id: projectId.data.max,
+      project_id: newProjectId,
       contract_price: projectData.budget.contractPrice,
       profit: projectData.budget.profit,
       profit_margin: projectData.budget.profitMargin,
@@ -333,6 +334,7 @@ export const createProject = (projectData) => async (dispatch) => {
     for(const key in projectData.budget.budgetCost) {
     
       const newBudgetCost = {
+        project_id: newProjectId,
         project_budget_id: budgetId.data.max,
         budget_name: projectData.budget.budgetCost[key].name,
         item_code: projectData.budget.budgetCost[key].itemCode,
@@ -347,6 +349,7 @@ export const createProject = (projectData) => async (dispatch) => {
       for(const costKey in projectData.budget.budgetCost[key].subCategories) {
         console.log('budget_cost_id_2: ', budgetCostId.data[0].max);
         const newBudgetSubcategory = { 
+          project_id: newProjectId,
           budget_cost_id: budgetCostId.data[0].max,
           budget_subcategory_name: projectData.budget.budgetCost[key].subCategories[costKey].name,
           total_cost: projectData.budget.budgetCost[key].subCategories[costKey].totalCost,
@@ -361,6 +364,7 @@ export const createProject = (projectData) => async (dispatch) => {
         for(const subKey in projectData.budget.budgetCost[key].subCategories[costKey].subCategoryItem) {
 
           const newSubcategoryItem = {
+            project_id: newProjectId,
             budget_subcategory_id: subCategoryId.data[0].max,
             subcategory_item_no: projectData.budget.budgetCost[key].subCategories[costKey].subCategoryItem[subKey].itemCode,
             subcategory_item_name: projectData.budget.budgetCost[key].subCategories[costKey].subCategoryItem[subKey].name,

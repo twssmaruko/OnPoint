@@ -200,7 +200,7 @@ export const setVendor = (vendorId) => async (dispatch) => {
     dispatch(setLoading(true));
     const result = await OPC.get('/vendors/' + vendorId);
     const fetchedVendor = result.data
-    dispatch(setVendorInStore(fetchedVendor));
+    dispatch(setVendorInStore(fetchedVendor[0]));
     dispatch(setLoading(false));
   } catch (error) {
     message.error(error)
