@@ -584,6 +584,27 @@ export const addPurchaseOrder = (purchaseOrderData) => async (dispatch) => {
 
 
 }
+
+export const fetchPurchaseRequest = (prId) => async(dispatch) => {
+  dispatch(setShowSpin2(true));
+  try {
+    const purchaseRequest = await OPC.get('/purchase_requests/' + prId);
+    const purchaseRequestOrders = await OPC.get('/purchase_requests/orders/' + prId);
+    const orders = [];
+    for(const key in purchaseRequestOrders.data) {
+      orders.push(purchaseRequestOrders.data[key]);
+    }
+    const selectedPurchaseRequest = {
+      ...purchaseRequest.data,
+      orders: orders
+    }
+    dispatch(setPurchaseRequest(selectedPurchaseRequest));
+    dispatch(setShowSpin2(false));
+  } catch (error) {
+    console.error(error.message);
+    dispatch(setShowSpin2(false));
+  }
+}
 export const getVendors = () => async (dispatch) => {
 
   dispatch(setShowSpin2(true));

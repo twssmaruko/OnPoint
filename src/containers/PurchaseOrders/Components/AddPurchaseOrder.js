@@ -13,6 +13,7 @@ import {
   InputNumber,
   message,
 } from "antd";
+import OPC from '../../../api/OPC';
 import { MinusCircleOutlined, WindowsFilled } from "@ant-design/icons";
 import Logopng from "./../../../assets/images/Logo.jpg";
 import {
@@ -254,56 +255,73 @@ const AddPurchaseOrder = memo(() => {
     purchaseOrderData,
   ]);
 
-  const onSelectClick = (data) => {
+  const onSelectClick = async(data) => {
     const today = new Date();
     let counterFlag = 0;
     console.log('data: ', data);
+  try {
+    const fetchedPurchaseRequest = await OPC.get('/purchase_requests/' + data);
+    const fetchedOrders = await OPC.get('/purchase_requests/orders/' + data);
+    const orders = [];
+    for(const key in fetchedOrders.data) {
+      orders.push(fetchedOrders.data[key]);
+    }
+    const selectedPurchaseRequest = {
+      ...fetchedPurchaseRequest.data,
+      orders: orders
+    }
+
+    console.log('selectedPurchaseRequest: ',selectedPurchaseRequest);
+    dispatcher(actions.setPurchaseRequestData(selectedPurchaseRequest));
+    const initTotalPrice = [];
+    let newTotalAmount = 0;
+    for (const key in selectedPurchaseRequest.orders) {
+      if (selectedPurchaseRequest.orders[key].quantity_left > 0) {
+        initTotalPrice.push({
+          ...initTotalPrice[key],
+          product: selectedPurchaseRequest.orders[key].product,
+          quantity: selectedPurchaseRequest.orders[key].quantity_left,
+          unit: selectedPurchaseRequest.orders[key].unit,
+          orderId: selectedPurchaseRequest.orders[key].purchase_request_order_id,
+          itemType: selectedPurchaseRequest.orders[key].item_type,
+          unitPrice: selectedPurchaseRequest.orders[key].unit_price,
+          totalPrice:
+            selectedPurchaseRequest.orders[key].quantity_left *
+            selectedPurchaseRequest.orders[key].unit_price,
+        });
+        newTotalAmount +=
+          selectedPurchaseRequest.orders[key].quantity_left *
+          selectedPurchaseRequest.orders[key].unit_price;
+        counterFlag += 1;
+      }
+    }
+    console.log('done');
+    const newKey = uuid();
+    setOrdersKey(newKey);
+    setOrderCounter(counterFlag);
+    dispatcher(actions.initOrders(initTotalPrice));
+    setPurchaseRequestData(selectedPurchaseRequest);
+    const newPurchaseOrderData = {
+      ...purchaseOrder,
+      purchaseRequestNo: selectedPurchaseRequest.purchase_request_number,
+      purchaseOrderNo: purchaseOrder.purchaseOrderNo,
+      requestedBy: selectedPurchaseRequest.requested_by,
+      purchaseRequestId: selectedPurchaseRequest.purchase_request_id,
+      totalPrice: newTotalAmount,
+      orders: initTotalPrice,
+    };
+    setOrderState(newPurchaseOrderData.orders);
+    setPurchaseOrderData(newPurchaseOrderData);
+    console.log('newPurchaseOrderData: ', newPurchaseOrderData);
+  } catch (error) {
+    console.error(error.message);
+  }
     // dispatcher(actions.getPurchaseRequests());
     // const thisPurchaseRequestList = [...purchaseRequestList];
     // const selectedPurchaseRequest = thisPurchaseRequestList.find(
     //   (element) => element.purchase_request_id === data
     // );
-    // dispatcher(actions.setPurchaseRequestData(data));
-    // const initTotalPrice = [];
-    // let newTotalAmount = 0;
-    // for (const key in selectedPurchaseRequest.orders) {
-    //   if (selectedPurchaseRequest.orders[key].quantityLeft > 0) {
-    //     initTotalPrice.push({
-    //       ...initTotalPrice[key],
-    //       product: selectedPurchaseRequest.orders[key].product,
-    //       quantity: selectedPurchaseRequest.orders[key].quantityLeft,
-    //       unit: selectedPurchaseRequest.orders[key].unit,
-    //       orderId: selectedPurchaseRequest.orders[key].orderId,
-    //       itemType: selectedPurchaseRequest.orders[key].itemType,
-    //       unitPrice: selectedPurchaseRequest.orders[key].unitPrice,
-    //       totalPrice:
-    //         selectedPurchaseRequest.orders[key].quantityLeft *
-    //         selectedPurchaseRequest.orders[key].unitPrice,
-    //     });
-    //     newTotalAmount +=
-    //       selectedPurchaseRequest.orders[key].quantityLeft *
-    //       selectedPurchaseRequest.orders[key].unitPrice;
-    //     counterFlag += 1;
-    //   }
-    // }
-    // const newKey = uuid();
-    // setOrdersKey(newKey);
-    // setOrderCounter(counterFlag);
-    // dispatcher(actions.initOrders(initTotalPrice));
-    // setPurchaseRequestData(selectedPurchaseRequest);
-    // const newPurchaseOrderData = {
-    //   ...purchaseOrder,
-    //   purchaseRequestNo: selectedPurchaseRequest.purchaseRequestNo,
-    //   purchaseOrderNo: purchaseOrder.purchaseOrderNo,
-    //   requestedBy: selectedPurchaseRequest.requestedBy,
-    //   purchaseRequestId: selectedPurchaseRequest.id,
-    //   totalPrice: newTotalAmount,
-    //   orders: initTotalPrice,
-    // };
-    // setOrderState(newPurchaseOrderData.orders);
-    // setPurchaseOrderData(newPurchaseOrderData);
-    // console.log('newPurchaseOrderData: ', newPurchaseOrderData);
-    // dispatcher(actions.setPurchaseOrder(newPurchaseOrderData));
+    
   };
 
   const onDeleteClicked = (index, newerPurchaseRequest) => {
@@ -2727,7 +2745,7 @@ const AddPurchaseOrder = memo(() => {
                           marginLeft: "2.4%",
                         }}
                       >
-                        {purchaseRequest.requestedBy}
+                        {purchaseRequest.requested_by}
                       </Col>
                     </Row>
                     <Row>
