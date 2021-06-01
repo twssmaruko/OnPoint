@@ -153,7 +153,7 @@ const AddPurchaseOrder = memo(() => {
     if (purchaseRequestData !== 0) {
       const newPurchaseRequestOrders = [];
       for (const key in purchaseRequestData.orders) {
-        if (purchaseRequestData.orders[key].quantityLeft > 0) {
+        if (purchaseRequestData.orders[key].quantity_left > 0) {
           newPurchaseRequestOrders.push({
             ...purchaseRequestData.orders[key],
           });
@@ -162,7 +162,7 @@ const AddPurchaseOrder = memo(() => {
       }
       const newerPurchaseRequestOrders = [];
       for (const key in purchaseRequestData.orders) {
-        if (purchaseRequestData.orders[key].quantityLeft > 0) {
+        if (purchaseRequestData.orders[key].quantity_left > 0) {
           newerPurchaseRequestOrders.push({
             ...purchaseRequestData.orders[key],
           });
@@ -176,7 +176,7 @@ const AddPurchaseOrder = memo(() => {
       const ordersDisplay = newerPurchaseRequestData.orders.map(
         (order, index) => {
           const emptyOrders = [];
-          order.totalPrice = order.quantityLeft * order.unitPrice;
+          order.total_price = order.quantity_left * order.unit_price;
           setDisplayedOrders(emptyOrders);
           if (orderCounter === newCounterFlag) {
             return (
@@ -295,7 +295,6 @@ const AddPurchaseOrder = memo(() => {
         counterFlag += 1;
       }
     }
-    console.log('done');
     const newKey = uuid();
     setOrdersKey(newKey);
     setOrderCounter(counterFlag);
@@ -312,6 +311,7 @@ const AddPurchaseOrder = memo(() => {
     };
     setOrderState(newPurchaseOrderData.orders);
     setPurchaseOrderData(newPurchaseOrderData);
+    dispatcher(actions.setPurchaseOrder(newPurchaseOrderData));
     console.log('newPurchaseOrderData: ', newPurchaseOrderData);
   } catch (error) {
     console.error(error.message);
@@ -502,14 +502,14 @@ const AddPurchaseOrder = memo(() => {
           .toFixed(2)
           .replace(/\d(?=(\d{3})+\.)/g, "$&,");
         const price = values[`${data.product}price`];
-        const qty = values[`${data.product}quantityLeft`] || data.quantityLeft;
+        const qty = values[`${data.product}quantityLeft`] || data.quantity_left;
         const totalPrice = parseFloat(price * qty)
           .toFixed(2)
           .replace(/\d(?=(\d{3})+\.)/g, "$&,");
         return {
           ...data,
-          quantityLeft:
-            values[`${data.product}quantityLeft`] || data.quantityLeft,
+          quantity_left:
+            values[`${data.product}quantityLeft`] || data.quantity_left,
           unitPrice: newValues,
           category: values[`${data.product}category`],
           itemTotal: totalPrice,
@@ -526,8 +526,8 @@ const AddPurchaseOrder = memo(() => {
         return {
           ...data,
           //disabled: true,
-          quantityLeft:
-            data.quantityLeft - values[`${data.product}quantityLeft`] || 0,
+          quantity_left:
+            data.quantity_left - values[`${data.product}quantityLeft`] || 0,
         };
       }
       return data;
@@ -3188,7 +3188,7 @@ const AddPurchaseOrder = memo(() => {
                 <Form form={selectedForm}>
                   {transferParams.selectedKeys.map((selectedKey) => {
                     const {
-                      quantityLeft,
+                      quantity_left,
                     } = transferParams.ordersInTransfer.find(
                       (data) => data.key === selectedKey
                     );
@@ -3202,16 +3202,16 @@ const AddPurchaseOrder = memo(() => {
                             rules={[
                               {
                                 validator: (_, value) =>
-                                  value <= quantityLeft || value === undefined
+                                  value <= quantity_left || value === undefined
                                     ? Promise.resolve()
                                     : Promise.reject(
-                                      `Should not exceed ${quantityLeft}`
+                                      `Should not exceed ${quantity_left}`
                                     ),
                               },
                             ]}
                           >
                             <InputNumber
-                              placeholder={quantityLeft}
+                              placeholder={quantity_left}
                               style={{
                                 width: 100,
                                 border: "1px solid black",

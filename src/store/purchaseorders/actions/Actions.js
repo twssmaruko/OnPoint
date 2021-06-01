@@ -8,7 +8,7 @@ import * as actionTypes from '../ActionTypes';
 import axios from '../../../axios-orders';
 import OPC from '../../../api/OPC';
 import { RestOutlined } from '@ant-design/icons';
-import { onCreatePurchaseRequest } from '../../../graphql/subscriptions';
+import { onCreatePurchaseRequest, onDeletePurchaseRequest } from '../../../graphql/subscriptions';
 
 export const setPurchaseRequests = (data) => ({
   type: actionTypes.SET_PURCHASEREQUESTSINPURCHASEORDER,
@@ -165,8 +165,9 @@ export const setProject = (projectData) => {
 export const setPurchaseRequestData = (purchaseRequestId) => async (dispatch) => {
   try {
     dispatch(setLoading(true));
-    const fetchedPurchaseRequest = await axios.get('/purchaserequests/' + purchaseRequestId + '.json');
-    const newPurchaseRequest = fetchedPurchaseRequest.data
+    const prId = purchaseRequestId.purchase_request_id;
+    const fetchedPurchaseRequest = await OPC.get('/purchase_requests/' + prId);
+    const newPurchaseRequest = fetchedPurchaseRequest.data;
     dispatch(setPurchaseRequest(newPurchaseRequest));
     dispatch(setLoading(false));
   } catch (error) {
@@ -472,7 +473,7 @@ export const getPurchaseRequests = () => async (dispatch) => {
 
 export const fetchPurchaseOrderId = () => async (dispatch) => {
   dispatch(setLoading(true));
-  dispatch(setShowSpin2(true));
+  //dispatch(setShowSpin2(true));
   try {
     const response = await axios.get('/currentPurchaseOrderId.json');
     dispatch(setLoading(false));
@@ -659,13 +660,13 @@ export const getPurchaseRequestData = (data) => async (dispatch) => {
 
   try {
     dispatch(setShowSpin2(true));
-    const response = await axios.get('/purchaserequests/' + data + '.json');
+    const response = await OPC.get('/purchase_requests/' + data);
     // .then((response) => {
     //   dispatch(setShowSpin2(false));
     //   dispatch(setPurchaseRequest(response.data));
     // })
     dispatch(setShowSpin2(false));
-    dispatch(setPurchaseRequest(response.data));
+    dispatch(setPurchaseRequest(response.data[0]));
   } catch (error) {
     message.error('failed to retrieve purchase request');
     console.error(error);

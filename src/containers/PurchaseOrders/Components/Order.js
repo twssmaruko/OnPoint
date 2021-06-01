@@ -15,11 +15,11 @@ const Order = (props) => {
 
   const [orderState, setOrderState] = useState({
     product: order.product,
-    quantity: order.quantityLeft,
+    quantity: order.quantity_left,
     unit: order.unit,
     quantityReceived: 0,
     unitPrice: 0,
-    totalPrice: order.totalPrice,
+    totalPrice: order.total_price,
     category: ''
   });
 
@@ -41,16 +41,16 @@ const Order = (props) => {
 
   const onQuantityBlur = (data) => {
     const oldTotalPriceState = orderState;
-    if (data > order.quantityLeft) {
+    if (data > order.quantity_left) {
       message.error(`${'cannot exceed quantity requested for ' + order.product}`)
     }
     if (oldTotalPriceState.quantity === undefined) {
       setOrderState({
         ...oldTotalPriceState,
-        quantity: order.quantityLeft
+        quantity: order.quantity_left
       })
     }
-    const newTotalPrice = data * oldTotalPriceState.unitPrice
+    const newTotalPrice = data * oldTotalPriceState.unit_price
     const newOrderState = {
       ...oldTotalPriceState,
       product: order.product,
@@ -70,7 +70,7 @@ const Order = (props) => {
     if (oldTotalPriceState.quantity === undefined) {
       setOrderState({
         ...oldTotalPriceState,
-        quantity: order.quantityLeft
+        quantity: order.quantity_left
       })
     }
     const newTotalPrice = parseFloat(newData * parseFloat(oldTotalPriceState.quantity));
@@ -86,7 +86,7 @@ const Order = (props) => {
   }
 
   const validateQuantity = (data) => {
-    if (parseFloat(data) <= order.quantityLeft) {
+    if (parseFloat(data) <= order.quantity_left) {
       return {
         validateStatus: 'success',
         errorMsg: null
@@ -123,7 +123,7 @@ const Order = (props) => {
             <Form.Item style={{ marginBottom: 0 }}
               id={index + 'quantity'}
               name="quantity"
-              initialValue={order.quantityLeft}
+              initialValue={order.quantity_left}
               validateStatus={(e) => validateQuantity(e.target.value)}
               rules={[
                 {
@@ -131,7 +131,7 @@ const Order = (props) => {
                   message: 'Please Input Quantity'
                 }
               ]}>
-              <InputNumber id={index + 'quantity'} max={order.quantityLeft} onChange={(e) => onQuantityBlur(e)} style={{
+              <InputNumber id={index + 'quantity'} max={order.quantity_left} onChange={(e) => onQuantityBlur(e)} style={{
                 width: 60,
                 fontSize: 12
               }} />
@@ -142,7 +142,7 @@ const Order = (props) => {
             <Form.Item style={{ marginBottom: 0 }}
               id={index + 'unitPrice'}
               name="unitPrice"
-              initialValue={order.unitPrice}
+              initialValue={order.unit_price}
               rules={[
                 {
                   required: true,
