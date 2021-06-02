@@ -83,6 +83,7 @@ const AddPurchaseOrder = memo(() => {
     purchaseOrderNo,
     selectedVendor,
     purchaseOrder,
+    fetchedCategories,
     totalPrice,
     vendor,
     worksheet,
@@ -97,6 +98,7 @@ const AddPurchaseOrder = memo(() => {
       purchaseOrder: purchaseOrder.purchaseOrder,
       totalPrice: purchaseOrder.totalPrice,
       vendor: purchaseOrder.vendor,
+      fetchedCategories: purchaseOrder.categories,
       purchaseRequestList: purchaseOrder.purchaseRequests,
       //purchaseRequestProducts: purchaseOrder.purchaseRequest,
       vendorsList: vendor.vendors,
@@ -172,7 +174,6 @@ const AddPurchaseOrder = memo(() => {
         ...purchaseRequestData,
         orders: newerPurchaseRequestOrders,
       };
-      console.log("newerPurchaseRequest: ", newerPurchaseRequestData);
       const ordersDisplay = newerPurchaseRequestData.orders.map(
         (order, index) => {
           const emptyOrders = [];
@@ -255,73 +256,70 @@ const AddPurchaseOrder = memo(() => {
     purchaseOrderData,
   ]);
 
-  const onSelectClick = async(data) => {
+  const onSelectClick = async (data) => {
     const today = new Date();
     let counterFlag = 0;
-    console.log('data: ', data);
-  try {
-    const fetchedPurchaseRequest = await OPC.get('/purchase_requests/' + data);
-    const fetchedOrders = await OPC.get('/purchase_requests/orders/' + data);
-    const orders = [];
-    for(const key in fetchedOrders.data) {
-      orders.push(fetchedOrders.data[key]);
-    }
-    const selectedPurchaseRequest = {
-      ...fetchedPurchaseRequest.data,
-      orders: orders
-    }
-
-    console.log('selectedPurchaseRequest: ',selectedPurchaseRequest);
-    dispatcher(actions.setPurchaseRequestData(selectedPurchaseRequest));
-    const initTotalPrice = [];
-    let newTotalAmount = 0;
-    for (const key in selectedPurchaseRequest.orders) {
-      if (selectedPurchaseRequest.orders[key].quantity_left > 0) {
-        initTotalPrice.push({
-          ...initTotalPrice[key],
-          product: selectedPurchaseRequest.orders[key].product,
-          quantity: selectedPurchaseRequest.orders[key].quantity_left,
-          unit: selectedPurchaseRequest.orders[key].unit,
-          orderId: selectedPurchaseRequest.orders[key].purchase_request_order_id,
-          itemType: selectedPurchaseRequest.orders[key].item_type,
-          unitPrice: selectedPurchaseRequest.orders[key].unit_price,
-          totalPrice:
-            selectedPurchaseRequest.orders[key].quantity_left *
-            selectedPurchaseRequest.orders[key].unit_price,
-        });
-        newTotalAmount +=
-          selectedPurchaseRequest.orders[key].quantity_left *
-          selectedPurchaseRequest.orders[key].unit_price;
-        counterFlag += 1;
+    try {
+      const fetchedPurchaseRequest = await OPC.get('/purchase_requests/' + data);
+      const fetchedOrders = await OPC.get('/purchase_requests/orders/' + data);
+      const orders = [];
+      for (const key in fetchedOrders.data) {
+        orders.push(fetchedOrders.data[key]);
       }
+      const selectedPurchaseRequest = {
+        ...fetchedPurchaseRequest.data,
+        orders: orders
+      }
+
+      dispatcher(actions.setPurchaseRequestData(selectedPurchaseRequest));
+      const initTotalPrice = [];
+      let newTotalAmount = 0;
+      for (const key in selectedPurchaseRequest.orders) {
+        if (selectedPurchaseRequest.orders[key].quantity_left > 0) {
+          initTotalPrice.push({
+            ...initTotalPrice[key],
+            product: selectedPurchaseRequest.orders[key].product,
+            quantity: selectedPurchaseRequest.orders[key].quantity_left,
+            unit: selectedPurchaseRequest.orders[key].unit,
+            orderId: selectedPurchaseRequest.orders[key].purchase_request_order_id,
+            itemType: selectedPurchaseRequest.orders[key].item_type,
+            unitPrice: selectedPurchaseRequest.orders[key].unit_price,
+            totalPrice:
+              selectedPurchaseRequest.orders[key].quantity_left *
+              selectedPurchaseRequest.orders[key].unit_price,
+          });
+          newTotalAmount +=
+            selectedPurchaseRequest.orders[key].quantity_left *
+            selectedPurchaseRequest.orders[key].unit_price;
+          counterFlag += 1;
+        }
+      }
+      const newKey = uuid();
+      setOrdersKey(newKey);
+      setOrderCounter(counterFlag);
+      dispatcher(actions.initOrders(initTotalPrice));
+      setPurchaseRequestData(selectedPurchaseRequest);
+      const newPurchaseOrderData = {
+        ...purchaseOrder,
+        purchaseRequestNo: selectedPurchaseRequest.purchase_request_number,
+        purchaseOrderNo: purchaseOrder.purchaseOrderNo,
+        requestedBy: selectedPurchaseRequest.requested_by,
+        purchaseRequestId: selectedPurchaseRequest.purchase_request_id,
+        totalPrice: newTotalAmount,
+        orders: initTotalPrice,
+      };
+      setOrderState(newPurchaseOrderData.orders);
+      setPurchaseOrderData(newPurchaseOrderData);
+      dispatcher(actions.setPurchaseOrder(newPurchaseOrderData));
+    } catch (error) {
+      console.error(error.message);
     }
-    const newKey = uuid();
-    setOrdersKey(newKey);
-    setOrderCounter(counterFlag);
-    dispatcher(actions.initOrders(initTotalPrice));
-    setPurchaseRequestData(selectedPurchaseRequest);
-    const newPurchaseOrderData = {
-      ...purchaseOrder,
-      purchaseRequestNo: selectedPurchaseRequest.purchase_request_number,
-      purchaseOrderNo: purchaseOrder.purchaseOrderNo,
-      requestedBy: selectedPurchaseRequest.requested_by,
-      purchaseRequestId: selectedPurchaseRequest.purchase_request_id,
-      totalPrice: newTotalAmount,
-      orders: initTotalPrice,
-    };
-    setOrderState(newPurchaseOrderData.orders);
-    setPurchaseOrderData(newPurchaseOrderData);
-    dispatcher(actions.setPurchaseOrder(newPurchaseOrderData));
-    console.log('newPurchaseOrderData: ', newPurchaseOrderData);
-  } catch (error) {
-    console.error(error.message);
-  }
     // dispatcher(actions.getPurchaseRequests());
     // const thisPurchaseRequestList = [...purchaseRequestList];
     // const selectedPurchaseRequest = thisPurchaseRequestList.find(
     //   (element) => element.purchase_request_id === data
     // );
-    
+
   };
 
   const onDeleteClicked = (index, newerPurchaseRequest) => {
@@ -348,7 +346,7 @@ const AddPurchaseOrder = memo(() => {
     //  ordersToDisplay2(newPurchaseRequest);
   };
 
-  const setProject = (selectedProject) => {
+  const setProject = async (selectedProject) => {
     if (!selectedProject) {
       setSelectedProject({});
       return;
@@ -357,7 +355,19 @@ const AddPurchaseOrder = memo(() => {
       (data) => data.project_id === selectedProject
     );
     setSelectedProject(projectSelected);
+
     const categories = [];
+
+    try {
+      const response = await OPC.get('/project_categories/' + selectedProject);
+      for (const key in response.data) {
+        categories.push(response.data[key].subcategory_category);
+      }
+      console.log('fetchedCategories: ', categories);
+      setProjectCategories(categories);
+    } catch (error) {
+      console.error(error.message);
+    }
 
     setPurchaseOrderData({
       ...purchaseOrderData,
@@ -365,7 +375,8 @@ const AddPurchaseOrder = memo(() => {
     });
     const newPurchaseOrderData = {
       ...purchaseOrder,
-      project: projectSelected.project_id
+      project: projectSelected.project_id,
+      projectCode: projectSelected.project_code
     };
     dispatcher(actions.setPurchaseOrder(newPurchaseOrderData));
     setProjectCategories(categories);
@@ -789,9 +800,9 @@ const AddPurchaseOrder = memo(() => {
               </View>
 
               <View style={{ flex: 3 }}>
-                <Text style={{ marginBottom: 2 }}>{vendor.vendorName}</Text>
+                <Text style={{ marginBottom: 2 }}>{vendor.name}</Text>
                 <Text style={{ marginBottom: 2 }}>{vendor.location}</Text>
-                <Text style={{ marginBottom: 2 }}>{vendor.telNo}</Text>
+                <Text style={{ marginBottom: 2 }}>{vendor.tel_no}</Text>
                 <Text style={{ marginBottom: 2 }}>{vendor.terms}</Text>
               </View>
             </View>
@@ -835,7 +846,7 @@ const AddPurchaseOrder = memo(() => {
                 <Text style={{ marginBottom: 2 }}>
                   {purchaseOrder.requestedBy}
                 </Text>
-                <Text style={{ marginBottom: 2 }}>{purchaseOrder.project}</Text>
+                <Text style={{ marginBottom: 2 }}>{purchaseOrder.projectCode}</Text>
                 <Text style={{ marginBottom: 2 }}></Text>
               </View>
             </View>
@@ -1302,9 +1313,9 @@ const AddPurchaseOrder = memo(() => {
               </View>
 
               <View style={{ flex: 3 }}>
-                <Text style={{ marginBottom: 2 }}>{vendor.vendorName}</Text>
+                <Text style={{ marginBottom: 2 }}>{vendor.name}</Text>
                 <Text style={{ marginBottom: 2 }}>{vendor.location}</Text>
-                <Text style={{ marginBottom: 2 }}>{vendor.telNo}</Text>
+                <Text style={{ marginBottom: 2 }}>{vendor.tel_no}</Text>
                 <Text style={{ marginBottom: 2 }}>{vendor.terms}</Text>
               </View>
             </View>
@@ -1348,7 +1359,7 @@ const AddPurchaseOrder = memo(() => {
                 <Text style={{ marginBottom: 2 }}>
                   {purchaseOrder.requestedBy}
                 </Text>
-                <Text style={{ marginBottom: 2 }}>{purchaseOrder.project}</Text>
+                <Text style={{ marginBottom: 2 }}>{purchaseOrder.projectCode}</Text>
                 <Text style={{ marginBottom: 2 }}></Text>
               </View>
             </View>
@@ -1815,9 +1826,9 @@ const AddPurchaseOrder = memo(() => {
               </View>
 
               <View style={{ flex: 3 }}>
-                <Text style={{ marginBottom: 2 }}>{vendor.vendorName}</Text>
+                <Text style={{ marginBottom: 2 }}>{vendor.name}</Text>
                 <Text style={{ marginBottom: 2 }}>{vendor.location}</Text>
-                <Text style={{ marginBottom: 2 }}>{vendor.telNo}</Text>
+                <Text style={{ marginBottom: 2 }}>{vendor.tel_no}</Text>
                 <Text style={{ marginBottom: 2 }}>{vendor.terms}</Text>
               </View>
             </View>
@@ -1861,7 +1872,7 @@ const AddPurchaseOrder = memo(() => {
                 <Text style={{ marginBottom: 2 }}>
                   {purchaseOrder.requestedBy}
                 </Text>
-                <Text style={{ marginBottom: 2 }}>{purchaseOrder.project}</Text>
+                <Text style={{ marginBottom: 2 }}>{purchaseOrder.projectCode}</Text>
                 <Text style={{ marginBottom: 2 }}></Text>
               </View>
             </View>
@@ -3327,20 +3338,21 @@ const AddPurchaseOrder = memo(() => {
               <Modal
                 visible={myDocumentVisible}
                 title="Proceed?"
+                maskClosable={false}
                 onCancel={noClick}
+                okButtonProps = {{visible: false, disabled: true}}
                 onOk={onProceed}
               >
                 {/* <PDFViewer style={{ height: "100%" }}>
                   {printDocument}
                 </PDFViewer> */}
-                <Button onOK={onProceed}>
-                  <PDFDownloadLink
-                    fileName={purchaseOrder.purchaseOrderNo}
-                    document={printDocument}
-                  >
-                    Download
-                  </PDFDownloadLink>
-                </Button>
+                <PDFDownloadLink
+                  fileName={purchaseOrder.purchaseOrderNo}
+                  document={printDocument}
+                >
+                  {({ blob, url, loading, error }) => (loading ? 'Preparing document...' : <Button style={{ backgroundColor: "#13407F",
+                  color: "white",}} onClick = {onProceed}>Download & Save</Button>)}
+                </PDFDownloadLink>
               </Modal>
             </div>
           </Col>

@@ -3,7 +3,7 @@ const budgetDB = require('./budget/queries');
 
 const getProjects = async (req, res) => {
     try {
-        
+
         const fetchedProjects = await pool.query('SELECT * FROM project');
         res.json(fetchedProjects.rows);
 
@@ -12,17 +12,38 @@ const getProjects = async (req, res) => {
     }
 }
 
+const getProjectCode = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const fetchedCode = await pool.query('SELECT project_code FROM project WHERE project_id = $1', [id]);
+        res.json(fetchedCode.rows);
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+
+const getCategories = async (req, res) => {
+    try {
+        const { id } = req.params
+        const fetchedCategories = await pool.query('SELECT subcategory_category FROM subcategory_item WHERE project_id = $1', [id]);
+        res.json(fetchedCategories.rows);
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+
 const getProject = async (req, res) => {
     try {
-        const {id} = req.params;
-        if(id === 'budgets') {
+        const { id } = req.params;
+        if (id === 'budgets') {
             budgetDB.getBudgets(req, res);
-        } else if (id ==='project_id') {
+        } else if (id === 'project_id') {
             const fetchedProjectId = await pool.query('SELECT MAX(project_id) FROM project');
             res.json(fetchedProjectId.rows[0]);
-        }else {
+        } else {
             const fetchedProject = await pool.query('SELECT * FROM project WHERE project_id = $1', [id]);
-            
+
             res.json(fetchedProject.rows);
         }
     } catch (err) {
@@ -32,9 +53,9 @@ const getProject = async (req, res) => {
 
 const createProject = async (req, res) => {
     try {
-        const {project_location, project_status, client_name, project_code, project_name} = req.body;
+        const { project_location, project_status, client_name, project_code, project_name } = req.body;
         const createdProject = await pool.query('INSERT INTO project (project_location, project_status, client_name, project_code, project_name) VALUES ($1, $2, $3, $4, $5)',
-        [project_location, project_status, client_name, project_code, project_name]);
+            [project_location, project_status, client_name, project_code, project_name]);
         res.json(createdProject.rows);
 
     } catch (err) {
@@ -44,7 +65,7 @@ const createProject = async (req, res) => {
 
 const deleteProject = async (req, res) => {
     try {
-        const {id} = req.params;
+        const { id } = req.params;
         const deletedSubcategoryItems = await pool.query('DELETE FROM subcategory_item WHERE project_id = $1', [id]);
         const deletedSubcategories = await pool.query('DELETE FROM budget_subcategory WHERE project_id = $1', [id]);
         const deletedBudgetCosts = await pool.query('DELETE FROM budget_cost WHERE project_id = $1', [id]);
@@ -58,7 +79,9 @@ const deleteProject = async (req, res) => {
 
 module.exports = {
     getProjects,
+    getCategories,
     getProject,
+    getProjectCode,
     createProject,
     deleteProject
 }

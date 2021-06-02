@@ -73,14 +73,14 @@ const PurchaseOrderTable = memo(() => {
   //     : <CloseCircleFilled style={{marginLeft: 20,
   //       color: 'red'}} />;
   const poStatusDisplay = (status) => {
-    if (status === 'pending') {
+    if (status === 'PENDING') {
       return <div>PENDING<ExclamationCircleOutlined style={{
         marginLeft: 20,
         color: 'orange'
       }} /></div>
     }
 
-    else if (status === 'received') {
+    else if (status === 'RECEIVED') {
       return <div> RECEIVED
       <CheckCircleFilled style={{
           marginLeft: 20,
@@ -94,9 +94,9 @@ const PurchaseOrderTable = memo(() => {
     }
   }
 
-  const poNumberDisplay = (data) => `${data.purchaseOrderNo}`;
+  const poNumberDisplay = (data) => `${data.purchase_order_number}`;
   const projectDisplay = (data) => `${data.project}`;
-  const prDisplay = (data) => `${data.purchaseRequestNo}`;
+  const prDisplay = (data) => `${data.purchaseRequestNumber}`;
 
   const onDeleteConfirmed = () => {
     dispatcher(actions.deletePurchaseOrder(deleteId));
@@ -169,15 +169,15 @@ const PurchaseOrderTable = memo(() => {
     },
     {
       title: 'PO Number',
-      key: 'purchaseOrderNo',
+      key: 'purchase_order_number',
       width: 250,
       defaultSortOrder: 'ascend',
-      sorter: (a, b) => b.purchaseOrderId - a.purchaseOrderId,
+      sorter: (a, b) => b.purchase_order_id - a.purchase_order_id,
       render: poNumberDisplay
     },
     {
       title: 'Project',
-      key: 'project',
+      key: 'project_id',
       width: 250,
       render: projectDisplay
     },
@@ -190,16 +190,16 @@ const PurchaseOrderTable = memo(() => {
     },
     {
       title: 'PR',
-      key: 'purchaseRequestNo',
+      key: 'purchase_request_id',
       width: 250,
       render: prDisplay
     },
     {
       title: 'Requested On',
-      dataIndex: 'dateCreated',
-      key: 'dateCreated',
+      dataIndex: 'date_created',
+      key: 'date_created',
       width: 250,
-      render: (createdAt) => moment(createdAt).format('MMMM Do YYYY, h:mm:ss A')
+      render: (createdAt) => moment(createdAt).format('MMMM Do YYYY')
     },
     {
       title: 'Cancel',
@@ -338,7 +338,7 @@ const PurchaseOrderTable = memo(() => {
                   columns={columns}
                   dataSource={checkDisplay()}
                   size="small"
-                  rowKey="id"
+                  rowKey="purchase_order_id"
                   pagination={{
                     pageSize: 10
                   }}
@@ -349,7 +349,7 @@ const PurchaseOrderTable = memo(() => {
                   columns={columns}
                   dataSource={checkDisplay()}
                   size="small"
-                  rowKey="id"
+                  rowKey="purchase_order_id"
                   pagination={{
                     pageSize: 10
                   }}

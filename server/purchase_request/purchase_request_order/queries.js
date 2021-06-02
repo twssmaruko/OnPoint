@@ -19,6 +19,17 @@ const getPurchaseRequestOrder = async(req,res) => {
     }
 }
 
+const editPurchaseRequestOrder = async(req, res) => {
+    try {
+
+        const { id } = req.params;
+        const { quantity_left } = req.body;
+        
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+
 
 const createPurchaseRequestOrder = async (req, res) => {
     try {

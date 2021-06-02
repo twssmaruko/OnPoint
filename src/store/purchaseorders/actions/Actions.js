@@ -77,10 +77,29 @@ const deletePurchaseOrderInStore = (id, data) => ({
   data
 })
 
+const setCategoriesInStore = (data) => ({
+  type: actionTypes.SET_CATEGORIES,
+  data
+})
+
 export const setSamplePurchaseOrder = (data) => ({
   type: actionTypes.SET_SAMPLE_PURCHASEORDER,
   data
 })
+
+export const setCategories = (data) => async (dispatch) => {
+  const fetchedCategories = [];
+  try {
+    const response = await OPC.get('/project_categories/' + data.project_id);
+    console.log(response.data);
+    for (const key in response.data) {
+      fetchedCategories.push(response.data[key].subcategory_category);
+    }
+    dispatch(setCategoriesInStore(fetchedCategories));
+  } catch (error) {
+    console.error(error.message);
+  }
+}
 
 export const getSamplePO = () => async (dispatch) => {
   const fetchedPurchaseOrders = [];
@@ -359,7 +378,29 @@ export const fetchPurchaseOrders = () => async (dispatch) => {
   dispatch(setShowSpin2(true));
   dispatch(setLoading(true));
   try {
-    const fetchedPurchaseOrders = await OPC.get('/purchase_orders');
+    const response = await OPC.get('/purchase_orders');
+    const fetchedPurchaseOrders = [];
+    for(const key in response.data) {
+      const projectCode = await OPC.get('/project_code/' + response.data[key].project_id);
+      const prNumber = await OPC.get('/purchase_request_number/' + response.data[key].purchase_request_id);
+      fetchedPurchaseOrders.push({
+        ...response.data[key],
+        project: projectCode.data[0].project_code,
+        purchaseRequestNumber: prNumber.data[0].purchase_request_number
+      })
+    }
+    const pendingPurchaseOrders = [];
+    for(const key in fetchedPurchaseOrders) {
+      if(fetchedPurchaseOrders[key].status === 'PENDING' || fetchedPurchaseOrders[key].status === 'CANCELLED') {
+        pendingPurchaseOrders.push({
+          ...fetchedPurchaseOrders[key]
+        })
+      }
+    }
+
+
+
+    dispatch(fetchPurchaseOrdersToStore(fetchedPurchaseOrders, pendingPurchaseOrders));
     dispatch(setShowSpin2(false));
   } catch (err) {
     console.error(err.message);
@@ -438,7 +479,6 @@ export const getPurchaseRequests = () => async (dispatch) => {
   dispatch(setShowSpin1(true));
   try {
     const response = await OPC.get('/purchase_requests');
-    console.log('purchase_requests: ', response.data);
     dispatch(setPurchaseRequests(response.data))
     dispatch(setShowSpin1(false));
   } catch (err) {
@@ -493,106 +533,151 @@ export const addPurchaseOrder = (purchaseOrderData) => async (dispatch) => {
   console.log('purchaseOrderData: ', purchaseOrderData);
   const date = new Date();
   const newDate = moment(date, 'DD-MM-YYYY');
-
-  const fetchedPurchaseRequests = await axios.get('/purchaserequests.json');
-  const purchaseRequests = []
-  for (const key in fetchedPurchaseRequests.data) {
-    purchaseRequests.push({
-      ...fetchedPurchaseRequests.data[key],
-      id: key
-    })
-  }
-  const selectedPurchaseRequest = purchaseRequests.find((element) =>
-    element.id === purchaseOrderData.purchaseRequestId);
-
-  const newPurchaseRequestOrders = [];
-  for (const key in selectedPurchaseRequest.orders) {
-    const orderFound = purchaseOrderData.orders.find((element) =>
-      element.orderId === selectedPurchaseRequest.orders[key].orderId);
-    if (orderFound === undefined) {
-      newPurchaseRequestOrders.push({
-        ...selectedPurchaseRequest.orders[key]
-      })
-
-    } else {
-      const newQuantityLeft = selectedPurchaseRequest.orders[key].quantityLeft - orderFound.quantity
-      newPurchaseRequestOrders.push({
-        ...selectedPurchaseRequest.orders[key],
-        quantityLeft: newQuantityLeft,
-        purchaseOrderNo: purchaseOrderData.purchaseOrderNo
-      })
-    }
-  }
-
-
-  let prFlag = 0;
-  let newPrStatus = 'PENDING';
-  for (const key in newPurchaseRequestOrders) {
-    if (newPurchaseRequestOrders[key].quantityLeft === 0 ||
-      newPurchaseRequestOrders[key].quantityLeft === undefined) {
-      prFlag += 1;
-    }
-  }
-
-  if (prFlag === newPurchaseRequestOrders.length) {
-    newPrStatus = 'ORDERED';
-  }
-
-  const newPurchaseRequest = {
-    ...selectedPurchaseRequest,
-    orders: newPurchaseRequestOrders,
-    status: newPrStatus
-  }
-
-  const currentPurchaseOrderNo = await axios.get('/currentPurchaseOrderId.json');
-  const updatedPurchaseOrderOrders = [];
-  for (const key in purchaseOrderData.orders) {
-    if (purchaseOrderData.orders[key].quantity !== 0) {
-      updatedPurchaseOrderOrders.push({
-        ...purchaseOrderData.orders[key],
-      })
-    }
-  }
-  console.log(purchaseOrderData);
-  const newPurchaseOrderId = currentPurchaseOrderNo.data;
-  const purchaseOrderNoDisplay = purchaseOrderData.purchaseOrderNo
-  const purchaseOrderIdDisplay = purchaseOrderData.purchaseOrderNo
-  const newPurchaseOrderData = {
-    ...purchaseOrderData,
-    orders: updatedPurchaseOrderOrders,
-    purchaseOrderNo: purchaseOrderNoDisplay,
-    dateCreated: newDate
-  }
-  const newPurchaseOrderNo = parseFloat(purchaseOrderIdDisplay) + 1
   try {
+    const fetchedPurchaseRequest = await OPC.get('/purchase_requests/' + purchaseOrderData.purchaseRequestId);
+    const fetchedOrders = await OPC.get('/purchase_requests/orders/' + purchaseOrderData.purchaseRequestId);
 
-    await axios.put('/purchaserequests/' + selectedPurchaseRequest.id + '.json', newPurchaseRequest);
-    //await axios.put('/currentPurchaseOrderId.json', newPurchaseOrderNo)
-    await axios.post('/purchaseorders.json', newPurchaseOrderData);
+    const purchaseRequest = {
+      ...fetchedPurchaseRequest.data,
+      orders: fetchedOrders.data
+    }
+    const newPurchaseOrder = {
+      purchase_request_id: purchaseOrderData.purchaseRequestId,
+      vendor_id: purchaseOrderData.vendor,
+      project_id: purchaseOrderData.project,
+      notes: purchaseOrderData.notes,
+      purchase_order_number: purchaseOrderData.purchaseOrderNo,
+      date_created: date,
+      requested_by: purchaseOrderData.requestedBy,
+      status: 'PENDING',
+      total_price: purchaseOrderData.totalPrice
+    }
+    const createdPurchaseOrder = await OPC.post('/purchase_orders', newPurchaseOrder);
+    const fetchedId = await OPC.get('/purchase_orders/last_id');
+    const purchaseOrderId = fetchedId.data[0].max;
+    console.log('purchaseRequest: ', purchaseRequest);
+    console.log('purchaseOrderId: ', purchaseOrderId);
 
-    // console.log(response.data);
-    dispatch(setLoading(false));
-    dispatch(setShowSpin2(false));
-    alert('Purchase order created!');
-    dispatch(setOpenModal1(false));
-    window.location.reload(false);
+    for (const key in purchaseOrderData.orders) {
+      const purchaseOrderOrders = {
+        purchase_order_id: purchaseOrderId,
+        item_type: purchaseOrderData.orders[key].itemType,
+        product: purchaseOrderData.orders[key].product,
+        quantity: purchaseOrderData.orders[key].quantity,
+        quantity_received: 0,
+        unit: purchaseOrderData.orders[key].unit,
+        category: '',
+        unit_price: purchaseOrderData.orders[key].unitPrice,
+        total_price: purchaseOrderData.orders[key].totalPrice
+      }
 
+      const newOrder = await OPC.post('/purchase_orders/orders', purchaseOrderOrders);
+
+    }
+  message.success('Purchase Order Created!');
+  window.location.reload(false);
   } catch (error) {
-    message.error('Failed to add purchase order');
-    dispatch(setLoading(false));
-    console.error(error);
+    message.error('unable to create purchase order');
+    console.error(error.message);
   }
+  const purchaseRequests = []
+  // for (const key in fetchedPurchaseRequests.data) {
+  //   purchaseRequests.push({
+  //     ...fetchedPurchaseRequests.data[key],
+  //     id: key
+  //   })
+  // }
+  // const selectedPurchaseRequest = purchaseRequests.find((element) =>
+  //   element.id === purchaseOrderData.purchaseRequestId);
+
+  // const newPurchaseRequestOrders = [];
+  // for (const key in selectedPurchaseRequest.orders) {
+  //   const orderFound = purchaseOrderData.orders.find((element) =>
+  //     element.orderId === selectedPurchaseRequest.orders[key].orderId);
+  //   if (orderFound === undefined) {
+  //     newPurchaseRequestOrders.push({
+  //       ...selectedPurchaseRequest.orders[key]
+  //     })
+
+  //   } else {
+  //     const newQuantityLeft = selectedPurchaseRequest.orders[key].quantityLeft - orderFound.quantity
+  //     newPurchaseRequestOrders.push({
+  //       ...selectedPurchaseRequest.orders[key],
+  //       quantityLeft: newQuantityLeft,
+  //       purchaseOrderNo: purchaseOrderData.purchaseOrderNo
+  //     })
+  //   }
+  // }
+
+
+  // let prFlag = 0;
+  // let newPrStatus = 'PENDING';
+  // for (const key in newPurchaseRequestOrders) {
+  //   if (newPurchaseRequestOrders[key].quantityLeft === 0 ||
+  //     newPurchaseRequestOrders[key].quantityLeft === undefined) {
+  //     prFlag += 1;
+  //   }
+  // }
+
+  // if (prFlag === newPurchaseRequestOrders.length) {
+  //   newPrStatus = 'ORDERED';
+  // }
+
+  // const newPurchaseRequest = {
+  //   ...selectedPurchaseRequest,
+  //   orders: newPurchaseRequestOrders,
+  //   status: newPrStatus
+  // }
+
+  // const currentPurchaseOrderNo = await axios.get('/currentPurchaseOrderId.json');
+  // const updatedPurchaseOrderOrders = [];
+  // for (const key in purchaseOrderData.orders) {
+  //   if (purchaseOrderData.orders[key].quantity !== 0) {
+  //     updatedPurchaseOrderOrders.push({
+  //       ...purchaseOrderData.orders[key],
+  //     })
+  //   }
+  // }
+  // console.log(purchaseOrderData);
+  // const newPurchaseOrderId = currentPurchaseOrderNo.data;
+  // const purchaseOrderNoDisplay = purchaseOrderData.purchaseOrderNo
+  // const purchaseOrderIdDisplay = purchaseOrderData.purchaseOrderNo
+  // const newPurchaseOrderData = {
+  //   ...purchaseOrderData,
+  //   orders: updatedPurchaseOrderOrders,
+  //   purchaseOrderNo: purchaseOrderNoDisplay,
+  //   dateCreated: newDate
+  // }
+  // const newPurchaseOrderNo = parseFloat(purchaseOrderIdDisplay) + 1
+  // try {
+
+  //   await axios.put('/purchaserequests/' + selectedPurchaseRequest.id + '.json', newPurchaseRequest);
+  //   //await axios.put('/currentPurchaseOrderId.json', newPurchaseOrderNo)
+  //   await axios.post('/purchaseorders.json', newPurchaseOrderData);
+
+  //   // console.log(response.data);
+  //   dispatch(setLoading(false));
+  //   dispatch(setShowSpin2(false));
+  //   alert('Purchase order created!');
+  //   dispatch(setOpenModal1(false));
+  //   window.location.reload(false);
+
+  // } catch (error) {
+  //   message.error('Failed to add purchase order');
+  //   dispatch(setLoading(false));
+  //   console.error(error);
+  // }
 
 
 }
 
-export const fetchPurchaseRequest = (prId) => async(dispatch) => {
+export const fetchPurchaseRequest = (prId) => async (dispatch) => {
   dispatch(setShowSpin2(true));
   try {
     const purchaseRequest = await OPC.get('/purchase_requests/' + prId);
     const purchaseRequestOrders = await OPC.get('/purchase_requests/orders/' + prId);
     const orders = [];
-    for(const key in purchaseRequestOrders.data) {
+    for (const key in purchaseRequestOrders.data) {
       orders.push(purchaseRequestOrders.data[key]);
     }
     const selectedPurchaseRequest = {

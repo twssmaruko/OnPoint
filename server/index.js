@@ -12,6 +12,7 @@ const budgetDB = require('./project/budget/queries');
 const budgetCostDB = require('./project/budget/budget_cost/queries');
 const subcategoryItemDB = require('./project/budget/budget_subcategory/subcategory_item/queries');
 const purchaseOrderDB = require('./purchase_order/purchase_order');
+const purchaseOrderOrderDB = require('./purchase_order/order/order');
 
 //middlware
 
@@ -37,6 +38,7 @@ app.put('/vendors/:id', vendorDB.updateVendor);
 
 //PURCHASE REQUESTS
 
+app.get('/purchase_request_number/:id', purchaseRequestDB.getPurchaseRequestNumber);
 app.get('/purchase_requests', purchaseRequestDB.getPurchaseRequests);
 app.get('/purchase_requests/:id', purchaseRequestDB.getPurchaseRequest);
 app.get('/last_id', purchaseRequestDB.getLastPurchaseRequestID);
@@ -51,9 +53,11 @@ app.post('/purchase_requests/orders', purchaseRequestOrderDB.createPurchaseReque
 
 //PROJECTS
 
+app.get('/project_code/:id', projectDB.getProjectCode);
 app.get('/projects', projectDB.getProjects);
 app.get('/projects/:id', projectDB.getProject);
 app.get('projects/project_id', projectDB.getProject);
+app.get('/project_categories/:id', projectDB.getCategories);
 app.post('/projects', projectDB.createProject);
 app.delete('/projects/:id', projectDB.deleteProject);
 
@@ -89,6 +93,12 @@ app.get('/purchase_orders' , purchaseOrderDB.getPurchaseOrders);
 app.get('/purchase_orders/:id', purchaseOrderDB.getPurchaseOrder);
 app.post('/purchase_orders', purchaseOrderDB.createPurchaseOrder);
 // app.delete('/purchase_orders/:id', purchaseOrderDB.deletePurchaseOrder);
+
+//PURCHASE ORDER ORDERS
+
+app.get('/purchase_orders/orders', purchaseOrderOrderDB.getPurchaseOrderOrders);
+app.get('/purchase_orders/orders/:id', purchaseOrderOrderDB.getPurchaseOrderOrder);
+app.post('/purchase_orders/orders', purchaseOrderOrderDB.createPurchaseOrderOrder);
 
 
 app.listen(5000, () => {

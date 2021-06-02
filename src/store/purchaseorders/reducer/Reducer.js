@@ -35,7 +35,8 @@ const initialState = {
   purchaseOrderId: 0,
   purchaseOrders: [],
   purchaseOrdersPending: [],
-  purchaseRequest: 0
+  purchaseRequest: 0,
+  categories: []
 };
 
 const setPurchaseRequestsInPurchaseOrder = (state, action) => updateObject(state,
@@ -80,6 +81,10 @@ const setSamplePurchaseOrder = (state, action) => updateObject(state, {
   samplePO: action.data
 })
 
+const setCategories = (state, action) => updateObject(state, {
+  categories: action.data
+})
+
 const deletePurchaseOrder = (state, action) => {
   const newPurchaseOrders = updateObject(action.data, {id: action.id})
   const statePurchaseOrders = state.purchaseOrders;
@@ -119,6 +124,7 @@ const purchaseOrderReducer = (state = initialState, action) => {
   case actions.SET_SAMPLE_PURCHASEORDER: return setSamplePurchaseOrder(state, action);
   case actions.DELETE_PURCHASEORDER: return deletePurchaseOrder(state, action);
   case actions.FETCH_WORKSHEET: return fetchWorksheet(state, action);
+  case actions.SET_CATEGORIES: return setCategories(state, action);
   default:
     return state;
   }

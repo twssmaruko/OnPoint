@@ -9,6 +9,17 @@ const getPurchaseRequests = async (req, res) => {
     }
 }
 
+const getPurchaseRequestNumber = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const fetchedNumber = await pool.query('SELECT purchase_request_number FROM purchase_request WHERE purchase_request_id = $1', [id])
+        res.json(fetchedNumber.rows);
+    } catch (error) {
+        
+    }
+}
+
 const getPurchaseRequest = async (req, res) => {
     try {
 
@@ -65,6 +76,7 @@ const deletePurchaseRequest = async (req, res) => {
 module.exports = {
     getPurchaseRequests,
     getPurchaseRequest,
+    getPurchaseRequestNumber,
     getLastPurchaseRequestID,
     deletePurchaseRequest,
     createPurchaseRequest,
