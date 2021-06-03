@@ -31,6 +31,16 @@ const fetchVendorToStore = (data) => ({
   data
 })
 
+const compare = (a, b) => {
+  if(a.name < b.name) {
+    return -1;
+  }
+  if(a.name > b.name) {
+    return 1;
+  }
+  return 0;
+}
+
 export const fetchVendors = () => async(dispatch) => {
   try {
     //const body = {vendors};
@@ -43,6 +53,7 @@ export const fetchVendors = () => async(dispatch) => {
         ...response.data[key],
       })
     }
+    fetchedVendors.sort(compare);
    dispatch(fetchVendorsSuccess(fetchedVendors));
   } catch (err) {
     console.error(err.message);

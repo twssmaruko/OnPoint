@@ -1,15 +1,17 @@
 const pool = require('../db');
-
 const createVendor = async (req, res) => {
+   
+
     try {
-        const {name, location, tel_no, terms} = req.body;
-        const newVendor = await pool.query('INSERT INTO vendor (name, location, tel_no, terms) VALUES ($1, $2, $3, $4)' ,[name, location, tel_no, terms]);
+        const { name, location, tel_no, terms } = req.body;
+
+        const newVendor = await pool.query('INSERT INTO vendor (name, location, tel_no, terms) VALUES ($1, $2, $3, $4)', [name, location, tel_no, terms]);
         res.json(newVendor.rows);
+
     } catch (err) {
         console.error(err.message);
     }
 }
-
 const getVendors = async (req, res) => {
     try {
         const allVendors = await pool.query('SELECT * FROM vendor');
@@ -18,7 +20,6 @@ const getVendors = async (req, res) => {
         console.error(err.message);
     }
 }
-
 const getVendor = async (req, res) => {
     try {
         const { id } = req.params;
@@ -32,9 +33,9 @@ const getVendor = async (req, res) => {
 const updateVendor = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, location, terms, tel_no} = req.body;
+        const { name, location, tel_no, terms } = req.body;
 
-        const updatedVendor = await pool.query('UPDATE vendor SET name = $1, location = $2, terms = $3, tel_no = $4 WHERE vendor_id = $5', [name, location, terms, tel_no, id]);
+        const updatedVendor = await pool.query('UPDATE vendor SET name= $1, location= $2, terms= $3, tel_no= $4 WHERE vendor_id = $5', [name, location, tel_no, terms, id]);
         res.json("vendor updated");
 
     } catch (err) {
@@ -51,7 +52,6 @@ const deleteVendor = async (req, res) => {
         console.error(err.message);
     }
 }
-
 
 
 module.exports = {

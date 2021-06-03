@@ -1,0 +1,429 @@
+ const vendors = [{
+        vendor: {
+            location: "Cebu City",
+            tel_no: "(032) 238 - 1311",
+            terms: "COD",
+            name: "Test Vendor"
+        }
+    }, {
+        vendor: {
+            location: "Pulangbato, Cebu City",
+            tel_no: "0943-625-9940",
+            terms: "ODC",
+            name: "BCM Enterprises"
+        }
+    }, {
+        vendor: {
+            location: "Reclamation Area",
+            tel_no: "(032) 416 - 5931",
+            terms: "ODC",
+            name: "Yes Marketing"
+        }
+    }, {
+        vendor: {
+            location: "Plaridel Street, Cebu City",
+            tel_no: "(032) 254-1082",
+            terms: "PDC 30 days",
+            name: "Surebright"
+        }
+    }, {
+        vendor: {
+            location: "Subangdaku, Mandaue",
+            tel_no: "350-9472",
+            terms: "ODC",
+            name: "Pyeza Parts Depot Inc."
+        }
+    }, {
+        vendor: {
+            location: "Osmena Ave., NRA Cebu City",
+            tel_no: "238-8138",
+            terms: "Deposit Check",
+            name: "Mandaue Compressed Gases Corp."
+        }
+    }, {
+        vendor: {
+            location: "Centro, Mandaue",
+            tel_no: "345-1415",
+            terms: "Cash",
+            name: "Suson Lumber Inc."
+        }
+    }, {
+        vendor: {
+            location: "Subangdaku, Mandaue",
+            tel_no: "236-4667",
+            terms: "ODC",
+            name: "Atlas Bolt and Supply"
+        }
+    }, {
+        vendor: {
+            location: "MJ Cuenco Ave., Cebu City",
+            tel_no: "233-7488",
+            terms: "PDC 30 Days",
+            name: "Vic Enterprises"
+        }
+    }, {
+        vendor: {
+            location: "MJ Cuenco Ave., Cebu City",
+            tel_no: "412-3356",
+            terms: "PDC 30 Days",
+            name: "Primeworx Building Solutions Inc."
+        }
+    }, {
+        vendor: {
+            location: "Casdf",
+            tel_no: "12312",
+            terms: "123123",
+            name: "Test 2"
+        }
+    }, {
+        vendor: {
+            location: "Estancia, Mandaue",
+            tel_no: "344-4560",
+            terms: "ODC",
+            name: "ToknameEnterprises"
+        }
+    }, {
+        vendor: {
+            location: "Cebu City",
+            tel_no: "346-2665",
+            terms: "PDC 30 Days",
+            name: "SCOTTIE INC"
+        }
+    }, {
+        vendor: {
+            location: "Casals Village, Mabolo",
+            tel_no: "231-0292",
+            terms: "ODC",
+            name: "Jims Enterprises"
+        }
+    }, {
+        vendor: {
+            location: "Mabolo, Cebu City",
+            tel_no: "0923-083-9476",
+            terms: "ODC",
+            name: "NITRONNE TRADE "
+        }
+    }, {
+        vendor: {
+            location: "Maguikay, Mandaue",
+            tel_no: "346-8231",
+            terms: "ODC",
+            name: "JVF Commercial "
+        }
+    }, {
+        vendor: {
+            location: " Talisay, Cebu City ",
+            tel_no: " 0947-996-2056 ",
+            terms: " ODC ",
+            name: "Philmetal Products, Inc. "
+        }
+    }, {
+        vendor: {
+            location: " Subangdaku, Mandaue ",
+            tel_no: " Subangdaku, Mandaue ",
+            terms: "PDC 30 Days",
+            name: "Circle 8 Motors Trading "
+        }
+    }, {
+        vendor: {
+            location: " Plaridel St., Cebu City ",
+            tel_no: " 255-3657 ",
+            terms: "ODC",
+            name: "Cathay Hardware Inc. "
+        }
+    }, {
+        vendor: {
+            location: " Pier 4, Cebu City ",
+            tel_no: " 416-6790 ",
+            terms: "ODC",
+            name: "Seguro Marketing Inc. "
+        }
+    }, {
+        vendor: {
+            location: "Ibabao, Mandaue",
+            tel_no: " 272-7689 ",
+            terms: "PDC 30 Days",
+            name: "Weld Powertools Indt'l Mchnry. Corp. "
+        }
+    }, {
+        vendor: {
+            location: "Natalio B. Bacalso Ave, Cebu City, Cebu",
+            tel_no: "(032) 238 2385",
+            terms: "COD",
+            name: "Asia Glass Palace"
+        }
+    }, {
+        vendor: {
+            location: "NGS Building, M. J. Cuenco Avenue, Mabolo, Cebu City, Cebu",
+            tel_no: "(032) 231 5906",
+            terms: "COD",
+            name: "New Interlock Sales & Services"
+        }
+    }, {
+        vendor: {
+            location: "Casals Building, P.Sanchez, Pagsabungan, Mandaue City",
+            tel_no: "(032) 405 3262",
+            terms: "COD",
+            name: "Goldensteel Construction Supply"
+        }
+    }, {
+        vendor: {
+            location: "125 Plaridel St, Cebu City, Cebu",
+            tel_no: "(032) 254 1082",
+            terms: "PDC 30 Days",
+            name: "Shurebright Electrical Supply, Inc."
+        }
+    }, {
+        vendor: {
+            location: "Cebu City",
+            tel_no: "(032) *******",
+            terms: "PDC COD",
+            name: "Florgenloyskie Merchandise"
+        }
+    }, {
+        vendor: {
+            location: "Cebu, Philippines",
+            tel_no: "(032) *******",
+            terms: "PDC COD",
+            name: "Hafele Philippines, Inc."
+        }
+    }, {
+        vendor: {
+            location: "Cebu City",
+            tel_no: "(032) *******",
+            terms: "Cash",
+            name: "Cash"
+        }
+    }, {
+        vendor: {
+            location: "Cebu City",
+            tel_no: "(032) *******",
+            terms: "COD",
+            name: "FBL Blocks"
+        }
+    }, {
+        vendor: {
+            location: "Talisay, Cebu City",
+            tel_no: "0947-982-2856",
+            terms: "ODC",
+            name: "Victor S. Cabatas"
+        }
+    }, {
+        vendor: {
+            location: "Subangdaku, Mandaue",
+            tel_no: "344-3762",
+            terms: "PDC 30 Days",
+            name: "Circle 8 Motors Trading"
+        }
+    }, {
+        vendor: {
+            location: "Cabancalan, Mandaue",
+            tel_no: "421-1337",
+            terms: "PDC 30 Days",
+            name: "Lifequest Safetypro Ventures "
+        }
+    }, {
+        vendor: {
+            location: "AS Fortuna St., Mandaue",
+            tel_no: "230-3777",
+            terms: "ODC",
+            name: "Cebu Home and Builders Centre"
+        }
+    }, {
+        vendor: {
+            location: "Cambaro, Mandaue",
+            tel_no: "414-3771",
+            terms: "ODC",
+            name: "DES STRONG MOTOR, INC."
+        }
+    }, {
+        vendor: {
+            location: "AS Fortuna St., Mandaue",
+            tel_no: " 230-3777 ",
+            terms: "Deposit Check",
+            name: "Cebu Oversea Hardware Co. Inc. "
+        }
+    }, {
+        vendor: {
+            location: "Lahug, Cebu City",
+            tel_no: "4161980",
+            terms: "COD",
+            name: "First Auto LPG Gas Holdings Corp."
+        }
+    }, {
+        vendor: {
+            location: "Mandaue City, Cebu",
+            tel_no: "(032) 346 2982",
+            terms: "Cash",
+            name: "Honda Motorworld"
+        }
+    }, {
+        vendor: {
+            location: "Mandaue City, Cebu",
+            tel_no: "0933 492 7836",
+            terms: "Cash",
+            name: "Spark88 Integrated Systems and Services"
+        }
+    }, {
+        vendor: {
+            location: "Cebu City",
+            tel_no: "(032) 253 5118",
+            terms: "Cash",
+            name: "Johnny's Garment"
+        }
+    }, {
+        vendor: {
+            location: "Mandaue City",
+            tel_no: "0918 928 4524",
+            terms: "ODC",
+            name: "Freepoint Motorcycles & Parts Co. "
+        }
+    }, {
+        vendor: {
+            location: "Tawason, Mandaue",
+            tel_no: "0916-972-4588",
+            terms: "ODC",
+            name: "Rosedelima Carlos"
+        }
+    }, {
+        vendor: {
+            location: "Mabolo, Cebu City",
+            tel_no: "231-0245",
+            terms: "ODC",
+            name: "Kima Glass Supply Company Inc."
+        }
+    }, {
+        vendor: {
+            location: "Cebu City",
+            tel_no: "",
+            terms: "Cash Refund, Jamil",
+            name: "Various Suppliers"
+        }
+    }, {
+        vendor: {
+            location: "Cebu City",
+            tel_no: "(032) 232 0486",
+            terms: "ODC",
+            name: "Wheelmasters Corporation"
+        }
+    }, {
+        vendor: {
+            location: "Consolacion, Cebu",
+            tel_no: "0927 002 2713",
+            terms: "ODC",
+            name: "H&H Furnishings Corportation"
+        }
+    }, {
+        vendor: {
+            location: "",
+            tel_no: "",
+            terms: "",
+            name: "Shopee Online Shop"
+        }
+    }, {
+        vendor: {
+            location: "",
+            tel_no: "",
+            terms: "Advance PO Only",
+            name: "Ricardo Borres"
+        }
+    }, {
+        vendor: {
+            location: "Mandaue City",
+            tel_no: "(032) 268 0841",
+            name: "JB Rock",
+            terms: "",
+        }
+    }, {
+        vendor: {
+            location: "Cebu City",
+            tel_no: "(032) 254 9028",
+            name: "Fil-Ann Enterprises",
+            terms: "",
+        }
+    }, {
+        vendor: {
+            location: "Cebu City",
+            tel_no: "(032) 256 1038",
+            name: "Guan Lee Corp",
+            terms: "",
+        }
+    }, {
+        vendor: {
+            location: "Cebu City",
+            name: "Kenzie Tech. Supplies",
+            terms: "",
+            tel_no: ""
+
+        }
+    }, {
+        vendor: {
+            name: "Ireneo Morales",
+            tel_no: "",
+            terms: "",
+            location: ""
+        }
+    }, {
+        vendor: {
+            name: "ESD Enterprises",
+            tel_no: "",
+            terms: "",
+            location: ""
+        }
+    }, {
+        vendor: {
+            location: "Cebu City",
+            name: "Speedmaster Marketing",
+            tel_no: "",
+            terms: ""
+        }
+    }, {
+        vendor: {
+            location: "Cebu City",
+            name: " Yasco Motor Parts Corp. ",
+            tel_no: "",
+            terms: ""
+        }
+    }, {
+        vendor: {
+            location: "Mandaue City",
+            name: "Cebu Belmont Inc.",
+            tel_no: "",
+            terms: ""
+        }
+    }, {
+        vendor: {
+            location: "Cebu City",
+            tel_no: "(032) 416 4096",
+            name: "Progress Home & Office Furnishings ",
+            terms: ""
+        }
+    }, {
+        vendor: {
+            name: "S&R Saavedra Hardware & Gen. Mer. ",
+            location: "",
+            tel_no: "",
+            terms: ""
+        }
+    }, {
+        vendor: {
+            name: "EG Marketing",
+            location: "",
+            tel_no: "",
+            terms: ""
+        }
+    }, {
+        vendor: {
+            location: "Cebu City",
+            name: "Cebu A.I. Logic Inc. ",
+            tel_no: "",
+            terms: ""
+        }
+    }, {
+        vendor: {
+            location: "Cebu City",
+            name: "One-Z Window Blinds ",
+            tel_no: "",
+            terms: ""
+        }
+    }];
