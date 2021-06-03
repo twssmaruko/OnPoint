@@ -477,11 +477,18 @@ const AddPurchaseOrder = memo(() => {
   };
 
   const searchPurchaseRequestList = () =>
-    purchaseRequestList.map((purchaseRequest) => (
-      <Option key={purchaseRequest.purchase_request_id} value={purchaseRequest.purchase_request_id}>
-        {purchaseRequest.purchase_request_number}
-      </Option>
-    ));
+    purchaseRequestList.map((purchaseRequest) => {
+      if (purchaseRequest.status === 'PENDING') {
+        return (
+          (
+            <Option key={purchaseRequest.purchase_request_id} value={purchaseRequest.purchase_request_id}>
+              {purchaseRequest.purchase_request_number}
+            </Option>
+          )
+        )
+      }
+    }
+    );
 
   const vendorOptions = [];
 
@@ -3340,7 +3347,7 @@ const AddPurchaseOrder = memo(() => {
                 title="Proceed?"
                 maskClosable={false}
                 onCancel={noClick}
-                okButtonProps = {{visible: false, disabled: true}}
+                okButtonProps={{ visible: false, disabled: true }}
                 onOk={onProceed}
               >
                 {/* <PDFViewer style={{ height: "100%" }}>
@@ -3350,8 +3357,10 @@ const AddPurchaseOrder = memo(() => {
                   fileName={purchaseOrder.purchaseOrderNo}
                   document={printDocument}
                 >
-                  {({ blob, url, loading, error }) => (loading ? 'Preparing document...' : <Button style={{ backgroundColor: "#13407F",
-                  color: "white",}} onClick = {onProceed}>Download & Save</Button>)}
+                  {({ blob, url, loading, error }) => (loading ? 'Preparing document...' : <Button style={{
+                    backgroundColor: "#13407F",
+                    color: "white",
+                  }} onClick={onProceed}>Download & Save</Button>)}
                 </PDFDownloadLink>
               </Modal>
             </div>

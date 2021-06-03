@@ -287,14 +287,7 @@ const Updatemodal = (props) => {
               PR Number:
               </Col>
             <Col style={{ borderBottomStyle: "solid", borderWidth: 1 }}>
-              {
-                <Input
-                  style={{ color: "black" }}
-                  disabled={true}
-                  bordered={false}
-                  defaultValue={purchaseRequestData.purchaseRequestNo}
-                />
-              }
+              {purchaseRequestData.purchase_request_number}
             </Col>
           </Row>
         </Col>
@@ -306,10 +299,10 @@ const Updatemodal = (props) => {
           <Row>
             <Col span={1} />
             <Col span={1} style={{ marginRight: 0 }}>
-              <PlusCircleOutlined
+              {/* <PlusCircleOutlined
                 style={{ color: "green" }}
                 onClick={() => addPurchaseRequestOrder()}
-              />
+              /> */}
             </Col>
             <Col span={18} style={{ marginRight: 20 }}>
               <ReactDataSheet
@@ -319,10 +312,10 @@ const Updatemodal = (props) => {
               />
             </Col>
             <Col span={1}>
-              <MinusCircleOutlined
+              {/* <MinusCircleOutlined
                 style={{ color: "red" }}
                 onClick={() => removePurchaseRequestOrder()}
-              />
+              /> */}
             </Col>
             <Col span={1} />
           </Row>

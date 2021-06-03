@@ -399,25 +399,21 @@ export const addPurchaseRequest = (purchaseRequestData) => async (dispatch, getS
   } else {
 
     try {
-      console.log('purchaseRequestData: ', purchaseRequestData);
       const purchaseRequestPost = {
         is_approved: true,
         purchase_request_number: purchaseRequestData.purchase_request_number,
         status: 'PENDING',
         requested_by: purchaseRequestData.requested_by
       }
-      console.log('purchaseRequestPost: ', purchaseRequestPost);
       const newPurchaseRequest = await OPC.post('/purchase_requests', purchaseRequestPost);
       const lastID = await OPC.get('/purchase_requests/last_id');
       const lastPurchaseRequestID = lastID.data[0].max;
-      console.log('lastID: ', lastPurchaseRequestID);
       for (const key in purchaseRequestData.orders) {
         const purchaseRequestOrderPost = {
           ...purchaseRequestData.orders[key],
           purchase_request_id: lastPurchaseRequestID
         }
         const newPurchaseRequestOrder = await OPC.post('/purchase_requests/orders', purchaseRequestOrderPost);
-        console.log('purchaseRequestOrder: ', newPurchaseRequestOrder);
       }
       message.success('Purchase Request Created');
       dispatch(fetchPurchaseRequests());

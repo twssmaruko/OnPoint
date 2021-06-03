@@ -29,6 +29,7 @@ import moment from "moment";
 import * as uiActions from "../../store/ui/actions/Actions";
 import * as actions from "../../store/purchaserequest/actions/Actions";
 import TableButton from "../../components/button/OnpointButton";
+import OPC from '../../api/OPC';
 //import {setPurchaseRequest} from '../../store/purchaseorders/actions/Actions';
 
 const PurchaseRequestFormModal = lazy(() =>
@@ -70,13 +71,19 @@ const PurchaseRequests = () => {
     // };
   }, [dispatcher]);
 
-  const onDetailsClick = (item) => {
-    // setPurchaseRequestValue(item);
-    const newUpdateModal = <UpdateModal purchaseRequestData={item} />;
+  const onDetailsClick = async(item) => {
+    const response = await OPC.get('/purchase_requests/orders/' + item.purchase_request_id);
+    console.log(response.data);
+    const purchaseRequestData = {
+      ...item,
+      orders: response.data
+    }
+    console.log('purchaseRequestData: ', purchaseRequestData);
+
+    const newUpdateModal = <UpdateModal purchaseRequestData={purchaseRequestData} />;
     
     setDisplayUpdateModal(newUpdateModal);
     dispatcher(uiActions.setOpenModal2(true));
-    // dispatcher(actions.initiateUpdateModal(item.id));
   };
 
   const handleCancel = () => {
@@ -91,7 +98,7 @@ const PurchaseRequests = () => {
     dispatcher(uiActions.setOpenModal1(true));
   };
 
-  const [seeAll, setSeeAll] = useState(true);
+  const [seeAll, setSeeAll] = useState(false);
 
   const purchaseRequestNumberModal = (
     <Modal
@@ -190,7 +197,7 @@ const PurchaseRequests = () => {
       title: "PR Number",
       key: "purchase_request_number",
       width: 250,
-      defaultSortOrder: "ascend",
+      //defaultSortOrder: "ascend",
       sorter: (a, b) => (a.purchase_request_number < b.purchase_request_number ? 1 : -1),
       render: prNumberDisplay,
     },
@@ -229,7 +236,8 @@ const PurchaseRequests = () => {
       key: "dayMonthYear",
       width: 250,
       // defaultSortOrder: 'ascend',
-      // sorter: (a,b) => b.isApproved.length - a.dayMonthYear.length,
+      sorter: ((a, b) => b.date_created - a.date_created),
+      defaultSortOrder: "ascend",
       render: (createdAt) =>
         moment(createdAt).format("MMMM Do YYYY"),
         //moment(createdAt).format("MMMM Do YYYY, h:mm:ss A"),
@@ -298,7 +306,7 @@ const PurchaseRequests = () => {
           </Col>
           <Col span={3} style={{ marginTop: 10 }}>
             <Checkbox
-              defaultChecked={true}
+              defaultChecked={false}
               style={{ fontWeight: "bold", fontSize: 18 }}
               onChange={onChecked}
             >

@@ -93,36 +93,14 @@ const editProductSuccess = (id, productData) => ({
 export const fetchProducts = () => async (dispatch) => {
  
   try {
-  //  const body = {product};
     const response = await fetch('http://localhost:5000/products');
     const jsonData = await response.json();
-    console.log(jsonData);
     
     dispatch(fetchProductsSuccess(jsonData));
     
   } catch (err) {
     console.error(err.message);
   }
-  // return dispatch => {
-  //   dispatch(setShowSpin2(true));
-  //   dispatch(fetchProductsStart());
-  //   axios.get('/products.json')
-  //     .then((response) => {
-  //       const fetchedProducts = [];
-  //       for (const key in response.data) {
-  //         fetchedProducts.push({
-  //           ...response.data[key],
-  //           id: key
-  //         });
-  //       }
-  //       dispatch(fetchProductsSuccess(fetchedProducts));
-  //       dispatch(setShowSpin2(false));
-  //     })
-  //     .catch((error) => {
-  //       dispatch(fetchProductsFail(error));
-  //       dispatch(setShowSpin2(false));
-  //     })
-  // }
 
 }
 
