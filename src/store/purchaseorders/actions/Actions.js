@@ -559,6 +559,9 @@ export const addPurchaseOrder = (purchaseOrderData) => async (dispatch) => {
     console.log('purchaseOrderId: ', purchaseOrderId);
 
     for (const key in purchaseOrderData.orders) {
+
+      const orderQuantityLeft = await OPC.get('/pr_quantity/' + purchaseOrderData.orders[key].orderId);
+      
       const purchaseOrderOrders = {
         purchase_order_id: purchaseOrderId,
         item_type: purchaseOrderData.orders[key].itemType,
@@ -570,14 +573,39 @@ export const addPurchaseOrder = (purchaseOrderData) => async (dispatch) => {
         unit_price: purchaseOrderData.orders[key].unitPrice,
         total_price: purchaseOrderData.orders[key].totalPrice
       }
-
+      const newQuantityLeft = orderQuantityLeft.data.quantity_left - purchaseOrderOrders.quantity;
+      const newPR = {
+        quantity_left: newQuantityLeft
+      }
+      const updatedQuantityLeft = await OPC.put('/pr_quantity/' + purchaseOrderData.orders[key].orderId, newPR);
+      //edit purchase request orders here
+      //purchaseOrderData.orders.orderId
+      //purchaseOrderData.purchaseRequestId
+      
       const newOrder = await OPC.post('/purchase_orders/orders', purchaseOrderOrders);
 
     }
+    console.log('done');
+    const updatedOrders = await OPC.get('/purchase_requests/orders/' + purchaseOrderData.purchaseRequestId);
+    let newStatusFlag = false;
+    console.log('updatedOrders: ', updatedOrders.data);
+    for(const key in updatedOrders.data) {
+      if(updatedOrders.data[key].quantity_left > 0) {
+        newStatusFlag = true;
+      }
+    }
+    if(newStatusFlag === false) {
+      const newStatus = {
+        status: 'ORDERED'
+      }
+      const updatedStatus = await OPC.put('/pr_status/' + purchaseOrderData.purchaseRequestId, newStatus)
+    }
+
+    
   message.success('Purchase Order Created!');
   window.location.reload(false);
   } catch (error) {
-    message.error('unable to create purchase order');
+    message.error('Unable to create purchase order');
     console.error(error.message);
   }
   const purchaseRequests = []

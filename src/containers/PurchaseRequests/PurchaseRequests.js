@@ -191,7 +191,7 @@ const PurchaseRequests = () => {
       key: "purchase_request_number",
       width: 250,
       defaultSortOrder: "ascend",
-      sorter: (a, b) => (a.purchase_request_number > b.purchase_request_number ? 1 : -1),
+      sorter: (a, b) => (a.purchase_request_number < b.purchase_request_number ? 1 : -1),
       render: prNumberDisplay,
     },
     {

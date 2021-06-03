@@ -20,6 +20,19 @@ const getPurchaseRequestNumber = async (req, res) => {
     }
 }
 
+const updatePurchaseRequestStatus = async (req, res) => {
+    const { id } = req.params;
+    const {status} = req.body;
+
+    try {
+
+        const updatedStatus = await pool.query('UPDATE purchase_request SET status = $1 WHERE purchase_request_id = $2', [status, id])
+        res.json('status updated');
+    } catch (err) {
+        console.error(err.message);
+    }
+}
+
 const getPurchaseRequest = async (req, res) => {
     try {
 
@@ -77,6 +90,7 @@ module.exports = {
     getPurchaseRequests,
     getPurchaseRequest,
     getPurchaseRequestNumber,
+    updatePurchaseRequestStatus,
     getLastPurchaseRequestID,
     deletePurchaseRequest,
     createPurchaseRequest,

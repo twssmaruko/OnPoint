@@ -40,6 +40,7 @@ app.put('/vendors/:id', vendorDB.updateVendor);
 
 app.get('/purchase_request_number/:id', purchaseRequestDB.getPurchaseRequestNumber);
 app.get('/purchase_requests', purchaseRequestDB.getPurchaseRequests);
+app.put('/pr_status/:id', purchaseRequestDB.updatePurchaseRequestStatus);
 app.get('/purchase_requests/:id', purchaseRequestDB.getPurchaseRequest);
 app.get('/last_id', purchaseRequestDB.getLastPurchaseRequestID);
 app.post('/purchase_requests', purchaseRequestDB.createPurchaseRequest);
@@ -48,7 +49,9 @@ app.delete('/purchase_requests/:id', purchaseRequestDB.deletePurchaseRequest);
 //PURCHASE REQUEST ORDERS
 
 app.get('/purchase_requests/orders', purchaseRequestOrderDB.getPurchaseRequestOrders);
-app.get('/purchase_requests/orders/:id', purchaseRequestOrderDB.getPurchaseRequestOrder);
+app.get('/pr_quantity/:id', purchaseRequestOrderDB.getPurchaseRequestOrderQuantityLeft);
+app.put('/pr_quantity/:id', purchaseRequestOrderDB.updatePurchaseRequestOrderQuantityLeft);
+app.get('/purchase_requests/orders/:id', purchaseRequestOrderDB.getAllPurchaseRequestOrder);
 app.post('/purchase_requests/orders', purchaseRequestOrderDB.createPurchaseRequestOrder);
 
 //PROJECTS
