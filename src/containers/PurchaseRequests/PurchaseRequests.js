@@ -239,8 +239,8 @@ const PurchaseRequests = () => {
       sorter: ((a, b) => b.date_created - a.date_created),
       defaultSortOrder: "ascend",
       render: (createdAt) =>
-        moment(createdAt).format("MMMM Do YYYY"),
-        //moment(createdAt).format("MMMM Do YYYY, h:mm:ss A"),
+        //moment(createdAt).format("MMMM Do YYYY"),
+        moment(createdAt).format("MMMM Do YYYY, h:mm:ss A"),
     },
     {
       title: "Delete",

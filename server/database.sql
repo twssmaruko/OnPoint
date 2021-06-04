@@ -19,7 +19,7 @@ CREATE TABLE purchase_request (
     purchase_request_id BIGSERIAL PRIMARY KEY NOT NULL,
     is_approved BOOLEAN,
     purchase_request_number VARCHAR(20),
-    date_created DATE,
+    date_created TIMESTAMP,
     requested_by VARCHAR(100),
     status VARCHAR (20)
 
@@ -124,7 +124,7 @@ CREATE TABLE purchase_order (
     project_id BIGSERIAL,
     notes VARCHAR(255),
     purchase_order_number VARCHAR(20),
-    date_created DATE,
+    date_created TIMESTAMP,
     requested_by VARCHAR(100),
     status VARCHAR(20),
     total_price FLOAT,

@@ -199,7 +199,7 @@ const PurchaseOrderTable = memo(() => {
       dataIndex: 'date_created',
       key: 'date_created',
       width: 250,
-      render: (createdAt) => moment(createdAt).format('MMMM Do YYYY')
+      render: (createdAt) => moment(createdAt).format('MMMM Do YYYY, h:mm:ss A')
     },
     {
       title: 'Cancel',
