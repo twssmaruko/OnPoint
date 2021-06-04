@@ -114,7 +114,7 @@ const PurchaseOrderTable = memo(() => {
       setDisplayDeleteModal(false)
     }}
     onOk={(e) => onDeleteConfirmed(e)}>
-    Are you sure you want to delete this Purchase Request?
+    Are you sure you want to delete this Purchase Order?
   </Modal>;
 
   const cancelModal = <Modal visible={displayCancelModal}
@@ -128,12 +128,12 @@ const PurchaseOrderTable = memo(() => {
 
 
   const deleteItem = (data) => {
-    setDeleteId(data);
+    setDeleteId(data.purchase_order_id);
     setDisplayDeleteModal(true);
   };
 
   const cancelItem = (data) => {
-    setCancelId(data.id);
+    setCancelId(data.purchase_order_id);
     setDisplayCancelModal(true);
   };
 

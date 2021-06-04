@@ -40,9 +40,27 @@ const createPurchaseOrder = async (req, res) => {
     }
 }
 
+const cancelPurchaseOrder = async(req, res) => {
+
+    const { id } = req.params
+    const status = "CANCELLED";
+    try {
+
+        const cancelledPurchaseOrder = await pool.query('UPDATE purchase_order SET status=$1 WHERE purchase_order_id = $2', [status, id]);
+        res.json('purchase order cancelled');
+        
+    } catch (err) {
+     console.error(err.message);   
+    }
+}
+
 const deletePurchaseOrder = async (req, res) => {
     try {
         const {id} = req.params
+        const deletedOrders = await pool.query('DELETE FROM purchase_order_order WHERE purchase_order_id = $1', [id]);
+        const deletedPurchaseOrder = await pool.query('DELETE FROM purchase_order WHERE purchase_order_id = $1', [id]);
+        
+        res.json('purchase order deleted');
     } catch (err) {
         console.error(err.message);
     }
@@ -62,4 +80,6 @@ module.exports = {
     getPurchaseOrders,
     getPurchaseOrder,
     createPurchaseOrder,
+    cancelPurchaseOrder,
+    deletePurchaseOrder
 }

@@ -800,22 +800,32 @@ export const getPurchaseRequestData = (data) => async (dispatch) => {
 
 };
 
-export const deletePurchaseOrder = (data) => async (dispatch) => {
-  const newURL = 'purchaseorders/' + data.id + '.json';
-
+export const deletePurchaseOrder = (purchaseOrderId) => async (dispatch) => {
+  console.log(purchaseOrderId);
+  // const newURL = 'purchaseorders/' + data.id + '.json';
   try {
-
-    const fetchedPurchaseOrder = data
-    await axios.delete(newURL);
-    dispatch(deletePurchaseOrderInStore(data.id, fetchedPurchaseOrder))
+    dispatch(setLoading(true));
+    const response = await OPC.delete('/purchase_orders/' + purchaseOrderId);
+    message.success('Purchase Order Deleted');
     dispatch(fetchPurchaseOrders());
-    message.success('purchase order removed');
-
-
-  } catch (error) {
-    message.error('unable to delete purchase order');
-    console.error(error);
+    dispatch(setLoading(false));
+  } catch (err) {
+    console.error(err.message);
+    dispatch(setLoading(false));
   }
+  // try {
+
+  //   const fetchedPurchaseOrder = data
+  //   await axios.delete(newURL);
+  //   dispatch(deletePurchaseOrderInStore(data.id, fetchedPurchaseOrder))
+  //   dispatch(fetchPurchaseOrders());
+  //   message.success('purchase order removed');
+
+
+  // } catch (error) {
+  //   message.error('unable to delete purchase order');
+  //   console.error(error);
+  // }
 
 }
 
@@ -870,18 +880,28 @@ export const fetchWorksheet = () => async (dispatch) => {
   }
 }
 
-export const cancelPurchaseOrder = (data) => async (dispatch) => {
+export const cancelPurchaseOrder = (purchaseOrderId) => async (dispatch) => {
+  console.log(purchaseOrderId);
+  dispatch(setLoading(true));
   try {
-    const result = await axios.get('/purchaseorders/' + data + '.json');
-    const newPurchaseOrder = {
-      ...result.data,
-      status: 'cancelled'
-    }
-    await axios.put('/purchaseorders/' + data + '/.json', newPurchaseOrder);
-    message.success('Purchase Order cancelled');
-    window.location.reload(false);
-  } catch (error) {
-    message.error('Could not cancel purchase order!');
-    console.error(error);
+    const cancelPurchaseOrder = await OPC.put('/cancel_purchase_order/' + purchaseOrderId);
+    dispatch(fetchPurchaseOrders());
+    dispatch(setLoading(false));
+  } catch (err) {
+    console.error(err.message);
+    dispatch(setLoading(false));
   }
+  // try {
+  //   const result = await axios.get('/purchaseorders/' + data + '.json');
+  //   const newPurchaseOrder = {
+  //     ...result.data,
+  //     status: 'cancelled'
+  //   }
+  //   await axios.put('/purchaseorders/' + data + '/.json', newPurchaseOrder);
+  //   message.success('Purchase Order cancelled');
+  //   window.location.reload(false);
+  // } catch (error) {
+  //   message.error('Could not cancel purchase order!');
+  //   console.error(error);
+  // }
 }

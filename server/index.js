@@ -95,6 +95,9 @@ app.post('/projects/budgets/costs/subcategories/items', subcategoryItemDB.create
 app.get('/purchase_orders' , purchaseOrderDB.getPurchaseOrders);
 app.get('/purchase_orders/:id', purchaseOrderDB.getPurchaseOrder);
 app.post('/purchase_orders', purchaseOrderDB.createPurchaseOrder);
+app.put('/cancel_purchase_order/:id', purchaseOrderDB.cancelPurchaseOrder);
+app.delete('/purchase_orders/:id', purchaseOrderDB.deletePurchaseOrder);
+
 // app.delete('/purchase_orders/:id', purchaseOrderDB.deletePurchaseOrder);
 
 //PURCHASE ORDER ORDERS
