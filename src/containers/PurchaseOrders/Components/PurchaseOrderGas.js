@@ -128,9 +128,9 @@ const PurchaseOrderGas = (props) => {
     </Option>
   ));
 
-  const projectList = projects.map((project, index) => (
-    <Option key={"project-" + index} value={project.projectCode}>
-      {project.projectCode}
+  const projectList = projects.map((project) => (
+    <Option key={"project-" + project.project_id} value={project.project_code}>
+      {project.project_code}
     </Option>
   ));
 

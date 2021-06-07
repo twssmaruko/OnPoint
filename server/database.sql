@@ -158,6 +158,26 @@ CREATE TABLE purchase_order_order (
 
 );
 
+CREATE TABLE purchase_request_gas (
+    purchase_request_gas_id BIGSERIAL PRIMARY KEY NOT NULL,
+    purchase_request_gas_number VARCHAR(20),
+    requested_by VARCHAR(100),
+    date_created TIMESTAMP
+)
+
+CREATE TABLE purchase_request_gas_order (
+    purchase_request_gas_order_id BIGSERIAL PRIMARY KEY NOT NULL,
+    purchase_request_gas_id BIGSERIAL,
+    item_type VARCHAR(50),
+    quantity INT,
+    product VARCHAR (255),
+    unit VARCHAR(20),
+    CONSTRAINT fk_purchase_request_gas
+        FOREIGN KEY(purchase_request_gas_id)
+            REFERENCES purchase_request_gas(purchase_request_gas_id)
+    
+)
+
 
 
 
