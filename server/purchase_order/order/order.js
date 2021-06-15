@@ -15,6 +15,7 @@ const getPurchaseOrderOrder = async(req, res) => {
 
     try {
         const fetchedOrder = await pool.query('SELECT * FROM purchase_order_order WHERE purchase_order_id = $1', [id]);
+        res.json(fetchedOrder.rows);
     } catch (error) {
         console.error(error.message);
     }

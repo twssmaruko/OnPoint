@@ -5,6 +5,7 @@ const initialState = {
   openModal2: false,
   openModal3: false,
   openModal4: false,
+  openModal5: false,
   showSpin1: false,
   showSpin2: false,
   showSpin3: false
@@ -32,6 +33,11 @@ const ui = (state = initialState, action) => {
       ...state,
       openModal4: action.data
     };
+    case actions.SET_OPENMODAL5:
+      return {
+        ...state,
+        openModal5: action.data
+      };
   case actions.SET_SHOWSPIN1:
     return {
       ...state,

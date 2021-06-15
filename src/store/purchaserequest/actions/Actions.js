@@ -411,6 +411,8 @@ export const addPurchaseRequest = (purchaseRequestData) => async (dispatch, getS
       for (const key in purchaseRequestData.orders) {
         const purchaseRequestOrderPost = {
           ...purchaseRequestData.orders[key],
+          quantity: purchaseRequestData.orders[key].quantity.toFixed(2),
+          quantity_left: purchaseRequestData.orders[key].quantity_left.toFixed(2),
           purchase_request_id: lastPurchaseRequestID
         }
         const newPurchaseRequestOrder = await OPC.post('/purchase_requests/orders', purchaseRequestOrderPost);

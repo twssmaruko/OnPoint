@@ -2250,7 +2250,7 @@ const AddPurchaseOrder = memo(() => {
         <Text>{order.product}</Text>
       </View>
       <View style={{ flex: flexProps3[3] }}>
-        <Text>{order.quantity}</Text>
+        <Text>{order.quantity.toFixed(2)}</Text>
       </View>
       <View style={{ flex: flexProps3[4] }}>
         <Text>{order.unit}</Text>
@@ -2362,7 +2362,7 @@ const AddPurchaseOrder = memo(() => {
                       marginLeft: "0%",
                     }}
                   >
-                    <Logo />
+                    {<Logo />}
                   </Col>
                   <Col span={1} />
                   <Col

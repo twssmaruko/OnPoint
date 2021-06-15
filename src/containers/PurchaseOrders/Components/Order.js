@@ -8,7 +8,6 @@ const Order = (props) => {
   const { order, index, categories } = props
   const borderStyle = 'none'
   
-
   const { totalPrice } = useSelector(({ purchaseOrder }) => ({
     totalPrice: purchaseOrder.totalPrice,
   }))
@@ -27,7 +26,6 @@ const Order = (props) => {
   const dispatcher = useDispatch();
 
   useEffect(() => {
-    
   }, [order, orderState, totalPrice, setOrderState])
 
   const categoriesToDisplay = () => {
@@ -123,7 +121,7 @@ const Order = (props) => {
             <Form.Item style={{ marginBottom: 0 }}
               id={index + 'quantity'}
               name="quantity"
-              initialValue={order.quantity_left}
+              initialValue={order.quantity_left.toFixed(2)}
               validateStatus={(e) => validateQuantity(e.target.value)}
               rules={[
                 {
@@ -131,7 +129,7 @@ const Order = (props) => {
                   message: 'Please Input Quantity'
                 }
               ]}>
-              <InputNumber id={index + 'quantity'} max={order.quantity_left} onChange={(e) => onQuantityBlur(e)} style={{
+              <Input id={index + 'quantity'} max={order.quantity_left} onChange={(e) => onQuantityBlur(e)} style={{
                 width: 60,
                 fontSize: 12
               }} />

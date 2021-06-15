@@ -23,7 +23,7 @@ import {
 } from 'react-redux';
 
 import './PurchaseOrder.css'
-
+import OPC from '../../../api/OPC';
 
 const PurchaseOrderTable = memo(() => {
 
@@ -164,13 +164,13 @@ const PurchaseOrderTable = memo(() => {
     {
       title: 'Details',
       key: 'details',
-      width: 100,
+      width: '2%',
       render: editButton
     },
     {
       title: 'PO Number',
       key: 'purchase_order_number',
-      width: 250,
+      width: 150,
       defaultSortOrder: 'ascend',
       sorter: (a, b) => b.purchase_order_id - a.purchase_order_id,
       render: poNumberDisplay
@@ -178,27 +178,27 @@ const PurchaseOrderTable = memo(() => {
     {
       title: 'Project',
       key: 'project_id',
-      width: 250,
+      width: 150,
       render: projectDisplay
     },
     {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      width: 250,
+      width: 150,
       render: poStatusDisplay
     },
     {
       title: 'PR',
       key: 'purchase_request_id',
-      width: 250,
+      width: 150,
       render: prDisplay
     },
     {
       title: 'Requested On',
       dataIndex: 'date_created',
       key: 'date_created',
-      width: 250,
+      width: 150,
       render: (createdAt) => moment(createdAt).format('MMMM Do YYYY, h:mm:ss A')
     },
     {
@@ -215,14 +215,16 @@ const PurchaseOrderTable = memo(() => {
     },
   ];
 
-  const onDetailsClick = (e) => {
+  const onDetailsClick = async(e) => {
     // dispatcher(actions.fetchProjectForPurchaseOrder(e.project))
 
     // dispatcher(actions.initiateUpdateModal(item.id));
     setCurrentPurchaseOrder(e);
+    const vendorsFetched = await OPC.get('/vendors/' + e.vendor_id)
+    const fetchedOrders = await OPC.get('/purchase_orders/orders/' + e.purchase_order_id);
     dispatcher(uiActions.setOpenModal1(true));
     // setPurchaseOrderDetailsModal(<PurchaseOrderModal />)
-    setPurchaseOrderDetailsModal(<PurchaseOrderDetails purchaseOrder={e} initOrders={[]} />)
+    setPurchaseOrderDetailsModal(<PurchaseOrderDetails purchaseOrder={e} initOrders={[]} vendor={vendorsFetched.data[0]} orders={fetchedOrders.data}/>)
   };
 
   const onChecked = () => {
@@ -241,80 +243,8 @@ const PurchaseOrderTable = memo(() => {
     <div style={{
       marginTop: 20,
       marginLeft: '20%',
-      marginRight: '20%'
+      marginRight: '10%'
     }}>
-      {/* <div style={{display: 'flex',
-          alignItems: 'center'}}>
-          <h4>Requested On:</h4>
-          <div>
-            <DatePicker
-              disabled={params.monthYear}
-              allowClear
-              placeholder="Specific Day"
-              style={{
-                marginLeft: 15,
-                marginBottom: 10,
-                width: 130,
-                border: '0.5px solid black'
-              }}
-              onChange={onDateSelect}
-            />
-          </div>
-
-          <DatePicker
-            disabled={params.dayMonthYear}
-            allowClear
-            picker="month"
-            placeholder="Year/Month"
-            style={{
-              marginLeft: 5,
-              marginBottom: 10,
-              width: 130,
-              border: '0.5px solid black'
-            }}
-            onChange={onMonthYearSelect}
-          />
-          <h4 style={{marginLeft: 110}}>Status</h4>
-          <Select
-            allowClear
-            style={{
-              marginLeft: 10,
-              marginBottom: 10,
-              width: 170,
-              border: '0.5px solid black'
-            }}
-            onChange={handleStatusChange}
-          >
-            <Option value="ORDERED">ORDERED</Option>
-            <Option value="PENDING">PENDING</Option>
-            <Option value="RECEIVED">RECEIVED</Option>
-          </Select>
-          <h4 style={{marginLeft: 20}}>Approved</h4>
-          <Select
-            allowClear
-            onChange={onApprovedChange}
-            style={{
-              marginLeft: 10,
-              marginBottom: 10,
-              width: 170,
-              border: '0.5px solid black'
-            }}
-          >
-            <Option value="APPROVED">APPROVED</Option>
-            <Option value="NOTAPPROVED">NOT APPROVED</Option>
-          </Select>
-
-          <Button
-            style={{marginLeft: 10,
-              backgroundColor: '#13407F',
-              color: 'white',
-              marginBottom: 10}}
-            onClick={onSearch}
-          >
-                Search
-          </Button>
-
-        </div> */}
       <Row style={{ marginBottom: 10 }}>
         <Col span={5}>
           <Checkbox onChange={onChecked}
@@ -327,6 +257,7 @@ const PurchaseOrderTable = memo(() => {
         </Col>
       </Row>
       <Row>
+        <Col>
         <div style={{ border: '1px solid black' }}>
           <Spin spinning={tableSpin}>
             <Tabs
@@ -358,6 +289,7 @@ const PurchaseOrderTable = memo(() => {
             </Tabs>
           </Spin>
         </div>
+        </Col>
       </Row>
       {purchaseOrderDetailsModal}
       {deleteModal}

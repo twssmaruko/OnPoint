@@ -196,7 +196,7 @@ const PurchaseRequests = () => {
     {
       title: "PR Number",
       key: "purchase_request_number",
-      width: 250,
+      width: 150,
       //defaultSortOrder: "ascend",
       sorter: (a, b) => (a.purchase_request_number < b.purchase_request_number ? 1 : -1),
       render: prNumberDisplay,
@@ -205,7 +205,7 @@ const PurchaseRequests = () => {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      width: 250,
+      width: 150,
       // filters: [
       //   {
       //     text: 'PENDING',
@@ -226,7 +226,7 @@ const PurchaseRequests = () => {
       title: "Approved",
       dataIndex: "is_approved",
       key: "isApproved",
-      width: 200,
+      width: 150,
       sorter: (a, b) => b.is_approved.length - a.is_approved.length,
       render: approvedDisplay,
     },
@@ -234,7 +234,7 @@ const PurchaseRequests = () => {
       title: "Requested On",
       dataIndex: "date_created",
       key: "dayMonthYear",
-      width: 250,
+      width: 150,
       // defaultSortOrder: 'ascend',
       sorter: ((a, b) => b.date_created - a.date_created),
       defaultSortOrder: "ascend",
