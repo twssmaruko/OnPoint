@@ -189,3 +189,16 @@ CREATE TABLE materials_receiving (
             REFERENCES purchase_order(purchase_order_id)
 
 )
+
+CREATE TABLE materials_receiving_order (
+    materials_receiving_order_id BIGSERIAL PRIMARY KEY NOT NULL,
+    materials_receiving_id BIGSERIAL,
+    product VARCHAR(255),
+    quantity FLOAT,
+    unit VARCHAR(20),
+    unit_price FLOAT,
+    category VARCHAR(20),
+    CONSTRAINT fk_materials_receiving
+        FOREIGN KEY(materials_receiving_id)
+            REFERENCES materials_receiving(materials_receiving_id)
+)

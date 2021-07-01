@@ -13,6 +13,7 @@ const budgetCostDB = require('./project/budget/budget_cost/queries');
 const subcategoryItemDB = require('./project/budget/budget_subcategory/subcategory_item/queries');
 const purchaseOrderDB = require('./purchase_order/purchase_order');
 const purchaseOrderOrderDB = require('./purchase_order/order/order');
+const materialsReceivingDB = require('./materials_receiving/materials_receiving');
 
 //middlware
 
@@ -105,6 +106,10 @@ app.delete('/purchase_orders/:id', purchaseOrderDB.deletePurchaseOrder);
 app.get('/purchase_orders/orders', purchaseOrderOrderDB.getPurchaseOrderOrders);
 app.get('/purchase_orders/orders/:id', purchaseOrderOrderDB.getPurchaseOrderOrder);
 app.post('/purchase_orders/orders', purchaseOrderOrderDB.createPurchaseOrderOrder);
+
+//MATERIALS RECEIVING
+
+app.get('/materials_receiving', materialsReceivingDB.getMaterialsReceiving);
 
 
 app.listen(5000, () => {
