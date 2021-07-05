@@ -1,6 +1,7 @@
 import { message } from "antd";
 import * as actionTypes from "../ActionTypes";
 import axios from "../../../axios-orders";
+import OPC from '../../../api/OPC';
 
 const createMRRToStore = (data) => ({
   type: actionTypes.CREATE_MMR,
@@ -69,18 +70,12 @@ export const fetchProjects = () => async (dispatch) => {
 };
 
 export const fetchPurchaseOrders = () => async (dispatch) => {
+  dispatch(setLoading(true));
   try {
-    const result = await axios.get("/purchaseorders.json");
-    const fetchedPurchaseOrders = [];
+    const result = await OPC.get('/purchase_order_pending');
+    console.log(result.data);
 
-    for (const key in result.data) {
-      fetchedPurchaseOrders.push({
-        ...result.data[key],
-        id: key,
-      });
-    }
-
-    dispatch(fetchPurchaseOrdersToStore(fetchedPurchaseOrders));
+    dispatch(fetchPurchaseOrdersToStore(result.data));
     dispatch(setLoading(false));
   } catch (error) {
     message.error("Unable to fetch purchase orders!");

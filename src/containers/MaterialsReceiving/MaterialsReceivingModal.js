@@ -88,7 +88,7 @@ const MaterialsReceivingModal = (props) => {
 
 
   const purchaseOrdersList = purchaseOrders.map((purchaseOrder) =>
-    <Option key={purchaseOrder.id}>{purchaseOrder.purchaseOrderNo}</Option>
+    <Option key={purchaseOrder.purchase_order_id}>{purchaseOrder.purchase_order_number}</Option>
   )
 
   const onDeleteClicked = (index) => {

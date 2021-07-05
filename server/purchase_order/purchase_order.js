@@ -40,6 +40,17 @@ const createPurchaseOrder = async (req, res) => {
     }
 }
 
+const getPendingPurchaseOrder = async (req, res) => {
+    try {
+        const status = 'PENDING';
+        const fetchedPendingPurchaseOrder = await pool.query('SELECT * FROM purchase_order WHERE status=$1', [status]);
+        res.json(fetchedPendingPurchaseOrder.rows);
+        
+    } catch (err) {
+        console.error(err.message);
+    }
+}
+
 const cancelPurchaseOrder = async(req, res) => {
 
     const { id } = req.params
@@ -80,6 +91,7 @@ module.exports = {
     getPurchaseOrders,
     getPurchaseOrder,
     createPurchaseOrder,
+    getPendingPurchaseOrder,
     cancelPurchaseOrder,
     deletePurchaseOrder
 }
