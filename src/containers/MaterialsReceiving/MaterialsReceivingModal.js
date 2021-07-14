@@ -131,7 +131,8 @@ const MaterialsReceivingModal = (props) => {
   const onSelectClick = (data) => {
     const generateKey = uuid();
     setNewKey(generateKey);
-    const newPurchaseOrder = purchaseOrders.find((element) => element.id === data);
+    console.log('data: ', data);
+    const newPurchaseOrder = purchaseOrders.find((element) => element.purchase_order_id === data);
     setSelectedPurchaseOrder(newPurchaseOrder)
     setMaterialsReceivingOrders(newPurchaseOrder.orders)
     const initOrders = [];
