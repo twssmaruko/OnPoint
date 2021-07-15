@@ -21,6 +21,7 @@ import {
 import { MinusCircleOutlined } from '@ant-design/icons';
 import { uuid } from 'uuidv4';
 import MaterialsReceivingOrder from './MaterialsReceivingOrder';
+import OPC from '../../api/OPC';
 import { setProject } from '../../store/purchaseorders/actions/Actions';
 
 
@@ -128,35 +129,45 @@ const MaterialsReceivingModal = (props) => {
     ordersToDisplay();
   }, [materialsReceiving, dispatcher, selectedPurchaseOrder, materialsReceivingState, setMaterialsReceivingState])
 
-  const onSelectClick = (data) => {
+  const onSelectClick = async (data) => {
     const generateKey = uuid();
     setNewKey(generateKey);
     console.log('data: ', data);
-    const newPurchaseOrder = purchaseOrders.find((element) => element.purchase_order_id === data);
-    setSelectedPurchaseOrder(newPurchaseOrder)
-    setMaterialsReceivingOrders(newPurchaseOrder.orders)
-    const initOrders = [];
-    for (const key in newPurchaseOrder.orders) {
-      initOrders.push({
-        product: newPurchaseOrder.orders[key].product,
-        unit: newPurchaseOrder.orders[key].unit,
-        quantity: newPurchaseOrder.orders[key].quantity,
-        quantityReceived: 0,
-        unitPrice: newPurchaseOrder.orders[key].unitPrice,
-        category: newPurchaseOrder.orders[key].category
-      })
+    const fetchedPurchaseOrder = await OPC.get('/purchase_orders/' + data);
+    console.log(fetchedPurchaseOrder.data[0]);
+    const fetchedOrders = await OPC.get('/purchase_orders/orders/' + data);
+    console.log(fetchedOrders.data);
+    const projectId = fetchedPurchaseOrder.data[0].project_id;
+    console.log(projectId);
+
+    const newPurchaseOrder = {
+      ...fetchedPurchaseOrder.data[0],
+      orders: fetchedOrders.data
     }
-    const initMaterialsReceiving = {
-      ...materialsReceivingState,
-      orders: initOrders,
-      purchaseOrderNo: newPurchaseOrder.purchaseOrderNo,
-      project: newPurchaseOrder.project
-    }
-    console.log('initMaterialsReceiving: ', initMaterialsReceiving);
-    console.log('data: ', data);
-    console.log('selectedPurchaseOrder: ', newPurchaseOrder);
-    const selectedProject = projects.find((element) => element.id === data);
-    console.log('selectedProject: ', selectedProject);
+
+    //const newPurchaseOrder = purchaseOrders.find((element) => element.purchase_order_id === data);
+    // setSelectedPurchaseOrder(newPurchaseOrder)
+    // setMaterialsReceivingOrders(newPurchaseOrder.orders)
+    // const initOrders = [];
+    // for (const key in newPurchaseOrder.orders) {
+    //   initOrders.push({
+    //     product: newPurchaseOrder.orders[key].product,
+    //     unit: newPurchaseOrder.orders[key].unit,
+    //     quantity: newPurchaseOrder.orders[key].quantity,
+    //     quantityReceived: 0,
+    //     unitPrice: newPurchaseOrder.orders[key].unitPrice,
+    //     category: newPurchaseOrder.orders[key].category
+    //   })
+    // }
+    // const initMaterialsReceiving = {
+    //   ...materialsReceivingState,
+    //   orders: initOrders,
+    //   purchaseOrderNo: newPurchaseOrder.purchaseOrderNo,
+    //   project: newPurchaseOrder.project
+    // }
+    // console.log('initMaterialsReceiving: ', initMaterialsReceiving);
+    // console.log('selectedPurchaseOrder: ', newPurchaseOrder);
+//    console.log('selectedProject: ', selectedProject);
     // const categories = [];
 
     // for (const budgetCost in selectedProject.budget.budgetCost) {
@@ -178,11 +189,11 @@ const MaterialsReceivingModal = (props) => {
     // setCategoriesState(categories);
 
 
-    setMaterialsReceivingState(initMaterialsReceiving);
-    dispatcher(actions.setMRR(initMaterialsReceiving));
-    dispatcher(actions.setCategories(newPurchaseOrder.project));
-    setProjectState(newPurchaseOrder.project);
-    setInputState(true);
+    //setMaterialsReceivingState(initMaterialsReceiving);
+    //dispatcher(actions.setMRR(initMaterialsReceiving));
+    //dispatcher(actions.setCategories(newPurchaseOrder.project));
+    //setProjectState(newPurchaseOrder.project);
+    //setInputState(true);
     //setSelectedPurchaseOrder(data);
   }
 
