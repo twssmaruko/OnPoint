@@ -145,6 +145,9 @@ const MaterialsReceivingModal = (props) => {
       orders: fetchedOrders.data
     }
 
+
+    console.log('newPurchaseOrder: ', newPurchaseOrder);
+
     //const newPurchaseOrder = purchaseOrders.find((element) => element.purchase_order_id === data);
     // setSelectedPurchaseOrder(newPurchaseOrder)
     // setMaterialsReceivingOrders(newPurchaseOrder.orders)
