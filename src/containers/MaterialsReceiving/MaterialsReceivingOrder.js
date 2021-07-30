@@ -72,7 +72,7 @@ const MaterialsReceivingOrder = (props) => {
             {order.product}
           </Col>
           <Col span={5} style={{ textAlign: 'center' }}>
-            <InputNumber max={purchaseOrderOrder.quantity - purchaseOrderOrder.quantityReceived} bordered={inputState} style={{
+            <InputNumber max={purchaseOrderOrder.quantity - purchaseOrderOrder.quantity_received} bordered={inputState} style={{
               textAlign: 'center',
               marginLeft: 0
             }} onChange={(e) => onQuantityChanged(e)} />
@@ -81,7 +81,7 @@ const MaterialsReceivingOrder = (props) => {
             {order.unit}
           </Col>
           <Col span={3} style={{ textAlign: 'left' }}>
-            {parseFloat(order.unitPrice).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
+            {parseFloat(order.unit_price).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
           </Col>
           <Col span={3} style={{ textAlign: 'center' }}>
             {parseFloat(totalPriceState).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}

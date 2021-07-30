@@ -183,7 +183,8 @@ CREATE TABLE materials_receiving (
     materials_receiving_number VARCHAR(20),
     purchase_order_id BIGSERIAL,
     delivered_by VARCHAR(100),
-    delivery_date TIMESTAMP,
+    delivery_date DATE,
+    delivery_time TIMESTAMP,
     CONSTRAINT fk_purchase_order
         FOREIGN KEY(purchase_order_id)
             REFERENCES purchase_order(purchase_order_id)
