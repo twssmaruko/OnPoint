@@ -20,6 +20,16 @@ const getSubcategoryItem = async (req, res) => {
     }
 }
 
+const getCategories = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const fetchedCategories = await pool.query('SELECT * FROM subcategory_item WHERE project_id=$1', [id]);
+        res.json(fetchedCategories.rows);
+    } catch (err) {
+        console.error(err.message);
+    }
+}
+
 const createSubCategoryItem = async (req, res) => {
     try {
         const {budget_subcategory_id, subcategory_item_no, subcategory_item_name, subcategory_item_cost, amount_spent, subcategory_category, project_id} = req.body;
@@ -34,5 +44,6 @@ const createSubCategoryItem = async (req, res) => {
 module.exports =  {
     getSubcategoryItems,
     getSubcategoryItem,
-    createSubCategoryItem
+    createSubCategoryItem,
+    getCategories
 }

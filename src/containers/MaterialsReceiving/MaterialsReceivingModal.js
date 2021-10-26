@@ -109,7 +109,7 @@ const MaterialsReceivingModal = (props) => {
     const purchaseOrdersReceived = selectedPurchaseOrder.orders.map((order, index) =>
       <Row key={index}>
         <Col span={23}>
-          <MaterialsReceivingOrder key={'order' + index} order={order} index={index} inputState={inputState} materialsReceivingState={materialsReceivingState} purchaseOrderOrder={selectedPurchaseOrder.orders[index]} />
+          <MaterialsReceivingOrder key={'order' + index} order={order} index={index} inputState={inputState} materialsReceivingState={materialsReceivingState} purchaseOrderOrder={selectedPurchaseOrder.orders[index]} categories={categoriesState} />
         </Col>
         <Col span={1}>
           <Button key={'btn' + index} onClick={() => onDeleteClicked(index)} style={{
@@ -135,7 +135,17 @@ const MaterialsReceivingModal = (props) => {
     const fetchedPurchaseOrder = await OPC.get('/purchase_orders/' + data);
     const fetchedOrders = await OPC.get('/purchase_orders/orders/' + data);
     const projectId = fetchedPurchaseOrder.data[0].project_id;
-
+    const fetchedProject = await OPC.get('/projects/categories/' + projectId);
+    console.log('project: ', fetchedProject.data);
+    const fetchedCategories = [];
+    for(const index in fetchedProject.data) {
+      const newCategory = {
+        id: fetchedProject.data[index].subcategory_item_id,
+        category: fetchedProject.data[index].subcategory_category
+      }
+      fetchedCategories.push(newCategory);
+    }
+    console.log('fetchedCategories: ', fetchedCategories);
     const newPurchaseOrder = {
       ...fetchedPurchaseOrder.data[0],
       orders: fetchedOrders.data
@@ -185,12 +195,12 @@ const MaterialsReceivingModal = (props) => {
     //   }
     // }
 
-    setCategoriesState(['']);
+    setCategoriesState(fetchedCategories);
 
 
     setMaterialsReceivingState(initMaterialsReceiving);
     dispatcher(actions.setMRR(initMaterialsReceiving));
-    dispatcher(actions.setCategories(newPurchaseOrder.project));
+    //dispatcher(actions.setCategories(newPurchaseOrder.project));
     setProjectState(newPurchaseOrder.project_id);
     setInputState(true);
     //setSelectedPurchaseOrder(data);

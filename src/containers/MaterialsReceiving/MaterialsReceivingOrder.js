@@ -13,21 +13,21 @@ import {
 const MaterialsReceivingOrder = (props) => {
 
   const [totalPriceState, setTotalPriceState] = useState(0);
-  const { order, index, inputState, materialsReceivingState, purchaseOrderOrder } = props
+  const { order, index, inputState, materialsReceivingState, purchaseOrderOrder, categories } = props
   const dispatcher = useDispatch();
   const { Option } = Select;
-  const { materialsReceiving, loading, categories } = useSelector(({ materialsReceiving }) => ({
+  const { materialsReceiving, loading } = useSelector(({ materialsReceiving }) => ({
     materialsReceiving: materialsReceiving.materialsReceiving,
-    loading: materialsReceiving.loading,
-    categories: materialsReceiving.categories
+    loading: materialsReceiving.loading
   }), shallowEqual)
 
   useEffect(() => {
-    console.log('materialsReceiving123: ', materialsReceiving.orders[index].receivedSoFar);
+    console.log('materialsReceiving123: ', materialsReceiving.orders[index]);
+    console.log('categories: ', categories);
   }, [dispatcher, materialsReceivingState, order, index, inputState])
 
   const categoriesShown = categories.map((category, index) =>
-    <Option key={index} value={category}>{category}</Option>
+    <Option key={index} value={category.category}>{category.category}</Option>
   )
 
   const onQuantityChanged = (data) => {
@@ -72,7 +72,8 @@ const MaterialsReceivingOrder = (props) => {
             {order.product}
           </Col>
           <Col span={5} style={{ textAlign: 'center' }}>
-            <InputNumber max={purchaseOrderOrder.quantity - purchaseOrderOrder.quantity_received} bordered={inputState} style={{
+            <InputNumber 
+            max={purchaseOrderOrder.quantity - purchaseOrderOrder.quantity_received} bordered={inputState} style={{
               textAlign: 'center',
               marginLeft: 0
             }} onChange={(e) => onQuantityChanged(e)} />
@@ -87,7 +88,7 @@ const MaterialsReceivingOrder = (props) => {
             {parseFloat(totalPriceState).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}
           </Col>
           <Col span={3} style={{ textAlign: 'center' }}>
-            <Select style={{ width: 75 }} defaultValue={materialsReceivingState.orders[index].category}>
+            <Select style={{ width: 75 }} defaultValue= {''}>
               {categoriesShown}
             </Select>
           </Col>

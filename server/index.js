@@ -90,6 +90,7 @@ app.post('/projects/budgets/costs/subcategories/', budgetSubcategoryDB.createBud
 app.get('/projects/budgets/costs/subcategories/items', subcategoryItemDB.getSubcategoryItems);
 app.get('/projects/budgets/costs/subcategories/items/:id', subcategoryItemDB.getSubcategoryItem);
 app.post('/projects/budgets/costs/subcategories/items', subcategoryItemDB.createSubCategoryItem);
+app.get('/projects/categories/:id', subcategoryItemDB.getCategories);
 
 //PURCHASE ORDERS
 
