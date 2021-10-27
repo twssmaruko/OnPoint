@@ -53,8 +53,9 @@ const MaterialsReceivingModal = (props) => {
       {
         product: '',
         quantity: 0,
+        quantity_received: 0,
         unit: '',
-        unitPrice: 0,
+        unit_price: 0,
         category: ''
       }
     ],

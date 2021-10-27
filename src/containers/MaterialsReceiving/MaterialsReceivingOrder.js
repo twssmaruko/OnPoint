@@ -13,6 +13,7 @@ import {
 const MaterialsReceivingOrder = (props) => {
 
   const [totalPriceState, setTotalPriceState] = useState(0);
+  const [placeholderQuantity, setPlaceholderQuantity] = useState(0);
   const { order, index, inputState, materialsReceivingState, purchaseOrderOrder, categories } = props
   const dispatcher = useDispatch();
   const { Option } = Select;
@@ -24,6 +25,7 @@ const MaterialsReceivingOrder = (props) => {
   useEffect(() => {
     console.log('materialsReceiving123: ', materialsReceiving.orders[index]);
     console.log('categories: ', categories);
+    console.log("order: ", order)
   }, [dispatcher, materialsReceivingState, order, index, inputState])
 
   const categoriesShown = categories.map((category, index) =>
@@ -31,7 +33,7 @@ const MaterialsReceivingOrder = (props) => {
   )
 
   const onQuantityChanged = (data) => {
-    const newTotalPriceState = data * order.unitPrice;
+    const newTotalPriceState = data * order.unit_price;
     const oldOrders = materialsReceiving.orders;
     const newQuantityReceived = data;
     const newOrders = [];
@@ -73,6 +75,7 @@ const MaterialsReceivingOrder = (props) => {
           </Col>
           <Col span={5} style={{ textAlign: 'center' }}>
             <InputNumber 
+            placeholder={order.quantity - order.quantity_received}
             max={purchaseOrderOrder.quantity - purchaseOrderOrder.quantity_received} bordered={inputState} style={{
               textAlign: 'center',
               marginLeft: 0
