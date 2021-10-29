@@ -252,6 +252,7 @@ const MaterialsReceivingModal = (props) => {
     setMaterialsReceivingState(newMaterialsReceiving);
     dispatcher(actions.setMRR(newMaterialsReceiving));
   }
+
   return (
     <Form>
       <Spin spinning={loading}>

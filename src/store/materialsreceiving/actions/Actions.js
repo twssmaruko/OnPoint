@@ -104,9 +104,26 @@ export const createMMR = () => async (dispatch, getState) => {
   const materialsReceiving = getState().materialsReceiving.materialsReceiving;
   const selectedPurchaseOrder = getState().materialsReceiving.purchaseOrder;
   const selectedProject = getState().materialsReceiving.project;
-  console.log("materialsReceiving: ", materialsReceiving);
+  console.log('selectedProject: ', selectedProject);
+  try {
+    const fetchedProject = await OPC.get('/projects/' + materialsReceiving.project);
+    console.log("project: ", fetchedProject.data.project_name);
+
+  } catch (err) {
+    console.log(err.message);
+    message.error('unable to fetch project');
+  }
+  const orders = [];
+
+  for(const key in materialsReceiving) {
+    orders.push({
+      ...materialsReceiving.orders[key]
+    })
+  }
+  console.log('orders: ', orders);
+  console.log("materialsReceiving!!!: ", materialsReceiving);
   console.log("selectedPurchaseOrder: ", selectedPurchaseOrder);
-  console.log("project: ", selectedProject);
+  
 };
 
 export const setCategories = (data) => async (dispatch) => {

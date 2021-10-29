@@ -44,8 +44,9 @@ const MaterialsReceiving = () => {
     }
   ];
 
-  const { purchaseOrders } = useSelector(({ materialsReceiving }) => ({
-    purchaseOrders: materialsReceiving.purchaseOrders
+  const { purchaseOrders, materialsReceiving } = useSelector(({ materialsReceiving }) => ({
+    purchaseOrders: materialsReceiving.purchaseOrders,
+    materialsReceiving: materialsReceiving.materialsReceiving
   }), shallowEqual);
 
   const dispatcher = useDispatch();

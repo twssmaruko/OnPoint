@@ -44,7 +44,7 @@ const getProject = async (req, res) => {
         } else {
             const fetchedProject = await pool.query('SELECT * FROM project WHERE project_id = $1', [id]);
 
-            res.json(fetchedProject.rows);
+            res.json(fetchedProject.rows[0]);
         }
     } catch (err) {
         console.error
