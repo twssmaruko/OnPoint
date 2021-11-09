@@ -76,15 +76,15 @@ const PurchaseRequestGasModal = () => {
         //     current) => accumulator + current.price * current.quantity, 0);
         const prData = {
             status: "PENDING",
-            purchaseRequestNo: parseFloat(purchaseRequestNumber),
-            isApproved: "APPROVED",
+            purchase_request_number: parseFloat(purchaseRequestNumber),
+            is_approved: true,
             year: dateNow.getFullYear(),
             //dayMonthYear: moment(dateNow).format('DD-MM-YYYY'),
-            dayMonthYear: moment(dateNow, "DD-MM-YYYY"),
+            date_created: moment(dateNow, "DD-MM-YYYY"),
             // totalPrice,
-            prType: 'Fuel',
+            pr_type: 'gas',
             orders: purchaseRequestOrders,
-            requestedBy: requestedBy,
+            requested_by: requestedBy,
         };
 
         if (purchaseRequestOrders.length < 1 || purchaseRequestNumber === '' || requestedBy === '') {
@@ -159,15 +159,13 @@ const PurchaseRequestGasModal = () => {
         const newPurchaseRequestOrders = [];
         for (let i = 0; i < newGrid.length - 1; i++) {
             newPurchaseRequestOrders.push({
-                id: i,
-                orderId: 'order-' + i,
-                itemType: 'Fuel',
-                product: newGrid[i + 1][1].value,
+                item_type: newGrid[i + 1][1].value,
+                product: newGrid[i + 1][2].value,
                 quantity: parseFloat(newGrid[i + 1][3].value.split(',').join('')),
-                quantityLeft: parseFloat(newGrid[i + 1][3].value.split(',').join('')),
+                quantity_left: parseFloat(newGrid[i + 1][3].value.split(',').join('')),
                 unit: newGrid[i + 1][4].value,
-                unitPrice: '',
-                purchaseOrderNo: 'none',
+                unit_price: 0.00,
+                purchase_order_no: 'none',
             })
         }
         setPurchaseRequestOrders(newPurchaseRequestOrders);

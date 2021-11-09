@@ -403,12 +403,15 @@ export const addPurchaseRequest = (purchaseRequestData) => async (dispatch, getS
         is_approved: true,
         purchase_request_number: purchaseRequestData.purchase_request_number,
         status: 'PENDING',
+        pr_type: purchaseRequestData.pr_type,
         requested_by: purchaseRequestData.requested_by
       }
       const newPurchaseRequest = await OPC.post('/purchase_requests', purchaseRequestPost);
       const lastID = await OPC.get('/purchase_requests/last_id');
       const lastPurchaseRequestID = lastID.data[0].max;
+      console.log('purchaseRequestData.orders: ', purchaseRequestData.orders);
       for (const key in purchaseRequestData.orders) {
+        console.log('hello');
         const purchaseRequestOrderPost = {
           ...purchaseRequestData.orders[key],
           quantity: purchaseRequestData.orders[key].quantity.toFixed(2),
@@ -423,6 +426,8 @@ export const addPurchaseRequest = (purchaseRequestData) => async (dispatch, getS
       dispatch(setOpenModal1(false));
     } catch (err) {
       console.error(err.message);
+      dispatch(setShowSpin2(false));
+      dispatch(setOpenModal1(false));
     }
     // if (!purchaseRequestData.orders.length) {
     //   message.error('Please create orders');

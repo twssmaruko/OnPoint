@@ -56,8 +56,8 @@ const getPurchaseRequest = async (req, res) => {
 
 const createPurchaseRequest = async (req, res) => {
     try {
-        const { purchase_request_number, is_approved, requested_by, status } = req.body;
-        const newPurchaseRequest = await pool.query('INSERT INTO purchase_request (purchase_request_number, is_approved, requested_by, status, date_created) VALUES($1, $2, $3, $4, now())', [purchase_request_number, is_approved, requested_by, status]);
+        const { purchase_request_number, is_approved, requested_by, status, pr_type } = req.body;
+        const newPurchaseRequest = await pool.query('INSERT INTO purchase_request (purchase_request_number, is_approved, requested_by, status, date_created, pr_type) VALUES($1, $2, $3, $4, now(), $5)', [purchase_request_number, is_approved, requested_by, status, pr_type]);
         res.json(newPurchaseRequest.rows);
 
     } catch (err) {

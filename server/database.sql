@@ -21,6 +21,7 @@ CREATE TABLE purchase_request (
     purchase_request_number VARCHAR(20),
     date_created TIMESTAMP,
     requested_by VARCHAR(100),
+    pr_type VARCHAR(10),
     status VARCHAR (20)
 
 );

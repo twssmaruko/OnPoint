@@ -66,6 +66,7 @@ const PurchaseRequestForm = () => {
       is_approved: true,
       //dayMonthYear: moment(dateNow).format('DD-MM-YYYY'),
       date_created: moment(dateNow, "DD-MM-YYYY"),
+      pr_type: "normal",
       // totalPrice,
       orders: purchaseRequestOrders,
       requested_by: requestedBy,
