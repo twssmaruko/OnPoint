@@ -66,6 +66,7 @@ const AddPurchaseOrder = memo(() => {
     openTransferModal: false,
   });
 
+  const { TextArea } = Input;
   const formRef = useRef(null);
   const borderStyle = "none";
   const flexProps = [11, 1.5, 9.8];
@@ -930,13 +931,13 @@ const AddPurchaseOrder = memo(() => {
             marginBottom: 15,
           }}
         >
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 2 }}>
             <Text style={{ fontFamily: "ArialBold" }}>Notes: </Text>
           </View>
-          <View style={{ flex: 10 }}>
-            <Text>{purchaseOrder.notes}</Text>
+          <View style={{ flex: 60 }}>
+            <Text style={{textAlign: 'center'}}>{purchaseOrder.notes}</Text>
           </View>
-          <View style={{ flex: 1 }} />
+          <View style={{ flex: 57 }} />
         </View>
         <View>{ordersDisplay3}</View>
 
@@ -1443,13 +1444,13 @@ const AddPurchaseOrder = memo(() => {
             marginBottom: 15,
           }}
         >
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 2 }}>
             <Text style={{ fontFamily: "ArialBold" }}>Notes: </Text>
           </View>
-          <View style={{ flex: 10 }}>
-            <Text>{purchaseOrder.notes}</Text>
+          <View style={{ flex: 60 }}>
+            <Text style={{textAlign: 'center'}}>{purchaseOrder.notes}</Text>
           </View>
-          <View style={{ flex: 1 }} />
+          <View style={{ flex: 57 }} />
         </View>
         <View>{ordersDisplay3}</View>
 
@@ -1956,13 +1957,13 @@ const AddPurchaseOrder = memo(() => {
             marginBottom: 15,
           }}
         >
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 2 }}>
             <Text style={{ fontFamily: "ArialBold" }}>Notes: </Text>
           </View>
-          <View style={{ flex: 10 }}>
-            <Text>{purchaseOrder.notes}</Text>
+          <View style={{ flex: 60 }}>
+            <Text style={{textAlign: 'center'}}>{purchaseOrder.notes}</Text>
           </View>
-          <View style={{ flex: 1 }} />
+          <View style={{ flex: 57 }} />
         </View>
         <View>{ordersDisplay3}</View>
 
@@ -2974,9 +2975,9 @@ const AddPurchaseOrder = memo(() => {
                   <Col span={1} />
                   <Col span={2}>Notes:</Col>
                   <Col>
-                    <Input
+                    <TextArea
                       onChange={(e) => onNotesChange(e.target.value)}
-                      style={{ width: 275 }}
+                      style={{ width: 275, textAlign: 'center' }}
                     />
                   </Col>
                 </Row>
