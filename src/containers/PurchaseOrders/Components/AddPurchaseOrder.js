@@ -988,7 +988,6 @@ const AddPurchaseOrder = memo(() => {
             style={{ borderStyle: "solid", borderTopWidth: 1, marginTop: 15 }}
           ></View>
         </View>
-
         <View>
           <View
             style={{ flexDirection: "row", fontFamily: "Arial", fontSize: 10 }}
@@ -2976,8 +2975,9 @@ const AddPurchaseOrder = memo(() => {
                   <Col span={2}>Notes:</Col>
                   <Col>
                     <TextArea
+                      autoSize={{minRows: 1, maxRows: 7}}
                       onChange={(e) => onNotesChange(e.target.value)}
-                      style={{ width: 275, textAlign: 'center' }}
+                      style={{ width: 275}}
                     />
                   </Col>
                 </Row>
