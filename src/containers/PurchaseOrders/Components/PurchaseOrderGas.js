@@ -15,10 +15,7 @@ const PurchaseOrderGas = (props) => {
 
   const dispatcher = useDispatch();
 
-  useEffect(() => {
-    dispatcher(prActions.fetchPurchaseRequestsGas());
-    dispatcher(poActions.getProjects());
-  }, [dispatcher]);
+  
 
   const [gasState] = useState([
     "IF-1 (MC1)",
@@ -98,7 +95,11 @@ const PurchaseOrderGas = (props) => {
     </Option>
   ));
 
-  const { openModal, purchaseRequests, projects } = useSelector(
+  const {
+    openModal,
+    purchaseRequests,
+    projects
+  } = useSelector(
     ({ ui, purchaseOrder, purchaseRequests }) => ({
       openModal: ui.openModal3,
       purchaseRequests: purchaseRequests.purchaseRequestsGas,
@@ -106,6 +107,11 @@ const PurchaseOrderGas = (props) => {
     }),
     shallowEqual
   );
+
+  useEffect(() => {
+    dispatcher(prActions.fetchPurchaseRequestsGas());
+    dispatcher(poActions.getProjects());
+  }, [dispatcher]);
 
   const onCancelClicked = () => {
     dispatcher(uiActions.setOpenModal3(false));
@@ -123,9 +129,12 @@ const PurchaseOrderGas = (props) => {
   };
 
   const prList = purchaseRequests.map((purchaseRequest) => (
-    <Option key={purchaseRequest.id} value={purchaseRequest.id}>
-      {purchaseRequest.purchaseRequestNo}
-    </Option>
+      <Option
+        key={purchaseRequest.purchase_request_id}
+        value={purchaseRequest.purchase_request_id}
+      >
+        {purchaseRequest.purchase_request_number}
+      </Option>
   ));
 
   const projectList = projects.map((project) => (
@@ -246,7 +255,8 @@ const PurchaseOrderGas = (props) => {
   };
 
   const onPRSelect = (data) => {
-    const selectedPurchaseRequest = purchaseRequests.find((e) => e.id === data);
+    console.log('data: ', data);
+    const selectedPurchaseRequest = purchaseRequests.find((e) => e.purchase_request_id === data);
     const purchaseRequestNo = selectedPurchaseRequest.purchaseRequsetNo;
     const newPurchaseOrderData = {
       ...purchaseOrderData,
