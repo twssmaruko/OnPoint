@@ -7,8 +7,10 @@ const Homepage = () => {
   return (
     <div style={{ marginTop: 50 }}>
       <h1>On Point Construction</h1>
-      <h3>v0.5.1</h3>
+      <h3>v0.5.2</h3>
     </div>
+  
+  
   );
 };
 export default Homepage;
