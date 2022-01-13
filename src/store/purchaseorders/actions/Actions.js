@@ -71,6 +71,11 @@ const setLoading = (data) => ({
   data
 })
 
+const setGasOrderInStore = (data) => ({
+  type: actionTypes.SET_GASORDER,
+  data
+})
+
 const deletePurchaseOrderInStore = (id, data) => ({
   type: actionTypes.DELETE_PURCHASEORDER,
   id,
@@ -101,23 +106,23 @@ export const setCategories = (data) => async (dispatch) => {
   }
 }
 
-export const getSamplePO = () => async (dispatch) => {
-  const fetchedPurchaseOrders = [];
-  try {
-    const result = await axios.get('/purchaseorders.json');
-    for (const key in result.data) {
-      fetchedPurchaseOrders.push({
-        ...result.data[key],
-        id: key
-      })
-    }
-    dispatch(setSamplePurchaseOrder(fetchedPurchaseOrders));
-  } catch (error) {
-    message.error('Error getting the purchaseOrders!');
-    console.error(error);
-  }
+// export const getSamplePO = () => async (dispatch) => {
+//   const fetchedPurchaseOrders = [];
+//   try {
+//     const result = await axios.get('/purchaseorders.json');
+//     for (const key in result.data) {
+//       fetchedPurchaseOrders.push({
+//         ...result.data[key],
+//         id: key
+//       })
+//     }
+//     dispatch(setSamplePurchaseOrder(fetchedPurchaseOrders));
+//   } catch (error) {
+//     message.error('Error getting the purchaseOrders!');
+//     console.error(error);
+//   }
 
-}
+// }
 
 export const setPurchaseOrder = (data) => ({
   type: actionTypes.SET_PURCHASEORDER,
@@ -129,23 +134,27 @@ export const initOrders = (data) => (dispatch) => {
 }
 
 
-export const newVendor = (vendorData) => async (dispatch, getState) => {
-  // Marco Code
-  dispatch(setLoading(true));
-  const vendorsList = getState().purchaseOrder.vendors;
-  const newVendors = vendorsList;
-  newVendors.push(vendorData);
-  try {
-    await axios.post('/vendors.json', vendorData);
-    dispatch(setVendorInStore(vendorData))
-    dispatch(setVendors(newVendors));
-    dispatch(setLoading(false));
-    message.success('New Vendor created');
-  } catch (error) {
-    message.error('Cannot add new Vendor');
-    console.error(error);
-    dispatch(setLoading(false));
-  }
+// export const newVendor = (vendorData) => async (dispatch, getState) => {
+//   // Marco Code
+//   dispatch(setLoading(true));
+//   const vendorsList = getState().purchaseOrder.vendors;
+//   const newVendors = vendorsList;
+//   newVendors.push(vendorData);
+//   try {
+//     await axios.post('/vendors.json', vendorData);
+//     dispatch(setVendorInStore(vendorData))
+//     dispatch(setVendors(newVendors));
+//     dispatch(setLoading(false));
+//     message.success('New Vendor created');
+//   } catch (error) {
+//     message.error('Cannot add new Vendor');
+//     console.error(error);
+//     dispatch(setLoading(false));
+//   }
+// }
+
+export const setGasOrder = (data) => (dispatch) => {
+  dispatch(setGasOrderInStore(data));
 }
 
 export const setOrder = (data, index) => (dispatch, getState) => {
@@ -227,152 +236,152 @@ export const setVendor = (vendorId) => async (dispatch) => {
   }
 }
 
-export const setOrdersReceived = (initOrders, ordersData, idLink) => async (dispatch, getState) => {
-  const newOrders = [];
-  if (!ordersData.length) {
-    message.success('no changes made');
-    return;
-  }
-  for (const key in ordersData) {
-    newOrders.push({
-      ...ordersData[key],
-      id: key
-    });
-  }
-  // console.log('newOrdersPushed: ', newOrders);
-  dispatch(setOrdersReceivedInStore(newOrders));
-  dispatch(setShowSpin1(true));
-  const fetchedProjects = [];
-  try {
-    const result = await axios.get('/projects.json')
-    for (const key in result.data) {
-      fetchedProjects.push({
-        ...result.data[key],
-        id: key
-      })
-    }
-    const projectSelected = fetchedProjects.find((e) => e.projectCode === newOrders[0].projectCode);
-    dispatch(setProjectInStore(projectSelected));
-    //console.log('projectSelected: ', projectSelected);
+// export const setOrdersReceived = (initOrders, ordersData, idLink) => async (dispatch, getState) => {
+//   const newOrders = [];
+//   if (!ordersData.length) {
+//     message.success('no changes made');
+//     return;
+//   }
+//   for (const key in ordersData) {
+//     newOrders.push({
+//       ...ordersData[key],
+//       id: key
+//     });
+//   }
+//   // console.log('newOrdersPushed: ', newOrders);
+//   dispatch(setOrdersReceivedInStore(newOrders));
+//   dispatch(setShowSpin1(true));
+//   const fetchedProjects = [];
+//   try {
+//     const result = await axios.get('/projects.json')
+//     for (const key in result.data) {
+//       fetchedProjects.push({
+//         ...result.data[key],
+//         id: key
+//       })
+//     }
+//     const projectSelected = fetchedProjects.find((e) => e.projectCode === newOrders[0].projectCode);
+//     dispatch(setProjectInStore(projectSelected));
+//     //console.log('projectSelected: ', projectSelected);
 
-    const newPurchaseOrderOrders = [];
+//     const newPurchaseOrderOrders = [];
 
-    for (const key in newOrders) {
-      const projectInStore = getState().purchaseOrder.project;
-      for (const budgetCostKey in projectInStore
-        .budget
-        .budgetCost) {
+//     for (const key in newOrders) {
+//       const projectInStore = getState().purchaseOrder.project;
+//       for (const budgetCostKey in projectInStore
+//         .budget
+//         .budgetCost) {
 
-        for (const subCategoriesKey in projectInStore
-          .budget.budgetCost[budgetCostKey]
-          .subCategories) {
+//         for (const subCategoriesKey in projectInStore
+//           .budget.budgetCost[budgetCostKey]
+//           .subCategories) {
 
-          const foundItem = projectInStore
-            .budget
-            .budgetCost[budgetCostKey]
-            .subCategories[subCategoriesKey]
-            .subCategoryItem.find((e) => e.category === newOrders[key].category)
+//           const foundItem = projectInStore
+//             .budget
+//             .budgetCost[budgetCostKey]
+//             .subCategories[subCategoriesKey]
+//             .subCategoryItem.find((e) => e.category === newOrders[key].category)
 
-          if (foundItem !== undefined) {
-            const newAmountSpent = newOrders[key].itemTotal;
-            const newSubCategoryItemAmountSpent = projectInStore
-              .budget.budgetCost[budgetCostKey]
-              .subCategories[subCategoriesKey]
-              .subCategoryItem[foundItem.index]
-              .amountSpent + newAmountSpent;
+//           if (foundItem !== undefined) {
+//             const newAmountSpent = newOrders[key].itemTotal;
+//             const newSubCategoryItemAmountSpent = projectInStore
+//               .budget.budgetCost[budgetCostKey]
+//               .subCategories[subCategoriesKey]
+//               .subCategoryItem[foundItem.index]
+//               .amountSpent + newAmountSpent;
 
-            const newSubCategoriesAmountSpent = projectInStore
-              .budget.budgetCost[budgetCostKey]
-              .subCategories[subCategoriesKey]
-              .amountSpent + newAmountSpent;
+//             const newSubCategoriesAmountSpent = projectInStore
+//               .budget.budgetCost[budgetCostKey]
+//               .subCategories[subCategoriesKey]
+//               .amountSpent + newAmountSpent;
 
-            const newBudgetCostAmountSpent = projectInStore
-              .budget.budgetCost[budgetCostKey]
-              .amountSpent + newAmountSpent;
+//             const newBudgetCostAmountSpent = projectInStore
+//               .budget.budgetCost[budgetCostKey]
+//               .amountSpent + newAmountSpent;
 
-            //  console.log('newSubCategoryItemAmountSpent: ', newSubCategoryItemAmountSpent);
+//             //  console.log('newSubCategoryItemAmountSpent: ', newSubCategoryItemAmountSpent);
 
-            const newProject = projectInStore;
-            newProject.budget.budgetCost[budgetCostKey]
-              .subCategories[subCategoriesKey].subCategoryItem.splice(foundItem.index, 1, {
-                ...projectInStore.budget.budgetCost[budgetCostKey]
-                  .subCategories[subCategoriesKey]
-                  .subCategoryItem[foundItem.index],
-                amountSpent: newSubCategoryItemAmountSpent
-              })
+//             const newProject = projectInStore;
+//             newProject.budget.budgetCost[budgetCostKey]
+//               .subCategories[subCategoriesKey].subCategoryItem.splice(foundItem.index, 1, {
+//                 ...projectInStore.budget.budgetCost[budgetCostKey]
+//                   .subCategories[subCategoriesKey]
+//                   .subCategoryItem[foundItem.index],
+//                 amountSpent: newSubCategoryItemAmountSpent
+//               })
 
-            newProject.budget.budgetCost[budgetCostKey]
-              .subCategories.splice(subCategoriesKey, 1, {
-                ...projectInStore.budget.budgetCost[budgetCostKey]
-                  .subCategories[subCategoriesKey],
-                amountSpent: newSubCategoriesAmountSpent
-              })
+//             newProject.budget.budgetCost[budgetCostKey]
+//               .subCategories.splice(subCategoriesKey, 1, {
+//                 ...projectInStore.budget.budgetCost[budgetCostKey]
+//                   .subCategories[subCategoriesKey],
+//                 amountSpent: newSubCategoriesAmountSpent
+//               })
 
-            newProject.budget.budgetCost.splice(budgetCostKey, 1, {
-              ...projectInStore.budget.budgetCost[budgetCostKey],
-              amountSpent: newBudgetCostAmountSpent
-            })
-            const newPurchaseOrderData = {
-              category: newOrders[key].category,
-              didReceive: true,
-              id: newOrders[key].product + newOrders[key].id + uuidv4,
-              itemTotal: newOrders[key].itemTotal,
-              product: newOrders[key].product,
-              quantity: newOrders[key].quantity,
-              unit: newOrders[key].unit,
-              unitPrice: newOrders[key].unitPrice
-            }
-            newPurchaseOrderOrders.push(newPurchaseOrderData);
-            dispatch(setProjectInStore(newProject));
+//             newProject.budget.budgetCost.splice(budgetCostKey, 1, {
+//               ...projectInStore.budget.budgetCost[budgetCostKey],
+//               amountSpent: newBudgetCostAmountSpent
+//             })
+//             const newPurchaseOrderData = {
+//               category: newOrders[key].category,
+//               didReceive: true,
+//               id: newOrders[key].product + newOrders[key].id + uuidv4,
+//               itemTotal: newOrders[key].itemTotal,
+//               product: newOrders[key].product,
+//               quantity: newOrders[key].quantity,
+//               unit: newOrders[key].unit,
+//               unitPrice: newOrders[key].unitPrice
+//             }
+//             newPurchaseOrderOrders.push(newPurchaseOrderData);
+//             dispatch(setProjectInStore(newProject));
 
-          }
-        }
-      }
-    }
+//           }
+//         }
+//       }
+//     }
 
-    const finalPurchaseOrderOrders = [...initOrders];
-    for (const key in finalPurchaseOrderOrders) {
-      const orderFound = newPurchaseOrderOrders.find(
-        (e) => e.product === finalPurchaseOrderOrders[key].product);
-      if (orderFound !== undefined) {
-        finalPurchaseOrderOrders[key] = orderFound;
-      }
-    }
+//     const finalPurchaseOrderOrders = [...initOrders];
+//     for (const key in finalPurchaseOrderOrders) {
+//       const orderFound = newPurchaseOrderOrders.find(
+//         (e) => e.product === finalPurchaseOrderOrders[key].product);
+//       if (orderFound !== undefined) {
+//         finalPurchaseOrderOrders[key] = orderFound;
+//       }
+//     }
 
 
-    let newPoStatus = 'Pending';
-    let didReceiveFlag = 0;
-    for (const key in finalPurchaseOrderOrders) {
-      if (finalPurchaseOrderOrders[key].didReceive === true ||
-        finalPurchaseOrderOrders[key].didReceive === undefined) {
-        didReceiveFlag += 1;
-      }
-    }
+//     let newPoStatus = 'Pending';
+//     let didReceiveFlag = 0;
+//     for (const key in finalPurchaseOrderOrders) {
+//       if (finalPurchaseOrderOrders[key].didReceive === true ||
+//         finalPurchaseOrderOrders[key].didReceive === undefined) {
+//         didReceiveFlag += 1;
+//       }
+//     }
 
-    if (didReceiveFlag === initOrders.length) {
-      newPoStatus = 'Received';
-    }
+//     if (didReceiveFlag === initOrders.length) {
+//       newPoStatus = 'Received';
+//     }
 
-    const editedProject = getState().purchaseOrder.project;
-    const fetchedPurchaseOrder = await axios.get('/purchaseorders/' + idLink + '.json');
-    const finalPurchaseOrder = {
-      ...fetchedPurchaseOrder.data,
-      status: newPoStatus,
-      orders: finalPurchaseOrderOrders
-    }
-    await axios.put('/projects/' + projectSelected.id + '.json', editedProject);
-    await axios.put('purchaseorders/' + idLink + '.json', finalPurchaseOrder);
-    message.success('Budget updated!');
-    dispatch(setShowSpin1(false));
-    dispatch(setOpenModal1(false))
-    window.location.reload(false);
-  } catch (error) {
-    message.error('Purchase Order Error!');
-    dispatch(setShowSpin1(false));
-    console.error(error);
-  }
+//     const editedProject = getState().purchaseOrder.project;
+//     const fetchedPurchaseOrder = await axios.get('/purchaseorders/' + idLink + '.json');
+//     const finalPurchaseOrder = {
+//       ...fetchedPurchaseOrder.data,
+//       status: newPoStatus,
+//       orders: finalPurchaseOrderOrders
+//     }
+//     await axios.put('/projects/' + projectSelected.id + '.json', editedProject);
+//     await axios.put('purchaseorders/' + idLink + '.json', finalPurchaseOrder);
+//     message.success('Budget updated!');
+//     dispatch(setShowSpin1(false));
+//     dispatch(setOpenModal1(false))
+//     window.location.reload(false);
+//   } catch (error) {
+//     message.error('Purchase Order Error!');
+//     dispatch(setShowSpin1(false));
+//     console.error(error);
+//   }
 
-}
+// }
 
 export const fetchPurchaseOrders = () => async (dispatch) => {
   dispatch(setShowSpin2(true));
@@ -511,21 +520,21 @@ export const getPurchaseRequests = () => async (dispatch) => {
   // }
 };
 
-export const fetchPurchaseOrderId = () => async (dispatch) => {
-  dispatch(setLoading(true));
-  //dispatch(setShowSpin2(true));
-  try {
-    const response = await axios.get('/currentPurchaseOrderId.json');
-    dispatch(setLoading(false));
-    dispatch(fetchPurchaseOrderIdInStore(response.data));
-    dispatch(setShowSpin2(false));
-  } catch (error) {
-    message.error('failed to fetch purchase order id');
-    dispatch(setLoading(false));
-    console.error(error);
-    dispatch(setShowSpin2(false));
-  }
-}
+// export const fetchPurchaseOrderId = () => async (dispatch) => {
+//   dispatch(setLoading(true));
+//   //dispatch(setShowSpin2(true));
+//   try {
+//     const response = await axios.get('/currentPurchaseOrderId.json');
+//     dispatch(setLoading(false));
+//     dispatch(fetchPurchaseOrderIdInStore(response.data));
+//     dispatch(setShowSpin2(false));
+//   } catch (error) {
+//     message.error('failed to fetch purchase order id');
+//     dispatch(setLoading(false));
+//     console.error(error);
+//     dispatch(setShowSpin2(false));
+//   }
+// }
 
 export const addPurchaseOrder = (purchaseOrderData) => async (dispatch) => {
   dispatch(setShowSpin2(true));
@@ -719,55 +728,26 @@ export const fetchPurchaseRequest = (prId) => async (dispatch) => {
     dispatch(setShowSpin2(false));
   }
 }
-export const getVendors = () => async (dispatch) => {
+// export const getVendors = () => async (dispatch) => {
 
-  dispatch(setShowSpin2(true));
-  try {
-    const response = await axios.get('/vendors.json')
-    const fetchedVendors = [];
-    for (const key in response.data) {
-      fetchedVendors.push({
-        ...response.data[key],
-        id: key
-      })
-    }
-    dispatch(setVendors(fetchedVendors))
-    dispatch(setShowSpin2(false));
-  } catch (error) {
-    dispatch(setShowSpin2(false));
-    message.error('unable to retrieve vendor');
-    console.error(error);
-  }
-
-
-  // try {
-  //   if (data) {
-  //     dispatch(setShowSpin2(true));
-  //     const queryData = await API.graphql(graphqlOperation(searchVendors, {
-  //       filter:
-  //           {
-  //             vendorName:
-  //               {
-  //                 matchPhrasePrefix: data
-  //               }
-  //           },
-  //       limit: 5
-  //     }));
-  //     const vendors = queryData.data.searchVendors.items;
-  //     if (vendors.length) {
-  //       dispatch(setVendors(vendors));
-  //       dispatch(setShowSpin2(false));
-  //     }
-  //   }
-
-
-
-  // } catch (e) {
-  //   console.error(e)
-  //   dispatch(setShowSpin2(false));
-  //   message.error('Error getting products');
-  // }
-};
+//   dispatch(setShowSpin2(true));
+//   try {
+//     const response = await axios.get('/vendors.json')
+//     const fetchedVendors = [];
+//     for (const key in response.data) {
+//       fetchedVendors.push({
+//         ...response.data[key],
+//         id: key
+//       })
+//     }
+//     dispatch(setVendors(fetchedVendors))
+//     dispatch(setShowSpin2(false));
+//   } catch (error) {
+//     dispatch(setShowSpin2(false));
+//     message.error('unable to retrieve vendor');
+//     console.error(error);
+//   }
+// };
 
 export const getPurchaseRequestData = (data) => async (dispatch) => {
 
@@ -829,56 +809,56 @@ export const deletePurchaseOrder = (purchaseOrderId) => async (dispatch) => {
 
 }
 
-export const fetchWorksheet = () => async (dispatch) => {
+// export const fetchWorksheet = () => async (dispatch) => {
 
-  try {
-    dispatch(setLoading(true));
-    const result = await axios.get('/purchaseorders.json');
-    const fetchedPurchaseOrders = [];
-    const worksheetData = [];
-    for (const key in result.data) {
-      // fetchedPurchaseOrders.push({
-      //   ...result.data[key],
-      //   id: key
-      // })
-      const purchaseOrderNo = result.data[key].purchaseOrderId.toString();
-      const purchaseRequestNo = result.data[key].purchaseRequestNo;
-      const project = result.data[key].project;
-      const vendor = result.data[key].vendor;
-      const orders = result.data[key].orders;
-      const year = result.data[key].dateCreated.slice(0, 4);
-      const month = result.data[key].dateCreated.slice(5, 7);
-      const day = result.data[key].dateCreated.slice(8, 10)
-      for (const i in orders) {
-        worksheetData.push({
-          purchaseOrderNo: purchaseOrderNo,
-          purchaseRequestNo: purchaseRequestNo,
-          project: project,
-          vendor: vendor,
-          category: orders[i].category,
-          itemType: orders[i].itemType,
-          product: orders[i].product,
-          quantity: orders[i].quantity,
-          unit: orders[i].unit,
-          unitPrice: orders[i].unitPrice,
-          totalPrice: orders[i].totalPrice,
-          year: year,
-          month: month,
-          day: day
+//   try {
+//     dispatch(setLoading(true));
+//     const result = await axios.get('/purchaseorders.json');
+//     const fetchedPurchaseOrders = [];
+//     const worksheetData = [];
+//     for (const key in result.data) {
+//       // fetchedPurchaseOrders.push({
+//       //   ...result.data[key],
+//       //   id: key
+//       // })
+//       const purchaseOrderNo = result.data[key].purchaseOrderId.toString();
+//       const purchaseRequestNo = result.data[key].purchaseRequestNo;
+//       const project = result.data[key].project;
+//       const vendor = result.data[key].vendor;
+//       const orders = result.data[key].orders;
+//       const year = result.data[key].dateCreated.slice(0, 4);
+//       const month = result.data[key].dateCreated.slice(5, 7);
+//       const day = result.data[key].dateCreated.slice(8, 10)
+//       for (const i in orders) {
+//         worksheetData.push({
+//           purchaseOrderNo: purchaseOrderNo,
+//           purchaseRequestNo: purchaseRequestNo,
+//           project: project,
+//           vendor: vendor,
+//           category: orders[i].category,
+//           itemType: orders[i].itemType,
+//           product: orders[i].product,
+//           quantity: orders[i].quantity,
+//           unit: orders[i].unit,
+//           unitPrice: orders[i].unitPrice,
+//           totalPrice: orders[i].totalPrice,
+//           year: year,
+//           month: month,
+//           day: day
 
-        })
-      }
-    }
-    dispatch(fetchWorksheetToStore(worksheetData));
-    dispatch(setLoading(false));
-    message.success('worksheet loaded');
+//         })
+//       }
+//     }
+//     dispatch(fetchWorksheetToStore(worksheetData));
+//     dispatch(setLoading(false));
+//     message.success('worksheet loaded');
 
-  } catch (error) {
-    message.error('failed to fetch worksheet!');
-    console.error(error);
-    dispatch(setLoading(false));
-  }
-}
+//   } catch (error) {
+//     message.error('failed to fetch worksheet!');
+//     console.error(error);
+//     dispatch(setLoading(false));
+//   }
+// }
 
 export const cancelPurchaseOrder = (purchaseOrderId) => async (dispatch) => {
   console.log(purchaseOrderId);

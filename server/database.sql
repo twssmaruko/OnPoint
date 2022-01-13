@@ -204,3 +204,11 @@ CREATE TABLE materials_receiving_order (
         FOREIGN KEY(materials_receiving_id)
             REFERENCES materials_receiving(materials_receiving_id)
 )
+
+CREATE TABLE equipment (
+    equipment_id BIGSERIAL PRIMARY KEY NOT NULL,
+    equipment_code VARCHAR(100),
+    equipment_name VARCHAR(100),
+    equipment_category VARCHAR(100)
+    
+)

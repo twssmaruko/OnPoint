@@ -304,7 +304,7 @@ const PurchaseOrderModal = (props) => {
               textAlign: 'left',
               fontSize: 14
             }}>
-            28A Sanson Road, Lahug
+            3rd fl. SPC Bldg., One Paseo Compound
             </Col>
           </Row>
           <Row style={{

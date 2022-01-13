@@ -215,6 +215,61 @@ const PurchaseOrderTable = memo(() => {
     },
   ];
 
+  const columnsGas = [
+    {
+      title: 'Details',
+      key: 'detailsGas',
+      width: '2%',
+      render: editButton
+    },
+    {
+      title: 'PO Number',
+      key: 'purchase_order_number',
+      width: 150,
+      defaultSortOrder: 'ascend',
+      sorter: (a, b) => b.purchase_order_id - a.purchase_order_id,
+      render: poNumberDisplay
+    },
+    {
+      title: 'Project',
+      key: 'project_id',
+      width: 150,
+      render: projectDisplay
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      width: 150,
+      render: poStatusDisplay
+    },
+    {
+      title: 'PR',
+      key: 'purchase_request_id',
+      width: 150,
+      render: prDisplay
+    },
+    {
+      title: 'Requested On',
+      dataIndex: 'date_created',
+      key: 'date_created',
+      width: 150,
+      render: (createdAt) => moment(createdAt).format('MMMM Do YYYY, h:mm:ss A')
+    },
+    {
+      title: 'Cancel',
+      render: cancelButton,
+      key: 'cancel',
+      width: '1%'
+    },
+    {
+      title: "Delete",
+      render: deleteButton,
+      key: "delete",
+      width: "1%",
+    },
+  ]
+
   const onDetailsClick = async(e) => {
     // dispatcher(actions.fetchProjectForPurchaseOrder(e.project))
 
@@ -277,7 +332,7 @@ const PurchaseOrderTable = memo(() => {
               </Tab>
               <Tab eventKey="purchaseOrderGas" title="Gas">
                 <Table
-                  columns={columns}
+                  columns={columnsGas}
                   dataSource={checkDisplay()}
                   size="small"
                   rowKey="purchase_order_id"

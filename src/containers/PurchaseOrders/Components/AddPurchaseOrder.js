@@ -66,6 +66,7 @@ const AddPurchaseOrder = memo(() => {
     openTransferModal: false,
   });
 
+  const { TextArea } = Input;
   const formRef = useRef(null);
   const borderStyle = "none";
   const flexProps = [11, 1.5, 9.8];
@@ -112,7 +113,7 @@ const AddPurchaseOrder = memo(() => {
   );
 
   useEffect(() => {
-    dispatcher(actions.fetchPurchaseOrderId());
+    //dispatcher(actions.fetchPurchaseOrderId());
     dispatcher(actions.getProjects());
     dispatcher(vendorActions.fetchVendors());
     dispatcher(actions.getPurchaseRequests());
@@ -420,7 +421,7 @@ const AddPurchaseOrder = memo(() => {
 
   const vendorFormSubmit = () => {
     formRef.current.submit();
-    dispatcher(actions.getVendors());
+  //  dispatcher(actions.getVendors());
     vendorsList.map((vendors) => {
       const newVendor = vendors;
       vendorOptions.push({
@@ -471,7 +472,7 @@ const AddPurchaseOrder = memo(() => {
   };
 
   const onVendorSubmit = (values) => {
-    dispatcher(actions.newVendor(values));
+  //  dispatcher(actions.newVendor(values));
     //dispatcher(actions.setVendor(values.vendorName));
     setNewVendorForm(false);
   };
@@ -729,13 +730,13 @@ const AddPurchaseOrder = memo(() => {
               </Text>
             </View>
             <View>
-              <Text style={{ fontSize: 10 }}>28 A Sanson Road, Lahug</Text>
+              <Text style={{ fontSize: 10 }}>3rd fl., SPC Bldg., One Paseo Compound</Text>
             </View>
             <View>
-              <Text style={{ fontSize: 10 }}>Cebu City, Philippines</Text>
+              <Text style={{ fontSize: 10 }}>Paseo Saturnino St., Banilad</Text>
             </View>
             <View>
-              <Text style={{ fontSize: 10 }}>(032) 266 3356</Text>
+              <Text style={{ fontSize: 10 }}>Cebu City, Philippines 6000</Text>
             </View>
             <View>
               <Text style={{ fontSize: 10 }}>
@@ -930,13 +931,13 @@ const AddPurchaseOrder = memo(() => {
             marginBottom: 15,
           }}
         >
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 2 }}>
             <Text style={{ fontFamily: "ArialBold" }}>Notes: </Text>
           </View>
-          <View style={{ flex: 10 }}>
-            <Text>{purchaseOrder.notes}</Text>
+          <View style={{ flex: 60 }}>
+            <Text style={{textAlign: 'center'}}>{purchaseOrder.notes}</Text>
           </View>
-          <View style={{ flex: 1 }} />
+          <View style={{ flex: 57 }} />
         </View>
         <View>{ordersDisplay3}</View>
 
@@ -987,7 +988,6 @@ const AddPurchaseOrder = memo(() => {
             style={{ borderStyle: "solid", borderTopWidth: 1, marginTop: 15 }}
           ></View>
         </View>
-
         <View>
           <View
             style={{ flexDirection: "row", fontFamily: "Arial", fontSize: 10 }}
@@ -1091,6 +1091,40 @@ const AddPurchaseOrder = memo(() => {
             <Text>VENDOR</Text>
           </View>
         </View>
+        {/* <View
+          style={{
+            flexDirection: "row",
+            fontFamily: "ArialBold",
+            fontSize: "10",
+          }}
+        >
+          <View
+            style={{
+              flex: 6,
+              textAlight: "left",
+            }}
+          >
+            <Text>AND DEVELOPMENT CORPORATION</Text>
+          </View>
+          <View style={{ flex: 4 }}></View>
+          <View
+            style={{
+              flex: 6,
+              textAlign: "center",
+            }}
+          >
+            <Text>AND DEVELOPMENT CORPORATION</Text>
+          </View>
+          <View style={{ flex: 4 }}></View>
+          <View
+            style={{
+              flex: 5,
+              textAlign: "center",
+            }}
+          >
+            <Text></Text>
+          </View>
+        </View> */}
 
         {/* <View style={{ marginTop: 20 }}>
           <View style={{ flexDirection: "row" }}>
@@ -1242,13 +1276,13 @@ const AddPurchaseOrder = memo(() => {
               </Text>
             </View>
             <View>
-              <Text style={{ fontSize: 10 }}>28 A Sanson Road, Lahug</Text>
+              <Text style={{ fontSize: 10 }}>3rd fl., SPC Bldg., One Paseo Compound</Text>
             </View>
             <View>
-              <Text style={{ fontSize: 10 }}>Cebu City, Philippines</Text>
+              <Text style={{ fontSize: 10 }}>Paseo Saturnino St., Banilad</Text>
             </View>
             <View>
-              <Text style={{ fontSize: 10 }}>(032) 266 3356</Text>
+              <Text style={{ fontSize: 10 }}>Cebu City, Philippines 6000</Text>
             </View>
             <View>
               <Text style={{ fontSize: 10 }}>
@@ -1443,13 +1477,13 @@ const AddPurchaseOrder = memo(() => {
             marginBottom: 15,
           }}
         >
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 2 }}>
             <Text style={{ fontFamily: "ArialBold" }}>Notes: </Text>
           </View>
-          <View style={{ flex: 10 }}>
-            <Text>{purchaseOrder.notes}</Text>
+          <View style={{ flex: 60 }}>
+            <Text style={{textAlign: 'center'}}>{purchaseOrder.notes}</Text>
           </View>
-          <View style={{ flex: 1 }} />
+          <View style={{ flex: 57 }} />
         </View>
         <View>{ordersDisplay3}</View>
 
@@ -1755,13 +1789,13 @@ const AddPurchaseOrder = memo(() => {
               </Text>
             </View>
             <View>
-              <Text style={{ fontSize: 10 }}>28 A Sanson Road, Lahug</Text>
+              <Text style={{ fontSize: 10 }}>3rd fl., SPC Bldg., One Paseo Compound</Text>
             </View>
             <View>
-              <Text style={{ fontSize: 10 }}>Cebu City, Philippines</Text>
+              <Text style={{ fontSize: 10 }}>Paseo Saturnino St., Banilad</Text>
             </View>
             <View>
-              <Text style={{ fontSize: 10 }}>(032) 266 3356</Text>
+              <Text style={{ fontSize: 10 }}>Cebu City, Philippines 6000</Text>
             </View>
             <View>
               <Text style={{ fontSize: 10 }}>
@@ -1956,13 +1990,13 @@ const AddPurchaseOrder = memo(() => {
             marginBottom: 15,
           }}
         >
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 2 }}>
             <Text style={{ fontFamily: "ArialBold" }}>Notes: </Text>
           </View>
-          <View style={{ flex: 10 }}>
-            <Text>{purchaseOrder.notes}</Text>
+          <View style={{ flex: 60 }}>
+            <Text style={{textAlign: 'center'}}>{purchaseOrder.notes}</Text>
           </View>
-          <View style={{ flex: 1 }} />
+          <View style={{ flex: 57 }} />
         </View>
         <View>{ordersDisplay3}</View>
 
@@ -2313,7 +2347,7 @@ const AddPurchaseOrder = memo(() => {
 
   return (
     <div>
-      <Spin spinning={loadingState} tip="Please wait a moment..." size="large">
+      <Spin spinning={false} tip="Please wait a moment..." size="large">
         <Row>
           <Col span={5}></Col>
           <Col
@@ -2517,7 +2551,7 @@ const AddPurchaseOrder = memo(() => {
                           fontSize: 14,
                         }}
                       >
-                        28A Sanson Road, Lahug
+                        3rd Fl. SPC Bldg., One Paseo Compound
                       </Col>
                     </Row>
                     <Row
@@ -2974,9 +3008,10 @@ const AddPurchaseOrder = memo(() => {
                   <Col span={1} />
                   <Col span={2}>Notes:</Col>
                   <Col>
-                    <Input
+                    <TextArea
+                      autoSize={{minRows: 1, maxRows: 7}}
                       onChange={(e) => onNotesChange(e.target.value)}
-                      style={{ width: 275 }}
+                      style={{ width: 275}}
                     />
                   </Col>
                 </Row>

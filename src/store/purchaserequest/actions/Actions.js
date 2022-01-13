@@ -608,9 +608,9 @@ export const deletePurchaseRequest = (data) => async (dispatch) => {
 export const fetchPurchaseRequestsGas = (data) => async (dispatch) => {
   const fetchedPurchaseRequests = [];
   try {
-    const results = await axios.get('/purchaserequests.json');
+    const results = await OPC.get('/purchase_requests');
     for (const key in results.data) {
-      if (results.data[key].prType == 'Fuel') {
+      if (results.data[key].pr_type == 'gas') {
         fetchedPurchaseRequests.push({
           ...results.data[key],
           id: key

@@ -39,3 +39,8 @@ export const setShowSpin3 = (data) => ({
   type: actionTypes.SET_SHOWSPIN3,
   data
 });
+
+export const setOpenGasOrderModal = (data) => ({
+  type: actionTypes.SET_OPENGASORDERMODAL,
+  data
+});

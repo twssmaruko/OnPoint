@@ -22,14 +22,16 @@ import {
 import { useSelector, useDispatch, shallowEqual } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import PurchaseRequestNumberModal from "./PurchaseRequestNumberModal";
-import PurchaseRequestGasModal from './PurchaseRequestGasModal';
+import PurchaseRequestGasModal from "./PurchaseRequestGasModal";
+import Tabs from 'react-bootstrap/Tabs'
+import Tab from 'react-bootstrap/Tab'
 import moment from "moment";
 //import _ from 'lodash';
 
 import * as uiActions from "../../store/ui/actions/Actions";
 import * as actions from "../../store/purchaserequest/actions/Actions";
 import TableButton from "../../components/button/OnpointButton";
-import OPC from '../../api/OPC';
+import OPC from "../../api/OPC";
 //import {setPurchaseRequest} from '../../store/purchaseorders/actions/Actions';
 
 const PurchaseRequestFormModal = lazy(() =>
@@ -46,6 +48,8 @@ const PurchaseRequests = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [displayDeleteModal, setDisplayDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState(0);
+  const [tableKey, setTableKey] = useState('purchaseRequest');
+
 
   // const [purchaseRequestValue, setPurchaseRequestValue] = useState({orders: []});
   //const [params, setParams] = useState({});
@@ -71,17 +75,21 @@ const PurchaseRequests = () => {
     // };
   }, [dispatcher]);
 
-  const onDetailsClick = async(item) => {
-    const response = await OPC.get('/purchase_requests/orders/' + item.purchase_request_id);
+  const onDetailsClick = async (item) => {
+    const response = await OPC.get(
+      "/purchase_requests/orders/" + item.purchase_request_id
+    );
     console.log(response.data);
     const purchaseRequestData = {
       ...item,
-      orders: response.data
-    }
-    console.log('purchaseRequestData: ', purchaseRequestData);
+      orders: response.data,
+    };
+    console.log("purchaseRequestData: ", purchaseRequestData);
 
-    const newUpdateModal = <UpdateModal purchaseRequestData={purchaseRequestData} />;
-    
+    const newUpdateModal = (
+      <UpdateModal purchaseRequestData={purchaseRequestData} />
+    );
+
     setDisplayUpdateModal(newUpdateModal);
     dispatcher(uiActions.setOpenModal2(true));
   };
@@ -119,10 +127,17 @@ const PurchaseRequests = () => {
     </Modal>
   );
 
-
-  
-
   const editButton = (item) => (
+    <div>
+      <TableButton
+        value={item}
+        type="primary"
+        icon={<EditTwoTone />}
+        onClick={onDetailsClick}
+      />
+    </div>
+  );
+  const editButtonGas = (item) => (
     <div>
       <TableButton
         value={item}
@@ -154,21 +169,24 @@ const PurchaseRequests = () => {
       </div>
     );
   const prNumberDisplay = (data) => `PR ${data.purchase_request_number}`;
+  const prNumberDisplayGas = (data) =>`PR ${data.purchase_request_number}`;
 
   const onDeleteConfirmed = () => {
     dispatcher(actions.deletePurchaseRequest(deleteId));
     setDisplayDeleteModal(false);
-  }
+  };
 
-  const deleteModal = <Modal visible={displayDeleteModal}
-  onCancel={() => {
-    setDisplayDeleteModal(false)
-  }}
-  onOk={(e) => onDeleteConfirmed(e)}> 
-  Are you sure you want to delete this Purchase Request?
-  </Modal>;
-
-
+  const deleteModal = (
+    <Modal
+      visible={displayDeleteModal}
+      onCancel={() => {
+        setDisplayDeleteModal(false);
+      }}
+      onOk={(e) => onDeleteConfirmed(e)}
+    >
+      Are you sure you want to delete this Purchase Request?
+    </Modal>
+  );
 
   const deleteItem = (data) => {
     setDeleteId(data);
@@ -195,10 +213,12 @@ const PurchaseRequests = () => {
     },
     {
       title: "PR Number",
+      dataSource: "purchase_request_number",
       key: "purchase_request_number",
       width: 150,
       //defaultSortOrder: "ascend",
-      sorter: (a, b) => (a.purchase_request_number < b.purchase_request_number ? 1 : -1),
+      sorter: (a, b) =>
+        a.purchase_request_number < b.purchase_request_number ? 1 : -1,
       render: prNumberDisplay,
     },
     {
@@ -236,7 +256,7 @@ const PurchaseRequests = () => {
       key: "dayMonthYear",
       width: 150,
       // defaultSortOrder: 'ascend',
-      sorter: ((a, b) => b.date_created - a.date_created),
+      sorter: (a, b) => b.date_created - a.date_created,
       defaultSortOrder: "ascend",
       render: (createdAt) =>
         //moment(createdAt).format("MMMM Do YYYY"),
@@ -250,21 +270,129 @@ const PurchaseRequests = () => {
     },
   ];
 
+  const columnsGas = [
+    {
+      title: "Details",
+      key: "detailsGas",
+      width: 100,
+      render: editButtonGas,
+    },
+    {
+      title: "PR Number",
+      dataSource: "purchase_request_number",
+      key: "purchase_request_numberGas",
+      width: 150,
+      //defaultSortOrder: "ascend",
+      sorter: (a, b) =>
+        a.purchase_request_number < b.purchase_request_number ? 1 : -1,
+      render: prNumberDisplayGas,
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "statusGas",
+      width: 150,
+      // filters: [
+      //   {
+      //     text: 'PENDING',
+      //     value: 'PENDING'
+      //   },
+      //   {
+      //     text: 'ORDERED',
+      //     value: 'ORDERED'
+      //   }
+      // ],
+      // filterMultiple: false,
+      // onFilter: (value, record) => record.status.indexOf(value) === 0,
+      sorter: (a, b) => a.status.length - b.status.length,
+      sortDirections: ["descend", "ascend"],
+      render: prStatusDisplay,
+    },
+    {
+      title: "Approved",
+      dataIndex: "is_approved",
+      key: "isApprovedGas",
+      width: 150,
+      sorter: (a, b) => b.is_approved.length - a.is_approved.length,
+      render: approvedDisplay,
+    },
+    {
+      title: "Requested On",
+      dataIndex: "date_created",
+      key: "dayMonthYearGas",
+      width: 150,
+      // defaultSortOrder: 'ascend',
+      sorter: (a, b) => b.date_created - a.date_created,
+      defaultSortOrder: "ascend",
+      render: (createdAt) =>
+        //moment(createdAt).format("MMMM Do YYYY"),
+        moment(createdAt).format("MMMM Do YYYY, h:mm:ss A"),
+    },
+    {
+      title: "Delete",
+      render: deleteButton,
+      key: "deleteGas",
+      width: "1%",
+    },
+  ];
+
   const onChecked = () => {
     const booleanFlag = seeAll;
     setSeeAll(!booleanFlag);
   };
 
   const checkDisplay = () => {
-    if (!seeAll) {
-      return pendingPurchaseRequests;
+    const newPendingPurchaseRequests = [];
+    const newPurchaseRequestsList = [];
+    for(const key in purchaseRequestsList) {
+      if(purchaseRequestsList[key].pr_type === 'normal') {
+        newPurchaseRequestsList.push({
+          ...purchaseRequestsList[key]
+        })
+      }
     }
-    return purchaseRequestsList ;
+    for(const key in pendingPurchaseRequests) {
+      if(pendingPurchaseRequests[key].pr_type === 'normal') {
+      newPendingPurchaseRequests.push({
+        ...pendingPurchaseRequests[key]
+
+      })
+      }
+    }
+    if (!seeAll) {
+      return newPendingPurchaseRequests;
+    }
+    return newPurchaseRequestsList;
   };
+
+  const checkDisplayGas = () => {
+    const newPendingPurchaseRequests = [];
+    const newPurchaseRequestsList = [];
+    for(const key in purchaseRequestsList) {
+      if(purchaseRequestsList[key].pr_type === 'gas') {
+        newPurchaseRequestsList.push({
+          ...purchaseRequestsList[key]
+        })
+      }
+    }
+    for(const key in pendingPurchaseRequests) {
+      if(pendingPurchaseRequests[key].pr_type === 'gas') {
+      newPendingPurchaseRequests.push({
+        ...pendingPurchaseRequests[key]
+
+      })
+      }
+    }
+    if (!seeAll) {
+      return newPendingPurchaseRequests;
+    }
+    return newPurchaseRequestsList;
+  }
 
   return (
     <div>
       <Row
+      key="rowGas"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -272,7 +400,7 @@ const PurchaseRequests = () => {
           marginTop: 20,
         }}
       >
-        <Row>
+        <Row key="prRowGas">
           <h1 style={{ fontWeight: "bold", color: "#FF111B" }}>
             PURCHASE REQUESTS
           </h1>
@@ -284,8 +412,10 @@ const PurchaseRequests = () => {
                 type="link"
                 style={{ fontWeight: "bold", fontSize: 26, color: "#13407F" }}
                 className="ant-btn-menu"
-                onClick={() => {setDisplayAddModal(<PurchaseRequestFormModal />)
-                  dispatcher(uiActions.setOpenModal1(true));}}
+                onClick={() => {
+                  setDisplayAddModal(<PurchaseRequestFormModal />);
+                  dispatcher(uiActions.setOpenModal1(true));
+                }}
               >
                 New Purchase Request
               </Button>
@@ -297,8 +427,10 @@ const PurchaseRequests = () => {
                 type="link"
                 style={{ fontWeight: "bold", fontSize: 26, color: "#13407F" }}
                 className="ant-btn-menu"
-                onClick={() => {setDisplayAddModal(<PurchaseRequestGasModal />)
-                  dispatcher(uiActions.setOpenModal1(true));}}
+                onClick={() => {
+                  setDisplayAddModal(<PurchaseRequestGasModal />);
+                  dispatcher(uiActions.setOpenModal1(true));
+                }}
               >
                 New Purchase Request Gas
               </Button>
@@ -317,6 +449,7 @@ const PurchaseRequests = () => {
       </Row>
 
       <Row
+        key="row-gas"
         style={{
           marginTop: 3,
           marginLeft: "20%",
@@ -325,15 +458,35 @@ const PurchaseRequests = () => {
       >
         <div style={{ border: "1px solid black" }}>
           <Spin spinning={tableSpin}>
-            <Table
-              columns={columns}
-              dataSource={checkDisplay()}
-              size="small"
-              rowKey="purchase_request_id"
-              pagination={{
-                pageSize: 10,
-              }}
-            />
+            <Tabs
+            id="tabs-purcahseRequests"
+            activeKey={tableKey}
+            onSelect={(e) => setTableKey(e)}>
+              <Tab eventKey="purchaseRequest" title="Purchase Requests" key="tab">
+                <Table
+                  key="prTable"
+                  columns={columns}
+                  dataSource={checkDisplay()}
+                  size="small"
+                  rowKey="purchase_request_id"
+                  pagination={{
+                    pageSize: 10,
+                  }}
+                />
+              </Tab>
+              <Tab eventKey="purchaseRequestGas" title="Gas" key="tabGas">
+                <Table
+                  key="prTableGas"
+                  columns={columnsGas}
+                  dataSource={checkDisplayGas()}
+                  size="small"
+                  rowKey="purchase_request_id_gas"
+                  pagination={{
+                    pageSize: 10,
+                  }}
+                />
+              </Tab>
+            </Tabs>
           </Spin>
         </div>
       </Row>

@@ -59,7 +59,7 @@ const Header = (props) => {
   }
 
   const purchaseOrderGas = <PurchaseOrderGas modalVisible={openModal}/>
-
+  
   return (
     <Row
       style={{

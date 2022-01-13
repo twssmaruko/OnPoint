@@ -5,6 +5,8 @@ import * as uiActions from "../../../store/ui/actions/Actions";
 import * as poActions from "../../../store/purchaseorders/actions/Actions";
 import * as prActions from "../../../store/purchaserequest/actions/Actions";
 import Logo from "../../../components/logo/Logo";
+import OPC from '../../../api/OPC';
+import PurchaseOrderGasOrder from './PurchaseOrderGasOrder.js';
 import "./PurchaseOrder.css";
 import moment from "moment";
 
@@ -15,10 +17,7 @@ const PurchaseOrderGas = (props) => {
 
   const dispatcher = useDispatch();
 
-  useEffect(() => {
-    dispatcher(prActions.fetchPurchaseRequestsGas());
-    dispatcher(poActions.getProjects());
-  }, [dispatcher]);
+  
 
   const [gasState] = useState([
     "IF-1 (MC1)",
@@ -85,6 +84,7 @@ const PurchaseOrderGas = (props) => {
   const [dieselOilState, setDieselOilState] = useState("");
   const [yearState, setYearState] = useState(currentYear);
   const [poNumber, setPONumber] = useState("");
+  const [gasOrders, setGasOrders] = useState([]);
 
   const gasList = gasState.map((type, index) => (
     <Option key={index} value={type}>
@@ -98,14 +98,25 @@ const PurchaseOrderGas = (props) => {
     </Option>
   ));
 
-  const { openModal, purchaseRequests, projects } = useSelector(
+  const {
+    openModal,
+    purchaseRequests,
+    projects,
+    gasOrderModal
+  } = useSelector(
     ({ ui, purchaseOrder, purchaseRequests }) => ({
       openModal: ui.openModal3,
+      gasOrderModal: ui.gasOrderModal,
       purchaseRequests: purchaseRequests.purchaseRequestsGas,
       projects: purchaseOrder.projects,
     }),
     shallowEqual
   );
+
+  useEffect(() => {
+    dispatcher(prActions.fetchPurchaseRequestsGas());
+    dispatcher(poActions.getProjects());
+  }, [dispatcher]);
 
   const onCancelClicked = () => {
     dispatcher(uiActions.setOpenModal3(false));
@@ -123,9 +134,12 @@ const PurchaseOrderGas = (props) => {
   };
 
   const prList = purchaseRequests.map((purchaseRequest) => (
-    <Option key={purchaseRequest.id} value={purchaseRequest.id}>
-      {purchaseRequest.purchaseRequestNo}
-    </Option>
+      <Option
+        key={purchaseRequest.purchase_request_id}
+        value={purchaseRequest.purchase_request_id}
+      >
+        {purchaseRequest.purchase_request_number}
+      </Option>
   ));
 
   const projectList = projects.map((project) => (
@@ -245,8 +259,9 @@ const PurchaseOrderGas = (props) => {
     setPurchaseOrderData(newPurchaseOrderData);
   };
 
-  const onPRSelect = (data) => {
-    const selectedPurchaseRequest = purchaseRequests.find((e) => e.id === data);
+  const onPRSelect = async(data) => {
+    console.log('data: ', data);
+    const selectedPurchaseRequest = purchaseRequests.find((e) => e.purchase_request_id === data);
     const purchaseRequestNo = selectedPurchaseRequest.purchaseRequsetNo;
     const newPurchaseOrderData = {
       ...purchaseOrderData,
@@ -254,9 +269,21 @@ const PurchaseOrderGas = (props) => {
       purchaseRequestNo: purchaseRequestNo,
     };
     setPurchaseOrderData(newPurchaseOrderData);
+    const prNumber = await OPC.get('/purchase_requests/orders/' + data);
+    const prOrders = [];
+    for(const key in prNumber.data) {
+      prOrders.push({
+        ...prNumber.data[key]
+      })
+    }
+    setGasOrders(prOrders);
+    console.log('prOrders: ', prOrders);
+    dispatcher(uiActions.setOpenGasOrderModal(true));
     console.log("selectedPurchaseRequest: ", selectedPurchaseRequest);
   };
-
+  const onGasOrderCancel = () => {
+    dispatcher(uiActions.setOpenGasOrderModal(false));
+  }
   const onModalClose = () => {};
 
   return (
@@ -273,6 +300,13 @@ const PurchaseOrderGas = (props) => {
       afterClose={onModalClose}
       destroyOnClose
     >
+      <Modal
+      title="Order"
+      visible={gasOrderModal}
+      onCancel={onGasOrderCancel}>
+      
+      <PurchaseOrderGasOrder orders={gasOrders} />
+      </Modal>
       <Row>
         <Col span={11}>
           <Logo />
@@ -310,24 +344,29 @@ const PurchaseOrderGas = (props) => {
       </Row>
 
       <Row>
-        <Col span={9}>
+        <Col span={10}>
           <Row className="bold-text">
             <Col className="input-text-align" span={24}>
               ON POINT CONSTRUCTION
             </Col>
           </Row>
           <Row>
-            <Col className="input-text-align" span={24}>
-              28A Sanson Road, Lahug
+            <Col className="input-text-align-left" span={24}>
+              3rd fl., SPC Bldg., One Paseo Compound,
             </Col>
           </Row>
           <Row>
-            <Col className="input-text-align" span={24}>
-              Cebu City, Philippines
+            <Col className="input-text-align-left" span={24}>
+              Paseo Saturnino St., Banilad
+            </Col>
+          </Row>
+          <Row>
+            <Col className="input-text-align-left" span={24}>
+              Cebu City, Philippines 6000
             </Col>
           </Row>
         </Col>
-        <Col span={5} />
+        <Col span={4} />
         <Col span={10}>
           <Row>
             <Col span={8}>PR / DOC NO:</Col>
