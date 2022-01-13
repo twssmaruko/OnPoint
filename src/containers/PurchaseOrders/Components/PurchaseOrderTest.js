@@ -33,8 +33,8 @@ const PurchaseOrderTest = () => {
   }), shallowEqual);
 
   useEffect(() => {
-    dispatcher(actions.getSamplePO());
-    dispatcher(actions.getVendors());
+   // dispatcher(actions.getSamplePO());
+   // dispatcher(actions.getVendors());
   }, [dispatcher, vendor])
 
   const styles = StyleSheet.create({

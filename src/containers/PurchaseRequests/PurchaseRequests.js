@@ -137,6 +137,16 @@ const PurchaseRequests = () => {
       />
     </div>
   );
+  const editButtonGas = (item) => (
+    <div>
+      <TableButton
+        value={item}
+        type="primary"
+        icon={<EditTwoTone />}
+        onClick={onDetailsClick}
+      />
+    </div>
+  );
   const approvedDisplay = (is_approved) =>
     is_approved === true ? (
       <CheckCircleFilled style={{ marginLeft: 20, color: "green" }} />
@@ -159,6 +169,7 @@ const PurchaseRequests = () => {
       </div>
     );
   const prNumberDisplay = (data) => `PR ${data.purchase_request_number}`;
+  const prNumberDisplayGas = (data) =>`PR ${data.purchase_request_number}`;
 
   const onDeleteConfirmed = () => {
     dispatcher(actions.deletePurchaseRequest(deleteId));
@@ -202,6 +213,7 @@ const PurchaseRequests = () => {
     },
     {
       title: "PR Number",
+      dataSource: "purchase_request_number",
       key: "purchase_request_number",
       width: 150,
       //defaultSortOrder: "ascend",
@@ -254,6 +266,72 @@ const PurchaseRequests = () => {
       title: "Delete",
       render: deleteButton,
       key: "delete",
+      width: "1%",
+    },
+  ];
+
+  const columnsGas = [
+    {
+      title: "Details",
+      key: "detailsGas",
+      width: 100,
+      render: editButtonGas,
+    },
+    {
+      title: "PR Number",
+      dataSource: "purchase_request_number",
+      key: "purchase_request_numberGas",
+      width: 150,
+      //defaultSortOrder: "ascend",
+      sorter: (a, b) =>
+        a.purchase_request_number < b.purchase_request_number ? 1 : -1,
+      render: prNumberDisplayGas,
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "statusGas",
+      width: 150,
+      // filters: [
+      //   {
+      //     text: 'PENDING',
+      //     value: 'PENDING'
+      //   },
+      //   {
+      //     text: 'ORDERED',
+      //     value: 'ORDERED'
+      //   }
+      // ],
+      // filterMultiple: false,
+      // onFilter: (value, record) => record.status.indexOf(value) === 0,
+      sorter: (a, b) => a.status.length - b.status.length,
+      sortDirections: ["descend", "ascend"],
+      render: prStatusDisplay,
+    },
+    {
+      title: "Approved",
+      dataIndex: "is_approved",
+      key: "isApprovedGas",
+      width: 150,
+      sorter: (a, b) => b.is_approved.length - a.is_approved.length,
+      render: approvedDisplay,
+    },
+    {
+      title: "Requested On",
+      dataIndex: "date_created",
+      key: "dayMonthYearGas",
+      width: 150,
+      // defaultSortOrder: 'ascend',
+      sorter: (a, b) => b.date_created - a.date_created,
+      defaultSortOrder: "ascend",
+      render: (createdAt) =>
+        //moment(createdAt).format("MMMM Do YYYY"),
+        moment(createdAt).format("MMMM Do YYYY, h:mm:ss A"),
+    },
+    {
+      title: "Delete",
+      render: deleteButton,
+      key: "deleteGas",
       width: "1%",
     },
   ];
@@ -314,6 +392,7 @@ const PurchaseRequests = () => {
   return (
     <div>
       <Row
+      key="rowGas"
         style={{
           display: "flex",
           flexDirection: "column",
@@ -321,7 +400,7 @@ const PurchaseRequests = () => {
           marginTop: 20,
         }}
       >
-        <Row>
+        <Row key="prRowGas">
           <h1 style={{ fontWeight: "bold", color: "#FF111B" }}>
             PURCHASE REQUESTS
           </h1>
@@ -370,6 +449,7 @@ const PurchaseRequests = () => {
       </Row>
 
       <Row
+        key="row-gas"
         style={{
           marginTop: 3,
           marginLeft: "20%",
@@ -382,8 +462,9 @@ const PurchaseRequests = () => {
             id="tabs-purcahseRequests"
             activeKey={tableKey}
             onSelect={(e) => setTableKey(e)}>
-              <Tab eventKey="purchaseRequest" title="Purchase Requests">
+              <Tab eventKey="purchaseRequest" title="Purchase Requests" key="tab">
                 <Table
+                  key="prTable"
                   columns={columns}
                   dataSource={checkDisplay()}
                   size="small"
@@ -393,9 +474,10 @@ const PurchaseRequests = () => {
                   }}
                 />
               </Tab>
-              <Tab eventKey="purchaseRequestGas" title="Gas">
+              <Tab eventKey="purchaseRequestGas" title="Gas" key="tabGas">
                 <Table
-                  columns={columns}
+                  key="prTableGas"
+                  columns={columnsGas}
                   dataSource={checkDisplayGas()}
                   size="small"
                   rowKey="purchase_request_id_gas"

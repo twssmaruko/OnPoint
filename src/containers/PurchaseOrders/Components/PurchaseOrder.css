@@ -81,6 +81,9 @@
 .input-text-align {
     text-align: center;
 }
+.input-text-align-left {
+    text-align: left;
+}
 
 .purchase-order-text {
     text-align: center;

@@ -35,7 +35,7 @@ const updateVendor = async (req, res) => {
         const { id } = req.params;
         const { name, location, tel_no, terms } = req.body;
 
-        const updatedVendor = await pool.query('UPDATE vendor SET name= $1, location= $2, terms= $3, tel_no= $4 WHERE vendor_id = $5', [name, location, tel_no, terms, id]);
+        const updatedVendor = await pool.query('UPDATE vendor SET name= $1, location= $2, tel_no= $3, terms= $4 WHERE vendor_id = $5', [name, location, tel_no, terms, id]);
         res.json("vendor updated");
 
     } catch (err) {

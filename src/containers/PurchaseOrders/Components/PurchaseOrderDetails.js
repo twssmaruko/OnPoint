@@ -189,13 +189,13 @@ const PurchaseOrderDetails = (props) => {
               </Text>
             </View>
             <View>
-              <Text style={{ fontSize: 10 }}>28 A Sanson Road, Lahug</Text>
+              <Text style={{ fontSize: 10 }}>3rd fl. SPC Bldg., One Paseo Compound</Text>
             </View>
             <View>
-              <Text style={{ fontSize: 10 }}>Cebu City, Philippines</Text>
+              <Text style={{ fontSize: 10 }}>Paseo Saturnino St., Banilad</Text>
             </View>
             <View>
-              <Text style={{ fontSize: 10 }}>(032) 266 3356</Text>
+              <Text style={{ fontSize: 10 }}>Cebu City, Philippines 6000</Text>
             </View>
             <View>
               <Text style={{ fontSize: 10 }}>
