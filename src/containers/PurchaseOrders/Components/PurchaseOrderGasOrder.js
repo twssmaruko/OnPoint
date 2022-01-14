@@ -10,15 +10,15 @@ const {orders} = props;
 const [sampleGas, setSampleGas] = useState(1);
 const dispatcher = useDispatch();
 
-const ordersDisplay = orders.map((order) => (
-    <Radio value={order.purchase_request_order_id}>{order.product + " " + order.item_type + " " + order.quantity_left + "L"}</Radio>
+const ordersDisplay = orders.map((order, index) => (
+    <Radio key = {index} value={order.purchase_request_order_id}>{order.product + " " + order.item_type + " " + order.quantity_left + "L"}</Radio>
 ));
 
 const onChange = (data) => {
     const foundOrder = orders.find((order) => order.purchase_request_order_id === data.target.value);
+    setSampleGas(data.target.value);
     console.log('foundOrder: ', foundOrder);
     dispatcher(actions.setGasOrder(foundOrder));
-    setSampleGas(data.target.value)
 }
     return (
         <div>

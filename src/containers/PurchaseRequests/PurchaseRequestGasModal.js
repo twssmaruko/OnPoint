@@ -223,7 +223,7 @@ const PurchaseRequestGasModal = () => {
                 <Row style={{ marginTop: 20, marginBottom: 25 }}>
                     <Col span={8} />
                     <Col span={8} style={{ textAlign: 'center', fontFamily: 'Arial', fontWeight: 'bold', color: 'black', fontSize: 16 }}>
-                        PURCHASE REQUEST
+                        PURCHASE REQUEST GAS
                     </Col>
                     <Col span={8} />
                 </Row>

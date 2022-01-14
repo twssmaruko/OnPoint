@@ -17,7 +17,13 @@ const PurchaseOrderGas = (props) => {
 
   const dispatcher = useDispatch();
 
-  
+
+  const [gasTypes] = useState([
+    "Diesel",
+    "Premium",
+    "Unleaded",
+    "DIESEL Engine OIL"
+  ]);
 
   const [gasState] = useState([
     "IF-1 (MC1)",
@@ -102,16 +108,23 @@ const PurchaseOrderGas = (props) => {
     openModal,
     purchaseRequests,
     projects,
+    gasOrder,
+    chosenGas,
     gasOrderModal
   } = useSelector(
     ({ ui, purchaseOrder, purchaseRequests }) => ({
       openModal: ui.openModal3,
+      chosenGas: purchaseOrder.chosenGas,
+      gasOrder: purchaseOrder.gasOrder,
       gasOrderModal: ui.gasOrderModal,
       purchaseRequests: purchaseRequests.purchaseRequestsGas,
       projects: purchaseOrder.projects,
     }),
     shallowEqual
   );
+
+  const [gasOrderDisplay, setGasOrderDisplay] = useState(gasOrder);
+
 
   useEffect(() => {
     dispatcher(prActions.fetchPurchaseRequestsGas());
@@ -134,12 +147,12 @@ const PurchaseOrderGas = (props) => {
   };
 
   const prList = purchaseRequests.map((purchaseRequest) => (
-      <Option
-        key={purchaseRequest.purchase_request_id}
-        value={purchaseRequest.purchase_request_id}
-      >
-        {purchaseRequest.purchase_request_number}
-      </Option>
+    <Option
+      key={purchaseRequest.purchase_request_id}
+      value={purchaseRequest.purchase_request_id}
+    >
+      {purchaseRequest.purchase_request_number}
+    </Option>
   ));
 
   const projectList = projects.map((project) => (
@@ -259,7 +272,7 @@ const PurchaseOrderGas = (props) => {
     setPurchaseOrderData(newPurchaseOrderData);
   };
 
-  const onPRSelect = async(data) => {
+  const onPRSelect = async (data) => {
     console.log('data: ', data);
     const selectedPurchaseRequest = purchaseRequests.find((e) => e.purchase_request_id === data);
     const purchaseRequestNo = selectedPurchaseRequest.purchaseRequsetNo;
@@ -271,7 +284,7 @@ const PurchaseOrderGas = (props) => {
     setPurchaseOrderData(newPurchaseOrderData);
     const prNumber = await OPC.get('/purchase_requests/orders/' + data);
     const prOrders = [];
-    for(const key in prNumber.data) {
+    for (const key in prNumber.data) {
       prOrders.push({
         ...prNumber.data[key]
       })
@@ -284,7 +297,18 @@ const PurchaseOrderGas = (props) => {
   const onGasOrderCancel = () => {
     dispatcher(uiActions.setOpenGasOrderModal(false));
   }
-  const onModalClose = () => {};
+  const onModalClose = () => { };
+  const onGasOrderOk = () => {
+    for (const key in gasTypes) {
+      if (gasOrder.item_type.search(gasTypes[key]) > 0) {
+        console.log('gasType: ', gasTypes[key])
+      }
+    }
+    console.log('foundOrder: ', gasOrder);
+
+    setGasOrderDisplay(chosenGas);
+    dispatcher(uiActions.setOpenGasOrderModal(false));
+  };
 
   return (
     <Modal
@@ -301,11 +325,12 @@ const PurchaseOrderGas = (props) => {
       destroyOnClose
     >
       <Modal
-      title="Order"
-      visible={gasOrderModal}
-      onCancel={onGasOrderCancel}>
-      
-      <PurchaseOrderGasOrder orders={gasOrders} />
+        title="Order"
+        visible={gasOrderModal}
+        onOk={onGasOrderOk}
+        onCancel={onGasOrderCancel}>
+
+        <PurchaseOrderGasOrder orders={gasOrders} />
       </Modal>
       <Row>
         <Col span={11}>
@@ -477,12 +502,7 @@ const PurchaseOrderGas = (props) => {
               Diesel
             </Col>
             <Col span={5} className="border-right">
-              <Input
-                bordered={false}
-                className="input-text-align"
-                value={dieselGasState}
-                onChange={(e) => onDieselGasChange(e.target.value)}
-              />
+              {chosenGas[0]}
             </Col>
             <Col span={4} className="border-right"></Col>
             <Col span={4}></Col>
@@ -499,7 +519,7 @@ const PurchaseOrderGas = (props) => {
               <Input
                 bordered={false}
                 className="input-text-align"
-                value={premiumGasState}
+                value={chosenGas[1]}
                 onChange={(e) => onPremiumGasChange(e.target.value)}
               />
             </Col>
@@ -518,7 +538,7 @@ const PurchaseOrderGas = (props) => {
               <Input
                 bordered={false}
                 className="input-text-align"
-                value={unleadedGasState}
+                value={chosenGas[2]}
                 onChange={(e) => onUnleadedGasChange(e.target.value)}
               />
             </Col>
@@ -537,7 +557,7 @@ const PurchaseOrderGas = (props) => {
               <Input
                 bordered={false}
                 className="input-text-align"
-                value={dieselOilState}
+                value={chosenGas[3]}
                 onChange={(e) => onDieselOilChange(e.target.value)}
               />
             </Col>

@@ -10,7 +10,9 @@ const initialState = {
   project: {},
   samplePO: [],
   worksheet: [],
-  gasOrder: {},
+  gasTypes: ["Diesel", "Premium", "Unleaded", "DIESEL Engine OIL"],
+  gasOrder: "",
+  chosenGas: ["", "", "", ""],
   totalPrice: 5,
   purchaseOrder: {requestedBy: 'Engr. Jojo Salamanes',
     project: '',
@@ -86,7 +88,11 @@ const setCategories = (state, action) => updateObject(state, {
   categories: action.data
 })
 const setGasOrder = (state,action) => updateObject(state, {
-  gasOrders: action.data
+  gasOrder: action.data
+})
+
+const setChosenGas = (state, action) => updateObject(state, {
+  chosenGas: action.data
 })
 
 const deletePurchaseOrder = (state, action) => {
@@ -130,6 +136,7 @@ const purchaseOrderReducer = (state = initialState, action) => {
   case actions.FETCH_WORKSHEET: return fetchWorksheet(state, action);
   case actions.SET_CATEGORIES: return setCategories(state, action);
   case actions.SET_GASORDER: return setGasOrder(state, action);
+  case actions.SET_CHOSENGAS: return setChosenGas(state, action);
   default:
     return state;
   }

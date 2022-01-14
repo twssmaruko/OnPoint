@@ -92,6 +92,11 @@ export const setSamplePurchaseOrder = (data) => ({
   data
 })
 
+export const setChosenGas = (data) => ({
+  type: actionTypes.SET_CHOSENGAS,
+  data
+})
+
 export const setCategories = (data) => async (dispatch) => {
   const fetchedCategories = [];
   try {
@@ -153,7 +158,33 @@ export const initOrders = (data) => (dispatch) => {
 //   }
 // }
 
-export const setGasOrder = (data) => (dispatch) => {
+export const setGasOrder = (data) => (dispatch, getState) => {
+  const gases = getState().purchaseOrder.gasTypes;
+  let foundGas = "";
+  for(const key in gases){
+    if(data.item_type.search(gases[key]) > 0) {
+      foundGas = gases[key];
+    }
+  }
+  switch(foundGas) {
+    case "Diesel":
+      dispatch(setChosenGas([data.quantity_left, "","",""]))
+      break;
+    case "Premium":
+      dispatch(setChosenGas(["",data.quantity_left,"",""]))
+      break;
+    case "Unleaded":
+      dispatch(setChosenGas([ "","",data.quantity_left,""]))
+      break;
+    case "DIESEL Engine OIL":
+      dispatch(setChosenGas(["","","",data.quantity_left]))
+      break;
+    default:
+      dispatch(setChosenGas(["","","",""]));
+  
+  }
+  const chosen = getState().purchaseOrder.chosenGas;
+  console.log('chosen: ', chosen);
   dispatch(setGasOrderInStore(data));
 }
 
