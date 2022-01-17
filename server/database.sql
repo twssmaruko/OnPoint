@@ -207,7 +207,6 @@ CREATE TABLE materials_receiving_order (
 
 CREATE TABLE equipment (
     equipment_id BIGSERIAL PRIMARY KEY NOT NULL,
-    equipment_code VARCHAR(100),
     equipment_name VARCHAR(100),
     equipment_category VARCHAR(100)
     

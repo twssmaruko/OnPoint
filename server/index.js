@@ -14,6 +14,7 @@ const subcategoryItemDB = require('./project/budget/budget_subcategory/subcatego
 const purchaseOrderDB = require('./purchase_order/purchase_order');
 const purchaseOrderOrderDB = require('./purchase_order/order/order');
 const materialsReceivingDB = require('./materials_receiving/materials_receiving');
+const equipmentDB = require('./equipment/equipment');
 
 //middlware
 
@@ -112,6 +113,9 @@ app.post('/purchase_orders/orders', purchaseOrderOrderDB.createPurchaseOrderOrde
 //MATERIALS RECEIVING
 
 app.get('/materials_receiving', materialsReceivingDB.getMaterialsReceiving);
+
+//EQUIPMENT
+app.get('/equipment', equipmentDB.getEquipment);
 
 
 app.listen(5000, () => {
