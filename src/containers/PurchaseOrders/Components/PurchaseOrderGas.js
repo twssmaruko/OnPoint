@@ -155,7 +155,7 @@ const PurchaseOrderGas = (props) => {
   ));
 
   const projectList = projects.map((project) => (
-    <Option key={"project-" + project.project_id} value={project.project_code}>
+    <Option key={"project-" + project.project_id} value={project.project_id}>
       {project.project_code}
     </Option>
   ));
@@ -201,7 +201,7 @@ const PurchaseOrderGas = (props) => {
   const onPRSelect = async (data) => {
     console.log('data: ', data);
     const selectedPurchaseRequest = purchaseRequests.find((e) => e.purchase_request_id === data);
-    const purchaseRequestNo = selectedPurchaseRequest.purchaseRequsetNo;
+    const purchaseRequestNo = selectedPurchaseRequest.purchase_request_number;
     const newPurchaseOrderData = {
       ...purchaseOrderData,
       purchaseRequest: selectedPurchaseRequest,
