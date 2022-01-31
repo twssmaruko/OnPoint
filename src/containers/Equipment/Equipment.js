@@ -1,20 +1,65 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Row, Col, Table, Button, Modal } from "antd";
 import * as uiActions from '../../store/ui/actions/Actions';
+import * as actions from '../../store/equipment/actions/Actions';
 import { SearchOutlined, DeleteFilled, EditTwoTone } from "@ant-design/icons";
 import TableButton from "../../components/button/OnpointButton";
 import EquipmentModal from './EquipmentModal';
+import EquipmentDetail from './EquipmentDetail';
+import "./Equipment.css";
 
 const Equipment = () => {
 
   const dispatcher = useDispatch();
-  const setEditModal = (data) => { };
+  const [chosenEquipment, setChosenEquipment] = useState('');
+  const [deleteID, setDeleteID] = useState('');
 
-  const deleteItem = (data) => { };
 
-  const { openModal } = useSelector(({ ui }) => ({
-    openModal: ui.openModal1
+  const setEditModal = (selectedEquipment) => { 
+    setChosenEquipment(selectedEquipment);
+    dispatcher(uiActions.setOpenModal2(true));
+  };
+
+  const deleteItem = (data) => { 
+    console.log(data.equipment_id);
+    dispatcher(uiActions.setOpenModal3(true));
+    setDeleteID(data.equipment_id);
+  };
+
+  useEffect(() => {
+    dispatcher(actions.fetchEquipment());
+  },[dispatcher])
+
+  const modalFooter1 = [
+    <Button className="equipment-modal" key="cancel" type="reset" onClick={() => {
+      dispatcher(uiActions.setOpenModal1(false))
+    }}>
+      Cancel
+    </Button>,
+    <Button form="equipmentForm" key="submit" htmlType="submit" type="primary">
+      Proceed
+    </Button>
+    
+  ];
+
+  const modalFooter2 = [
+    <Button className="equipment-modal" key="cancel" type="reset" onClick={() => {
+      dispatcher(uiActions.setOpenModal2(false))
+    }}>
+      Cancel
+    </Button>,
+    <Button form="formDetail" key="submit" htmlType="submit" type="primary">
+      Proceed
+    </Button>
+    
+  ];
+
+  const { openModal1, openModal2, openModal3, equipment } = useSelector(({ ui, equipment }) => ({
+    openModal1: ui.openModal1,
+    openModal2: ui.openModal2,
+    openModal3: ui.openModal3,
+    equipment: equipment.equipment
   }))
 
   const editButton = (item) => (
@@ -31,7 +76,7 @@ const Equipment = () => {
     <div>
       <TableButton
         value={item}
-        type="primary"
+        type="danger"
         icon={<DeleteFilled />}
         onClick={deleteItem}
       />
@@ -46,17 +91,18 @@ const Equipment = () => {
       fixed: "left",
       width: "1%",
     },
-    {
-      title: "Code",
-      key: "code",
-    },
+   
     {
       title: "Category",
-      key: "category",
+      dataIndex: "equipment_category",
+      key: "equipment_category",
+      sorter: (a, b) => a.equipment_category.localeCompare(b.equipment_category),
+      defaultSortOrder: 'ascend'
     },
     {
       title: "Name",
-      key: "name",
+      dataIndex: "equipment_name",
+      key: "equipment_name",
     },
     {
       title: "Delete",
@@ -72,6 +118,10 @@ const Equipment = () => {
   }
   const onEquipmentOk = () => {
     dispatcher(uiActions.setOpenModal1(false));
+  }
+  const onEquipmentDelete = () => {
+    dispatcher(actions.deleteEquipment(deleteID));
+    dispatcher(uiActions.setOpenModal3(false));
   }
 
   return (
@@ -99,26 +149,31 @@ const Equipment = () => {
             marginRight: "20%",
           }}>
           <Col>
-            <Table columns={columns} />
+            <Table columns={columns}
+            dataSource={equipment} 
+            rowKey="equipment_id"/>
           </Col>
         </Row>
       </Row>
-      <Modal visible={openModal} onCancel={() => {
+      <Modal visible={openModal1} onCancel={() => {
         dispatcher(uiActions.setOpenModal1(false));
       }}
         onOk={onEquipmentOk}
-        footer={[
-          <Button key="cancel" type="reset" onClick={() => {
-            dispatcher(uiActions.setOpenModal1(false))
-          }}>
-            Cancel
-          </Button>,
-          <Button form="equipmentForm" key="submit" htmlType="submit" type="primary">
-            Proceed
-          </Button>
-          
-        ]}>
-        <EquipmentModal />
+        footer={modalFooter1}>
+        <EquipmentModal className="margin-top"/>
+      </Modal>
+      <Modal visible={openModal2} onCancel={() => {
+        dispatcher(uiActions.setOpenModal2(false))
+      }}
+      footer={modalFooter2}>
+        <EquipmentDetail chosenEquipment = {chosenEquipment}/>
+      </Modal>
+      <Modal visible={openModal3}
+      onOk = {onEquipmentDelete}
+      onCancel={() => {
+        dispatcher(uiActions.setOpenModal3(false))
+      }}>
+        Are you sure you want to delete this equipment?
       </Modal>
     </>
   );

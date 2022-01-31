@@ -11,7 +11,7 @@ const createEquipment = async(req, res) => {
     }
 }
 
-const getEquipment = async(req, res) => {
+const fetchEquipment = async(req, res) => {
     try {
         const allEquipment = await pool.query('SELECT * FROM equipment');
         res.json(allEquipment.rows);
@@ -20,7 +20,40 @@ const getEquipment = async(req, res) => {
     }
 }
 
+const updateEquipment = async(req, res) => {
+    try {
+        const {equipment_name, equipment_category, equipment_id} = req.body;
+        const editedEquipment = await pool.query('UPDATE equipment SET equipment_name = $1, equipment_category = $2 WHERE equipment_id = $3', [equipment_name, equipment_category, equipment_id]);
+        res.json("Equipment updated");
+    } catch (err) {
+        console.log(err.message);
+    }
+}
+
+const getEquipment = async(req, res) => {
+    try {
+        const {id} = req.params;
+        const fetchedEquipment = await pool.query('SELECT * FROM equipment WHERE equipment_id = $1', [id]);
+        res.json(fetchedEquipment.rows[0])
+    } catch (err) {
+        console.error(err.message);
+    }
+}
+
+const deleteEquipment = async(req, res) => {
+    try {
+        const {id} = req.params;
+        const deleteEquipment = await pool.query('DELETE FROM equipment WHERE equipment_id = $1', [id]);
+        res.json('Equipment Deleted');
+    } catch (error) {
+        
+    }
+}
+
 module.exports = {
     createEquipment,
-    getEquipment
+    fetchEquipment,
+    updateEquipment,
+    getEquipment,
+    deleteEquipment
 }

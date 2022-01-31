@@ -115,7 +115,11 @@ app.post('/purchase_orders/orders', purchaseOrderOrderDB.createPurchaseOrderOrde
 app.get('/materials_receiving', materialsReceivingDB.getMaterialsReceiving);
 
 //EQUIPMENT
-app.get('/equipment', equipmentDB.getEquipment);
+app.get('/equipment', equipmentDB.fetchEquipment);
+app.get('/equipment/:id',equipmentDB.getEquipment);
+app.post('/equipment', equipmentDB.createEquipment);
+app.put('/equipment/:id', equipmentDB.updateEquipment);
+app.delete('/equipment/:id', equipmentDB.deleteEquipment);
 
 
 app.listen(5000, () => {

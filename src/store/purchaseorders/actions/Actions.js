@@ -40,6 +40,7 @@ export const setProjectInStore = (data) => ({
   data
 })
 
+
 const fetchWorksheetToStore = (data) => ({
   type: actionTypes.FETCH_WORKSHEET,
   data
@@ -109,6 +110,16 @@ export const setCategories = (data) => async (dispatch) => {
   } catch (error) {
     console.error(error.message);
   }
+}
+
+const fetchEquipmentToStore = (data) => ({
+  type:actionTypes.FETCH_EQUIPMENT,
+  data
+})
+
+export const fetchEquipment = () => async(dispatch) =>{
+  const response = await OPC.get('/equipment');
+  dispatch(fetchEquipmentToStore(response.data));
 }
 
 // export const getSamplePO = () => async (dispatch) => {

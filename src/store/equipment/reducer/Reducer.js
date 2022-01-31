@@ -5,9 +5,12 @@ const initialState = {
     equipment: [],
 };
 
-const createEquipment = (state, action) => updateObject(state, {
-    equipment: action.data
-})
+const createEquipment = (state, action) => {
+    const newEquipment = action.data;
+    return updateObject(state, {
+        equipment: state.equipment.concat(newEquipment)
+    });
+}
 
 const fetchEquipment = (state, action) => updateObject(state, {
     equipment: action.data
