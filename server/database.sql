@@ -211,3 +211,29 @@ CREATE TABLE equipment (
     equipment_category VARCHAR(100)
     
 )
+
+CREATE TABLE purchase_order_gas (
+    purchase_order_gas_id BIGSERIAL PRIMARY KEY NOT NULL,
+    purchase_request_id BIGSERIAL,
+    purchase_request_order_id BIGSERIAL,
+    project_id BIGSERIAL,
+    equipment_id BIGSERIAL,
+    purchase_order_gas_number VARCHAR(20),
+    requested_by VARCHAR(255),
+    date_created TIMESTAMP,
+    product VARCHAR(255),
+    quantity FLOAT,
+    unit_price FLOAT,
+    CONSTRAINT fk_purchase_request
+        FOREIGN KEY(purchase_request_id)
+            REFERENCES purchase_request(purchase_request_id),
+    CONSTRAINT fk_purchase_request_order
+        FOREIGN KEY(purchase_request_order_id)
+            REFERENCES purchase_request_order(purchase_request_order_id),
+    CONSTRAINT fk_project
+        FOREIGN KEY(project_id)
+            REFERENCES project(project_id),
+    CONSTRAINT fk_equipment
+        FOREIGN KEY(equipment_id)
+            REFERENCES equipment(equipment_id)
+)
