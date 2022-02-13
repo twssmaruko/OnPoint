@@ -6,6 +6,16 @@ import * as poActions from "../../../store/purchaseorders/actions/Actions";
 import * as prActions from "../../../store/purchaserequest/actions/Actions";
 import Logo from "../../../components/logo/Logo";
 import OPC from '../../../api/OPC';
+import {
+  PDFDownloadLink,
+  Document,
+  Page,
+  Text,
+  View,
+  Image,
+  StyleSheet,
+  Font,
+} from "@react-pdf/renderer";
 import PurchaseOrderGasOrder from './PurchaseOrderGasOrder.js';
 import "./PurchaseOrder.css";
 import moment from "moment";
@@ -25,80 +35,19 @@ const PurchaseOrderGas = (props) => {
     "DIESEL Engine OIL"
   ]);
 
-  const [gasState] = useState([
-    "IF-1 (MC1)",
-    "IF-2 (MD1)",
-    "IF-2 (MD2)",
-    "IF-3 (C/G/W/A)",
-    "IF-4 (BH1)",
-    "IF-2 (MD3)",
-    "IF-1(MC3)",
-    "IF-5 (MC4)",
-    "IF-1 (MC2)",
-    "BT1",
-    "PO",
-    "PU2",
-    "MP",
-    "IF-6(HR)",
-    "BH2",
-    "IF-2(MD4)",
-    "BT2",
-    "Cont",
-  ]);
-  const [plateNumberState] = useState([
-    "JDO 3108",
-    "070-103",
-    "GAF 9978",
-    "CMXR/GSet/WP/ATV",
-    "BackHoe1",
-    "YDY-842",
-    "YFB773",
-    "JAD-4839",
-    "JAB-9510",
-    "0716-555798",
-    "YDD-465",
-    "GAO-7780",
-    "0701-829213",
-    "UPZ-988",
-    "BackHoe2",
-    "0716-561354",
-    "0716-563487",
-    "Container",
-  ]);
-
   const currentYear = moment(new Date()).format("YYYY");
   const [purchaseOrderData, setPurchaseOrderData] = useState({
-    poType: "gas",
-    purchaseOrderNo: "",
+    purchase_order_number: "",
     vendor: "First Auto LPG Gas Holdings Corp.",
-    requestedBy: "Engr. Jojo Salamanes",
-    project: "",
-    purchaseRequestNo: "",
-    purchaseRequest: {},
-    order: {
-      product: "",
-      quantity: 0,
-      unit: "liters",
-      category: "",
-      unitPrice: 0,
-      totalPrice: 0,
-    },
+    requested_by: "Engr. Jojo Salamanes",
+    project_id: "",
+    equipment_id: "",
+    purchase_request_id: "",
   });
-  const [dieselGasState, setDieselGasState] = useState("");
-  const [premiumGasState, setPremiumGasState] = useState("");
-  const [unleadedGasState, setUnleadedGasState] = useState("");
-  const [dieselOilState, setDieselOilState] = useState("");
   const [yearState, setYearState] = useState(currentYear);
   const [poNumber, setPONumber] = useState("");
   const [gasOrders, setGasOrders] = useState([]);
   const [equipmentName, setEquipmentName] = useState("");
-
-
-  const plateNumberList = plateNumberState.map((type, index) => (
-    <Option key={"plate-" + index} value={type}>
-      {type}
-    </Option>
-  ));
 
   const {
     openModal,
@@ -121,8 +70,6 @@ const PurchaseOrderGas = (props) => {
     shallowEqual
   );
 
-  const [gasOrderDisplay, setGasOrderDisplay] = useState(gasOrder);
-
   const categoryList = equipment.map((type, index) => (
     <Option key={index} value={type.equipment_id}>
       {type.equipment_category}
@@ -141,8 +88,8 @@ const PurchaseOrderGas = (props) => {
 
   const onOk = () => {
     setYearState(currentYear);
-   // dispatcher(uiActions.setOpenModal3(false));
-    console.log("purchaseOrderData: ", purchaseOrderData);
+    dispatcher(uiActions.setOpenModal3(false));
+    dispatcher(poActions.createPurchaseOrderGas(purchaseOrderData));
   };
 
   const prList = purchaseRequests.map((purchaseRequest) => (
@@ -164,6 +111,10 @@ const PurchaseOrderGas = (props) => {
     console.log('gas_select: ', data);
     const selectedCategory = equipment.find((cat) => cat.equipment_id === data);
     setEquipmentName(selectedCategory.equipment_name);
+    setPurchaseOrderData({
+      ...purchaseOrderData,
+      equipment_id: selectedCategory.equipment_id
+    });
     console.log('hello: ', selectedCategory);
   };
 
@@ -171,7 +122,7 @@ const PurchaseOrderGas = (props) => {
     console.log("project: ", data);
     const newPurchaseOrderData = {
       ...purchaseOrderData,
-      project: data,
+      project_id: data,
     };
     setPurchaseOrderData(newPurchaseOrderData);
   };
@@ -182,7 +133,7 @@ const PurchaseOrderGas = (props) => {
     console.log("newPO: ", newPO);
     const newPurchaseOrderData = {
       ...purchaseOrderData,
-      purchaseOrderNo: newPO,
+      purchase_order_number: newPO,
     };
     setPurchaseOrderData(newPurchaseOrderData);
   };
@@ -193,7 +144,7 @@ const PurchaseOrderGas = (props) => {
     console.log("newPO: ", newPO);
     const newPurchaseOrderData = {
       ...purchaseOrderData,
-      purchaseOrderNo: newPO,
+      purchase_order_number: newPO,
     };
     setPurchaseOrderData(newPurchaseOrderData);
   };
@@ -201,14 +152,12 @@ const PurchaseOrderGas = (props) => {
   const onPRSelect = async (data) => {
     console.log('data: ', data);
     const selectedPurchaseRequest = purchaseRequests.find((e) => e.purchase_request_id === data);
-    const purchaseRequestNo = selectedPurchaseRequest.purchase_request_number;
     const newPurchaseOrderData = {
       ...purchaseOrderData,
-      purchaseRequest: selectedPurchaseRequest,
-      purchaseRequestNo: purchaseRequestNo,
+      purchase_request_id: selectedPurchaseRequest.purchase_request_id,
     };
     setPurchaseOrderData(newPurchaseOrderData);
-    const prNumber = await OPC.get('/purchase_requests/orders/' + data);
+    const prNumber = await OPC.get('/purchase_requests/orders/pr/' + data);
     const prOrders = [];
     for (const key in prNumber.data) {
       if (prNumber.data[key].quantity_left > 0) {
@@ -233,8 +182,14 @@ const PurchaseOrderGas = (props) => {
       }
     }
     console.log('foundOrder: ', gasOrder);
+    setPurchaseOrderData({
+      ...purchaseOrderData,
+      product: gasOrder.item_type,
+      purchase_request_order_id: gasOrder.purchase_request_order_id,
+      quantity: gasOrder.quantity,
+      unit: gasOrder.unit
+    })
 
-    setGasOrderDisplay(chosenGas);
     dispatcher(uiActions.setOpenGasOrderModal(false));
   };
 

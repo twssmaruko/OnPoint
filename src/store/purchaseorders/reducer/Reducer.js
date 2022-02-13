@@ -13,6 +13,9 @@ const initialState = {
   worksheet: [],
   gasTypes: ["Diesel", "Premium", "Unleaded", "DIESEL Engine OIL"],
   gasOrder: "",
+  purchaseOrderGas: {
+
+  },
   chosenGas: ["", "", "", ""],
   totalPrice: 5,
   purchaseOrder: {requestedBy: 'Engr. Jojo Salamanes',

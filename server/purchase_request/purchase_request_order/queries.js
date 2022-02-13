@@ -56,10 +56,21 @@ const createPurchaseRequestOrder = async (req, res) => {
     }
 }
 
+const getPurchaseRequestOrder = async (req, res) => {
+    try {
+        const {id} = req.params;
+        const fetchedPurchaseRequestOrder = await pool.query('SELECT * FROM purchase_request_order WHERE purchase_request_order_id = $1', [id]);
+        res.json(fetchedPurchaseRequestOrder.rows);
+    } catch (err) {
+        console.error(err.message);
+    }
+}
+
 module.exports = {
     getPurchaseRequestOrders,
     getAllPurchaseRequestOrder,
     getPurchaseRequestOrderQuantityLeft,
+    getPurchaseRequestOrder,
     updatePurchaseRequestOrderQuantityLeft,
     createPurchaseRequestOrder
 }

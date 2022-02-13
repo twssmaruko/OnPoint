@@ -927,3 +927,13 @@ export const cancelPurchaseOrder = (purchaseOrderId) => async (dispatch) => {
   //   console.error(error);
   // }
 }
+
+export const createPurchaseOrderGas = (purchaseOrderData) => async (dispatch) => {
+  console.log(purchaseOrderData);
+  try {
+    
+  } catch (err) {
+    console.error(err.message);
+    message.error('Unable to create Purchase Order!');
+  }
+}

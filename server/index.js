@@ -53,7 +53,8 @@ app.delete('/purchase_requests/:id', purchaseRequestDB.deletePurchaseRequest);
 app.get('/purchase_requests/orders', purchaseRequestOrderDB.getPurchaseRequestOrders);
 app.get('/pr_quantity/:id', purchaseRequestOrderDB.getPurchaseRequestOrderQuantityLeft);
 app.put('/pr_quantity/:id', purchaseRequestOrderDB.updatePurchaseRequestOrderQuantityLeft);
-app.get('/purchase_requests/orders/:id', purchaseRequestOrderDB.getAllPurchaseRequestOrder);
+app.get('/purchase_requests/orders/pr/:id', purchaseRequestOrderDB.getAllPurchaseRequestOrder);
+app.get('/purchase_requests/orders/:id', purchaseRequestOrderDB.getPurchaseRequestOrder);
 app.post('/purchase_requests/orders', purchaseRequestOrderDB.createPurchaseRequestOrder);
 
 //PROJECTS
