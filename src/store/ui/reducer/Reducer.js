@@ -7,6 +7,7 @@ const initialState = {
   openModal4: false,
   openModal5: false,
   gasOrderModal: false,
+  gasDocModal: false,
   showSpin1: false,
   showSpin2: false,
   showSpin3: false
@@ -58,6 +59,11 @@ const ui = (state = initialState, action) => {
     return {
       ...state,
       gasOrderModal: action.data
+    }
+  case actions.SET_OPENGASDOCMODAL:
+    return {
+      ...state,
+      gasDocModal: action.data
     }
   default:
     return state;

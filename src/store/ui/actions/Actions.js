@@ -44,3 +44,7 @@ export const setOpenGasOrderModal = (data) => ({
   type: actionTypes.SET_OPENGASORDERMODAL,
   data
 });
+export const setOpenGasDocModal = (data) => ({
+  type: actionTypes.SET_OPENGASDOCMODAL,
+  data
+})

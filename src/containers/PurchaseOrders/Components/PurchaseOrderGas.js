@@ -8,6 +8,7 @@ import Logo from "../../../components/logo/Logo";
 import OPC from '../../../api/OPC';
 import {
   PDFDownloadLink,
+  PDFViewer,
   Document,
   Page,
   Text,
@@ -17,13 +18,18 @@ import {
   Font,
 } from "@react-pdf/renderer";
 import PurchaseOrderGasOrder from './PurchaseOrderGasOrder.js';
+import PurchaseOrderGasDoc from './PurchaseOrderGasDoc.js';
 import "./PurchaseOrder.css";
 import moment from "moment";
+import Arial from "./../../../assets/Fonts/ARIAL.TTF";
+import ArialBold from "./../../../assets/Fonts/ARIALBD.TTF";
 
 const PurchaseOrderGas = (props) => {
   const { modalVisible } = props;
 
   const { Option } = Select;
+  Font.register({ family: "Arial", src: Arial });
+  Font.register({ family: "ArialBold", src: ArialBold });
 
   const dispatcher = useDispatch();
 
@@ -56,7 +62,8 @@ const PurchaseOrderGas = (props) => {
     gasOrder,
     equipment,
     chosenGas,
-    gasOrderModal
+    gasOrderModal,
+    gasDocModal
   } = useSelector(
     ({ ui, purchaseOrder, purchaseRequests }) => ({
       openModal: ui.openModal3,
@@ -64,6 +71,7 @@ const PurchaseOrderGas = (props) => {
       equipment: purchaseOrder.equipment,
       gasOrder: purchaseOrder.gasOrder,
       gasOrderModal: ui.gasOrderModal,
+      gasDocModal: ui.gasDocModal,
       purchaseRequests: purchaseRequests.purchaseRequestsGas,
       projects: purchaseOrder.projects,
     }),
@@ -88,8 +96,9 @@ const PurchaseOrderGas = (props) => {
 
   const onOk = () => {
     setYearState(currentYear);
-    dispatcher(uiActions.setOpenModal3(false));
-    dispatcher(poActions.createPurchaseOrderGas(purchaseOrderData));
+   // dispatcher(uiActions.setOpenModal3(false));
+   // dispatcher(poActions.createPurchaseOrderGas(purchaseOrderData));
+   dispatcher(uiActions.setOpenGasDocModal(true));
   };
 
   const prList = purchaseRequests.map((purchaseRequest) => (
@@ -190,8 +199,16 @@ const PurchaseOrderGas = (props) => {
       unit: gasOrder.unit
     })
 
-    dispatcher(uiActions.setOpenGasOrderModal(false));
+    //dispatcher(uiActions.setOpenGasOrderModal(false));
+    dispatcher(uiActions.setOpenGasDocModal(true));
   };
+
+  const onGasDocOk = () => {
+    dispatcher(uiActions.setOpenGasDocModal(false));
+  }
+  const onGasDocCancel = () => {
+    dispatcher(uiActions.setOpenGasDocModal(false));
+  }
 
   return (
     <Modal
@@ -214,6 +231,16 @@ const PurchaseOrderGas = (props) => {
         onCancel={onGasOrderCancel}>
 
         <PurchaseOrderGasOrder orders={gasOrders} />
+      </Modal>
+      <Modal
+      title="Print Order"
+      visible={gasDocModal}
+      onOk={onGasDocOk}
+      onCancel={onGasDocCancel}
+      >
+      <PDFViewer>
+        <PurchaseOrderGasDoc />
+      </PDFViewer>
       </Modal>
       <Row>
         <Col span={11}>
